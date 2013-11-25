@@ -1,0 +1,36 @@
+metavar var, x ::=   {{ com  term variable }} 
+{{ isa string}} {{ coq nat}} {{ hol string}} {{ coq-equality }}
+{{ ocaml int}} {{ lex alphanum}} {{ tex \mathit{[[var]]} }}
+
+grammar
+term, t :: 't_' ::=                          {{ com term    }}
+  | S           ::   :: subt
+  | K           ::   :: selt
+  | I           ::   :: idt
+  | (t t')     ::   :: app
+  | x            ::   :: var                   {{ com variable}}
+  | ( t )        :: S :: paren                 {{ icho [[t]]  }}
+
+
+terminals :: 'terminals_' ::=
+  | -->          ::   :: red     {{ tex \longrightarrow }}
+
+
+defns
+Jop :: '' ::=
+
+ defn
+ t1 --> t2 :: ::reduce::'' {{ com [[t1]] reduces to [[t2]]}} by
+
+    --------------------------  :: ax_idapp
+    (I t) -->  t
+
+   
+    --------------------------  :: ax_selapp
+    ((K t) t') -->  t
+
+   
+    --------------------------  :: ax_combapp
+    (((S t) t') t'') -->  ((t t'')(t' t''))
+
+

@@ -1,0 +1,72 @@
+DIGEST 1f22fe393a3b6c07afd888f1104359bc
+Ftest11
+R65:69 Coq.Arith.Arith <> <> lib
+R87:90 Coq.Bool.Bool <> <> lib
+R108:111 Coq.Lists.List <> <> lib
+def 127:133 <> termvar
+R138:140 Coq.Init.Datatypes <> nat ind
+prf 149:158 <> eq_termvar
+R175:181 test11 <> termvar def
+R185:185 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R191:195 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R202:202 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R187:189 Coq.Init.Logic <> :type_scope:x_'='_x not
+R186:186 test11 <> x var
+R190:190 test11 <> y var
+R197:200 Coq.Init.Logic <> :type_scope:x_'<>'_x not
+R196:196 test11 <> x var
+R201:201 test11 <> y var
+R287:296 test11 <> eq_termvar thm
+ind 329:329 <> t
+constr 344:348 <> t_Var
+constr 365:369 <> t_Lam
+constr 393:397 <> t_App
+constr 416:420 <> t_Foo
+R353:359 test11 <> termvar def
+R361:361 test11 <> t ind
+R374:380 test11 <> termvar def
+R387:387 test11 <> t ind
+R389:389 test11 <> t ind
+R403:403 test11 <> t ind
+R410:410 test11 <> t ind
+R412:412 test11 <> t ind
+R426:426 test11 <> t ind
+R428:428 test11 <> t ind
+def 456:464 <> is_t_of_t
+def 662:670 <> is_v_of_t
+R471:471 test11 <> t ind
+R677:677 test11 <> t ind
+R492:494 test11 <> t_6 var
+R506:510 test11 <> t_Var constr
+R519:522 Coq.Init.Logic <> True ind
+R530:534 test11 <> t_Lam constr
+R547:555 test11 <> is_t_of_t def
+R567:571 test11 <> t_App constr
+R584:584 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R597:602 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R615:615 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R585:593 test11 <> is_t_of_t def
+R603:611 test11 <> is_t_of_t def
+R623:627 test11 <> t_Foo constr
+R638:646 test11 <> is_v_of_t def
+R698:700 test11 <> t_6 var
+R712:716 test11 <> t_Var constr
+R724:728 Coq.Init.Logic <> False ind
+R735:739 test11 <> t_Lam constr
+R752:760 test11 <> is_t_of_t def
+R772:776 test11 <> t_App constr
+R788:792 Coq.Init.Logic <> False ind
+R799:803 test11 <> t_Foo constr
+R812:816 Coq.Init.Logic <> False ind
+ind 869:871 <> Baz
+constr 914:915 <> ax
+R880:880 test11 <> t ind
+R875:875 test11 <> t ind
+R933:933 test11 <> t ind
+R984:986 test11 <> Baz ind
+R991:992 test11 <> v5 var
+R988:989 test11 <> t5 var
+R963:971 test11 <> is_v_of_t def
+R973:974 test11 <> v5 var
+R942:950 test11 <> is_t_of_t def
+R952:953 test11 <> t5 var

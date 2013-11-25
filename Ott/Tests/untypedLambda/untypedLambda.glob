@@ -1,0 +1,140 @@
+DIGEST c5f5830f0f1557756f0c0cea08bfc0fc
+FuntypedLambda
+R63:67 Coq.Arith.Arith <> <> lib
+R85:88 Coq.Bool.Bool <> <> lib
+R106:109 Coq.Lists.List <> <> lib
+def 125:131 <> termvar
+R136:138 Coq.Init.Datatypes <> nat ind
+prf 168:177 <> eq_termvar
+R194:200 untypedLambda <> termvar def
+R204:204 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R210:214 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R221:221 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R206:208 Coq.Init.Logic <> :type_scope:x_'='_x not
+R205:205 untypedLambda <> x var
+R209:209 untypedLambda <> y var
+R216:219 Coq.Init.Logic <> :type_scope:x_'<>'_x not
+R215:215 untypedLambda <> x var
+R220:220 untypedLambda <> y var
+R306:315 untypedLambda <> eq_termvar thm
+ind 348:348 <> t
+constr 375:379 <> t_Var
+constr 412:416 <> t_Lam
+constr 454:458 <> t_App
+R384:390 untypedLambda <> termvar def
+R392:392 untypedLambda <> t ind
+R421:427 untypedLambda <> termvar def
+R434:434 untypedLambda <> t ind
+R436:436 untypedLambda <> t ind
+R464:464 untypedLambda <> t ind
+R471:471 untypedLambda <> t ind
+R473:473 untypedLambda <> t ind
+def 514:522 <> is_v_of_t
+R529:529 untypedLambda <> t ind
+R550:552 untypedLambda <> t_6 var
+R564:568 untypedLambda <> t_Var constr
+R576:580 Coq.Init.Logic <> False ind
+R587:591 untypedLambda <> t_Lam constr
+R603:606 Coq.Init.Logic <> True ind
+R614:618 untypedLambda <> t_App constr
+R630:634 Coq.Init.Logic <> False ind
+def 676:683 <> list_mem
+R702:702 untypedLambda <> A var
+R704:704 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R708:710 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R715:715 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R706:706 Coq.Init.Logic <> :type_scope:x_'='_x not
+R705:705 untypedLambda <> a var
+R707:707 untypedLambda <> b var
+R712:713 Coq.Init.Logic <> :type_scope:x_'<>'_x not
+R711:711 untypedLambda <> a var
+R714:714 untypedLambda <> b var
+R721:721 untypedLambda <> A var
+R727:730 Coq.Init.Datatypes <> list ind
+R732:732 untypedLambda <> A var
+R748:751 Coq.Init.Datatypes <> bool ind
+R764:764 untypedLambda <> l var
+R775:777 Coq.Init.Datatypes <> nil constr
+R782:786 Coq.Init.Datatypes <> false constr
+R792:795 Coq.Init.Datatypes <> cons constr
+R807:808 untypedLambda <> eq var
+R812:812 untypedLambda <> x var
+R829:836 untypedLambda <> list_mem def
+R843:843 untypedLambda <> x var
+R840:841 untypedLambda <> eq var
+R838:838 untypedLambda <> A var
+R819:822 Coq.Init.Datatypes <> true constr
+R871:878 untypedLambda <> list_mem def
+def 913:920 <> tsubst_t
+R927:927 untypedLambda <> t ind
+R934:940 untypedLambda <> termvar def
+R949:949 untypedLambda <> t ind
+R968:968 untypedLambda <> t ind
+R981:984 untypedLambda <> t__7 var
+R996:1000 untypedLambda <> t_Var constr
+R1012:1021 untypedLambda <> eq_termvar thm
+R1025:1026 untypedLambda <> x5 var
+R1043:1047 untypedLambda <> t_Var constr
+R1033:1035 untypedLambda <> t_6 var
+R1058:1062 untypedLambda <> t_Lam constr
+R1073:1077 untypedLambda <> t_Lam constr
+R1085:1092 untypedLambda <> list_mem def
+R1109:1112 Coq.Init.Datatypes <> cons constr
+R1116:1118 Coq.Init.Datatypes <> nil constr
+R1105:1106 untypedLambda <> x5 var
+R1094:1103 untypedLambda <> eq_termvar thm
+R1135:1142 untypedLambda <> tsubst_t def
+R1148:1149 untypedLambda <> x5 var
+R1144:1146 untypedLambda <> t_6 var
+R1161:1165 untypedLambda <> t_App constr
+R1177:1181 untypedLambda <> t_App constr
+R1205:1212 untypedLambda <> tsubst_t def
+R1218:1219 untypedLambda <> x5 var
+R1214:1216 untypedLambda <> t_6 var
+R1184:1191 untypedLambda <> tsubst_t def
+R1197:1198 untypedLambda <> x5 var
+R1193:1195 untypedLambda <> t_6 var
+ind 1277:1282 <> reduce
+constr 1328:1333 <> ax_app
+constr 1459:1469 <> ctx_app_fun
+constr 1564:1574 <> ctx_app_arg
+R1291:1291 untypedLambda <> t ind
+R1286:1286 untypedLambda <> t ind
+R1347:1353 untypedLambda <> termvar def
+R1364:1364 untypedLambda <> t ind
+R1394:1399 untypedLambda <> reduce ind
+R1430:1437 untypedLambda <> tsubst_t def
+R1449:1451 untypedLambda <> t12 var
+R1445:1445 untypedLambda <> x var
+R1440:1441 untypedLambda <> v2 var
+R1402:1406 untypedLambda <> t_App constr
+R1424:1425 untypedLambda <> v2 var
+R1410:1414 untypedLambda <> t_Lam constr
+R1418:1420 untypedLambda <> t12 var
+R1416:1416 untypedLambda <> x var
+R1373:1381 untypedLambda <> is_v_of_t def
+R1383:1384 untypedLambda <> v2 var
+R1492:1492 untypedLambda <> t ind
+R1523:1528 untypedLambda <> reduce ind
+R1546:1550 untypedLambda <> t_App constr
+R1556:1558 untypedLambda <> t_5 var
+R1552:1554 untypedLambda <> t1' var
+R1531:1535 untypedLambda <> t_App constr
+R1540:1542 untypedLambda <> t_5 var
+R1537:1538 untypedLambda <> t1 var
+R1501:1506 untypedLambda <> reduce ind
+R1511:1513 untypedLambda <> t1' var
+R1508:1509 untypedLambda <> t1 var
+R1596:1596 untypedLambda <> t ind
+R1648:1653 untypedLambda <> reduce ind
+R1670:1674 untypedLambda <> t_App constr
+R1679:1681 untypedLambda <> t1' var
+R1676:1677 untypedLambda <> v5 var
+R1656:1660 untypedLambda <> t_App constr
+R1665:1666 untypedLambda <> t1 var
+R1662:1663 untypedLambda <> v5 var
+R1626:1631 untypedLambda <> reduce ind
+R1636:1638 untypedLambda <> t1' var
+R1633:1634 untypedLambda <> t1 var
+R1605:1613 untypedLambda <> is_v_of_t def
+R1615:1616 untypedLambda <> v5 var

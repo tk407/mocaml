@@ -1,0 +1,95 @@
+DIGEST d1696aaabe173672c7830f7c15cb4080
+Fskicomb
+R64:68 Coq.Arith.Arith <> <> lib
+R86:89 Coq.Bool.Bool <> <> lib
+R107:110 Coq.Lists.List <> <> lib
+def 126:128 <> var
+R133:135 Coq.Init.Datatypes <> nat ind
+prf 165:170 <> eq_var
+R187:189 skicomb <> var def
+R193:193 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R199:203 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R210:210 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R195:197 Coq.Init.Logic <> :type_scope:x_'='_x not
+R194:194 skicomb <> x var
+R198:198 skicomb <> y var
+R205:208 Coq.Init.Logic <> :type_scope:x_'<>'_x not
+R204:204 skicomb <> x var
+R209:209 skicomb <> y var
+R295:300 skicomb <> eq_var thm
+ind 333:336 <> term
+constr 363:367 <> t_var
+constr 396:400 <> t_app
+constr 435:441 <> t_idapp
+constr 481:488 <> t_selapp
+constr 528:535 <> t_subapp
+R372:374 skicomb <> var def
+R376:376 skicomb <> term ind
+R405:408 skicomb <> term ind
+R415:418 skicomb <> term ind
+R420:420 skicomb <> term ind
+R445:448 skicomb <> term ind
+R492:495 skicomb <> term ind
+R539:542 skicomb <> term ind
+def 608:618 <> tsubst_term
+R624:627 skicomb <> term ind
+R634:636 skicomb <> var def
+R644:647 skicomb <> term ind
+R665:668 skicomb <> term ind
+R681:683 skicomb <> t_6 var
+R695:699 skicomb <> t_var constr
+R711:716 skicomb <> eq_var thm
+R720:721 skicomb <> x5 var
+R737:741 skicomb <> t_var constr
+R728:729 skicomb <> t5 var
+R752:756 skicomb <> t_app constr
+R767:771 skicomb <> t_app constr
+R796:806 skicomb <> tsubst_term def
+R811:812 skicomb <> x5 var
+R808:809 skicomb <> t5 var
+R774:784 skicomb <> tsubst_term def
+R789:790 skicomb <> x5 var
+R786:787 skicomb <> t5 var
+R822:828 skicomb <> t_idapp constr
+R833:839 skicomb <> t_idapp constr
+R846:853 skicomb <> t_selapp constr
+R858:865 skicomb <> t_selapp constr
+R872:879 skicomb <> t_subapp constr
+R884:891 skicomb <> t_subapp constr
+ind 946:951 <> reduce
+constr 1003:1008 <> id_app
+constr 1054:1060 <> sel_app
+constr 1107:1113 <> sub_app
+constr 1208:1218 <> ctx_app_fun
+R963:966 skicomb <> term ind
+R955:958 skicomb <> term ind
+R1022:1025 skicomb <> term ind
+R1034:1039 skicomb <> reduce ind
+R1049:1049 skicomb <> t var
+R1041:1047 skicomb <> t_idapp constr
+R1074:1077 skicomb <> term ind
+R1086:1091 skicomb <> reduce ind
+R1102:1102 skicomb <> t var
+R1093:1100 skicomb <> t_selapp constr
+R1134:1137 skicomb <> term ind
+R1146:1151 skicomb <> reduce ind
+R1164:1168 skicomb <> t_app constr
+R1188:1192 skicomb <> t_app constr
+R1197:1199 skicomb <> t'' var
+R1194:1195 skicomb <> t' var
+R1172:1176 skicomb <> t_app constr
+R1180:1182 skicomb <> t'' var
+R1178:1178 skicomb <> t var
+R1153:1160 skicomb <> t_subapp constr
+R1239:1242 skicomb <> term ind
+R1273:1278 skicomb <> reduce ind
+R1294:1298 skicomb <> t_app constr
+R1304:1304 skicomb <> t var
+R1300:1302 skicomb <> t1' var
+R1281:1285 skicomb <> t_app constr
+R1290:1290 skicomb <> t var
+R1287:1288 skicomb <> t1 var
+R1251:1256 skicomb <> reduce ind
+R1261:1263 skicomb <> t1' var
+R1258:1259 skicomb <> t1 var
+R1327:1332 skicomb <> reduce ind

@@ -1,0 +1,94 @@
+DIGEST d9f1b58067df0ec3e28c36e864bf7e83
+Ftest10
+R63:67 Coq.Arith.Arith <> <> lib
+R85:88 Coq.Bool.Bool <> <> lib
+R106:109 Coq.Lists.List <> <> lib
+def 125:127 <> var
+R132:134 Coq.Init.Datatypes <> nat ind
+prf 164:169 <> eq_var
+R186:188 test10 <> var def
+R192:192 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R198:202 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R209:209 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R194:196 Coq.Init.Logic <> :type_scope:x_'='_x not
+R193:193 test10 <> x var
+R197:197 test10 <> y var
+R204:207 Coq.Init.Logic <> :type_scope:x_'<>'_x not
+R203:203 test10 <> x var
+R208:208 test10 <> y var
+R294:299 test10 <> eq_var thm
+ind 332:335 <> term
+constr 362:366 <> t_var
+constr 395:399 <> t_app
+constr 434:440 <> t_idapp
+constr 480:487 <> t_selapp
+constr 527:534 <> t_subapp
+R371:373 test10 <> var def
+R375:375 test10 <> term ind
+R404:407 test10 <> term ind
+R414:417 test10 <> term ind
+R419:419 test10 <> term ind
+R444:447 test10 <> term ind
+R491:494 test10 <> term ind
+R538:541 test10 <> term ind
+def 607:617 <> tsubst_term
+R623:626 test10 <> term ind
+R633:635 test10 <> var def
+R643:646 test10 <> term ind
+R664:667 test10 <> term ind
+R680:682 test10 <> t_6 var
+R694:698 test10 <> t_var constr
+R710:715 test10 <> eq_var thm
+R719:720 test10 <> x5 var
+R736:740 test10 <> t_var constr
+R727:728 test10 <> t5 var
+R751:755 test10 <> t_app constr
+R766:770 test10 <> t_app constr
+R795:805 test10 <> tsubst_term def
+R810:811 test10 <> x5 var
+R807:808 test10 <> t5 var
+R773:783 test10 <> tsubst_term def
+R788:789 test10 <> x5 var
+R785:786 test10 <> t5 var
+R821:827 test10 <> t_idapp constr
+R832:838 test10 <> t_idapp constr
+R845:852 test10 <> t_selapp constr
+R857:864 test10 <> t_selapp constr
+R871:878 test10 <> t_subapp constr
+R883:890 test10 <> t_subapp constr
+ind 945:950 <> reduce
+constr 1002:1007 <> id_app
+constr 1053:1059 <> sel_app
+constr 1106:1112 <> sub_app
+constr 1207:1217 <> ctx_app_fun
+R962:965 test10 <> term ind
+R954:957 test10 <> term ind
+R1021:1024 test10 <> term ind
+R1033:1038 test10 <> reduce ind
+R1048:1048 test10 <> t var
+R1040:1046 test10 <> t_idapp constr
+R1073:1076 test10 <> term ind
+R1085:1090 test10 <> reduce ind
+R1101:1101 test10 <> t var
+R1092:1099 test10 <> t_selapp constr
+R1133:1136 test10 <> term ind
+R1145:1150 test10 <> reduce ind
+R1163:1167 test10 <> t_app constr
+R1187:1191 test10 <> t_app constr
+R1196:1198 test10 <> t'' var
+R1193:1194 test10 <> t' var
+R1171:1175 test10 <> t_app constr
+R1179:1181 test10 <> t'' var
+R1177:1177 test10 <> t var
+R1152:1159 test10 <> t_subapp constr
+R1238:1241 test10 <> term ind
+R1272:1277 test10 <> reduce ind
+R1293:1297 test10 <> t_app constr
+R1303:1303 test10 <> t var
+R1299:1301 test10 <> t1' var
+R1280:1284 test10 <> t_app constr
+R1289:1289 test10 <> t var
+R1286:1287 test10 <> t1 var
+R1250:1255 test10 <> reduce ind
+R1260:1262 test10 <> t1' var
+R1257:1258 test10 <> t1 var

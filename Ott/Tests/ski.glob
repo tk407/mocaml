@@ -1,0 +1,37 @@
+DIGEST 1dfb4e70d67193f693bcf11373449157
+Fski
+R62:66 Coq.Arith.Arith <> <> lib
+R84:87 Coq.Bool.Bool <> <> lib
+R105:108 Coq.Lists.List <> <> lib
+def 124:126 <> var
+R131:133 Coq.Init.Datatypes <> nat ind
+prf 163:168 <> eq_var
+R185:187 ski <> var def
+R191:191 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R197:201 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R208:208 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R193:195 Coq.Init.Logic <> :type_scope:x_'='_x not
+R192:192 ski <> x var
+R196:196 ski <> y var
+R203:206 Coq.Init.Logic <> :type_scope:x_'<>'_x not
+R202:202 ski <> x var
+R207:207 ski <> y var
+R293:298 ski <> eq_var thm
+ind 331:334 <> term
+constr 361:366 <> t_subt
+constr 378:383 <> t_selt
+constr 395:399 <> t_idt
+constr 411:415 <> t_app
+constr 427:431 <> t_var
+R370:373 ski <> term ind
+R387:390 ski <> term ind
+R403:406 ski <> term ind
+R419:422 ski <> term ind
+R436:438 ski <> var def
+R440:440 ski <> term ind
+ind 504:509 <> reduce
+constr 561:568 <> ax_idapp
+constr 653:661 <> ax_selapp
+constr 751:760 <> ax_combapp
+R521:524 ski <> term ind
+R513:516 ski <> term ind
