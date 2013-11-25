@@ -1,0 +1,37 @@
+DIGEST eca4f810c4688ba3ec0f28077ec6aca5
+Fsimples
+ind 10:12 <> day
+constr 28:33 <> monday
+constr 45:51 <> tuesday
+constr 63:71 <> wednesday
+constr 83:90 <> thursday
+constr 102:107 <> friday
+constr 119:126 <> saturday
+constr 138:143 <> sunday
+R37:39 simples <> day ind
+R55:57 simples <> day ind
+R75:77 simples <> day ind
+R94:96 simples <> day ind
+R111:113 simples <> day ind
+R130:132 simples <> day ind
+R147:149 simples <> day ind
+def 164:175 <> next_weekday
+R180:182 simples <> day ind
+R187:189 simples <> day ind
+R201:201 simples <> d var
+R213:218 simples <> monday constr
+R223:229 simples <> tuesday constr
+R235:241 simples <> tuesday constr
+R246:254 simples <> wednesday constr
+R260:268 simples <> wednesday constr
+R273:280 simples <> thursday constr
+R286:293 simples <> thursday constr
+R298:303 simples <> friday constr
+R309:314 simples <> friday constr
+R319:324 simples <> monday constr
+R330:337 simples <> saturday constr
+R342:347 simples <> monday constr
+R353:358 simples <> sunday constr
+R363:368 simples <> monday constr
+R394:405 simples <> next_weekday def
+R407:412 simples <> friday constr

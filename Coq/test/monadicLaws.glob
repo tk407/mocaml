@@ -1,0 +1,40 @@
+DIGEST d1ed3db2f660279bac9dfa15830dbf6d
+FmonadicLaws
+ind 10:15 <> option
+constr 34:37 <> Some
+constr 58:61 <> None
+R46:51 monadicLaws <> option ind
+R65:70 monadicLaws <> option ind
+R95:98 monadicLaws <> Some constr
+R124:127 monadicLaws <> None constr
+def 146:148 <> ret
+R166:166 monadicLaws <> A var
+R172:175 monadicLaws <> Some constr
+R177:177 monadicLaws <> x var
+def 192:195 <> bind
+R215:220 monadicLaws <> option ind
+R222:222 monadicLaws <> A var
+R235:240 monadicLaws <> option ind
+R242:242 monadicLaws <> B var
+R230:230 monadicLaws <> A var
+R247:252 monadicLaws <> option ind
+R254:254 monadicLaws <> B var
+R266:266 monadicLaws <> a var
+R278:281 monadicLaws <> Some constr
+R288:288 monadicLaws <> f var
+R296:299 monadicLaws <> None constr
+R304:307 monadicLaws <> None constr
+R339:342 monadicLaws <> bind def
+not 325 <> ::x_'>>='_x
+prf 391:401 <> mon_left_id
+R429:429 monadicLaws <> A var
+R442:447 monadicLaws <> option ind
+R449:449 monadicLaws <> B var
+R437:437 monadicLaws <> A var
+R466:468 Coq.Init.Logic <> :type_scope:x_'='_x not
+R460:464 monadicLaws <> ::x_'>>='_x not
+R455:457 monadicLaws <> ret def
+R459:459 monadicLaws <> a var
+R465:465 monadicLaws <> f var
+R469:469 monadicLaws <> f var
+R471:471 monadicLaws <> a var
