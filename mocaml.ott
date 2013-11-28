@@ -56,6 +56,7 @@ constant, c :: CONST_ ::=
   | (&&)                               ::   :: and
   | not                                ::   :: not
   | ret                                ::   :: ret
+  | fork                               ::   :: fork
 
 % Terms
 expr, e :: E_ ::=
@@ -63,12 +64,10 @@ expr, e :: E_ ::=
   | constant                             ::   :: constant
   | expr expr'                           ::   :: apply
   | expr >>= expr'                       ::   :: bind
-  | fork expr expr' >!= expr''           ::   :: cutin
   | function value_name -> expr          ::   :: function (+ bind value_name in expr +)
   | let value_name = expr in expr'       ::   :: let      (+ bind value_name in expr' +)
   | live expr                            ::   :: live_expr
   | dead value                           ::   :: dead_expr
-  | fork expr expr'                      ::   :: fork_exprs
   | { e , e' }                           ::   :: pair
   | ( expr )                             :: S :: paren {{ ich [[expr]] }} {{ ocaml [[expr]] }}
   | inl e                                ::   :: taggingleft
@@ -134,9 +133,7 @@ terminals :: terminals_ ::=
   | con                                ::   :: concurrent {{ tex \textbf{concurrent} }}
   | live                               ::   :: conlive    {{ tex Live }}
   | dead                               ::   :: condead     {{ tex Dead }}
-  | fork                               ::   :: confork     {{ tex Fork }}
   | >>=                                ::   :: bind {{ tex >>= }}
-  | >!=                                ::   :: cutin {{ tex >!= }}
   | '*'                                ::   :: product_t    {{ tex * }}
   | ','                                ::   :: pair_elem   {{ tex , }}
   | inl                                ::   :: lefttag     {{ tex Left tag }}
@@ -216,6 +213,10 @@ G |- not : bool -> bool
 ------------------------ :: ret
 G |- ret : t -> con t
 
+------------------------ :: fork
+G |- fork : (con t1) -> ((con t2) -> (con (((t1*t2) + (t1 * (con t2))) + ((con t1) * t2))))
+
+
 % typing rules
 defn 
 G |- e : t :: :: Get :: Get_ by
@@ -246,21 +247,11 @@ G |- v : t
 ---------------------------  :: dead
 G |- dead v : con t
 
-G |- e : t1
-G |- e' : t2 
----------------- :: fork
-G |- fork e e' : con (t1*t2)
 
 G |- e : con t
 G |- e' : t -> con t'
 ----------------------- :: bind
 G |- e >>= e' : con t'
-
-G |- e'' : ((((t' * t'') + (t' * (con t''))) + ((con t') * t'')) -> con t)
-G |- e' : t''
-G |- e : t'
------------------------------------------ :: cutin
-G |- :E_cutin: fork e e' >!= e'' : con t  
 
 G |- e : t1
 G |- e' : t2 
@@ -312,14 +303,14 @@ live v --> dead v
 
 e --> e''
 --------------------------- :: fork1
-fork e e' -->  fork e'' e'
+(fork e) e' -->  (fork e'') e'
 
 e' --> e''
 --------------------------- :: fork2
-fork e e' -->  fork e e''
+(fork e) e' -->  (fork e) e''
 
 ---------------------------- :: forkdeath
-fork v v' -->  dead { v , v' }
+(fork v) v' -->  dead { v , v' }
 
 --------------------------- :: ret
 ret e --> live e
@@ -330,19 +321,6 @@ e >>= e'' --> e' >>= e''
 
 --------------------------- :: dobind
 dead v >>= e --> e v 
-
-:E_fork_exprs: fork e1 e2 --> fork e4 e5 
---------------------------------------------------- :: cutin1
- :E_cutin: fork e1 e2 >!= e3 --> fork e4 e5 >!= e3
-
------------------------------------------------------ :: cutinval
-:E_cutin: fork v1 v2 >!= e3 --> e3 (inl (inl { v1 , v2 }))
-
------------------------------------------------------ :: cutinright
-:E_cutin: fork v1 e2 >!= e3 --> e3 (inl (inr { v1 , (ret e2) }))
-
------------------------------------------------------ :: cutinright
-:E_cutin: fork e1 v2 >!= e3 --> e3 (inr (inr { (ret e1) , v2 }))
 
 %Context-application
 
@@ -374,7 +352,7 @@ not false --> true
 ((&&) false) e --> false
 
 % Pairs
-% Note this could be defined to be parallel, but I want to constr
+% Note this could be defined to be parallel, but I want to constrain concurrency to fork
 e --> e' 
 ----------------------- :: pair_1
 { e , e'' } --> { e' , e'' }
