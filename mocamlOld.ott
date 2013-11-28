@@ -1,0 +1,59 @@
+metavar value_name, x ::=
+  {{ isa string }} {{ coq nat }} {{ coq-equality }} {{ hol string }} {{ ocaml int }}
+  {{ lex alphanum }} 
+metavar ident ::=
+  {{ isa string }} {{ coq nat }} {{ hol string }} {{ ocaml int }}
+  {{ lex Alphanum }} 
+metavar integer_literal ::=
+  {{ isa int }} {{ coq nat }} {{ hol num }} {{ ocaml int }}
+  {{ lex  numeral }}
+indexvar index, i, j, n, m ::=
+  {{ isa nat }} {{ coq nat }}  {{ hol num }} {{ ocaml int }}
+  {{ lex numeral }}
+% the lex specifications above are not accurate - negative numerals, especially, 
+% should be supported
+
+grammar
+expr, e :: E_ ::=
+  | value_name                         ::   :: ident
+  | constant                           ::   :: constant
+  | expr expr'                         ::   :: apply
+  | function value_name -> expr        ::   :: function (+ bind value_name in expr +)
+  | let value_name = expr in expr'     ::   :: let      (+ bind value_name in expr' +)
+  | ( expr )                           :: S :: paren {{ ich [[expr]] }} {{ ocaml [[expr]] }}
+  | { v / x } e                        :: M :: subst 
+    {{ isa subst_expr [[v]] [[x]] [[e]] }}
+    {{ ch (subst_expr [[v]] [[x]] [[e]]) }}
+    {{ ocaml (subst_expr [[v]] [[x]] [[e]]) }}
+
+value, v :: V_ ::=
+  | constant                           ::   :: constant
+  | function value_name -> expr        ::   :: function
+
+defns 
+Jop :: JO_ ::= 
+
+defn 
+e --> e' :: :: red :: red_ by
+
+a -->L a'
+----------------------- :: fork1
+fork a b -->L fork a' b
+
+b -->L b'
+------------- :: fork2
+fork a b -->L fork a b'
+
+
+----------------------------- :: forkret
+fork v1 v2 --> return (v1,v2)
+
+a -->L a'
+-------------------- :: bindeval
+a >>= b -->L a'>>= b
+
+
+-------------------- :: bindret
+v >>= b --> b v
+
+
