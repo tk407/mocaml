@@ -280,14 +280,18 @@ e >>= e'' --> e' >>= e''
 dead v >>= e --> e v 
 
 %Context-application
+% Evaluate argument first
+% then the function
+% the rest is taken care of by the app
 
-e --> e'
+e' --> e''
 --------------  :: context_app1
-e e1 --> e' e1
+e e' --> e e''
 
 e --> e'
 ------------  :: context_app2
-v e --> v e'
+e v --> e' v
+
 
 % Pairs
 % Note this could be defined to be parallel, but I want to constrain concurrency to fork
