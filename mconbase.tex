@@ -71,7 +71,7 @@
 \ottprodline{|}{\ottnt{expr}  >>=  \ottnt{expr'}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\textbf{function} \, \ottmv{value\_name}  \rightarrow  \ottnt{expr}}{}{\textsf{bind}\; \ottmv{value\_name}\; \textsf{in}\; \ottnt{expr}}{}{}\ottprodnewline
 \ottprodline{|}{Live \, \ottnt{expr}}{}{}{}{}\ottprodnewline
-\ottprodline{|}{Dead \, \ottnt{value}}{}{}{}{}\ottprodnewline
+\ottprodline{|}{\ottkw{dead} \, \ottnt{value}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\{  \ottnt{e}  ,  \ottnt{e'}  \}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\ottsym{(}  \ottnt{expr}  \ottsym{)}} {\textsf{S}}{}{}{}\ottprodnewline
 \ottprodline{|}{Left tag \, \ottnt{e}}{}{}{}{}\ottprodnewline
@@ -83,6 +83,7 @@
 \ottrulehead{\ottnt{value}  ,\ \ottnt{v}}{::=}{}\ottprodnewline
 \ottfirstprodline{|}{\ottnt{constant}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\textbf{function} \, \ottmv{value\_name}  \rightarrow  \ottnt{expr}}{}{}{}{}\ottprodnewline
+\ottprodline{|}{Live \, \ottnt{expr}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{Left tag \, \ottnt{v}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{Right tag \, \ottnt{v}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\{  \ottnt{v}  ,  \ottnt{v'}  \}}{}{}{}{}}
@@ -110,7 +111,6 @@
 \ottprodline{|}{ \} }{}{}{}{}\ottprodnewline
 \ottprodline{|}{ \textbf{concurrent} }{}{}{}{}\ottprodnewline
 \ottprodline{|}{ Live }{}{}{}{}\ottprodnewline
-\ottprodline{|}{ Dead }{}{}{}{}\ottprodnewline
 \ottprodline{|}{ >>= }{}{}{}{}\ottprodnewline
 \ottprodline{|}{ * }{}{}{}{}\ottprodnewline
 \ottprodline{|}{ , }{}{}{}{}\ottprodnewline
@@ -252,14 +252,6 @@
 }}
 
 
-\newcommand{\ottdruleGetXXdead}[1]{\ottdrule[#1]{%
-\ottpremise{\Gamma  \vdash  \ottnt{v}  \ottsym{:}  \ottnt{t}}%
-}{
-\Gamma  \vdash  Dead \, \ottnt{v}  \ottsym{:}  \textbf{concurrent} \, \ottnt{t}}{%
-{\ottdrulename{Get\_dead}}{}%
-}}
-
-
 \newcommand{\ottdruleGetXXbind}[1]{\ottdrule[#1]{%
 \ottpremise{\Gamma  \vdash  \ottnt{e}  \ottsym{:}  \textbf{concurrent} \, \ottnt{t}}%
 \ottpremise{\Gamma  \vdash  \ottnt{e'}  \ottsym{:}  \ottnt{t}  \rightarrow  \textbf{concurrent} \, \ottnt{t'}}%
@@ -309,7 +301,6 @@
 \ottusedrule{\ottdruleGetXXapply{}}
 \ottusedrule{\ottdruleGetXXlambda{}}
 \ottusedrule{\ottdruleGetXXlive{}}
-\ottusedrule{\ottdruleGetXXdead{}}
 \ottusedrule{\ottdruleGetXXbind{}}
 \ottusedrule{\ottdruleGetXXpair{}}
 \ottusedrule{\ottdruleGetXXTInl{}}
@@ -330,47 +321,46 @@
 }}
 
 
-\newcommand{\ottdruleJOXXredXXlive}[1]{\ottdrule[#1]{%
-\ottpremise{\ottnt{e}  \longrightarrow  \ottnt{e'}}%
-}{
-Live \, \ottnt{e}  \longrightarrow  Live \, \ottnt{e'}}{%
-{\ottdrulename{JO\_red\_live}}{}%
-}}
-
-
-\newcommand{\ottdruleJOXXredXXdie}[1]{\ottdrule[#1]{%
-}{
-Live \, \ottnt{v}  \longrightarrow  Dead \, \ottnt{v}}{%
-{\ottdrulename{JO\_red\_die}}{}%
-}}
-
-
-\newcommand{\ottdruleJOXXredXXforkOne}[1]{\ottdrule[#1]{%
+\newcommand{\ottdruleJOXXredXXforkmoveOne}[1]{\ottdrule[#1]{%
 \ottpremise{\ottnt{e}  \longrightarrow  \ottnt{e''}}%
 }{
-\ottsym{(}  \ottkw{fork} \, \ottnt{e}  \ottsym{)} \, \ottnt{e'}  \longrightarrow  \ottsym{(}  \ottkw{fork} \, \ottnt{e''}  \ottsym{)} \, \ottnt{e'}}{%
-{\ottdrulename{JO\_red\_fork1}}{}%
+\ottsym{(}  \ottkw{fork} \, \ottsym{(}  Live \, \ottnt{e}  \ottsym{)}  \ottsym{)} \, \ottsym{(}  Live \, \ottnt{e'}  \ottsym{)}  \longrightarrow  \ottsym{(}  \ottkw{fork} \, \ottsym{(}  Live \, \ottnt{e''}  \ottsym{)}  \ottsym{)} \, \ottsym{(}  Live \, \ottnt{e'}  \ottsym{)}}{%
+{\ottdrulename{JO\_red\_forkmove1}}{}%
 }}
 
 
-\newcommand{\ottdruleJOXXredXXforkTwo}[1]{\ottdrule[#1]{%
+\newcommand{\ottdruleJOXXredXXforkmoveTwo}[1]{\ottdrule[#1]{%
 \ottpremise{\ottnt{e'}  \longrightarrow  \ottnt{e''}}%
 }{
-\ottsym{(}  \ottkw{fork} \, \ottnt{e}  \ottsym{)} \, \ottnt{e'}  \longrightarrow  \ottsym{(}  \ottkw{fork} \, \ottnt{e}  \ottsym{)} \, \ottnt{e''}}{%
-{\ottdrulename{JO\_red\_fork2}}{}%
+\ottsym{(}  \ottkw{fork} \, \ottsym{(}  Live \, \ottnt{e}  \ottsym{)}  \ottsym{)} \, \ottsym{(}  Live \, \ottnt{e'}  \ottsym{)}  \longrightarrow  \ottsym{(}  \ottkw{fork} \, \ottsym{(}  Live \, \ottnt{e}  \ottsym{)}  \ottsym{)} \, \ottsym{(}  Live \, \ottnt{e''}  \ottsym{)}}{%
+{\ottdrulename{JO\_red\_forkmove2}}{}%
 }}
 
 
-\newcommand{\ottdruleJOXXredXXforkdeath}[1]{\ottdrule[#1]{%
+\newcommand{\ottdruleJOXXredXXforkdeathOne}[1]{\ottdrule[#1]{%
 }{
-\ottsym{(}  \ottkw{fork} \, \ottnt{v}  \ottsym{)} \, \ottnt{v'}  \longrightarrow  Dead \, \{  \ottnt{v}  ,  \ottnt{v'}  \}}{%
-{\ottdrulename{JO\_red\_forkdeath}}{}%
+\ottsym{(}  \ottkw{fork} \, \ottsym{(}  Live \, \ottnt{v}  \ottsym{)}  \ottsym{)} \, \ottsym{(}  Live \, \ottnt{e'}  \ottsym{)}  \longrightarrow  Live \, \{  \ottnt{v}  ,  \ottsym{(}  Live \, \ottnt{e'}  \ottsym{)}  \}}{%
+{\ottdrulename{JO\_red\_forkdeath1}}{}%
+}}
+
+
+\newcommand{\ottdruleJOXXredXXforkdeathTwo}[1]{\ottdrule[#1]{%
+}{
+\ottsym{(}  \ottkw{fork} \, \ottsym{(}  Live \, \ottnt{e}  \ottsym{)}  \ottsym{)} \, \ottsym{(}  Live \, \ottnt{v}  \ottsym{)}  \longrightarrow  Live \, \{  \ottsym{(}  Live \, \ottnt{e}  \ottsym{)}  ,  \ottnt{v}  \}}{%
+{\ottdrulename{JO\_red\_forkdeath2}}{}%
+}}
+
+
+\newcommand{\ottdruleJOXXredXXforkdeathOneTwo}[1]{\ottdrule[#1]{%
+}{
+\ottsym{(}  \ottkw{fork} \, \ottsym{(}  Live \, \ottnt{v}  \ottsym{)}  \ottsym{)} \, \ottsym{(}  Live \, \ottnt{v'}  \ottsym{)}  \longrightarrow  Live \, \{  \ottnt{v}  ,  \ottnt{v'}  \}}{%
+{\ottdrulename{JO\_red\_forkdeath12}}{}%
 }}
 
 
 \newcommand{\ottdruleJOXXredXXret}[1]{\ottdrule[#1]{%
 }{
-\ottkw{ret} \, \ottnt{e}  \longrightarrow  Live \, \ottnt{e}}{%
+\ottkw{ret} \, \ottnt{v}  \longrightarrow  Live \, \ottnt{v}}{%
 {\ottdrulename{JO\_red\_ret}}{}%
 }}
 
@@ -384,8 +374,16 @@ Live \, \ottnt{v}  \longrightarrow  Dead \, \ottnt{v}}{%
 
 
 \newcommand{\ottdruleJOXXredXXdobind}[1]{\ottdrule[#1]{%
+\ottpremise{\ottnt{e}  \longrightarrow  \ottnt{e'}}%
 }{
-Dead \, \ottnt{v}  >>=  \ottnt{e}  \longrightarrow  \ottnt{e} \, \ottnt{v}}{%
+\ottsym{(}  Live \, \ottnt{e}  \ottsym{)}  >>=  \ottnt{e''}  \longrightarrow  \ottsym{(}  Live \, \ottnt{e'}  \ottsym{)}  >>=  \ottnt{e''}}{%
+{\ottdrulename{JO\_red\_dobind}}{}%
+}}
+
+
+\newcommand{\ottdruleJOXXredXXdobind}[1]{\ottdrule[#1]{%
+}{
+\ottsym{(}  Live \, \ottnt{v}  \ottsym{)}  >>=  \ottnt{e}  \longrightarrow  \ottnt{e} \, \ottnt{v}}{%
 {\ottdrulename{JO\_red\_dobind}}{}%
 }}
 
@@ -461,13 +459,14 @@ Case \, \ottnt{e} \, of \, Left tag \, \ottmv{x}  \Rightarrow  \ottnt{e''}  \ott
 
 \newcommand{\ottdefnJOXXred}[1]{\begin{ottdefnblock}[#1]{$\ottnt{e}  \longrightarrow  \ottnt{e'}$}{}
 \ottusedrule{\ottdruleJOXXredXXapp{}}
-\ottusedrule{\ottdruleJOXXredXXlive{}}
-\ottusedrule{\ottdruleJOXXredXXdie{}}
-\ottusedrule{\ottdruleJOXXredXXforkOne{}}
-\ottusedrule{\ottdruleJOXXredXXforkTwo{}}
-\ottusedrule{\ottdruleJOXXredXXforkdeath{}}
+\ottusedrule{\ottdruleJOXXredXXforkmoveOne{}}
+\ottusedrule{\ottdruleJOXXredXXforkmoveTwo{}}
+\ottusedrule{\ottdruleJOXXredXXforkdeathOne{}}
+\ottusedrule{\ottdruleJOXXredXXforkdeathTwo{}}
+\ottusedrule{\ottdruleJOXXredXXforkdeathOneTwo{}}
 \ottusedrule{\ottdruleJOXXredXXret{}}
 \ottusedrule{\ottdruleJOXXredXXevalbind{}}
+\ottusedrule{\ottdruleJOXXredXXdobind{}}
 \ottusedrule{\ottdruleJOXXredXXdobind{}}
 \ottusedrule{\ottdruleJOXXredXXcontextXXappOne{}}
 \ottusedrule{\ottdruleJOXXredXXcontextXXappTwo{}}
@@ -498,6 +497,6 @@ Case \, \ottnt{e} \, of \, Left tag \, \ottmv{x}  \Rightarrow  \ottnt{e''}  \ott
 
 \begin{verbatim}
 Definition rules:        33 good    0 bad
-Definition rule clauses: 63 good    0 bad
+Definition rule clauses: 62 good    0 bad
 \end{verbatim}
 \end{document}

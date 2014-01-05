@@ -65,6 +65,7 @@ expr, e :: E_ ::=
 value, v :: V_ ::=
   | constant                           ::   :: constant
   | function value_name -> expr        ::   :: function
+  | live expr                         ::   :: live_expr
   | inl v                              ::   :: taggedleft
   | inr v                              ::   :: taggedright
   | { v , v' }                         ::   :: valuepair
@@ -115,7 +116,6 @@ terminals :: terminals_ ::=
   | '}'                                ::   :: rightbrace {{ tex \} }}
   | con                                ::   :: concurrent {{ tex \textbf{concurrent} }}
   | live                               ::   :: conlive    {{ tex Live }}
-  | dead                               ::   :: condead     {{ tex Dead }}
   | >>=                                ::   :: bind {{ tex >>= }}
   | '*'                                ::   :: product_t    {{ tex * }}
   | ','                                ::   :: pair_elem   {{ tex , }}
@@ -175,6 +175,8 @@ value_name : typscheme in G, value_name':typscheme'
 defn
 G |- constant : t :: :: G_constant :: constant_ by
 
+% Primitive functions
+
 ------------------------ :: ret
 G |- ret : t -> con t
 
@@ -207,10 +209,6 @@ G |- function x1->e : t1->t
 G |- e : t
 ---------------------------  :: live
 G |- live e : con t
-
-G |- v : t
----------------------------  :: dead
-G |- dead v : con t
 
 
 G |- e : con t
@@ -251,33 +249,49 @@ e --> e' :: :: red :: red_ by
 
 %Concurrent constructs
 
-e --> e'
---------------------------- :: live
-live e -->  live e'
+%Live exressions are not allowed to move directly
 
---------------------------- :: die
-live v --> dead v
+%e --> e'
+%--------------------------- :: live
+%live e -->  live e'
+
+%and finish
+
+%--------------------------- :: die
+%live v --> dead v
+
+%Here should be the only path for concurrency
 
 e --> e''
---------------------------- :: fork1
-(fork e) e' -->  (fork e'') e'
+--------------------------- :: forkmove1
+(fork (live e) ) (live e') -->  (fork (live e'') ) (live e')
 
 e' --> e''
---------------------------- :: fork2
-(fork e) e' -->  (fork e) e''
+--------------------------- :: forkmove2
+(fork (live e) ) (live e') -->  (fork (live e) ) (live e'') 
 
----------------------------- :: forkdeath
-(fork v) v' -->  dead { v , v' }
+--------------------------- :: forkdeath1
+(fork (live v) ) (live e') -->  live { v , ( live e' ) }
+
+--------------------------- :: forkdeath2
+(fork (live e) ) (live v) -->  live { ( live e ) , v }
+
+--------------------------- :: forkdeath12
+(fork (live v) ) (live v') -->  live { v , v' }
 
 --------------------------- :: ret
-ret e --> live e
+ret v --> live v
 
 e --> e'
 --------------------------- :: evalbind
 e >>= e'' --> e' >>= e''
 
+e --> e'
 --------------------------- :: dobind
-dead v >>= e --> e v 
+(live e) >>= e'' --> (live e') >>= e'' 
+
+--------------------------- :: dobind
+(live v) >>= e --> e v 
 
 %Context-application
 % Evaluate argument first
