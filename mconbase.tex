@@ -373,11 +373,11 @@
 }}
 
 
-\newcommand{\ottdruleJOXXredXXdobind}[1]{\ottdrule[#1]{%
+\newcommand{\ottdruleJOXXredXXmovebind}[1]{\ottdrule[#1]{%
 \ottpremise{\ottnt{e}  \longrightarrow  \ottnt{e'}}%
 }{
 \ottsym{(}  Live \, \ottnt{e}  \ottsym{)}  >>=  \ottnt{e''}  \longrightarrow  \ottsym{(}  Live \, \ottnt{e'}  \ottsym{)}  >>=  \ottnt{e''}}{%
-{\ottdrulename{JO\_red\_dobind}}{}%
+{\ottdrulename{JO\_red\_movebind}}{}%
 }}
 
 
@@ -466,7 +466,7 @@ Case \, \ottnt{e} \, of \, Left tag \, \ottmv{x}  \Rightarrow  \ottnt{e''}  \ott
 \ottusedrule{\ottdruleJOXXredXXforkdeathOneTwo{}}
 \ottusedrule{\ottdruleJOXXredXXret{}}
 \ottusedrule{\ottdruleJOXXredXXevalbind{}}
-\ottusedrule{\ottdruleJOXXredXXdobind{}}
+\ottusedrule{\ottdruleJOXXredXXmovebind{}}
 \ottusedrule{\ottdruleJOXXredXXdobind{}}
 \ottusedrule{\ottdruleJOXXredXXcontextXXappOne{}}
 \ottusedrule{\ottdruleJOXXredXXcontextXXappTwo{}}

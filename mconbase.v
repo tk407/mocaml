@@ -159,12 +159,6 @@ Definition tsubst_typscheme (sub:list (typvar*typexpr)) (ts5:typscheme) : typsch
   | (TS_ts typvar_list typexpr5) => TS_ts typvar_list (tsubst_typexpr (list_minus2 eq_typvar sub (unmake_list_typvar typvar_list)) typexpr5)
 end.
 
-Fixpoint tsubst_G (sub:list (typvar*typexpr)) (G_6:G) {struct G_6} : G :=
-  match G_6 with
-  | G_em => G_em 
-  | (G_vn G5 value_name5 typscheme5) => G_vn (tsubst_G sub G5) value_name5 (tsubst_typscheme sub typscheme5)
-end.
-
 Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr :=
   match e__6 with
   | (E_ident value_name5) => (if eq_value_name value_name5 x_5 then e_5 else (E_ident value_name5))
@@ -178,6 +172,12 @@ Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr
   | (E_taggingleft e) => E_taggingleft (subst_expr e_5 x_5 e)
   | (E_taggingright e) => E_taggingright (subst_expr e_5 x_5 e)
   | (E_case e1 x1 e2 x2 e3) => E_case (subst_expr e_5 x_5 e1) x1 (subst_expr e_5 x_5 e2) x2 (subst_expr e_5 x_5 e3)
+end.
+
+Fixpoint tsubst_G (sub:list (typvar*typexpr)) (G_6:G) {struct G_6} : G :=
+  match G_6 with
+  | G_em => G_em 
+  | (G_vn G5 value_name5 typscheme5) => G_vn (tsubst_G sub G5) value_name5 (tsubst_typscheme sub typscheme5)
 end.
 
 (** library functions *)
@@ -304,7 +304,7 @@ Inductive JO_red : expr -> expr -> Prop :=    (* defn red *)
  | JO_red_evalbind : forall (e e'' e':expr),
      JO_red e e' ->
      JO_red (E_bind e e'') (E_bind e' e'')
- | JO_red_dobind : forall (e e'' e':expr),
+ | JO_red_movebind : forall (e e'' e':expr),
      JO_red e e' ->
      JO_red (E_bind  (E_live_expr e)  e'') (E_bind  (E_live_expr e')  e'')
  | JO_red_dobind : forall (v e:expr),
