@@ -14,6 +14,8 @@ Qed.
 Extraction Language Ocaml.
 
 Notation "A >>= F" := (E_bind A F) (at level 42, left associativity).
+Notation "A --> B" := (JO_red A B) (at level 54, no associativity).
+
 
 Example valuepair : is_value_of_expr (E_pair (E_constant(CONST_ret)) (E_constant(CONST_fork))).
 Proof.
@@ -25,16 +27,18 @@ Ltac caseEq f :=
   generalize (refl_equal f); pattern f at -1; case f. 
 
 Inductive JO_red_star : expr -> expr -> Prop :=
-| JO_red_star_step: forall e e' f,
-    JO_red e e' ->
+| JO_red_star_step: forall (e e' f : expr),
+    e --> e' ->
     JO_red_star e' f ->
     JO_red_star e f
 | JO_red_star_refl: forall e,
     JO_red_star e e.
 
+Notation "A -->* B" := (JO_red_star A B) (at level 54, no associativity).
+
 Example simplred : forall (x:value_name) (e v:expr),
      is_value_of_expr v ->
-     JO_red (E_apply  (E_function x e)  v)  (subst_expr  v   x   e ).
+     E_apply  (E_function x e)  v -->  subst_expr  v   x   e.
 Proof.
   intros.
   Check JO_red_app.
@@ -44,10 +48,10 @@ Qed.
 
 Lemma mon_left_id : forall (x:value_name) (a e:expr),
     is_value_of_expr a ->
-    JO_red_star ((E_apply(E_constant (CONST_ret)) a) >>= (E_function x e)) (E_apply (E_function x e) a).
+    ((E_apply(E_constant (CONST_ret)) a) >>= (E_function x e)) -->* (E_apply (E_function x e) a).
 Proof.
  intros.
- apply JO_red_star_step with (e' := (E_bind (E_live_expr a) (E_function x e))).
+ apply JO_red_star_step with (e' := (E_live_expr a >>= E_function x e)).
  apply JO_red_evalbind.
  apply JO_red_ret.
  apply H.
@@ -57,8 +61,26 @@ Proof.
  apply JO_red_star_refl.
 Qed.
 
-(*
+
 Lemma mon_right_id : forall (a:expr),
    is_value_of_expr a ->
-   JO_red_star (E_bind (a)  (E_constant (CONST_ret))) (a).
-*)
+   E_live_expr a >>= E_constant CONST_ret -->* E_live_expr a.
+Proof.
+ intros.
+ apply JO_red_star_step with (e' := (E_apply (E_constant CONST_ret) a)).
+ apply JO_red_dobind.
+ trivial.
+ apply JO_red_star_step with (e' := (E_live_expr a)).
+ apply JO_red_ret.
+ trivial.
+ apply JO_red_star_refl.
+Qed.
+
+Lemma mon_assoc : forall (v v' v'' : value_name) (a e e' :expr),  
+    is_value_of_expr a ->
+    v <> v' ->
+    v' <> v'' ->
+    v <> v'' ->
+    exists (t :expr), (E_live_expr a >>= (E_function v e) >>= (E_function v' e') -->* t) /\ (E_live_expr a >>= (E_function v'' (E_apply (E_function v e) (E_ident v'') >>= (E_function v' e'))) -->* t).
+Proof.
+ Admitted.
