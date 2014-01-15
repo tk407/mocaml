@@ -78,9 +78,24 @@ Qed.
 
 Lemma mon_assoc : forall (v v' v'' : value_name) (a e e' :expr),  
     is_value_of_expr a ->
-    v <> v' ->
-    v' <> v'' ->
     v <> v'' ->
+    v' <> v'' ->
     exists (t :expr), (E_live_expr a >>= (E_function v e) >>= (E_function v' e') -->* t) /\ (E_live_expr a >>= (E_function v'' (E_apply (E_function v e) (E_ident v'') >>= (E_function v' e'))) -->* t).
 Proof.
+ intros.
+ exists (E_apply (E_function v e) a >>= E_function v' e' ).
+ split.
+ Show 1.
+  apply JO_red_star_step with (e' := ((E_apply (E_function v e) a) >>= E_function v' e')).
+  apply JO_red_evalbind with (e' := ((E_apply (E_function v e) a))).
+  apply JO_red_dobind.
+  trivial.
+  apply JO_red_star_refl.
+ apply JO_red_star_step with (e' := (E_apply (E_function v'' (E_apply (E_function v e) (E_ident v'') >>= E_function v' e')) a)).
+ apply JO_red_dobind.
+ trivial.
+ apply JO_red_star_step with  (e' := (subst_expr a v'' (E_apply (E_function v e) (E_ident v'') >>= E_function v' e'))).
+ apply JO_red_app with (x:=v'') (v:=a) (e := (E_apply (E_function v e) (E_ident v'') >>= E_function v' e')).
+ trivial.
+ simpl.
  Admitted.
