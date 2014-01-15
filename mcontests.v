@@ -1,3 +1,7 @@
+Require Import Arith.
+Require Import Bool.
+Require Import List.
+
 Load mconbase.
 
 (*Check E_ident(0).*)
@@ -80,6 +84,8 @@ Lemma mon_assoc : forall (v v' v'' : value_name) (a e e' :expr),
     is_value_of_expr a ->
     v <> v'' ->
     v' <> v'' ->
+    ((subst_expr a v'' e') = e') ->
+    ((subst_expr a v'' e) = e) ->
     exists (t :expr), (E_live_expr a >>= (E_function v e) >>= (E_function v' e') -->* t) /\ (E_live_expr a >>= (E_function v'' (E_apply (E_function v e) (E_ident v'') >>= (E_function v' e'))) -->* t).
 Proof.
  intros.
@@ -97,5 +103,35 @@ Proof.
  apply JO_red_star_step with  (e' := (subst_expr a v'' (E_apply (E_function v e) (E_ident v'') >>= E_function v' e'))).
  apply JO_red_app with (x:=v'') (v:=a) (e := (E_apply (E_function v e) (E_ident v'') >>= E_function v' e')).
  trivial.
+ auto.
+ cut ((subst_expr a v''  (E_apply (E_function v e) (E_ident v'') >>= E_function v' e') = (E_apply (E_function v e) a >>= E_function v' e'))). 
+ intros.
+ rewrite H4.
+ apply JO_red_star_refl.
  simpl.
- Admitted.
+ rewrite H2.
+ rewrite H3.
+ cut ((if eq_value_name v v'' then true else false) = false).
+ intros.
+ rewrite H4.
+ cut ((if eq_value_name v'' v'' then a else E_ident v'') = a).
+ intros.
+ rewrite H5.
+ cut ((if eq_value_name v' v'' then true else false) = false).
+ intros.
+ rewrite H6.
+ trivial.
+ Check eq_value_name v v''.
+ destruct (eq_value_name v v'').
+ contradiction.
+ destruct (eq_value_name v' v'').
+ contradiction.
+ trivial.
+ destruct (eq_value_name v'' v'').
+ trivial.
+ contradiction n.
+ trivial.
+ destruct (eq_value_name v v'').
+ contradiction e0.
+ trivial.
+Qed.
