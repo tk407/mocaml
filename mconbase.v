@@ -14,23 +14,14 @@ Hint Resolve eq_value_name : ott_coq_equality.
 Definition ident := nat.
 Definition index := nat.
 
-Inductive typvar : Set := 
- | TV_ident (ident5:ident).
-
 Inductive constant : Set := 
  | CONST_ret : constant
- | CONST_fork : constant.
+ | CONST_fork : constant
+ | CONST_read_value : constant
+ | CONST_write_value : constant.
 
-Inductive typexpr : Set := 
- | TE_var (typvar5:typvar)
- | TE_arrow (typexpr5:typexpr) (typexpr':typexpr)
- | TE_prod (typexpr5:typexpr) (typexpr':typexpr)
- | TE_concurrent (typexpr5:typexpr)
- | TE_sum (typexpr5:typexpr) (typexpr':typexpr).
-
-Inductive list_typvar : Set := 
- | Nil_list_typvar : list_typvar
- | Cons_list_typvar (_:typvar) (_:list_typvar).
+Inductive typvar : Set := 
+ | TV_ident (ident5:ident).
 
 Inductive expr : Set := 
  | E_ident (value_name5:value_name)
@@ -45,12 +36,31 @@ Inductive expr : Set :=
  | E_taggingright (e:expr)
  | E_case (e1:expr) (x1:value_name) (e2:expr) (x2:value_name) (e3:expr).
 
+Inductive typexpr : Set := 
+ | TE_var (typvar5:typvar)
+ | TE_arrow (typexpr5:typexpr) (typexpr':typexpr)
+ | TE_prod (typexpr5:typexpr) (typexpr':typexpr)
+ | TE_concurrent (typexpr5:typexpr)
+ | TE_sum (typexpr5:typexpr) (typexpr':typexpr).
+
+Inductive list_typvar : Set := 
+ | Nil_list_typvar : list_typvar
+ | Cons_list_typvar (_:typvar) (_:list_typvar).
+
+Inductive sideeffect : Set := 
+ | sideeffect_read : sideeffect
+ | sideeffect_write (expr5:expr).
+
 Inductive typscheme : Set := 
  | TS_ts (_:list_typvar) (typexpr5:typexpr).
+
+Definition trans_label : Set := (list sideeffect).
 
 Inductive G : Set := 
  | G_em : G
  | G_vn (G5:G) (value_name5:value_name) (typscheme5:typscheme).
+
+Definition labelled_arrow : Set := trans_label.
 Lemma eq_typvar: forall (x y : typvar), {x = y} + {x <> y}.
 Proof.
 decide equality. apply eq_value_name.
@@ -121,6 +131,12 @@ with is_value_of_expr (e_5:expr) : Prop :=
   | (E_case e1 x1 e2 x2 e3) => False
 end.
 
+Definition is_sideeffect_of_sideeffect (SE5:sideeffect) : Prop :=
+  match SE5 with
+  | sideeffect_read => (True)
+  | (sideeffect_write expr5) => ((is_expr_of_expr expr5))
+end.
+
 (** library functions *)
 Fixpoint list_mem A (eq:forall a b:A,{a=b}+{a<>b}) (x:A) (l:list A) {struct l} : bool :=
   match l with
@@ -154,11 +170,6 @@ Fixpoint tsubst_typexpr (sub:list (typvar*typexpr)) (t_6:typexpr) {struct t_6} :
   | (TE_sum typexpr5 typexpr') => TE_sum (tsubst_typexpr sub typexpr5) (tsubst_typexpr sub typexpr')
 end.
 
-Definition tsubst_typscheme (sub:list (typvar*typexpr)) (ts5:typscheme) : typscheme :=
-  match ts5 with
-  | (TS_ts typvar_list typexpr5) => TS_ts typvar_list (tsubst_typexpr (list_minus2 eq_typvar sub (unmake_list_typvar typvar_list)) typexpr5)
-end.
-
 Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr :=
   match e__6 with
   | (E_ident value_name5) => (if eq_value_name value_name5 x_5 then e_5 else (E_ident value_name5))
@@ -172,6 +183,17 @@ Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr
   | (E_taggingleft e) => E_taggingleft (subst_expr e_5 x_5 e)
   | (E_taggingright e) => E_taggingright (subst_expr e_5 x_5 e)
   | (E_case e1 x1 e2 x2 e3) => E_case (subst_expr e_5 x_5 e1) x1 (subst_expr e_5 x_5 e2) x2 (subst_expr e_5 x_5 e3)
+end.
+
+Definition tsubst_typscheme (sub:list (typvar*typexpr)) (ts5:typscheme) : typscheme :=
+  match ts5 with
+  | (TS_ts typvar_list typexpr5) => TS_ts typvar_list (tsubst_typexpr (list_minus2 eq_typvar sub (unmake_list_typvar typvar_list)) typexpr5)
+end.
+
+Definition subst_sideeffect (e5:expr) (x5:value_name) (SE5:sideeffect) : sideeffect :=
+  match SE5 with
+  | sideeffect_read => sideeffect_read 
+  | (sideeffect_write expr5) => sideeffect_write (subst_expr e5 x5 expr5)
 end.
 
 Fixpoint tsubst_G (sub:list (typvar*typexpr)) (G_6:G) {struct G_6} : G :=
@@ -278,66 +300,66 @@ with Get : G -> expr -> typexpr -> Prop :=    (* defn Get *)
 (** definitions *)
 
 (* defns Jop *)
-Inductive JO_red : expr -> expr -> Prop :=    (* defn red *)
+Inductive JO_red : expr -> labelled_arrow -> expr -> Prop :=    (* defn red *)
  | JO_red_app : forall (x:value_name) (e v:expr),
      is_value_of_expr v ->
-     JO_red (E_apply  (E_function x e)  v)  (subst_expr  v   x   e ) 
- | JO_red_forkmove1 : forall (e e' e'':expr),
-     JO_red e e'' ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e') ) (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e'') )   (E_live_expr e') )
- | JO_red_forkmove2 : forall (e e' e'':expr),
-     JO_red e' e'' ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e') ) (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e'') )
+     JO_red (E_apply  (E_function x e)  v)    (@nil sideeffect)     (subst_expr  v   x   e ) 
+ | JO_red_forkmove1 : forall (e e':expr) (L:trans_label) (e'':expr),
+     JO_red e  L  e'' ->
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e') )  L  (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e'') )   (E_live_expr e') )
+ | JO_red_forkmove2 : forall (e e':expr) (L:trans_label) (e'':expr),
+     JO_red e'  L  e'' ->
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e') )  L  (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e'') )
  | JO_red_forkdeath1 : forall (v e':expr),
      is_value_of_expr v ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr v) )   (E_live_expr e') ) (E_live_expr (E_pair v  (E_live_expr e') ))
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr v) )   (E_live_expr e') )    (@nil sideeffect)    (E_live_expr (E_pair v  (E_live_expr e') ))
  | JO_red_forkdeath2 : forall (e v:expr),
      is_value_of_expr v ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr v) ) (E_live_expr (E_pair  (E_live_expr e)  v))
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr v) )    (@nil sideeffect)    (E_live_expr (E_pair  (E_live_expr e)  v))
  | JO_red_forkdeath12 : forall (v v':expr),
      is_value_of_expr v ->
      is_value_of_expr v' ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr v) )   (E_live_expr v') ) (E_live_expr (E_pair v v'))
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr v) )   (E_live_expr v') )    (@nil sideeffect)    (E_live_expr (E_pair v v'))
  | JO_red_ret : forall (v:expr),
      is_value_of_expr v ->
-     JO_red (E_apply (E_constant CONST_ret) v) (E_live_expr v)
- | JO_red_evalbind : forall (e e'' e':expr),
-     JO_red e e' ->
-     JO_red (E_bind e e'') (E_bind e' e'')
- | JO_red_movebind : forall (e e'' e':expr),
-     JO_red e e' ->
-     JO_red (E_bind  (E_live_expr e)  e'') (E_bind  (E_live_expr e')  e'')
+     JO_red (E_apply (E_constant CONST_ret) v)    (@nil sideeffect)    (E_live_expr v)
+ | JO_red_evalbind : forall (e e'':expr) (L:trans_label) (e':expr),
+     JO_red e  L  e' ->
+     JO_red (E_bind e e'')  L  (E_bind e' e'')
+ | JO_red_movebind : forall (e e'':expr) (L:trans_label) (e':expr),
+     JO_red e  L  e' ->
+     JO_red (E_bind  (E_live_expr e)  e'')  L  (E_bind  (E_live_expr e')  e'')
  | JO_red_dobind : forall (v e:expr),
      is_value_of_expr v ->
-     JO_red (E_bind  (E_live_expr v)  e) (E_apply e v)
- | JO_red_context_app1 : forall (e e' e'':expr),
-     JO_red e' e'' ->
-     JO_red (E_apply e e') (E_apply e e'')
- | JO_red_context_app2 : forall (e v e':expr),
+     JO_red (E_bind  (E_live_expr v)  e)    (@nil sideeffect)    (E_apply e v)
+ | JO_red_context_app1 : forall (e e':expr) (L:trans_label) (e'':expr),
+     JO_red e'  L  e'' ->
+     JO_red (E_apply e e')  L  (E_apply e e'')
+ | JO_red_context_app2 : forall (e v:expr) (L:trans_label) (e':expr),
      is_value_of_expr v ->
-     JO_red e e' ->
-     JO_red (E_apply e v) (E_apply e' v)
- | JO_red_pair_1 : forall (e e'' e':expr),
-     JO_red e e' ->
-     JO_red (E_pair e e'') (E_pair e' e'')
- | JO_red_pair_2 : forall (v e e':expr),
+     JO_red e  L  e' ->
+     JO_red (E_apply e v)  L  (E_apply e' v)
+ | JO_red_pair_1 : forall (e e'':expr) (L:trans_label) (e':expr),
+     JO_red e  L  e' ->
+     JO_red (E_pair e e'')  L  (E_pair e' e'')
+ | JO_red_pair_2 : forall (v e:expr) (L:trans_label) (e':expr),
      is_value_of_expr v ->
-     JO_red e e' ->
-     JO_red (E_pair v e) (E_pair v e')
- | JO_red_evalinl : forall (e e':expr),
-     JO_red e e' ->
-     JO_red (E_taggingleft e) (E_taggingleft e')
- | JO_red_evalinr : forall (e e':expr),
-     JO_red e e' ->
-     JO_red (E_taggingright e) (E_taggingright e')
+     JO_red e  L  e' ->
+     JO_red (E_pair v e)  L  (E_pair v e')
+ | JO_red_evalinl : forall (e:expr) (L:trans_label) (e':expr),
+     JO_red e  L  e' ->
+     JO_red (E_taggingleft e)  L  (E_taggingleft e')
+ | JO_red_evalinr : forall (e:expr) (L:trans_label) (e':expr),
+     JO_red e  L  e' ->
+     JO_red (E_taggingright e)  L  (E_taggingright e')
  | JO_red_evalcaseinl : forall (x:value_name) (e:expr) (x':value_name) (e' v:expr),
      is_value_of_expr v ->
-     JO_red (E_case  (E_taggingleft v)  x e x' e')  (subst_expr  v   x   e ) 
+     JO_red (E_case  (E_taggingleft v)  x e x' e')    (@nil sideeffect)     (subst_expr  v   x   e ) 
  | JO_red_evalcaseinr : forall (x:value_name) (e:expr) (x':value_name) (e' v:expr),
      is_value_of_expr v ->
-     JO_red (E_case  (E_taggingright v)  x e x' e')  (subst_expr  v   x'   e' ) 
- | JO_red_evalcase : forall (e:expr) (x:value_name) (e'':expr) (x':value_name) (e''' e':expr),
-     JO_red e e' ->
-     JO_red (E_case e x e'' x' e''') (E_case e' x e'' x' e''').
+     JO_red (E_case  (E_taggingright v)  x e x' e')    (@nil sideeffect)     (subst_expr  v   x'   e' ) 
+ | JO_red_evalcase : forall (e:expr) (x:value_name) (e'':expr) (x':value_name) (e''':expr) (L:trans_label) (e':expr),
+     JO_red e  L  e' ->
+     JO_red (E_case e x e'' x' e''')  L  (E_case e' x e'' x' e''').
 
 

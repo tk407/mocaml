@@ -5,7 +5,8 @@ Require Import List.
 Load mconbase.
 
 (*Check E_ident(0).*)
-Check JO_red (E_ident(0)) (E_ident(1)).
+Check JO_red (E_ident(0))  (@nil sideeffect) (E_ident(1)).
+
 
 
 Theorem identisexpr : forall (n : nat), is_expr_of_expr (E_ident(n)) = True.
@@ -18,7 +19,8 @@ Qed.
 Extraction Language Ocaml.
 
 Notation "A >>= F" := (E_bind A F) (at level 42, left associativity).
-Notation "A --> B" := (JO_red A B) (at level 54, no associativity).
+Notation "A --> B" := (JO_red A (@nil sideeffect) B) (at level 54, no associativity).
+Check (E_ident(0)) --> (E_ident(1)).
 
 
 Example valuepair : is_value_of_expr (E_pair (E_constant(CONST_ret)) (E_constant(CONST_fork))).
@@ -30,15 +32,17 @@ Qed.
 Ltac caseEq f :=
   generalize (refl_equal f); pattern f at -1; case f. 
 
-Inductive JO_red_star : expr -> expr -> Prop :=
-| JO_red_star_step: forall (e e' f : expr),
-    e --> e' ->
-    JO_red_star e' f ->
-    JO_red_star e f
-| JO_red_star_refl: forall e,
-    JO_red_star e e.
+Check (@nil sideeffect) ++ nil.
 
-Notation "A -->* B" := (JO_red_star A B) (at level 54, no associativity).
+Inductive JO_red_star : expr -> labelled_arrow -> expr -> Prop :=
+| JO_red_star_step: forall (e e' f : expr) (l1 l2 : labelled_arrow),
+    (JO_red e l1 e') ->
+    JO_red_star e' l2 f ->
+    JO_red_star e (l1 ++ l2) f
+| JO_red_star_refl: forall e,
+    JO_red_star e nil e.
+
+Notation "A -->* B" := (JO_red_star A (@nil sideeffect) B) (at level 54, no associativity).
 
 Example simplred : forall (x:value_name) (e v:expr),
      is_value_of_expr v ->
@@ -55,11 +59,11 @@ Lemma mon_left_id : forall (x:value_name) (a e:expr),
     ((E_apply(E_constant (CONST_ret)) a) >>= (E_function x e)) -->* (E_apply (E_function x e) a).
 Proof.
  intros.
- apply JO_red_star_step with (e' := (E_live_expr a >>= E_function x e)).
+ apply JO_red_star_step with (e' := (E_live_expr a >>= E_function x e)) (l1 := nil) (l2 := nil).
  apply JO_red_evalbind.
  apply JO_red_ret.
  apply H.
- apply JO_red_star_step with (e' := (E_apply (E_function x e) a)).
+ apply JO_red_star_step with (e' := (E_apply (E_function x e) a)) (l1 := nil) (l2 := nil).
  apply JO_red_dobind.
  apply H.
  apply JO_red_star_refl.
@@ -71,10 +75,10 @@ Lemma mon_right_id : forall (a:expr),
    E_live_expr a >>= E_constant CONST_ret -->* E_live_expr a.
 Proof.
  intros.
- apply JO_red_star_step with (e' := (E_apply (E_constant CONST_ret) a)).
+ apply JO_red_star_step with (e' := (E_apply (E_constant CONST_ret) a)) (l1 := nil) (l2 := nil).
  apply JO_red_dobind.
  trivial.
- apply JO_red_star_step with (e' := (E_live_expr a)).
+ apply JO_red_star_step with (e' := (E_live_expr a)) (l1 := nil) (l2 := nil).
  apply JO_red_ret.
  trivial.
  apply JO_red_star_refl.
@@ -92,15 +96,15 @@ Proof.
  exists (E_apply (E_function v e) a >>= E_function v' e' ).
  split.
  Show 1.
-  apply JO_red_star_step with (e' := ((E_apply (E_function v e) a) >>= E_function v' e')).
+  apply JO_red_star_step with (e' := ((E_apply (E_function v e) a) >>= E_function v' e')) (l1 := nil) (l2 := nil).
   apply JO_red_evalbind with (e' := ((E_apply (E_function v e) a))).
   apply JO_red_dobind.
   trivial.
   apply JO_red_star_refl.
- apply JO_red_star_step with (e' := (E_apply (E_function v'' (E_apply (E_function v e) (E_ident v'') >>= E_function v' e')) a)).
+ apply JO_red_star_step with (e' := (E_apply (E_function v'' (E_apply (E_function v e) (E_ident v'') >>= E_function v' e')) a)) (l1 := nil) (l2 := nil).
  apply JO_red_dobind.
  trivial.
- apply JO_red_star_step with  (e' := (subst_expr a v'' (E_apply (E_function v e) (E_ident v'') >>= E_function v' e'))).
+ apply JO_red_star_step with  (e' := (subst_expr a v'' (E_apply (E_function v e) (E_ident v'') >>= E_function v' e'))) (l1 := nil) (l2 := nil).
  apply JO_red_app with (x:=v'') (v:=a) (e := (E_apply (E_function v e) (E_ident v'') >>= E_function v' e')).
  trivial.
  auto.

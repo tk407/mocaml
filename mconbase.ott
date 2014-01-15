@@ -41,6 +41,8 @@ typscheme, ts :: TS_ ::=
 constant, c :: CONST_ ::=
   | ret                                ::   :: ret
   | fork                               ::   :: fork
+  | readVal                            ::   :: read_value
+  | writeVal                           ::   :: write_value
 
 % Terms
 expr, e :: E_ ::=
@@ -105,13 +107,42 @@ formula :: formula_ ::=
   | value_name = value_name'           ::   :: eqv 
         {{ ich [[value_name]]=[[value_name']] }} {{ ocaml TODO }}
 
+%Side effects
+sideeffect, SE :: sideeffect_ ::=
+     | R                               :: I :: read
+     | W expr                          :: I :: write
+     | ( SE )                          :: M I :: paren
+        {{ ich [[SE]] }}
+
+%Transition labels
+trans_label, L :: label_ ::=
+    {{ coq (list sideeffect) }}
+    | empty                                             :: I :: nil
+        {{ coq (@nil sideeffect) }}
+    | L , SE                                            :: I :: snoc
+        {{ coq (cons [[SE]] [[L]]) }}
+    | SE1 , .. , SEn                                    :: M I :: list
+        {{ coq (rev [[SE1 .. SEn]]) }}
+    | L1 @ .. @ Ln                                      :: M I :: tree
+        {{ coq (flatten (rev [[L1 .. Ln]])) }}
+    | ( L )                                               :: I M :: paren
+       {{ ich [[L]] }}
+       {{ tex [[L]] }}
+
+labelled_arrow :: LA_ ::= 
+      {{ ich trans_label }} 
+      {{ tex \stackrel{\ottnt{L} }{\longrightarrow}\ottmaybebreakline }}
+  | --> L                                               :: I :: inj
+        {{ ich [[L]] }}
+        {{ tex \stackrel{[[L]]}{\longrightarrow}\ottmaybebreakline }}
+
 
 %Terminals
 terminals :: terminals_ ::=
   |  ->                                ::   :: arrow      {{ tex \rightarrow }}
   |  function                          ::   :: function   {{ tex \textbf{function} }}
   | |-                                 ::   :: turnstile  {{ tex \vdash }}
-  | -->                                ::   :: red        {{ tex \longrightarrow }}
+% | -->                                ::   :: red        {{ tex \longrightarrow }}
   | '{'                                ::   :: leftbrace  {{ tex \{ }}
   | '}'                                ::   :: rightbrace {{ tex \} }}
   | con                                ::   :: concurrent {{ tex \textbf{concurrent} }}
@@ -242,10 +273,10 @@ defns
 Jop :: JO_ ::= 
 
 defn 
-e --> e' :: :: red :: red_ by
+e labelled_arrow e' :: :: red :: red_ by
 
 ------------------------------- :: app
-(function x->e)  v --> {v/x}  e
+(function x->e)  v -->:label_paren:(empty) {v/x}  e
 
 %Concurrent constructs
 
@@ -262,77 +293,77 @@ e --> e' :: :: red :: red_ by
 
 %Here should be the only path for concurrency
 
-e --> e''
+e -->L e''
 --------------------------- :: forkmove1
-(fork (live e) ) (live e') -->  (fork (live e'') ) (live e')
+(fork (live e) ) (live e') -->L  (fork (live e'') ) (live e')
 
-e' --> e''
+e' -->L e''
 --------------------------- :: forkmove2
-(fork (live e) ) (live e') -->  (fork (live e) ) (live e'') 
+(fork (live e) ) (live e') -->L  (fork (live e) ) (live e'') 
 
 --------------------------- :: forkdeath1
-(fork (live v) ) (live e') -->  live { v , ( live e' ) }
+(fork (live v) ) (live e') -->:label_paren:(empty)  live { v , ( live e' ) }
 
 --------------------------- :: forkdeath2
-(fork (live e) ) (live v) -->  live { ( live e ) , v }
+(fork (live e) ) (live v) -->:label_paren:(empty)  live { ( live e ) , v }
 
 --------------------------- :: forkdeath12
-(fork (live v) ) (live v') -->  live { v , v' }
+(fork (live v) ) (live v') -->:label_paren:(empty)  live { v , v' }
 
 --------------------------- :: ret
-ret v --> live v
+ret v -->:label_paren:(empty) live v
 
-e --> e'
+e -->L e'
 --------------------------- :: evalbind
-e >>= e'' --> e' >>= e''
+e >>= e'' -->L e' >>= e''
 
-e --> e'
+e -->L e'
 --------------------------- :: movebind
-(live e) >>= e'' --> (live e') >>= e'' 
+(live e) >>= e'' -->L (live e') >>= e'' 
 
 --------------------------- :: dobind
-(live v) >>= e --> e v 
+(live v) >>= e -->:label_paren:(empty) e v 
 
 %Context-application
 % Evaluate argument first
 % then the function
 % the rest is taken care of by the app
 
-e' --> e''
+e' -->L e''
 --------------  :: context_app1
-e e' --> e e''
+e e' -->L e e''
 
-e --> e'
+e -->L e'
 ------------  :: context_app2
-e v --> e' v
+e v -->L e' v
 
 
 % Pairs
 % Note this could be defined to be parallel, but I want to constrain concurrency to fork
-e --> e' 
+e -->L e' 
 ----------------------- :: pair_1
-{ e , e'' } --> { e' , e'' }
+{ e , e'' } -->L { e' , e'' }
 
-e --> e'
+e -->L e'
 ----------------------- :: pair_2
-{ v , e } --> { v, e' }
+{ v , e } -->L { v, e' }
 
 
 %Sum types
-    e --> e'
+    e -->L e'
 ---------------- :: evalinl
-inl e --> inl e'
+inl e -->L inl e'
 
-    e --> e'
+    e -->L e'
 ---------------- :: evalinr
-inr e --> inr e'
+inr e -->L inr e'
 
 --------------------------------------------------------- :: evalcaseinl
-case (inl v) of inl x => e | inr x' => e' --> { v / x } e
+case (inl v) of inl x => e | inr x' => e' -->:label_paren:(empty) { v / x } e
 
 --------------------------------------------------------- :: evalcaseinr
-case (inr v) of inl x => e | inr x' => e' --> { v / x' } e'
+case (inr v) of inl x => e | inr x' => e' -->:label_paren:(empty) { v / x' } e'
 
-                                      e --> e'
+                                      e -->L e'
 ------------------------------------------------------------------------------------ :: evalcase
-case e of inl x => e'' | inr x' => e''' --> case e' of inl x => e'' | inr x' => e'''
+case e of inl x => e'' | inr x' => e''' -->L case e' of inl x => e'' | inr x' => e'''
