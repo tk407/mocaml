@@ -1,0 +1,41 @@
+-R . RelationExtraction
+-custom "
+#the following is inserted verbatim
+
+all: $(RELEXTR_PLUGIN).cma $(RELEXTR_PLUGIN).cmxs
+
+clean: clean-plugin
+
+clean-plugin:
+	rm -f $(RELEXTR_PLUGIN).a
+
+test: $(RELEXTR_PLUGIN).cma $(RELEXTR_PLUGIN).cmxs
+
+#end verbatim
+" "" ""
+
+RELEXTR_PLUGIN = "relation_extraction_plugin"
+host_stuff.mli
+proof_scheme.mli
+proof_scheme.ml
+pred.mli
+pred.ml
+coq_stuff.mli
+coq_stuff.ml
+host2spec.mli
+host2spec.ml
+minimlgen.mli
+minimlgen.ml
+fixpred.mli
+fixpred.ml
+reltacs.mli
+reltacs.ml
+proofgen.mli
+proofgen.ml
+fixpointgen.mli
+fixpointgen.ml
+relation_extraction.mli
+relation_extraction.ml
+g_relation_extraction.ml4
+relation_extraction_plugin.mllib
+test

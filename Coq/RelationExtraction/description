@@ -1,0 +1,9 @@
+Name: RelationExtraction
+Title: Functions extraction from inductive relations
+Author: Catherine Dubois, David Delahaye, Pierre-Nicolas Tollitte
+Institution: CNAM-ENSIIE, Paris, France
+Date: 2011, 2012
+Description: This plugin introduces a new set of extraction commands that
+  generates functional code form inductive specifications.
+Keywords: extraction, inductive relations, semantics
+Category: Computer Science/Semantics and Compilation/Compilation
