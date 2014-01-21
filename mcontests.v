@@ -8,6 +8,15 @@ Load mconbase.
 Check JO_red (E_ident(0)) (E_ident(1)).
 
 
+Theorem identisexpr : forall (n : nat), is_expr_of_expr (E_ident(n)) = True.
+Proof.
+ intros n.
+ simpl.
+ trivial.
+Qed.
+
+Extraction Language Ocaml.
+
 Notation "A >>= F" := (E_bind A F) (at level 42, left associativity).
 Notation "A --> B" := (JO_red A B) (at level 54, no associativity).
 
