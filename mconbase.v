@@ -39,7 +39,6 @@ Inductive expr : Set :=
  | E_bind (expr5:expr) (expr':expr)
  | E_function (value_name5:value_name) (expr5:expr)
  | E_live_expr (expr5:expr)
- | E_dead_expr (value5:expr)
  | E_pair (e:expr) (e':expr)
  | E_taggingleft (e:expr)
  | E_taggingright (e:expr)
@@ -92,29 +91,14 @@ Fixpoint app_list_typvar (l m: list_typvar): list_typvar :=
 
 
 (** subrules *)
-Fixpoint is_expr_of_expr (e_5:expr) : Prop :=
-  match e_5 with
-  | (E_ident value_name5) => (True)
-  | (E_constant constant5) => (True)
-  | (E_apply expr5 expr') => ((is_expr_of_expr expr5) /\ (is_expr_of_expr expr'))
-  | (E_bind expr5 expr') => ((is_expr_of_expr expr5) /\ (is_expr_of_expr expr'))
-  | (E_function value_name5 expr5) => ((is_expr_of_expr expr5))
-  | (E_live_expr expr5) => ((is_expr_of_expr expr5))
-  | (E_dead_expr value5) => ((is_value_of_expr value5))
-  | (E_pair e e') => ((is_expr_of_expr e) /\ (is_expr_of_expr e'))
-  | (E_taggingleft e) => ((is_expr_of_expr e))
-  | (E_taggingright e) => ((is_expr_of_expr e))
-  | (E_case e1 x1 e2 x2 e3) => ((is_expr_of_expr e1) /\ (is_expr_of_expr e2) /\ (is_expr_of_expr e3))
-end
-with is_value_of_expr (e_5:expr) : Prop :=
+Fixpoint is_value_of_expr (e_5:expr) : Prop :=
   match e_5 with
   | (E_ident value_name5) => False
   | (E_constant constant5) => (True)
   | (E_apply expr5 expr') => False
   | (E_bind expr5 expr') => False
-  | (E_function value_name5 expr5) => ((is_expr_of_expr expr5))
-  | (E_live_expr expr5) => ((is_expr_of_expr expr5))
-  | (E_dead_expr value5) => False
+  | (E_function value_name5 expr5) => (True)
+  | (E_live_expr expr5) => (True)
   | (E_pair e e') => ((is_value_of_expr e) /\ (is_value_of_expr e'))
   | (E_taggingleft e) => ((is_value_of_expr e))
   | (E_taggingright e) => ((is_value_of_expr e))
@@ -167,7 +151,6 @@ Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr
   | (E_bind expr5 expr') => E_bind (subst_expr e_5 x_5 expr5) (subst_expr e_5 x_5 expr')
   | (E_function value_name5 expr5) => E_function value_name5 (if list_mem eq_value_name x_5 (cons value_name5 nil) then expr5 else (subst_expr e_5 x_5 expr5))
   | (E_live_expr expr5) => E_live_expr (subst_expr e_5 x_5 expr5)
-  | (E_dead_expr value5) => E_dead_expr value5
   | (E_pair e e') => E_pair (subst_expr e_5 x_5 e) (subst_expr e_5 x_5 e')
   | (E_taggingleft e) => E_taggingleft (subst_expr e_5 x_5 e)
   | (E_taggingright e) => E_taggingright (subst_expr e_5 x_5 e)
@@ -291,9 +274,9 @@ Inductive JO_red : expr -> expr -> Prop :=    (* defn red *)
  | JO_red_forkdeath1 : forall (v e':expr),
      is_value_of_expr v ->
      JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr v) )   (E_live_expr e') ) (E_live_expr (E_pair v  (E_live_expr e') ))
- | JO_red_forkdeath2 : forall (e v:expr),
+ | JO_red_forkdeath2 : forall (v e:expr),
      is_value_of_expr v ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr v) ) (E_live_expr (E_pair  (E_live_expr e)  v))
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (E_ident nv)) )   (E_live_expr v) ) (E_live_expr (E_pair  (E_live_expr e)  v))
  | JO_red_forkdeath12 : forall (v v':expr),
      is_value_of_expr v ->
      is_value_of_expr v' ->

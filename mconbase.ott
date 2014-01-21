@@ -50,7 +50,6 @@ expr, e :: E_ ::=
   | expr >>= expr'                       ::   :: bind
   | function value_name -> expr          ::   :: function (+ bind value_name in expr +)
   | live expr                            ::   :: live_expr
-  | dead value                           ::   :: dead_expr
   | { e , e' }                           ::   :: pair
   | ( expr )                             :: S :: paren {{ ich [[expr]] }} {{ ocaml [[expr]] }}
   | inl e                                ::   :: taggingleft
@@ -69,6 +68,7 @@ value, v :: V_ ::=
   | inl v                              ::   :: taggedleft
   | inr v                              ::   :: taggedright
   | { v , v' }                         ::   :: valuepair
+
 
 %Type environment
 G {{ tex \Gamma }} :: G_ ::=
@@ -128,7 +128,7 @@ terminals :: terminals_ ::=
 
 % Subsumption: values are expressions
 subrules
-  v <:: expr     
+  v <:: expr
 
 substitutions
   single   expr value_name :: subst  
