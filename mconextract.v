@@ -29,6 +29,94 @@ Fixpoint xis_value_of_expr (e_5:expr) : bool :=
   | (E_case e1 x1 e2 x2 e3) => false
 end.
 
+Lemma l_val : forall (e:expr), (eq (xis_value_of_expr e) true) <-> (is_value_of_expr e).
+Proof.
+ intros.
+ split.
+ (* xis -> is*)
+  intros.
+  induction e.
+  (* ident *)
+   simpl in H.
+   apply diff_true_false.
+   symmetry.
+   trivial.
+  (* constant *)
+   simpl.
+   trivial.
+  (* apply *)
+   simpl in H.
+   simpl.
+   apply diff_true_false.
+   symmetry.
+   trivial.
+  (* bind *) 
+   simpl.
+   trivial.
+   simpl in H.
+   apply diff_true_false.
+   symmetry.
+   trivial.
+  (* function *) 
+   simpl; trivial.
+  (* live *)
+   simpl; trivial.
+  (* pair *)
+   simpl in H.
+   simpl.
+   split.
+   destruct (xis_value_of_expr e1).
+   auto.
+   auto.
+   destruct (xis_value_of_expr e2).
+   auto.
+   destruct (xis_value_of_expr e1).
+   auto.
+   auto.
+  (* tagging left *)
+   simpl.
+   auto.
+  (* tagging right *) 
+   simpl.
+   auto.
+  (* case *) 
+   simpl in H.
+   simpl.
+   apply diff_true_false.
+   symmetry.
+   trivial.
+ (* is -> xis *)
+  intros.
+  induction e.
+  (* ident *) 
+   simpl in H.
+   contradiction.
+  (* constant *)
+   simpl; trivial.
+  (* apply *)
+   simpl in H; contradiction.
+  (* bind *)
+   simpl in H; contradiction.
+  (* function *)
+   simpl; trivial.
+  (* live *)
+   simpl; trivial.
+  (* pair *)
+   simpl in H.
+   decompose [and] H. 
+   simpl in IHe1.
+   simpl.
+   rewrite IHe1.
+   auto.
+   auto.
+  (* tagging left *)
+   simpl; simpl in H; auto.
+  (* tagging right *)
+   simpl; simpl in H; auto.
+  (* case *)
+   simpl; contradiction.
+Qed.
+
 Fixpoint yval (e : expr) (b : bool) : Prop := (eq (xis_value_of_expr e) b).
 
 
