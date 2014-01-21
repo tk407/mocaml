@@ -274,9 +274,9 @@ Inductive JO_red : expr -> expr -> Prop :=    (* defn red *)
  | JO_red_forkdeath1 : forall (v e':expr),
      is_value_of_expr v ->
      JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr v) )   (E_live_expr e') ) (E_live_expr (E_pair v  (E_live_expr e') ))
- | JO_red_forkdeath2 : forall (v e:expr),
+ | JO_red_forkdeath2 : forall (e v:expr),
      is_value_of_expr v ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (E_ident nv)) )   (E_live_expr v) ) (E_live_expr (E_pair  (E_live_expr e)  v))
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr v) ) (E_live_expr (E_pair  (E_live_expr e)  v))
  | JO_red_forkdeath12 : forall (v v':expr),
      is_value_of_expr v ->
      is_value_of_expr v' ->
