@@ -17,16 +17,16 @@ Definition index := nat.
 Inductive typvar : Set := 
  | TV_ident (ident5:ident).
 
-Inductive constant : Set := 
- | CONST_ret : constant
- | CONST_fork : constant.
-
 Inductive typexpr : Set := 
  | TE_var (typvar5:typvar)
  | TE_arrow (typexpr5:typexpr) (typexpr':typexpr)
  | TE_prod (typexpr5:typexpr) (typexpr':typexpr)
  | TE_concurrent (typexpr5:typexpr)
  | TE_sum (typexpr5:typexpr) (typexpr':typexpr).
+
+Inductive constant : Set := 
+ | CONST_ret : constant
+ | CONST_fork : constant.
 
 Inductive list_typvar : Set := 
  | Nil_list_typvar : list_typvar
@@ -37,7 +37,7 @@ Inductive expr : Set :=
  | E_constant (constant5:constant)
  | E_apply (expr5:expr) (expr':expr)
  | E_bind (expr5:expr) (expr':expr)
- | E_function (value_name5:value_name) (expr5:expr)
+ | E_function (value_name5:value_name) (typexpr5:typexpr) (expr5:expr)
  | E_live_expr (expr5:expr)
  | E_pair (e:expr) (e':expr)
  | E_taggingleft (e:expr)
@@ -97,7 +97,7 @@ Fixpoint is_value_of_expr (e_5:expr) : Prop :=
   | (E_constant constant5) => (True)
   | (E_apply expr5 expr') => False
   | (E_bind expr5 expr') => False
-  | (E_function value_name5 expr5) => (True)
+  | (E_function value_name5 typexpr5 expr5) => (True)
   | (E_live_expr expr5) => (True)
   | (E_pair e e') => ((is_value_of_expr e) /\ (is_value_of_expr e'))
   | (E_taggingleft e) => ((is_value_of_expr e))
@@ -149,12 +149,26 @@ Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr
   | (E_constant constant5) => E_constant constant5
   | (E_apply expr5 expr') => E_apply (subst_expr e_5 x_5 expr5) (subst_expr e_5 x_5 expr')
   | (E_bind expr5 expr') => E_bind (subst_expr e_5 x_5 expr5) (subst_expr e_5 x_5 expr')
-  | (E_function value_name5 expr5) => E_function value_name5 (if list_mem eq_value_name x_5 (cons value_name5 nil) then expr5 else (subst_expr e_5 x_5 expr5))
+  | (E_function value_name5 typexpr5 expr5) => E_function value_name5 typexpr5 (if list_mem eq_value_name x_5 (cons value_name5 nil) then expr5 else (subst_expr e_5 x_5 expr5))
   | (E_live_expr expr5) => E_live_expr (subst_expr e_5 x_5 expr5)
   | (E_pair e e') => E_pair (subst_expr e_5 x_5 e) (subst_expr e_5 x_5 e')
   | (E_taggingleft e) => E_taggingleft (subst_expr e_5 x_5 e)
   | (E_taggingright e) => E_taggingright (subst_expr e_5 x_5 e)
   | (E_case e1 x1 e2 x2 e3) => E_case (subst_expr e_5 x_5 e1) x1 (subst_expr e_5 x_5 e2) x2 (subst_expr e_5 x_5 e3)
+end.
+
+Fixpoint tsubst_expr (sub:list (typvar*typexpr)) (e_5:expr) {struct e_5} : expr :=
+  match e_5 with
+  | (E_ident value_name5) => E_ident value_name5
+  | (E_constant constant5) => E_constant constant5
+  | (E_apply expr5 expr') => E_apply (tsubst_expr sub expr5) (tsubst_expr sub expr')
+  | (E_bind expr5 expr') => E_bind (tsubst_expr sub expr5) (tsubst_expr sub expr')
+  | (E_function value_name5 typexpr5 expr5) => E_function value_name5 (tsubst_typexpr sub typexpr5) (tsubst_expr sub expr5)
+  | (E_live_expr expr5) => E_live_expr (tsubst_expr sub expr5)
+  | (E_pair e e') => E_pair (tsubst_expr sub e) (tsubst_expr sub e')
+  | (E_taggingleft e) => E_taggingleft (tsubst_expr sub e)
+  | (E_taggingright e) => E_taggingright (tsubst_expr sub e)
+  | (E_case e1 x1 e2 x2 e3) => E_case (tsubst_expr sub e1) x1 (tsubst_expr sub e2) x2 (tsubst_expr sub e3)
 end.
 
 Fixpoint tsubst_G (sub:list (typvar*typexpr)) (G_6:G) {struct G_6} : G :=
@@ -185,6 +199,20 @@ end.
 Definition ftv_typscheme (ts5:typscheme) : list typvar :=
   match ts5 with
   | (TS_ts typvar_list typexpr5) => (app nil (list_minus eq_typvar (ftv_typexpr typexpr5) (unmake_list_typvar typvar_list)))
+end.
+
+Fixpoint ftv_expr (e_5:expr) : list typvar :=
+  match e_5 with
+  | (E_ident value_name5) => nil
+  | (E_constant constant5) => nil
+  | (E_apply expr5 expr') => (app (ftv_expr expr5) (ftv_expr expr'))
+  | (E_bind expr5 expr') => (app (ftv_expr expr5) (ftv_expr expr'))
+  | (E_function value_name5 typexpr5 expr5) => (app (ftv_typexpr typexpr5) (ftv_expr expr5))
+  | (E_live_expr expr5) => ((ftv_expr expr5))
+  | (E_pair e e') => (app (ftv_expr e) (ftv_expr e'))
+  | (E_taggingleft e) => ((ftv_expr e))
+  | (E_taggingright e) => ((ftv_expr e))
+  | (E_case e1 x1 e2 x2 e3) => (app (ftv_expr e1) (app (ftv_expr e2) (ftv_expr e3)))
 end.
 
 Fixpoint ftv_G (G_6:G) : list typvar :=
@@ -233,9 +261,9 @@ with Get : G -> expr -> typexpr -> Prop :=    (* defn Get *)
      Get G5 e (TE_arrow t1 t2) ->
      Get G5 e' t1 ->
      Get G5 (E_apply e e') t2
- | Get_lambda : forall (G5:G) (x1:value_name) (e:expr) (t1 t:typexpr),
+ | Get_lambda : forall (G5:G) (x1:value_name) (t1:typexpr) (e:expr) (t:typexpr),
      Get (G_vn G5 x1 (TS_ts Nil_list_typvar t1)) e t ->
-     Get G5 (E_function x1 e) (TE_arrow t1 t)
+     Get G5 (E_function x1 t1 e) (TE_arrow t1 t)
  | Get_live : forall (G5:G) (e:expr) (t:typexpr),
      Get G5 e t ->
      Get G5 (E_live_expr e) (TE_concurrent t)
@@ -262,9 +290,9 @@ with Get : G -> expr -> typexpr -> Prop :=    (* defn Get *)
 
 (* defns Jop *)
 Inductive JO_red : expr -> expr -> Prop :=    (* defn red *)
- | JO_red_app : forall (x:value_name) (e v:expr),
+ | JO_red_app : forall (x:value_name) (t:typexpr) (e v:expr),
      is_value_of_expr v ->
-     JO_red (E_apply  (E_function x e)  v)  (subst_expr  v   x   e ) 
+     JO_red (E_apply  (E_function x t e)  v)  (subst_expr  v   x   e ) 
  | JO_red_forkmove1 : forall (e e' e'':expr),
      JO_red e e'' ->
      JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e') ) (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e'') )   (E_live_expr e') )
@@ -274,9 +302,9 @@ Inductive JO_red : expr -> expr -> Prop :=    (* defn red *)
  | JO_red_forkdeath1 : forall (v e':expr),
      is_value_of_expr v ->
      JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr v) )   (E_live_expr e') ) (E_live_expr (E_pair v  (E_live_expr e') ))
- | JO_red_forkdeath2 : forall (v e:expr),
+ | JO_red_forkdeath2 : forall (e v:expr),
      is_value_of_expr v ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (E_ident nv)) )   (E_live_expr v) ) (E_live_expr (E_pair  (E_live_expr e)  v))
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr v) ) (E_live_expr (E_pair  (E_live_expr e)  v))
  | JO_red_forkdeath12 : forall (v v':expr),
      is_value_of_expr v ->
      is_value_of_expr v' ->

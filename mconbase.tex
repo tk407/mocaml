@@ -69,7 +69,7 @@
 \ottprodline{|}{\ottnt{constant}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\ottnt{expr} \, \ottnt{expr'}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\ottnt{expr}  >>=  \ottnt{expr'}}{}{}{}{}\ottprodnewline
-\ottprodline{|}{\textbf{function} \, \ottmv{value\_name}  \rightarrow  \ottnt{expr}}{}{\textsf{bind}\; \ottmv{value\_name}\; \textsf{in}\; \ottnt{expr}}{}{}\ottprodnewline
+\ottprodline{|}{\textbf{function} \, \ottmv{value\_name}  :  \ottnt{typexpr}  \rightarrow  \ottnt{expr}}{}{\textsf{bind}\; \ottmv{value\_name}\; \textsf{in}\; \ottnt{expr}}{}{}\ottprodnewline
 \ottprodline{|}{Live \, \ottnt{expr}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\{  \ottnt{e}  ,  \ottnt{e'}  \}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\ottsym{(}  \ottnt{expr}  \ottsym{)}} {\textsf{S}}{}{}{}\ottprodnewline
@@ -81,7 +81,7 @@
 \newcommand{\ottvalue}{
 \ottrulehead{\ottnt{value}  ,\ \ottnt{v}}{::=}{}\ottprodnewline
 \ottfirstprodline{|}{\ottnt{constant}}{}{}{}{}\ottprodnewline
-\ottprodline{|}{\textbf{function} \, \ottmv{value\_name}  \rightarrow  \ottnt{expr}}{}{}{}{}\ottprodnewline
+\ottprodline{|}{\textbf{function} \, \ottmv{value\_name}  :  \ottnt{typexpr}  \rightarrow  \ottnt{expr}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{Live \, \ottnt{expr}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{Left tag \, \ottnt{v}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{Right tag \, \ottnt{v}}{}{}{}{}\ottprodnewline
@@ -90,7 +90,7 @@
 \newcommand{\ottG}{
 \ottrulehead{\Gamma}{::=}{}\ottprodnewline
 \ottfirstprodline{|}{\ottkw{empty}}{}{}{}{}\ottprodnewline
-\ottprodline{|}{\Gamma  ,  \ottmv{value\_name}  \ottsym{:}  \ottnt{typscheme}}{}{}{}{}}
+\ottprodline{|}{\Gamma  ,  \ottmv{value\_name}  :  \ottnt{typscheme}}{}{}{}{}}
 
 \newcommand{\ottformula}{
 \ottrulehead{\ottnt{formula}}{::=}{}\ottprodnewline
@@ -118,13 +118,14 @@
 \ottprodline{|}{ Case }{}{}{}{}\ottprodnewline
 \ottprodline{|}{ of }{}{}{}{}\ottprodnewline
 \ottprodline{|}{ \Rightarrow }{}{}{}{}\ottprodnewline
-\ottprodline{|}{ + }{}{}{}{}}
+\ottprodline{|}{ + }{}{}{}{}\ottprodnewline
+\ottprodline{|}{ : }{}{}{}{}}
 
 \newcommand{\ottJtype}{
 \ottrulehead{\ottnt{Jtype}}{::=}{}\ottprodnewline
-\ottfirstprodline{|}{\ottmv{value\_name}  \ottsym{:}  \ottnt{typscheme} \, \ottkw{in} \, \Gamma}{}{}{}{}\ottprodnewline
-\ottprodline{|}{\Gamma  \vdash  \ottnt{constant}  \ottsym{:}  \ottnt{t}}{}{}{}{}\ottprodnewline
-\ottprodline{|}{\Gamma  \vdash  \ottnt{e}  \ottsym{:}  \ottnt{t}}{}{}{}{}}
+\ottfirstprodline{|}{\ottmv{value\_name}  :  \ottnt{typscheme} \, \ottkw{in} \, \Gamma}{}{}{}{}\ottprodnewline
+\ottprodline{|}{\Gamma  \vdash  \ottnt{constant}  :  \ottnt{t}}{}{}{}{}\ottprodnewline
+\ottprodline{|}{\Gamma  \vdash  \ottnt{e}  :  \ottnt{t}}{}{}{}{}}
 
 \newcommand{\ottJop}{
 \ottrulehead{\ottnt{Jop}}{::=}{}\ottprodnewline
@@ -171,20 +172,20 @@
 %% defn VTSin
 \newcommand{\ottdruleVTSinXXvnOne}[1]{\ottdrule[#1]{%
 }{
-\ottmv{value\_name}  \ottsym{:}  \ottnt{typscheme} \, \ottkw{in} \, \Gamma  ,  \ottmv{value\_name}  \ottsym{:}  \ottnt{typscheme}}{%
+\ottmv{value\_name}  :  \ottnt{typscheme} \, \ottkw{in} \, \Gamma  ,  \ottmv{value\_name}  :  \ottnt{typscheme}}{%
 {\ottdrulename{VTSin\_vn1}}{}%
 }}
 
 
 \newcommand{\ottdruleVTSinXXvnTwo}[1]{\ottdrule[#1]{%
-\ottpremise{\ottmv{value\_name}  \ottsym{:}  \ottnt{typscheme} \, \ottkw{in} \, \Gamma}%
+\ottpremise{\ottmv{value\_name}  :  \ottnt{typscheme} \, \ottkw{in} \, \Gamma}%
 \ottpremise{\ottkw{not} \, \ottsym{(}  \ottmv{value\_name}  \ottsym{=}  \ottmv{value\_name'}  \ottsym{)}}%
 }{
-\ottmv{value\_name}  \ottsym{:}  \ottnt{typscheme} \, \ottkw{in} \, \Gamma  ,  \ottmv{value\_name'}  \ottsym{:}  \ottnt{typscheme'}}{%
+\ottmv{value\_name}  :  \ottnt{typscheme} \, \ottkw{in} \, \Gamma  ,  \ottmv{value\_name'}  :  \ottnt{typscheme'}}{%
 {\ottdrulename{VTSin\_vn2}}{}%
 }}
 
-\newcommand{\ottdefnVTSin}[1]{\begin{ottdefnblock}[#1]{$\ottmv{value\_name}  \ottsym{:}  \ottnt{typscheme} \, \ottkw{in} \, \Gamma$}{}
+\newcommand{\ottdefnVTSin}[1]{\begin{ottdefnblock}[#1]{$\ottmv{value\_name}  :  \ottnt{typscheme} \, \ottkw{in} \, \Gamma$}{}
 \ottusedrule{\ottdruleVTSinXXvnOne{}}
 \ottusedrule{\ottdruleVTSinXXvnTwo{}}
 \end{ottdefnblock}}
@@ -192,109 +193,109 @@
 %% defn G_constant
 \newcommand{\ottdruleconstantXXret}[1]{\ottdrule[#1]{%
 }{
-\Gamma  \vdash  \ottkw{ret}  \ottsym{:}  \ottnt{t}  \rightarrow  \textbf{concurrent} \, \ottnt{t}}{%
+\Gamma  \vdash  \ottkw{ret}  :  \ottnt{t}  \rightarrow  \textbf{concurrent} \, \ottnt{t}}{%
 {\ottdrulename{constant\_ret}}{}%
 }}
 
 
 \newcommand{\ottdruleconstantXXfork}[1]{\ottdrule[#1]{%
 }{
-\Gamma  \vdash  \ottkw{fork}  \ottsym{:}  \ottsym{(}  \textbf{concurrent} \, \ottnt{t_{{\mathrm{1}}}}  \ottsym{)}  \rightarrow  \ottsym{(}  \ottsym{(}  \textbf{concurrent} \, \ottnt{t_{{\mathrm{2}}}}  \ottsym{)}  \rightarrow  \ottsym{(}  \textbf{concurrent} \, \ottsym{(}  \ottsym{(}  \ottsym{(}  \ottnt{t_{{\mathrm{1}}}}  *  \ottnt{t_{{\mathrm{2}}}}  \ottsym{)}  +  \ottsym{(}  \ottnt{t_{{\mathrm{1}}}}  *  \ottsym{(}  \textbf{concurrent} \, \ottnt{t_{{\mathrm{2}}}}  \ottsym{)}  \ottsym{)}  \ottsym{)}  +  \ottsym{(}  \ottsym{(}  \textbf{concurrent} \, \ottnt{t_{{\mathrm{1}}}}  \ottsym{)}  *  \ottnt{t_{{\mathrm{2}}}}  \ottsym{)}  \ottsym{)}  \ottsym{)}  \ottsym{)}}{%
+\Gamma  \vdash  \ottkw{fork}  :  \ottsym{(}  \textbf{concurrent} \, \ottnt{t_{{\mathrm{1}}}}  \ottsym{)}  \rightarrow  \ottsym{(}  \ottsym{(}  \textbf{concurrent} \, \ottnt{t_{{\mathrm{2}}}}  \ottsym{)}  \rightarrow  \ottsym{(}  \textbf{concurrent} \, \ottsym{(}  \ottsym{(}  \ottsym{(}  \ottnt{t_{{\mathrm{1}}}}  *  \ottnt{t_{{\mathrm{2}}}}  \ottsym{)}  +  \ottsym{(}  \ottnt{t_{{\mathrm{1}}}}  *  \ottsym{(}  \textbf{concurrent} \, \ottnt{t_{{\mathrm{2}}}}  \ottsym{)}  \ottsym{)}  \ottsym{)}  +  \ottsym{(}  \ottsym{(}  \textbf{concurrent} \, \ottnt{t_{{\mathrm{1}}}}  \ottsym{)}  *  \ottnt{t_{{\mathrm{2}}}}  \ottsym{)}  \ottsym{)}  \ottsym{)}  \ottsym{)}}{%
 {\ottdrulename{constant\_fork}}{}%
 }}
 
-\newcommand{\ottdefnGXXconstant}[1]{\begin{ottdefnblock}[#1]{$\Gamma  \vdash  \ottnt{constant}  \ottsym{:}  \ottnt{t}$}{}
+\newcommand{\ottdefnGXXconstant}[1]{\begin{ottdefnblock}[#1]{$\Gamma  \vdash  \ottnt{constant}  :  \ottnt{t}$}{}
 \ottusedrule{\ottdruleconstantXXret{}}
 \ottusedrule{\ottdruleconstantXXfork{}}
 \end{ottdefnblock}}
 
 %% defn Get
 \newcommand{\ottdruleGetXXvalueXXname}[1]{\ottdrule[#1]{%
-\ottpremise{\ottmv{x}  \ottsym{:}  \ottnt{typscheme} \, \ottkw{in} \, \Gamma}%
+\ottpremise{\ottmv{x}  :  \ottnt{typscheme} \, \ottkw{in} \, \Gamma}%
 \ottpremise{\ottnt{typscheme}  \ottsym{>}  \ottnt{t}}%
 }{
-\Gamma  \vdash  \ottmv{x}  \ottsym{:}  \ottnt{t}}{%
+\Gamma  \vdash  \ottmv{x}  :  \ottnt{t}}{%
 {\ottdrulename{Get\_value\_name}}{}%
 }}
 
 
 \newcommand{\ottdruleGetXXconstant}[1]{\ottdrule[#1]{%
-\ottpremise{\Gamma  \vdash  \ottnt{constant}  \ottsym{:}  \ottnt{t}}%
+\ottpremise{\Gamma  \vdash  \ottnt{constant}  :  \ottnt{t}}%
 }{
-\Gamma  \vdash  \ottnt{constant}  \ottsym{:}  \ottnt{t}}{%
+\Gamma  \vdash  \ottnt{constant}  :  \ottnt{t}}{%
 {\ottdrulename{Get\_constant}}{}%
 }}
 
 
 \newcommand{\ottdruleGetXXapply}[1]{\ottdrule[#1]{%
-\ottpremise{\Gamma  \vdash  \ottnt{e}  \ottsym{:}  \ottnt{t_{{\mathrm{1}}}}  \rightarrow  \ottnt{t_{{\mathrm{2}}}}}%
-\ottpremise{\Gamma  \vdash  \ottnt{e'}  \ottsym{:}  \ottnt{t_{{\mathrm{1}}}}}%
+\ottpremise{\Gamma  \vdash  \ottnt{e}  :  \ottnt{t_{{\mathrm{1}}}}  \rightarrow  \ottnt{t_{{\mathrm{2}}}}}%
+\ottpremise{\Gamma  \vdash  \ottnt{e'}  :  \ottnt{t_{{\mathrm{1}}}}}%
 }{
-\Gamma  \vdash  \ottnt{e} \, \ottnt{e'}  \ottsym{:}  \ottnt{t_{{\mathrm{2}}}}}{%
+\Gamma  \vdash  \ottnt{e} \, \ottnt{e'}  :  \ottnt{t_{{\mathrm{2}}}}}{%
 {\ottdrulename{Get\_apply}}{}%
 }}
 
 
 \newcommand{\ottdruleGetXXlambda}[1]{\ottdrule[#1]{%
-\ottpremise{\Gamma  ,  \ottmv{x_{{\mathrm{1}}}}  \ottsym{:}  \ottsym{(}  \,  \ottsym{)}  \ottnt{t_{{\mathrm{1}}}}  \vdash  \ottnt{e}  \ottsym{:}  \ottnt{t}}%
+\ottpremise{\Gamma  ,  \ottmv{x_{{\mathrm{1}}}}  :  \ottsym{(}  \,  \ottsym{)}  \ottnt{t_{{\mathrm{1}}}}  \vdash  \ottnt{e}  :  \ottnt{t}}%
 }{
-\Gamma  \vdash  \textbf{function} \, \ottmv{x_{{\mathrm{1}}}}  \rightarrow  \ottnt{e}  \ottsym{:}  \ottnt{t_{{\mathrm{1}}}}  \rightarrow  \ottnt{t}}{%
+\Gamma  \vdash  \textbf{function} \, \ottmv{x_{{\mathrm{1}}}}  :  \ottnt{t_{{\mathrm{1}}}}  \rightarrow  \ottnt{e}  :  \ottnt{t_{{\mathrm{1}}}}  \rightarrow  \ottnt{t}}{%
 {\ottdrulename{Get\_lambda}}{}%
 }}
 
 
 \newcommand{\ottdruleGetXXlive}[1]{\ottdrule[#1]{%
-\ottpremise{\Gamma  \vdash  \ottnt{e}  \ottsym{:}  \ottnt{t}}%
+\ottpremise{\Gamma  \vdash  \ottnt{e}  :  \ottnt{t}}%
 }{
-\Gamma  \vdash  Live \, \ottnt{e}  \ottsym{:}  \textbf{concurrent} \, \ottnt{t}}{%
+\Gamma  \vdash  Live \, \ottnt{e}  :  \textbf{concurrent} \, \ottnt{t}}{%
 {\ottdrulename{Get\_live}}{}%
 }}
 
 
 \newcommand{\ottdruleGetXXbind}[1]{\ottdrule[#1]{%
-\ottpremise{\Gamma  \vdash  \ottnt{e}  \ottsym{:}  \textbf{concurrent} \, \ottnt{t}}%
-\ottpremise{\Gamma  \vdash  \ottnt{e'}  \ottsym{:}  \ottnt{t}  \rightarrow  \textbf{concurrent} \, \ottnt{t'}}%
+\ottpremise{\Gamma  \vdash  \ottnt{e}  :  \textbf{concurrent} \, \ottnt{t}}%
+\ottpremise{\Gamma  \vdash  \ottnt{e'}  :  \ottnt{t}  \rightarrow  \textbf{concurrent} \, \ottnt{t'}}%
 }{
-\Gamma  \vdash  \ottnt{e}  >>=  \ottnt{e'}  \ottsym{:}  \textbf{concurrent} \, \ottnt{t'}}{%
+\Gamma  \vdash  \ottnt{e}  >>=  \ottnt{e'}  :  \textbf{concurrent} \, \ottnt{t'}}{%
 {\ottdrulename{Get\_bind}}{}%
 }}
 
 
 \newcommand{\ottdruleGetXXpair}[1]{\ottdrule[#1]{%
-\ottpremise{\Gamma  \vdash  \ottnt{e}  \ottsym{:}  \ottnt{t_{{\mathrm{1}}}}}%
-\ottpremise{\Gamma  \vdash  \ottnt{e'}  \ottsym{:}  \ottnt{t_{{\mathrm{2}}}}}%
+\ottpremise{\Gamma  \vdash  \ottnt{e}  :  \ottnt{t_{{\mathrm{1}}}}}%
+\ottpremise{\Gamma  \vdash  \ottnt{e'}  :  \ottnt{t_{{\mathrm{2}}}}}%
 }{
-\Gamma  \vdash  \{  \ottnt{e}  ,  \ottnt{e'}  \}  \ottsym{:}  \ottsym{(}  \ottnt{t_{{\mathrm{1}}}}  *  \ottnt{t_{{\mathrm{2}}}}  \ottsym{)}}{%
+\Gamma  \vdash  \{  \ottnt{e}  ,  \ottnt{e'}  \}  :  \ottsym{(}  \ottnt{t_{{\mathrm{1}}}}  *  \ottnt{t_{{\mathrm{2}}}}  \ottsym{)}}{%
 {\ottdrulename{Get\_pair}}{}%
 }}
 
 
 \newcommand{\ottdruleGetXXTInl}[1]{\ottdrule[#1]{%
-\ottpremise{\Gamma  \vdash  \ottnt{e}  \ottsym{:}  \ottnt{t}}%
+\ottpremise{\Gamma  \vdash  \ottnt{e}  :  \ottnt{t}}%
 }{
-\Gamma  \vdash  Left tag \, \ottnt{e}  \ottsym{:}  \ottnt{t}  +  \ottnt{t'}}{%
+\Gamma  \vdash  Left tag \, \ottnt{e}  :  \ottnt{t}  +  \ottnt{t'}}{%
 {\ottdrulename{Get\_TInl}}{}%
 }}
 
 
 \newcommand{\ottdruleGetXXTInr}[1]{\ottdrule[#1]{%
-\ottpremise{\Gamma  \vdash  \ottnt{e}  \ottsym{:}  \ottnt{t}}%
+\ottpremise{\Gamma  \vdash  \ottnt{e}  :  \ottnt{t}}%
 }{
-\Gamma  \vdash  Right tag \, \ottnt{e}  \ottsym{:}  \ottnt{t'}  +  \ottnt{t}}{%
+\Gamma  \vdash  Right tag \, \ottnt{e}  :  \ottnt{t'}  +  \ottnt{t}}{%
 {\ottdrulename{Get\_TInr}}{}%
 }}
 
 
 \newcommand{\ottdruleGetXXTCase}[1]{\ottdrule[#1]{%
-\ottpremise{\Gamma  \vdash  \ottnt{e}  \ottsym{:}  \ottnt{t}  +  \ottnt{t'}}%
-\ottpremise{\Gamma  ,  \ottmv{x}  \ottsym{:}  \ottsym{(}  \,  \ottsym{)}  \ottnt{t}  \vdash  \ottnt{e'}  \ottsym{:}  \ottnt{t''}}%
-\ottpremise{\Gamma  ,  \ottmv{x'}  \ottsym{:}  \ottsym{(}  \,  \ottsym{)}  \ottnt{t'}  \vdash  \ottnt{e''}  \ottsym{:}  \ottnt{t''}}%
+\ottpremise{\Gamma  \vdash  \ottnt{e}  :  \ottnt{t}  +  \ottnt{t'}}%
+\ottpremise{\Gamma  ,  \ottmv{x}  :  \ottsym{(}  \,  \ottsym{)}  \ottnt{t}  \vdash  \ottnt{e'}  :  \ottnt{t''}}%
+\ottpremise{\Gamma  ,  \ottmv{x'}  :  \ottsym{(}  \,  \ottsym{)}  \ottnt{t'}  \vdash  \ottnt{e''}  :  \ottnt{t''}}%
 }{
-\Gamma  \vdash  Case \, \ottnt{e} \, of \, Left tag \, \ottmv{x}  \Rightarrow  \ottnt{e'}  \ottsym{\mbox{$\mid$}} \, Right tag \, \ottmv{x'}  \Rightarrow  \ottnt{e''}  \ottsym{:}  \ottnt{t''}}{%
+\Gamma  \vdash  Case \, \ottnt{e} \, of \, Left tag \, \ottmv{x}  \Rightarrow  \ottnt{e'}  \ottsym{\mbox{$\mid$}} \, Right tag \, \ottmv{x'}  \Rightarrow  \ottnt{e''}  :  \ottnt{t''}}{%
 {\ottdrulename{Get\_TCase}}{}%
 }}
 
-\newcommand{\ottdefnGet}[1]{\begin{ottdefnblock}[#1]{$\Gamma  \vdash  \ottnt{e}  \ottsym{:}  \ottnt{t}$}{}
+\newcommand{\ottdefnGet}[1]{\begin{ottdefnblock}[#1]{$\Gamma  \vdash  \ottnt{e}  :  \ottnt{t}$}{}
 \ottusedrule{\ottdruleGetXXvalueXXname{}}
 \ottusedrule{\ottdruleGetXXconstant{}}
 \ottusedrule{\ottdruleGetXXapply{}}
@@ -315,7 +316,7 @@
 %% defn red
 \newcommand{\ottdruleJOXXredXXapp}[1]{\ottdrule[#1]{%
 }{
-\ottsym{(}  \textbf{function} \, \ottmv{x}  \rightarrow  \ottnt{e}  \ottsym{)} \, \ottnt{v}  \longrightarrow  \{  \ottnt{v}  \ottsym{/}  \ottmv{x}  \}  \ottnt{e}}{%
+\ottsym{(}  \textbf{function} \, \ottmv{x}  :  \ottnt{t}  \rightarrow  \ottnt{e}  \ottsym{)} \, \ottnt{v}  \longrightarrow  \{  \ottnt{v}  \ottsym{/}  \ottmv{x}  \}  \ottnt{e}}{%
 {\ottdrulename{JO\_red\_app}}{}%
 }}
 

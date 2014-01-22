@@ -21,7 +21,7 @@ Fixpoint xis_value_of_expr (e_5:expr) : bool :=
   | (E_constant constant5) => (true)
   | (E_apply expr5 expr') => false
   | (E_bind expr5 expr') => false
-  | (E_function value_name5 expr5) => true
+  | (E_function value_name5 typexpr5 expr5) => true
   | (E_live_expr expr5) => true
   | (E_pair e e') => (if (xis_value_of_expr e) then (xis_value_of_expr e') else false)
   | (E_taggingleft e) => ((xis_value_of_expr e))
@@ -123,9 +123,9 @@ Fixpoint yval (e : expr) (b : bool) : Prop := (eq (xis_value_of_expr e) b).
 
 (* defns Jop *)
 Inductive XJO_red : expr -> expr -> Prop :=    (* defn red *)
- | XJO_red_app : forall (x:value_name) (e v:expr),
+ | XJO_red_app : forall (x:value_name) (t : typexpr) (e v:expr),
      (eq (xis_value_of_expr v) true) ->
-     XJO_red (E_apply  (E_function x e)  v)  (subst_expr  v   x   e ) 
+     XJO_red (E_apply  (E_function x t e)  v)  (subst_expr  v   x   e ) 
  | XJO_red_forkmove1 : forall (e e' e'':expr),
      (eq (xis_value_of_expr e) false) ->
      (eq (xis_value_of_expr e') false) ->
@@ -203,6 +203,13 @@ Inductive XJO_red : expr -> expr -> Prop :=    (* defn red *)
      XJO_red e e' ->
      XJO_red (E_case e x e'' x' e''') (E_case e' x e'' x' e''').  
 
+Lemma red_not_value : forall (e e' : expr), (XJO_red e e') -> (eq (xis_value_of_expr e) false).
+Proof.
+Admitted.
+
+Theorem red_is_xred : forall (e e' : expr), JO_red e e' <-> XJO_red e e'.
+Proof.
+Admitted. 
 
 (*Extraction Relation Fixpoint is_expr_of_expr [1]. *)
 
