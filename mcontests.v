@@ -31,6 +31,7 @@ Inductive JO_red_star : expr -> expr -> Prop :=
 
 Notation "A -->* B" := (JO_red_star A B) (at level 54, no associativity).
 
+(*
 Example simplred : forall (x:value_name) (e v:expr),
      is_value_of_expr v ->
      E_apply  (E_function x e)  v -->  subst_expr  v   x   e.
@@ -41,16 +42,18 @@ Proof.
   apply H.
 Qed.
 
-Lemma mon_left_id : forall (x:value_name) (a e:expr),
+*)
+
+Lemma mon_left_id : forall (x:value_name) (t : typexpr) (a e:expr),
     is_value_of_expr a ->
-    ((E_apply(E_constant (CONST_ret)) a) >>= (E_function x e)) -->* (E_apply (E_function x e) a).
+    ((E_apply(E_constant (CONST_ret)) a) >>= (E_function x t e)) -->* (E_apply (E_function x t e) a).
 Proof.
  intros.
- apply JO_red_star_step with (e' := (E_live_expr a >>= E_function x e)).
+ apply JO_red_star_step with (e' := (E_live_expr a >>= E_function x t e)).
  apply JO_red_evalbind.
  apply JO_red_ret.
  apply H.
- apply JO_red_star_step with (e' := (E_apply (E_function x e) a)).
+ apply JO_red_star_step with (e' := (E_apply (E_function x t e) a)).
  apply JO_red_dobind.
  apply H.
  apply JO_red_star_refl.
@@ -71,31 +74,31 @@ Proof.
  apply JO_red_star_refl.
 Qed.
 
-Lemma mon_assoc : forall (v v' v'' : value_name) (a e e' :expr),  
+Lemma mon_assoc : forall (v v' v'' : value_name) (t t' : typexpr) (a e e' :expr),  
     is_value_of_expr a ->
     v <> v'' ->
     v' <> v'' ->
     ((subst_expr a v'' e') = e') ->
     ((subst_expr a v'' e) = e) ->
-    exists (t :expr), (E_live_expr a >>= (E_function v e) >>= (E_function v' e') -->* t) /\ (E_live_expr a >>= (E_function v'' (E_apply (E_function v e) (E_ident v'') >>= (E_function v' e'))) -->* t).
+    exists (b :expr), (E_live_expr a >>= (E_function v t e) >>= (E_function v' t' e') -->* b) /\ (E_live_expr a >>= (E_function v'' t (E_apply (E_function v t e) (E_ident v'') >>= (E_function v' t' e'))) -->* b).
 Proof.
  intros.
- exists (E_apply (E_function v e) a >>= E_function v' e' ).
+ exists (E_apply (E_function v t e) a >>= E_function v' t' e' ).
  split.
  Show 1.
-  apply JO_red_star_step with (e' := ((E_apply (E_function v e) a) >>= E_function v' e')).
-  apply JO_red_evalbind with (e' := ((E_apply (E_function v e) a))).
+  apply JO_red_star_step with (e' := ((E_apply (E_function v t e) a) >>= E_function v' t' e')).
+  apply JO_red_evalbind with (e' := ((E_apply (E_function v t e) a))).
   apply JO_red_dobind.
   trivial.
   apply JO_red_star_refl.
- apply JO_red_star_step with (e' := (E_apply (E_function v'' (E_apply (E_function v e) (E_ident v'') >>= E_function v' e')) a)).
+ apply JO_red_star_step with (e' := (E_apply (E_function v'' t (E_apply (E_function v t e) (E_ident v'') >>= E_function v' t' e')) a)).
  apply JO_red_dobind.
  trivial.
- apply JO_red_star_step with  (e' := (subst_expr a v'' (E_apply (E_function v e) (E_ident v'') >>= E_function v' e'))).
- apply JO_red_app with (x:=v'') (v:=a) (e := (E_apply (E_function v e) (E_ident v'') >>= E_function v' e')).
+ apply JO_red_star_step with  (e' := (subst_expr a v'' (E_apply (E_function v t e) (E_ident v'') >>= E_function v' t' e'))).
+ apply JO_red_app with (x:=v'') (v:=a) (e := (E_apply (E_function v t e) (E_ident v'') >>= E_function v' t' e')).
  trivial.
  auto.
- cut ((subst_expr a v''  (E_apply (E_function v e) (E_ident v'') >>= E_function v' e') = (E_apply (E_function v e) a >>= E_function v' e'))). 
+ cut ((subst_expr a v''  (E_apply (E_function v t e) (E_ident v'') >>= E_function v' t' e') = (E_apply (E_function v t e) a >>= E_function v' t' e'))). 
  intros.
  rewrite H4.
  apply JO_red_star_refl.
