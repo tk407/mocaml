@@ -2,6 +2,11 @@ Add ML Path "Coq/RelationExtraction".
 Print LoadPath.
 Declare ML Module "relation_extraction_plugin".
 
+Require Import Arith.
+Require Import Bool.
+Require Import Sumbool.
+Require Import List.
+
 Load mconbase.
 
 Inductive selectSet : Set := 
@@ -14,7 +19,7 @@ Axiom select : selectSet.
 Extract Constant select => "(selectBranch)".
 
 
-(** subrules *)
+(* Extractable version of is_value_of_expr *)
 Fixpoint xis_value_of_expr (e_5:expr) : bool :=
   match e_5 with
   | (E_ident value_name5) => false
@@ -28,6 +33,8 @@ Fixpoint xis_value_of_expr (e_5:expr) : bool :=
   | (E_taggingright e) => ((xis_value_of_expr e))
   | (E_case e1 x1 e2 x2 e3) => false
 end.
+
+(* Proof that is_value_of_expr and xis_value_of_expr are equivalent *)
 
 Lemma l_val : forall (e:expr), (eq (xis_value_of_expr e) true) <-> (is_value_of_expr e).
 Proof.
@@ -117,11 +124,93 @@ Proof.
    simpl; contradiction.
 Qed.
 
-Fixpoint yval (e : expr) (b : bool) : Prop := (eq (xis_value_of_expr e) b).
+Hint Resolve eq_value_name : ott_coq_equality.
+
+Lemma eq_typscheme: forall (x y : typscheme), {x = y} + {x <> y}.
+Proof.
+decide equality. decide equality. apply eq_typvar. decide equality. apply eq_typvar.
+Defined.
+Hint Resolve eq_typscheme : ott_coq_equality.
+
+(* Extractable VTSin *)
+
+Fixpoint XVTSin (v : value_name) (ts : typscheme)  (G5 : G) : bool := 
+ match G5 with 
+ | G_em => false 
+ | G_vn (G6 ) (v' ) (ts' ) => if (eq_value_name v v') then ( if (eq_typscheme ts ts') then true else false) else XVTSin v ts G6
+end.
+
+(* Proof that the extractable VTSin is the same as the original *)
+
+Lemma xvtsin_eq_vtsin : forall (v : value_name) (ts : typscheme)  (G5 : G), XVTSin v ts G5 = true <-> VTSin v ts G5.
+Proof.
+ intros.
+ split.
+ intros.
+ induction G5.
+ simpl in H.
+ symmetry in H.
+ apply diff_true_false in H.
+ contradiction.
+ destruct (eq_value_name v value_name5).
+ rewrite <- e.
+ destruct (eq_typscheme ts typscheme5).
+ rewrite <- e0.
+ apply VTSin_vn1.
+ apply VTSin_vn2.
+ apply IHG5.
+ rewrite <- e in H.
+ simpl in H.
+ destruct (eq_value_name v v).
+ destruct (eq_typscheme ts typscheme5).
+ contradiction.
+ symmetry in H.
+ apply diff_true_false in H.
+ contradiction.
+ trivial.
+ rewrite <- e in H.
+ simpl in H.
+ destruct (eq_value_name v v).
+ destruct (eq_typscheme ts typscheme5).
+ contradiction.
+ symmetry in H.
+ apply diff_true_false in H.
+ contradiction.
+ trivial.
+ simpl in H.
+ destruct (eq_value_name v value_name5).
+ contradiction.
+ apply VTSin_vn2.
+ apply IHG5.
+ trivial.
+ trivial.
+ intros.
+ induction G5.
+ inversion H.
+ simpl.
+ destruct (eq_value_name v value_name5).
+ rewrite <- e in H.
+ destruct (eq_typscheme ts typscheme5).
+ trivial.
+ inversion H.
+ rewrite -> H4 in n.
+ cut (typscheme5 = typscheme5).
+ intros.
+ contradiction.
+ auto.
+ cut (v = v).
+ intros.
+ contradiction.
+ auto.
+ inversion H.
+ contradiction.
+ apply IHG5.
+ trivial.
+Qed.
+ 
 
 
-
-(* defns Jop *)
+(* Extractable version of the reduction operation *)
 Inductive XJO_red : expr -> expr -> Prop :=    (* defn red *)
  | XJO_red_app : forall (x:value_name) (t : typexpr) (e v:expr),
      (eq (xis_value_of_expr v) true) ->
@@ -203,16 +292,23 @@ Inductive XJO_red : expr -> expr -> Prop :=    (* defn red *)
      XJO_red e e' ->
      XJO_red (E_case e x e'' x' e''') (E_case e' x e'' x' e''').  
 
+(* Proof that if a term reduces, it is not a value *)
+(*
 Lemma red_not_value : forall (e e' : expr), (XJO_red e e') -> (eq (xis_value_of_expr e) false).
 Proof.
-Admitted.
+Admitted. *)
 
-Theorem red_is_xred : forall (e e' : expr), JO_red e e' <-> XJO_red e e'.
+(* Proof that reduction and the extractable reduction is equivalent *)
+(* Theorem red_is_xred : forall (e e' : expr), JO_red e e' <-> XJO_red e e'.
 Proof.
-Admitted. 
+Admitted. *)
 
 (*Extraction Relation Fixpoint is_expr_of_expr [1]. *)
 
 Recursive Extraction xis_value_of_expr.
 
 Extraction Relation Relaxed XJO_red [1].
+
+Recursive Extraction XVTSin.
+
+(* Extraction Relation G_constant [1 2]. *)
