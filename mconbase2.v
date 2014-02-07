@@ -101,7 +101,7 @@ Fixpoint is_value_of_expr (e_5:expr) : Prop :=
   | (E_ident value_name5) => False
   | (E_constant constant5) => (True)
 (* Manual addition *)
-  | (E_apply expr5 expr') => match expr5 with | E_constant (CONST_fork)) => ((is_value_of_expr expr')) | _ => False end
+  | (E_apply expr5 expr') => match expr5 with | E_constant (CONST_fork) => ((is_value_of_expr expr')) | _ => False end
   | (E_bind expr5 expr') => False
   | (E_function value_name5 typexpr5 expr5) => (True)
   | (E_live_expr expr5) => (True)
