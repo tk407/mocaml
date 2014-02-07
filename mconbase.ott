@@ -15,8 +15,14 @@ grammar
 typvar, tv :: TV_ ::= {{ coq-equality decide equality. apply eq_value_name. }}
   | ' ident                            ::   :: ident
 
+
+% Type constants
+typconst, tc :: TC_ ::=
+  | unit                               ::   :: unit
+
 % Type terms
 typexpr, t :: TE_ ::=
+  | typconst                           ::   :: constants
   | typvar                             ::   :: var
   | typexpr -> typexpr'                ::   :: arrow
   | typexpr '*' typexpr'               ::   :: prod
@@ -41,12 +47,15 @@ typscheme, ts :: TS_ ::=
 constant, c :: CONST_ ::=
   | ret                                ::   :: ret
   | fork                               ::   :: fork
+  | unit                               ::   :: unit
 
 % Terms
 expr, e :: E_ ::=
   | value_name                           ::   :: ident
   | constant                             ::   :: constant
-  | expr expr'                           ::   :: apply
+%  |  {{ coq (E_apply (E_constant CONST_fork) [[expr]]) }}
+%  | fork expr                            :: S ::  fork_curry  {{ coq (E_apply (E_constant CONST_fork) [[expr]]) }}
+  | expr expr'                           ::   :: apply 
   | expr >>= expr'                       ::   :: bind
   | function value_name : typexpr -> expr          ::   :: function (+ bind value_name in expr +)
   | live expr                            ::   :: live_expr
@@ -68,6 +77,7 @@ value, v :: V_ ::=
   | inl v                              ::   :: taggedleft
   | inr v                              ::   :: taggedright
   | { v , v' }                         ::   :: valuepair
+  | ( v )                             :: S :: paren {{ ich [[v]] }} {{ ocaml [[v]] }}
 
 
 %Type environment
@@ -127,6 +137,9 @@ terminals :: terminals_ ::=
   | '+'                                ::   :: plus {{ tex + }}
   | ':'                                ::   :: funtype {{ tex : }}
 
+%parsing 
+%V_fork_curry <= V_constant
+  
 % Subsumption: values are expressions
 subrules
   v <:: expr
@@ -156,7 +169,7 @@ val _ = Define `
                                else x::(remove_duplicates xs))
 `; }}
 
-  
+
 defns 
 Jtype :: '' ::= 
 
@@ -183,6 +196,10 @@ G |- ret : t -> con t
 
 ------------------------ :: fork
 G |- fork : (con t1) -> ((con t2) -> (con (((t1*t2) + (t1 * (con t2))) + ((con t1) * t2))))
+
+
+------------------------ :: unit
+G |- unit : unit
 
 
 % typing rules
@@ -263,22 +280,24 @@ e --> e' :: :: red :: red_ by
 
 %Here should be the only path for concurrency
 
+{{ ~ ( is_value_of_expr ( [[e']] ) ) }}
 e --> e''
 --------------------------- :: forkmove1
-(fork (live e) ) (live e') -->  (fork (live e'') ) (live e')
+(:E_apply:fork (live e) ) (live e') -->  (:E_apply:fork (live e'') ) (live e')
 
+{{ ~ ( is_value_of_expr ( [[e]] ) ) }}
 e' --> e''
 --------------------------- :: forkmove2
-(fork (live e) ) (live e') -->  (fork (live e) ) (live e'') 
+(:E_apply:fork (live e) ) (live e') -->  (:E_apply:fork (live e) ) (live e'') 
 
 --------------------------- :: forkdeath1
-(fork (live v) ) (live e') -->  live { v , ( live e' ) }
+(:E_apply:fork (live v) ) (live e') -->  live { v , ( live e' ) }
 
 --------------------------- :: forkdeath2
-(fork (live e) ) (live v) -->  live { ( live e ) , v }
+(:E_apply:fork (live e) ) (live v) -->  live { ( live e ) , v }
 
 --------------------------- :: forkdeath12
-(fork (live v) ) (live v') -->  live { v , v' }
+(:E_apply:fork (live v) ) (live v') -->  live { v , v' }
 
 --------------------------- :: ret
 ret v --> live v

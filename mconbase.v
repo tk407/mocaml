@@ -17,7 +17,11 @@ Definition index := nat.
 Inductive typvar : Set := 
  | TV_ident (ident5:ident).
 
+Inductive typconst : Set := 
+ | TC_unit : typconst.
+
 Inductive typexpr : Set := 
+ | TE_constants (typconst5:typconst)
  | TE_var (typvar5:typvar)
  | TE_arrow (typexpr5:typexpr) (typexpr':typexpr)
  | TE_prod (typexpr5:typexpr) (typexpr':typexpr)
@@ -26,7 +30,8 @@ Inductive typexpr : Set :=
 
 Inductive constant : Set := 
  | CONST_ret : constant
- | CONST_fork : constant.
+ | CONST_fork : constant
+ | CONST_unit : constant.
 
 Inductive list_typvar : Set := 
  | Nil_list_typvar : list_typvar
@@ -131,6 +136,7 @@ Implicit Arguments list_minus2.
 (** substitutions *)
 Fixpoint tsubst_typexpr (sub:list (typvar*typexpr)) (t_6:typexpr) {struct t_6} : typexpr :=
   match t_6 with
+  | (TE_constants typconst5) => TE_constants typconst5
   | (TE_var typvar5) => (match list_assoc eq_typvar typvar5 sub with None => (TE_var typvar5) | Some t5 => t5 end)
   | (TE_arrow typexpr5 typexpr') => TE_arrow (tsubst_typexpr sub typexpr5) (tsubst_typexpr sub typexpr')
   | (TE_prod typexpr5 typexpr') => TE_prod (tsubst_typexpr sub typexpr5) (tsubst_typexpr sub typexpr')
@@ -189,6 +195,7 @@ Implicit Arguments list_minus.
 (** free variables *)
 Fixpoint ftv_typexpr (t5:typexpr) : list typvar :=
   match t5 with
+  | (TE_constants typconst5) => nil
   | (TE_var typvar5) => (cons typvar5 nil)
   | (TE_arrow typexpr5 typexpr') => (app (ftv_typexpr typexpr5) (ftv_typexpr typexpr'))
   | (TE_prod typexpr5 typexpr') => (app (ftv_typexpr typexpr5) (ftv_typexpr typexpr'))
@@ -244,6 +251,8 @@ with G_constant : G -> constant -> typexpr -> Prop :=    (* defn G_constant *)
      G_constant G5 CONST_ret (TE_arrow t (TE_concurrent t))
  | constant_fork : forall (G5:G) (t1 t2:typexpr),
      G_constant G5 CONST_fork (TE_arrow  (TE_concurrent t1)   (TE_arrow  (TE_concurrent t2)   (TE_concurrent  (TE_sum  (TE_sum  (TE_prod t1 t2)   (TE_prod t1  (TE_concurrent t2) ) )   (TE_prod  (TE_concurrent t1)  t2) ) ) ) )
+ | constant_unit : forall (G5:G),
+     G_constant G5 CONST_unit (TE_constants TC_unit)
 with Get : G -> expr -> typexpr -> Prop :=    (* defn Get *)
  | Get_value_name : forall (G5:G) (x:value_name) (t:typexpr) (typscheme5:typscheme),
      VTSin x typscheme5 G5 ->
@@ -294,9 +303,11 @@ Inductive JO_red : expr -> expr -> Prop :=    (* defn red *)
      is_value_of_expr v ->
      JO_red (E_apply  (E_function x t e)  v)  (subst_expr  v   x   e ) 
  | JO_red_forkmove1 : forall (e e' e'':expr),
+     ~ ( is_value_of_expr ( e' ) )  ->
      JO_red e e'' ->
      JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e') ) (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e'') )   (E_live_expr e') )
  | JO_red_forkmove2 : forall (e e' e'':expr),
+     ~ ( is_value_of_expr ( e ) )  ->
      JO_red e' e'' ->
      JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e') ) (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e'') )
  | JO_red_forkdeath1 : forall (v e':expr),
