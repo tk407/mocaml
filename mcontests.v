@@ -2,7 +2,7 @@ Require Import Arith.
 Require Import Bool.
 Require Import List.
 
-Load mconbase.
+Load mconbase2.
 
 (*Check E_ident(0).*)
 Check JO_red (E_ident(0)) (E_ident(1)).
