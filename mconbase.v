@@ -52,6 +52,10 @@ Inductive expr : Set :=
 Inductive typscheme : Set := 
  | TS_ts (_:list_typvar) (typexpr5:typexpr).
 
+Inductive select : Set := 
+ | S_First : select
+ | S_Second : select.
+
 Inductive G : Set := 
  | G_em : G
  | G_vn (G5:G) (value_name5:value_name) (typscheme5:typscheme).
@@ -298,68 +302,68 @@ with Get : G -> expr -> typexpr -> Prop :=    (* defn Get *)
 (** definitions *)
 
 (* defns Jop *)
-Inductive JO_red : expr -> expr -> Prop :=    (* defn red *)
- | JO_red_app : forall (x:value_name) (t:typexpr) (e v:expr),
+Inductive JO_red : expr -> select -> expr -> Prop :=    (* defn red *)
+ | JO_red_app : forall (x:value_name) (t:typexpr) (e:expr) (s:select) (v:expr),
      is_value_of_expr v ->
-     JO_red (E_apply  (E_function x t e)  v)  (subst_expr  v   x   e ) 
- | JO_red_forkmove1 : forall (e e' e'':expr),
+     JO_red (E_apply  (E_function x t e)  v) s  (subst_expr  v   x   e ) 
+ | JO_red_forkmove1 : forall (e e' e'':expr) (s:select),
      ~ ( is_value_of_expr ( e' ) )  ->
-     JO_red e e'' ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e') ) (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e'') )   (E_live_expr e') )
- | JO_red_forkmove2 : forall (e e' e'':expr),
+     JO_red e s e'' ->
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e') ) S_First (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e'') )   (E_live_expr e') )
+ | JO_red_forkmove2 : forall (e e' e'':expr) (s:select),
      ~ ( is_value_of_expr ( e ) )  ->
-     JO_red e' e'' ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e') ) (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e'') )
- | JO_red_forkdeath1 : forall (v e':expr),
+     JO_red e' s e'' ->
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e') ) S_Second (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr e'') )
+ | JO_red_forkdeath1 : forall (v e:expr) (s:select),
      is_value_of_expr v ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr v) )   (E_live_expr e') ) (E_live_expr (E_pair v  (E_live_expr e') ))
- | JO_red_forkdeath2 : forall (e v:expr),
-     is_value_of_expr v ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr v) ) (E_live_expr (E_pair  (E_live_expr e)  v))
- | JO_red_forkdeath12 : forall (v v':expr),
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr v) )   (E_live_expr e) ) s (E_live_expr (E_pair v  (E_live_expr e) ))
+ | JO_red_forkdeath2 : forall (e v':expr) (s:select),
+     is_value_of_expr v' ->
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr v') ) s (E_live_expr (E_pair  (E_live_expr e)  v'))
+ | JO_red_forkdeath12 : forall (v v':expr) (s:select),
      is_value_of_expr v ->
      is_value_of_expr v' ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr v) )   (E_live_expr v') ) (E_live_expr (E_pair v v'))
- | JO_red_ret : forall (v:expr),
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr v) )   (E_live_expr v') ) s (E_live_expr (E_pair v v'))
+ | JO_red_ret : forall (v:expr) (s:select),
      is_value_of_expr v ->
-     JO_red (E_apply (E_constant CONST_ret) v) (E_live_expr v)
- | JO_red_evalbind : forall (e e'' e':expr),
-     JO_red e e' ->
-     JO_red (E_bind e e'') (E_bind e' e'')
- | JO_red_movebind : forall (e e'' e':expr),
-     JO_red e e' ->
-     JO_red (E_bind  (E_live_expr e)  e'') (E_bind  (E_live_expr e')  e'')
- | JO_red_dobind : forall (v e:expr),
+     JO_red (E_apply (E_constant CONST_ret) v) s (E_live_expr v)
+ | JO_red_evalbind : forall (e e'':expr) (s:select) (e':expr),
+     JO_red e s e' ->
+     JO_red (E_bind e e'') s (E_bind e' e'')
+ | JO_red_movebind : forall (e e'':expr) (s:select) (e':expr),
+     JO_red e s e' ->
+     JO_red (E_bind  (E_live_expr e)  e'') s (E_bind  (E_live_expr e')  e'')
+ | JO_red_dobind : forall (v e:expr) (s:select),
      is_value_of_expr v ->
-     JO_red (E_bind  (E_live_expr v)  e) (E_apply e v)
- | JO_red_context_app1 : forall (e e' e'':expr),
-     JO_red e' e'' ->
-     JO_red (E_apply e e') (E_apply e e'')
- | JO_red_context_app2 : forall (e v e':expr),
+     JO_red (E_bind  (E_live_expr v)  e) s (E_apply e v)
+ | JO_red_context_app1 : forall (e e':expr) (s:select) (e'':expr),
+     JO_red e' s e'' ->
+     JO_red (E_apply e e') s (E_apply e e'')
+ | JO_red_context_app2 : forall (e v:expr) (s:select) (e':expr),
      is_value_of_expr v ->
-     JO_red e e' ->
-     JO_red (E_apply e v) (E_apply e' v)
- | JO_red_pair_1 : forall (e e'' e':expr),
-     JO_red e e' ->
-     JO_red (E_pair e e'') (E_pair e' e'')
- | JO_red_pair_2 : forall (v e e':expr),
+     JO_red e s e' ->
+     JO_red (E_apply e v) s (E_apply e' v)
+ | JO_red_pair_1 : forall (e e'':expr) (s:select) (e':expr),
+     JO_red e s e' ->
+     JO_red (E_pair e e'') s (E_pair e' e'')
+ | JO_red_pair_2 : forall (v e:expr) (s:select) (e':expr),
      is_value_of_expr v ->
-     JO_red e e' ->
-     JO_red (E_pair v e) (E_pair v e')
- | JO_red_evalinl : forall (e e':expr),
-     JO_red e e' ->
-     JO_red (E_taggingleft e) (E_taggingleft e')
- | JO_red_evalinr : forall (e e':expr),
-     JO_red e e' ->
-     JO_red (E_taggingright e) (E_taggingright e')
- | JO_red_evalcaseinl : forall (x:value_name) (e:expr) (x':value_name) (e' v:expr),
+     JO_red e s e' ->
+     JO_red (E_pair v e) s (E_pair v e')
+ | JO_red_evalinl : forall (e:expr) (s:select) (e':expr),
+     JO_red e s e' ->
+     JO_red (E_taggingleft e) s (E_taggingleft e')
+ | JO_red_evalinr : forall (e:expr) (s:select) (e':expr),
+     JO_red e s e' ->
+     JO_red (E_taggingright e) s (E_taggingright e')
+ | JO_red_evalcaseinl : forall (x:value_name) (e:expr) (x':value_name) (e':expr) (s:select) (v:expr),
      is_value_of_expr v ->
-     JO_red (E_case  (E_taggingleft v)  x e x' e')  (subst_expr  v   x   e ) 
- | JO_red_evalcaseinr : forall (x:value_name) (e:expr) (x':value_name) (e' v:expr),
+     JO_red (E_case  (E_taggingleft v)  x e x' e') s  (subst_expr  v   x   e ) 
+ | JO_red_evalcaseinr : forall (x:value_name) (e:expr) (x':value_name) (e':expr) (s:select) (v:expr),
      is_value_of_expr v ->
-     JO_red (E_case  (E_taggingright v)  x e x' e')  (subst_expr  v   x'   e' ) 
- | JO_red_evalcase : forall (e:expr) (x:value_name) (e'':expr) (x':value_name) (e''' e':expr),
-     JO_red e e' ->
-     JO_red (E_case e x e'' x' e''') (E_case e' x e'' x' e''').
+     JO_red (E_case  (E_taggingright v)  x e x' e') s  (subst_expr  v   x'   e' ) 
+ | JO_red_evalcase : forall (e:expr) (x:value_name) (e'':expr) (x':value_name) (e''':expr) (s:select) (e':expr),
+     JO_red e s e' ->
+     JO_red (E_case e x e'' x' e''') s (E_case e' x e'' x' e''').
 
 

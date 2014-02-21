@@ -18,7 +18,7 @@ typvar, tv :: TV_ ::= {{ coq-equality decide equality. apply eq_value_name. }}
 
 % Type constants
 typconst, tc :: TC_ ::=
-  | unit                               ::   :: unit
+  | tunit                               ::   :: unit
 
 % Type terms
 typexpr, t :: TE_ ::=
@@ -47,7 +47,7 @@ typscheme, ts :: TS_ ::=
 constant, c :: CONST_ ::=
   | ret                                ::   :: ret
   | fork                               ::   :: fork
-  | unit                               ::   :: unit
+  | unit                                 ::   :: unit
 
 % Terms
 expr, e :: E_ ::=
@@ -69,6 +69,7 @@ expr, e :: E_ ::=
     {{ ch (subst_expr [[v]] [[x]] [[e]]) }}
     {{ ocaml (subst_expr [[v]] [[x]] [[e]]) }}
 
+
 %Values
 value, v :: V_ ::=
   | constant                           ::   :: constant
@@ -79,6 +80,10 @@ value, v :: V_ ::=
   | { v , v' }                         ::   :: valuepair
   | ( v )                             :: S :: paren {{ ich [[v]] }} {{ ocaml [[v]] }}
 
+%Selects
+select, s :: S_ ::=
+  | First                              ::   :: First
+  | Second                             ::   :: Second
 
 %Type environment
 G {{ tex \Gamma }} :: G_ ::=
@@ -124,6 +129,8 @@ terminals :: terminals_ ::=
   | -->                                ::   :: red        {{ tex \longrightarrow }}
   | '{'                                ::   :: leftbrace  {{ tex \{ }}
   | '}'                                ::   :: rightbrace {{ tex \} }}
+  | '['                                ::   :: leftsqbrack  {{ tex [ }}
+  | ']'                                ::   :: rightsqbrack {{ tex ] }}
   | con                                ::   :: concurrent {{ tex \textbf{concurrent} }}
   | live                               ::   :: conlive    {{ tex Live }}
   | >>=                                ::   :: bind {{ tex >>= }}
@@ -199,7 +206,7 @@ G |- fork : (con t1) -> ((con t2) -> (con (((t1*t2) + (t1 * (con t2))) + ((con t
 
 
 ------------------------ :: unit
-G |- unit : unit
+G |- unit : tunit
 
 
 % typing rules
@@ -260,10 +267,10 @@ defns
 Jop :: JO_ ::= 
 
 defn 
-e --> e' :: :: red :: red_ by
+e [ s ] --> e' :: :: red :: red_ by
 
 ------------------------------- :: app
-(function x : t -> e)  v --> {v/x}  e
+(function x : t -> e)  v [ s ] --> {v/x}  e
 
 %Concurrent constructs
 
@@ -281,78 +288,80 @@ e --> e' :: :: red :: red_ by
 %Here should be the only path for concurrency
 
 {{ ~ ( is_value_of_expr ( [[e']] ) ) }}
-e --> e''
+e [ s ] --> e''
 --------------------------- :: forkmove1
-(:E_apply:fork (live e) ) (live e') -->  (:E_apply:fork (live e'') ) (live e')
+(:E_apply:fork (live e) ) (live e') [ First ] -->  (:E_apply:fork (live e'') ) (live e')
 
 {{ ~ ( is_value_of_expr ( [[e]] ) ) }}
-e' --> e''
+e' [ s ] --> e''
 --------------------------- :: forkmove2
-(:E_apply:fork (live e) ) (live e') -->  (:E_apply:fork (live e) ) (live e'') 
+(:E_apply:fork (live e) ) (live e') [ Second ] -->  (:E_apply:fork (live e) ) (live e'') 
 
 --------------------------- :: forkdeath1
-(:E_apply:fork (live v) ) (live e') -->  live { v , ( live e' ) }
+(:E_apply:fork (live v) ) (live e) [ s ] -->  live { v , (live e) }
 
 --------------------------- :: forkdeath2
-(:E_apply:fork (live e) ) (live v) -->  live { ( live e ) , v }
+(:E_apply:fork (live e) ) (live v') [ s ] -->  live { (live e) , v' }
 
 --------------------------- :: forkdeath12
-(:E_apply:fork (live v) ) (live v') -->  live { v , v' }
+(:E_apply:fork (live v) ) (live v') [ s ] -->  live { v , v' }
+
+
 
 --------------------------- :: ret
-ret v --> live v
+ret v [ s ] --> live v
 
-e --> e'
+e [ s ] --> e'
 --------------------------- :: evalbind
-e >>= e'' --> e' >>= e''
+e >>= e'' [ s ] --> e' >>= e''
 
-e --> e'
+e [ s ] --> e'
 --------------------------- :: movebind
-(live e) >>= e'' --> (live e') >>= e'' 
+(live e) >>= e'' [ s ] --> (live e') >>= e'' 
 
 --------------------------- :: dobind
-(live v) >>= e --> e v 
+(live v) >>= e [ s ] --> e v 
 
 %Context-application
 % Evaluate argument first
 % then the function
 % the rest is taken care of by the app
 
-e' --> e''
+e' [ s ] --> e''
 --------------  :: context_app1
-e e' --> e e''
+e e' [ s ] --> e e''
 
-e --> e'
+e [ s ] --> e'
 ------------  :: context_app2
-e v --> e' v
+e v [ s ] --> e' v
 
 
 % Pairs
 % Note this could be defined to be parallel, but I want to constrain concurrency to fork
-e --> e' 
+e [ s ] --> e' 
 ----------------------- :: pair_1
-{ e , e'' } --> { e' , e'' }
+{ e , e'' } [ s ] --> { e' , e'' }
 
-e --> e'
+e [ s ] --> e'
 ----------------------- :: pair_2
-{ v , e } --> { v, e' }
+{ v , e } [ s ] --> { v, e' }
 
 
 %Sum types
-    e --> e'
+    e [ s ] --> e'
 ---------------- :: evalinl
-inl e --> inl e'
+inl e [ s ] --> inl e'
 
-    e --> e'
+    e [ s ] --> e'
 ---------------- :: evalinr
-inr e --> inr e'
+inr e [ s ] --> inr e'
 
 --------------------------------------------------------- :: evalcaseinl
-case (inl v) of inl x => e | inr x' => e' --> { v / x } e
+case (inl v) of inl x => e | inr x' => e' [ s ] --> { v / x } e
 
 --------------------------------------------------------- :: evalcaseinr
-case (inr v) of inl x => e | inr x' => e' --> { v / x' } e'
+case (inr v) of inl x => e | inr x' => e' [ s ] --> { v / x' } e'
 
-                                      e --> e'
+                                      e [ s ] --> e'
 ------------------------------------------------------------------------------------ :: evalcase
-case e of inl x => e'' | inr x' => e''' --> case e' of inl x => e'' | inr x' => e'''
+case e of inl x => e'' | inr x' => e''' [ s ] --> case e' of inl x => e'' | inr x' => e'''
