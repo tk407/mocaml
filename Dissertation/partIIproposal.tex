@@ -1,0 +1,152 @@
+
+
+\section{Introduction of work to be undertaken}
+With the rise of ubiquitous multiple core systems it is necessary for a working programmer to use concurrency to the greatest extent. However concurrent code has never been easy to write as human reasoning is often poorly equipped with the tools necessary to think about such systems. That is why it is essential for a programming language to provide safe and sound primitives to tackle this problem. 
+
+My project aims to do this in the OCaml\cite{OCaml} language by developing a lightweight cooperating threading framework that holds correctness as a core value. The functional nature allows the use of one of the most recent trends in languages popular in academia, monads, to be used for a correct implementation. 
+
+There have been two very successful frameworks, LWT\cite{LWT} and Async\cite{Async} that both provided the primitives for concurrent development in OCaml however neither is supported by a clear semantic description as their main focus was ease of use and speed. 
+\section{Description of starting point}
+My personal starting points are the courses ML under Windows (IA), Semantics of Programming Languages (IB), Logic and Proof (IB) and Concepts in Programming Languages (IB). Furthermore I have done extracurricular reading into semantics and typing and attended the Denotational Semantics (II) course in the past year.
+
+The preparatory research period has to include familiarising myself with OCaml and the chosen specification and proof assistant tools.
+\section{Substance and structure}
+The project will consist of first creating a formal specification for a simple monad that has three main operations bind, return and choose. The behaviour of these operations will be specified in a current semantics tool like Lem\cite{Lem} or Ott\cite{Ott}. 
+
+As large amount of research has gone into both monadic concurrency and implementations in OCaml, the project will draw inspiration from Claessen\cite{Claessen99functionalpearls}, Deleuze\cite{deleuzelight} and Vouillon\cite{vouillon2008lwt}.
+
+Some atomic, blocking operations will also be specified including reading and writing to a console prompt or file to better illustrate the concurrency properties and make testing and evaluation possible.
+
+This theory driven executable specification will be paired by a hand implementation and will be thoroughly checked against each other to ensure that both adhere to the desired semantics. 
+
+Both of these implementations will be then compared against the two current frameworks for simplicity and speed on various test cases.
+
+If time allows, an extension will also be carried out on the theorem prover version of the specification to formally verify that the implementation is correct. 
+\section{Criteria}
+For the project to be deemed a success the following items must be
+successfully completed.
+\begin{enumerate}
+\item A specification for a monadic concurrency framework must be designed in the format of a semantics tool.
+\item This specification needs to be exported to a proof assistant and has a runnable OCaml version
+\item Test cases must be written that can thoroughly check a concurrency framework
+\item A hand implementation needs to be designed, implemented and tested against the specification
+\item The implementations must be compared to the frameworks LWT and Async based on speed
+\item The dissertation must be planned and written
+\end{enumerate}
+
+In case the extension will also become viable then its success criterion is that there is a clear formal verification accompanying the automated theorem prover version of the specification.
+\section{Timetable}
+The project will be split into two week packages
+
+
+\subsection{Week 1 and 2}
+Preparatory reading and research into tools that can be used for writing the specification and in the extension, the proofs. The tools of choice at the time of proposal are Ott for the specification step and Coq\cite{Coq} as the proof assistant. Potentially a meeting arranged in the Computer Lab by an expert in using these tools. 
+
+\textbf{Deliverable:} Small example specifications to try out the tool chain, including SKI combinator calculus.
+
+\subsection{Week 3 and 4}
+Investigating the two current libraries and their design decisions and planning the necessary parts of specification. Identifying the test cases that are thorough and common in concurrent code.
+
+\textbf{Deliverable:} A document describing the major design decisions of the two libraries, the difference in design of the specification and a set of test cases much like the ones used in OCaml Light \cite{OCamlLight, OCamlLightWeb}, but with a concurrency focus.
+
+\subsection{Week 5 and 6}
+Writing the specification and exporting to automated theorem provers and OCaml.
+
+\textbf{Deliverable:} The specification document in the format of the semantics tool and exported in the formats of the proof assistant and OCaml.
+
+
+\subsection{Week 7 and 8}
+Hand implement a version that adheres to the specification and test it against the runnable semantics.
+
+\subsection{Week 9 and 10}
+Evaluating the implementations of the concurrency framework against LWT and Async.
+Writing up the halfway report.
+
+\textbf{Deliverable:} Evaluation data and charts, the halfway report.
+\subsection{Week 11 and 12}
+If unexpected complexity occurs these two weeks can be used to compensate, otherwise starting on the verification proof in the proof assistant.
+\subsection{Week 13 and 14}
+If necessary adding more primitives (I/O, network) to test with, improving performance and finishing the verification proof. If time allows writing guide for future use of the framework.
+\subsection{Week 15 and 16}
+Combining all previously delivered documents as a starting point for the dissertation and doing any necessary further evaluation and extension.
+Creating the first, rough draft of the dissertation.
+\subsection{Week 17 and 18}
+Getting to the final structure but not necessarily final wording of the dissertation, acquiring all necessary graphs and charts, incorporating ongoing feedback from the supervisor.
+\subsection{Week 19 and 20}
+Finalising the dissertation and incorporating all feedback and polishing. 
+\section{Resource Declaration}
+The project will need the following resources:
+\begin{itemize}
+\item MCS computer access that is provided for all projects
+\item The OCaml core libraries and compiler
+\item The LWT and Async libraries
+\item The Lem tool
+\item The Ott tool
+\item The use of my personal laptop, to work more efficiently
+\end{itemize}
+
+As my personal laptop is included a suitable back-up plan is necessary which will consist of the following:
+\begin{itemize}
+\item A backup to my personal Dropbox account
+\item A Git repository on Github
+\item Frequent backups (potentially remotely) to the MCS partition
+\end{itemize}
+My supervisor and on request my overseers will receive access to both the Dropbox account and Github repository to allow full transparency.
+
+
+\begin{thebibliography}{9}
+
+\bibitem{OCaml}
+ OCaml.
+ \emph{http://ocaml.org/}
+
+\bibitem{LWT}
+ LWT, Lightweight Threading library.
+ \emph{http://ocsigen.org/lwt/}
+
+\bibitem{Async}
+ Async, Open source concurrency library by Jane Street
+ \emph{http://janestreet.github.io/}
+ 
+ \bibitem{Lem}
+ Lem, a tool for lightweight executable mathematics.\newline
+ \emph{http://www.cs.kent.ac.uk/people/staff/sao/lem/}
+ 
+ \bibitem{Ott}
+  Ott, a tool for writing definitions of programming languages and calculi.
+  Francesco Zappa Nardelli, Peter Sewell, and Scott Owens.\newline
+ \emph{http://www.cl.cam.ac.uk/\textasciitilde pes20/ott/}
+
+\bibitem{Claessen99functionalpearls}
+  Claessen, Koen.
+  \emph{Functional Pearls: A Poor Man's Concurrency Monad}.
+  1999.
+
+\bibitem{deleuzelight}
+  Deleuze, Christophe.
+  \emph{Light Weight Concurrency in OCaml: Continuations, Monads, Promises, Events}.
+
+\bibitem{vouillon2008lwt}
+  Vouillon, J{\'e}r{\^o}me.
+  \emph{Lwt: a cooperative thread library} in Proceedings of the 2008 ACM SIGPLAN workshop on ML, pages 3--12.
+  2008.
+  ACM.
+ 
+\bibitem{Coq}
+ Coq proof assistant.
+ \emph{http://coq.inria.fr/}
+
+\bibitem{OCamlLight}  
+ Owens, Scott.
+ \emph{A sound semantics for OCaml light.} in Programming Languages and Systems, pages 1--15.
+ 2008.
+ Springer Berlin Heidelberg.
+ 
+\bibitem{OCamlLightWeb}
+ Owens, Scott,
+ \emph{http://www.cl.cam.ac.uk/\textasciitilde so294/ocaml/}.
+ 2008.
+ 
+
+
+\end{thebibliography}
