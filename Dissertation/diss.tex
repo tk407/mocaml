@@ -142,9 +142,16 @@ Concurrent computation has became the norm for most applications with the rise o
 
 This project aims to model lightweight, cooperative concurrency. No threads are exposed to the underlying operating system or hardware and a blocking operation on the process level will still block all internal threads and the threads themselves expose the points of possible interleaving. 
 
+\section{Overview of OCaml}
+O
 
 \section{Current implementations in OCaml}
 There have been two very successful frameworks, LWT\cite{LWT} and Async\cite{Async} that both provided the primitives for concurrent development in OCaml however neither is supported by a clear semantic description as their main focus was ease of use and speed. 
+
+LWT, the lightweight cooperative threading library\cite{vouillon2008lwt} was designed as an open source framework entirely written in OCaml in a monadic style. It was successfully used in several large projects including the Unison file synchroniser and the Ocsigen Web server. This library includes many primitives to provide a feature rich framework, including primitives for thread creation, composition and cancel, thread local storage and support for various synchronisation techniques. 
+
+Async is a proprietary concurrency library for OCaml designed around promise monads called Deferred. 
+\textit{Some more goes here}
 
 \section{Semantics of concurrency}
 
@@ -171,13 +178,19 @@ These semantics can be modelled in logic, in particular a logic used by proof as
 \section{Logic to actual code}
 This logical representation is more amenable to proofs than to actual execution and the evaluation with respect to other implementations, which is why much research has gone into extraction of these representations into a functional programming language including OCaml and Haskell.
 \cite{letouzey2008extraction}
-
+\textit{More here!!}
 
 
 \chapter{Preparation}
 
-This chapter is empty!
+\section{Design of monadic semantics}
 
+\section{Design of concurrent semantics}
+
+\section{Tools}
+\subsection{Ott}
+\subsection{Coq}
+\subsection{OCaml}
 
 \cleardoublepage
 \chapter{Implementation}
