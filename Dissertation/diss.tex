@@ -8,6 +8,7 @@
 \usepackage{a4}
 \usepackage{verbatim}
 
+\usepackage{url}
 \input{epsf}                            % to allow postscript inclusions
 % On thor and CUS read top of file:
 %     /opt/TeX/lib/texmf/tex/dvips/epsf.sty
@@ -83,19 +84,7 @@ by {\tt detex diss.tex | tr -cd '0-9A-Za-z $\tt\backslash$n' | wc -w}
 
 \section*{Original Aims of the Project}
 
-To write an OCaml framework for lightweight threading framework. This framework should be defined from basic semantics and have these semantics represented in a theorem prover setting for verification. The verification should include proofs of basic monadic laws. This theorem prover representation should be extracted to OCaml where the extracted code should be as faithful to the representation as possible. The extracted code should be able to run OCaml code concurrently.
-
-To write a demonstration dissertation\footnote{A normal footnote without the
-complication of being in a table.} using \LaTeX\ to save
-student's time when writing their own dissertations. The dissertation
-should illustrate how to use the more common \LaTeX\ constructs. It
-should include pictures and diagrams to show how these can be
-incorporated into the dissertation.  It should contain the entire
-\LaTeX\ source of the dissertation and the Makefile.  It should
-explain how to construct an MSDOS disk of the dissertation in
-Postscript format that can be used by the book shop for printing, and,
-finally, it should have the prescribed layout and format of a diploma
-dissertation.
+To write an OCaml framework for lightweight threading. This framework should be defined from basic semantics and have these semantics represented in a theorem prover setting for verification. The verification should include proofs of basic monadic laws. This theorem prover representation should be extracted to OCaml where the extracted code should be as faithful to the representation as possible. The extracted code should be able to run OCaml code concurrently.
 
 
 \section*{Work Completed}
@@ -121,7 +110,7 @@ extent for a comparable purpose.
 \leftline{Signed [signature]}
 
 \medskip
-\leftline{Date [date]}
+\leftline{Date \today}
 
 \cleardoublepage
 
@@ -148,98 +137,40 @@ appreciated.
 
 \chapter{Introduction}
 
-\section{Overview of the files}
+\section{Overview of concurrency}
+Concurrent computation has became the norm for most applications with the rise of faster systems often with multiple cores. This concurrency can be exploited on multiple levels ranging from hardware supported instruction and thread level parallelism to software based heavy and lightweight models. 
 
-This document consists of the following files:
+This project aims to model lightweight, cooperative concurrency. No threads are exposed to the underlying operating system or hardware and a blocking operation on the process level will still block all internal threads and the threads themselves expose the points of possible interleaving. 
 
+
+\section{Current implementations in OCaml}
+There have been two very successful frameworks, LWT\cite{LWT} and Async\cite{Async} that both provided the primitives for concurrent development in OCaml however neither is supported by a clear semantic description as their main focus was ease of use and speed. 
+
+\section{Semantics of concurrency}
+
+There have been a lot of work on how exactly to formulate the semantics of concurrent and distributed systems. Some of the most common models for lightweight concurrency are captured and delimited continuations, trampolined style, continuation and promise monads and event based programming. This work focuses on the continuation monad style.
+
+The continuation monad consists of a monadic type $ \alpha \, \textbf{con} $, where $ \alpha $ is a type parameter describing the type of operation enclosed and three key operations 
 \begin{itemize}
-\item {\tt Makefile} --- The Makefile for the dissertation and Project Proposal
-\item {\tt diss.tex} --- The dissertation
-\item {\tt propbody.tex} --- Appendix~C  -- the project proposal 
-\item {\tt proposal.tex}  --- A \LaTeX\ main file for the proposal 
-\item{\tt figs} -- A directory containing diagrams and pictures
-\item{\tt refs.bib} --- The bibliography database
+\item{$>>=$, also known as bind. The operation sequences two operations one after the other. More formally it has a type $ \alpha \, \textbf{con} \rightarrow ( \alpha \rightarrow \beta \, \textbf{con}) \rightarrow \beta \, \textbf{con}  $ and }
+\item{ret, also known as return. It has type $ \alpha \rightarrow \alpha \, \textbf{con} $ and simply evaluates its parameter and boxes up the result.}
 \end{itemize}
 
-\section{Building the document}
+The third operation is fork, which is the way to spawn new threads (two in this particular case). The approach taken in this work is to have fork take two arguments, evaluate the two paths concurrently. The concurrency is achieved by reducing each path step by step based on some scheduler. When either path reduced to a value it returns a boxed up pair of results. 
 
-This document was produced using \LaTeXe which is based upon
-\LaTeX\cite{Lamport86}.  To build the document you first need to
-generate {\tt diss.aux} which, amongst other things, contains the
-references used.  This if done by executing the command:
+These results can be both values, or a value and a boxed up computation (that is, the partially reduced other path).
 
-{\tt latex diss}
+Therefore the signature of fork is slightly more complicated
+\[ \textbf{fork} \, : \, \alpha \, \textbf{con} \rightarrow \beta \, \textbf{con} \rightarrow ((\alpha * \beta ) \, + \, (\alpha *  \beta \, \textbf{con}) \, + \, ( \alpha \, \textbf{con} * \beta) ) \, \textbf{con} \]
+Where $ + $ refers to sum types.  
 
-\noindent
-Then the bibliography can be generated from {\tt refs.bib} using:
-
-{\tt bibtex diss}
-
-\noindent
-Finally, to ensure all the page numbering is correct run {\tt latex}
-on {\tt diss.tex} until the {\tt .aux} files do not change.  This
-usually takes 2 more runs.
-
-\subsection{The makefile}
-
-To simplify the calls to {\tt latex} and {\tt bibtex}, 
-a makefile has been provided, see Appendix~\ref{makefile}. 
-It provides the following facilities:
-
-\begin{itemize}
-
-\item{\tt make} \\
- Display help information.
-
-\item{\tt make prop} \\
- Run {\tt latex proposal; xdvi proposal.dvi}.
-
-\item{\tt make diss.ps} \\
- Make the file {\tt diss.ps}.
-
-\item{\tt make gv} \\
- View the dissertation using ghostview after performing 
-{\tt make diss.ps}, if necessary.
-
-\item{\tt make gs} \\
- View the dissertation using ghostscript after performing 
-{\tt make diss.ps}, if necessary.
-
-\item{\tt make count} \\
-Display an estimate of the word count.
-
-\item{\tt make all} \\
-Construct {\tt proposal.dvi} and {\tt diss.ps}.
-
-\item{\tt make pub} \\ Make a {\tt .tar} version of the {\tt demodiss}
-directory and place it in my {\tt public\_html} directory.
-
-\item{\tt make clean} \\ Delete all files except the source files of
-the dissertation. All these deleted files can be reconstructed by
-typing {\tt make all}.
-
-\item{\tt make pr} \\
-Print the dissertation on your default printer.
-
-\end{itemize}
+\section{Semantics to logic}
+These semantics can be modelled in logic, in particular a logic used by proof assistant. Mechanisation of semantics in proof assistant has been accepted as a way of formal verification of properties about said semantics \cite{benton2008mechanized,blazy2009mechanized, blazy2006formal, leroy2009formal}. Most often used proof assistants include Coq \cite{Coq}, HOL and Isabelle. There have been much effort to make this mechanisation as easy as possible with tools like Ott\cite{Ott}, which enable working semanticists to describe their language in a simple, ascii-art like style while versatile in destination languages, including the above mentioned proof assistants, latex and some direct ML representations.
 
 
-\section{Counting words}
-
-An approximate word count of the body of the dissertation may be
-obtained using:
-
-{\tt wc diss.tex}
-
-\noindent
-Alternatively, try something like:
-
-\verb/detex diss.tex | tr -cd '0-9A-Z a-z\n' | wc -w/
-
-
-
-
-\cleardoublepage
+\section{Logic to actual code}
+This logical representation is more amenable to proofs than to actual execution and the evaluation with respect to other implementations, which is why much research has gone into extraction of these representations into a functional programming language including OCaml and Haskell.
+\cite{letouzey2008extraction}
 
 
 

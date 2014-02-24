@@ -1,3 +1,80 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{10}
+
+\bibitem{Async}
+Async, open source concurrency library by jane street.
+\newblock \url{http://janestreet.github.io/}.
+
+\bibitem{Lem}
+Lem, a tool for lightweight executable mathematics.
+\newblock \url{http://www.cs.kent.ac.uk/people/staff/sao/lem/}.
+
+\bibitem{LWT}
+Lwt, lightweight threading library.
+\newblock \url{http://ocsigen.org/lwt/}.
+
+\bibitem{OCaml}
+Ocaml.
+\newblock \url{http://ocaml.org/}.
+
+\bibitem{Coq}
+Ott, a tool for writing definitions of programming languages and calculi.
+\newblock \url{http://coq.inria.fr/}.
+
+\bibitem{OCamlLightWeb}
+Ott, a tool for writing definitions of programming languages and calculi.
+\newblock \url{http://www.cl.cam.ac.uk/~so294/ocaml/}, 2008.
+
+\bibitem{benton2008mechanized}
+Nick Benton and Vasileios Koutavas.
+\newblock A mechanized bisimulation for the nu-calculus.
+\newblock {\em Higher-Order and Symbolic Computation (to appear, 2013)}, 2008.
+
+\bibitem{blazy2006formal}
+Sandrine Blazy, Zaynah Dargaye, and Xavier Leroy.
+\newblock Formal verification of a c compiler front-end.
+\newblock In {\em FM 2006: Formal Methods}, pages 460--475. Springer, 2006.
+
+\bibitem{blazy2009mechanized}
+Sandrine Blazy and Xavier Leroy.
+\newblock Mechanized semantics for the clight subset of the c language.
+\newblock {\em Journal of Automated Reasoning}, 43(3):263--288, 2009.
+
+\bibitem{Claessen99functionalpearls}
+Koen Claessen.
+\newblock Functional pearls: A poor man's concurrency monad, 1999.
+
+\bibitem{deleuzelight}
+Christophe Deleuze.
+\newblock Light weight concurrency in ocaml: Continuations, monads, promises,
+  events.
+
+\bibitem{leroy2009formal}
+Xavier Leroy.
+\newblock Formal verification of a realistic compiler.
+\newblock {\em Communications of the ACM}, 52(7):107--115, 2009.
+
+\bibitem{letouzey2008extraction}
+Pierre Letouzey.
+\newblock Extraction in coq: An overview.
+\newblock In {\em Logic and Theory of Algorithms}, pages 359--369. Springer,
+  2008.
+
+\bibitem{Ott}
+Francesco~Zappa Nardelli.
+\newblock Ott, a tool for writing definitions of programming languages and
+  calculi.
+\newblock \url{http://www.cl.cam.ac.uk/~pes20/ott/}.
+
+\bibitem{OCamlLight}
+Scott Owens.
+\newblock A sound semantics for ocaml light.
+\newblock In {\em Programming Languages and Systems}, pages 1--15. Springer,
+  2008.
+
+\bibitem{vouillon2008lwt}
+J{\'e}r{\^o}me Vouillon.
+\newblock Lwt: a cooperative thread library.
+\newblock In {\em Proceedings of the 2008 ACM SIGPLAN workshop on ML}, pages
+  3--12. ACM, 2008.
 
 \end{thebibliography}

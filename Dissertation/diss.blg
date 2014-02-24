@@ -2,64 +2,55 @@ This is BibTeX, Version 0.99d (TeX Live 2013/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: diss.aux
 The style file: plain.bst
-I couldn't open database file refs.bib
----line 41 of file diss.aux
- : \bibdata{refs
- :              }
-I'm skipping whatever remains of this command
-I found no database files---while reading file diss.aux
+Database file #1: refs.bib
 Warning--I didn't find a database entry for "moore95"
-Warning--I didn't find a database entry for "Lamport86"
-Warning--I didn't find a database entry for "OCaml"
-Warning--I didn't find a database entry for "LWT"
-Warning--I didn't find a database entry for "Async"
-Warning--I didn't find a database entry for "Lem"
-Warning--I didn't find a database entry for "Ott"
-Warning--I didn't find a database entry for "Claessen99functionalpearls"
-Warning--I didn't find a database entry for "deleuzelight"
-Warning--I didn't find a database entry for "vouillon2008lwt"
-Warning--I didn't find a database entry for "Coq"
-Warning--I didn't find a database entry for "OCamlLight"
-Warning--I didn't find a database entry for "OCamlLightWeb"
-You've used 0 entries,
+Warning--to sort, need author or key in LWT
+Warning--to sort, need author or key in Async
+Warning--to sort, need author or key in Coq
+Warning--to sort, need author or key in OCaml
+Warning--to sort, need author or key in Lem
+Warning--to sort, need author or key in OCamlLightWeb
+Warning--empty journal in deleuzelight
+Warning--empty year in deleuzelight
+You've used 16 entries,
             2118 wiz_defined-function locations,
-            520 strings with 4179 characters,
-and the built_in function-call counts, 18 in all, are:
-= -- 0
-> -- 0
-< -- 0
-+ -- 0
-- -- 0
-* -- 2
-:= -- 7
-add.period$ -- 0
-call.type$ -- 0
-change.case$ -- 0
+            574 strings with 5660 characters,
+and the built_in function-call counts, 4106 in all, are:
+= -- 417
+> -- 99
+< -- 4
++ -- 46
+- -- 28
+* -- 202
+:= -- 602
+add.period$ -- 44
+call.type$ -- 16
+change.case$ -- 62
 chr.to.int$ -- 0
-cite$ -- 0
-duplicate$ -- 0
-empty$ -- 1
-format.name$ -- 0
-if$ -- 1
+cite$ -- 24
+duplicate$ -- 185
+empty$ -- 425
+format.name$ -- 28
+if$ -- 937
 int.to.chr$ -- 0
-int.to.str$ -- 0
-missing$ -- 0
-newline$ -- 3
-num.names$ -- 0
-pop$ -- 0
+int.to.str$ -- 16
+missing$ -- 8
+newline$ -- 75
+num.names$ -- 20
+pop$ -- 113
 preamble$ -- 1
-purify$ -- 0
+purify$ -- 46
 quote$ -- 0
-skip$ -- 1
+skip$ -- 151
 stack$ -- 0
-substring$ -- 0
-swap$ -- 0
-text.length$ -- 0
+substring$ -- 234
+swap$ -- 44
+text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
-warning$ -- 0
-while$ -- 0
-width$ -- 0
-write$ -- 2
-(There were 2 error messages)
+type$ -- 64
+warning$ -- 8
+while$ -- 36
+width$ -- 18
+write$ -- 149
+(There were 9 warnings)
