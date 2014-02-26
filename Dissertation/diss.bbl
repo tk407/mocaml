@@ -1,9 +1,5 @@
 \begin{thebibliography}{10}
 
-\bibitem{Async}
-Async, open source concurrency library by jane street.
-\newblock \url{http://janestreet.github.io/}.
-
 \bibitem{Lem}
 Lem, a tool for lightweight executable mathematics.
 \newblock \url{http://www.cs.kent.ac.uk/people/staff/sao/lem/}.
@@ -48,6 +44,30 @@ Christophe Deleuze.
 \newblock Light weight concurrency in ocaml: Continuations, monads, promises,
   events.
 
+\bibitem{friedman1988applications}
+Daniel~P Friedman.
+\newblock Applications of continuations.
+\newblock In {\em Proceedings of the ACM Conference on Principles of
+  Programming Languages}, 1988.
+
+\bibitem{ganz1999trampolined}
+Steven~E Ganz, Daniel~P Friedman, and Mitchell Wand.
+\newblock Trampolined style.
+\newblock In {\em ACM SIGPLAN Notices}, volume~34, pages 18--27. ACM, 1999.
+
+\bibitem{hoareetal2001tackling}
+CAR Hoareetal.
+\newblock Tackling the awkward squad: monadic input/output, concurrency,
+  exceptions, and foreign-language calls in haskell.
+\newblock {\em Engineering theories of software construction}, 180:47, 2001.
+
+\bibitem{kiselyov2010delimited}
+Oleg Kiselyov.
+\newblock Delimited control in ocaml, abstractly and concretely: System
+  description.
+\newblock In {\em Functional and Logic Programming}, pages 304--320. Springer,
+  2010.
+
 \bibitem{leroy2009formal}
 Xavier Leroy.
 \newblock Formal verification of a realistic compiler.
@@ -58,6 +78,18 @@ Pierre Letouzey.
 \newblock Extraction in coq: An overview.
 \newblock In {\em Logic and Theory of Algorithms}, pages 359--369. Springer,
   2008.
+
+\bibitem{liskov1988promises}
+Barbara Liskov and Liuba Shrira.
+\newblock {\em Promises: linguistic support for efficient asynchronous
+  procedure calls in distributed systems}, volume~23.
+\newblock ACM, 1988.
+
+\bibitem{lochbihler2012machine}
+Andreas Lochbihler.
+\newblock {\em A Machine-Checked, Type-Safe Model of Java Concurrency:
+  Language, Virtual Machine, Memory Model, and Verified Compiler}.
+\newblock KIT Scientific Publishing, 2012.
 
 \bibitem{Ott}
 Francesco~Zappa Nardelli.
@@ -70,6 +102,27 @@ Scott Owens.
 \newblock A sound semantics for ocaml light.
 \newblock In {\em Programming Languages and Systems}, pages 1--15. Springer,
   2008.
+
+\bibitem{sevvcik2011relaxed}
+Jaroslav {\^S}ev{\v{c}}ik, Viktor Vafeiadis, Francesco Zappa~Nardelli, Suresh
+  Jagannathan, and Peter Sewell.
+\newblock Relaxed-memory concurrency and verified compilation.
+\newblock In {\em ACM SIGPLAN Notices}, volume~46, pages 43--54. ACM, 2011.
+
+\bibitem{shan2004shift}
+Chung-chieh Shan.
+\newblock Shift to control.
+\newblock In {\em Proceedings of the 5th workshop on Scheme and Functional
+  Programming}, pages 99--107, 2004.
+
+\bibitem{Ocamlnet}
+Gerd Stolpmann.
+\newblock Ocamlnet.
+\newblock \url{http://projects.camlcity.org/projects/ocamlnet.html}.
+
+\bibitem{Async}
+Jane Street.
+\newblock Async, open source concurrency library.
 
 \bibitem{vouillon2008lwt}
 J{\'e}r{\^o}me Vouillon.

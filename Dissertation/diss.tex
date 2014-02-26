@@ -121,10 +121,6 @@ extent for a comparable purpose.
 \newpage
 \section*{Acknowledgements}
 
-This document owes much to an earlier version written by Simon Moore
-\cite{moore95}.  His help, encouragement and advice was greatly 
-appreciated.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % now for the chapters
 
@@ -137,25 +133,36 @@ appreciated.
 
 \chapter{Introduction}
 
+The goal of this project is to build a concurrency framework for OCaml from semantics, through proof assistant to actual code. This framework aims to provide a verifiable reference implementation for concurrency. 
+
 \section{Overview of concurrency}
 Concurrent computation has became the norm for most applications with the rise of faster systems often with multiple cores. This concurrency can be exploited on multiple levels ranging from hardware supported instruction and thread level parallelism to software based heavy and lightweight models. 
 
 This project aims to model lightweight, cooperative concurrency. No threads are exposed to the underlying operating system or hardware and a blocking operation on the process level will still block all internal threads and the threads themselves expose the points of possible interleaving. 
 
-\section{Overview of OCaml}
-O
+The issue of concurrency occurs in every programming language however functional languages often both less developed in this area and also fit well with concurrency without races for mutable data structures. Functional languages that have both actual industrial applications and large set of features are of particular interest. These languages include OCaml and Haskell. This project focuses on OCaml. 
 
-\section{Current implementations in OCaml}
-There have been two very successful frameworks, LWT\cite{LWT} and Async\cite{Async} that both provided the primitives for concurrent development in OCaml however neither is supported by a clear semantic description as their main focus was ease of use and speed. 
+\section{Overview of OCaml}
+OCaml is a high level programming language combining functional, object-oriented and imperative paradigms used in large scale industrial and academic projects where speed and correctness are of utmost importance. It uses one of the most powerful type systems and inference available to make efficient and correct software engineering possible.
+  
+
+\section{Current implementations of a concurrency framework in OCaml}
+There have been two very successful monadic concurrency frameworks, LWT\cite{LWT} and Async\cite{Async} that both provided the primitives for concurrent development in OCaml however neither is supported by a clear semantic description as their main focus was ease of use and speed. 
 
 LWT, the lightweight cooperative threading library\cite{vouillon2008lwt} was designed as an open source framework entirely written in OCaml in a monadic style. It was successfully used in several large projects including the Unison file synchroniser and the Ocsigen Web server. This library includes many primitives to provide a feature rich framework, including primitives for thread creation, composition and cancel, thread local storage and support for various synchronisation techniques. 
 
-Async is a proprietary concurrency library for OCaml designed around promise monads called Deferred. 
+Async is an open source concurrency library for OCaml developed by Jane Street. Unlike LWT the basic semantics are designed with promise monads in mind. 
 \textit{Some more goes here}
+
+\section{Motivation}
+With these implementations in mind the motivation of the project is to investigate the lack of certified implementation of a concurrency framework. Verified concurrent systems have been researched for languages like C\cite{sevvcik2011relaxed}, C++ and Java\cite{lochbihler2012machine}, but not yet for OCaml.
 
 \section{Semantics of concurrency}
 
-There have been a lot of work on how exactly to formulate the semantics of concurrent and distributed systems. Some of the most common models for lightweight concurrency are captured and delimited continuations, trampolined style, continuation and promise monads and event based programming. This work focuses on the continuation monad style.
+There have been a lot of work on how exactly to formulate the semantics of concurrent and distributed systems. Some of the most common models for lightweight concurrency\cite{deleuzelight} are captured\cite{friedman1988applications} and delimited\cite{kiselyov2010delimited} continuations\cite{shan2004shift}, trampolined style\cite{ganz1999trampolined}, continuation monads\cite{Claessen99functionalpearls}, promise monads\cite{liskov1988promises} and event based programming(used in the OCamlNet\cite{Ocamlnet} project). This work focuses on the continuation monad style.
+
+A monad\cite{hoareetal2001tackling} in functional programming is a construct to structure computations that are somehow "sequenced" together. A monad requires two operations, $ >>= $ and ret, which are related by the monadic associativity rules.
+
 
 The continuation monad consists of a monadic type $ \alpha \, \textbf{con} $, where $ \alpha $ is a type parameter describing the type of operation enclosed and three key operations 
 \begin{itemize}
@@ -172,14 +179,17 @@ Therefore the signature of fork is slightly more complicated
 Where $ + $ refers to sum types.  
 
 \section{Semantics to logic}
-These semantics can be modelled in logic, in particular a logic used by proof assistant. Mechanisation of semantics in proof assistant has been accepted as a way of formal verification of properties about said semantics \cite{benton2008mechanized,blazy2009mechanized, blazy2006formal, leroy2009formal}. Most often used proof assistants include Coq \cite{Coq}, HOL and Isabelle. There have been much effort to make this mechanisation as easy as possible with tools like Ott\cite{Ott}, which enable working semanticists to describe their language in a simple, ascii-art like style while versatile in destination languages, including the above mentioned proof assistants, latex and some direct ML representations.
+These semantics can be modelled in logic, in particular logics used by proof assistants. Mechanisation of semantics in proof assistant has been accepted as a way of formal verification of properties about said semantics \cite{benton2008mechanized,blazy2009mechanized, blazy2006formal, leroy2009formal}. Most often used proof assistants include Coq \cite{Coq}, HOL and Isabelle. There has been much effort to make this mechanisation as easy as possible with tools like Ott\cite{Ott}, which enable working semanticists to describe their language in a simple, ascii-art like style while versatile in destination languages, including the above mentioned proof assistants, \LaTeX \, and some direct OCaml representations.
+
+This project was developed with the Coq proof assistant in mind. 
+
+Coq is formal proof assistant with a mathematical higher-level language called \textit{Gallina}, based around the Calculus of Inductive Constructions, that can be used to define functions and predicates, state, formally prove and machine check mathematical theorems and extract certified programs to high level languages like Haskell and OCaml.
 
 
 \section{Logic to actual code}
-This logical representation is more amenable to proofs than to actual execution and the evaluation with respect to other implementations, which is why much research has gone into extraction of these representations into a functional programming language including OCaml and Haskell.
-\cite{letouzey2008extraction}
-\textit{More here!!}
+This logical representation is more amenable to proofs than to actual execution and the evaluation with respect to other implementations, which is why much research has gone into extraction of these representations as certified programs in functional programming languages including OCaml \cite{letouzey2008extraction} and Haskell.
 
+Inductive sets often map simply to data structures of type constructors and constructive proofs to computable functions. 
 
 \chapter{Preparation}
 
