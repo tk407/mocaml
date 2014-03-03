@@ -48,6 +48,12 @@ constant, c :: CONST_ ::=
   | ret                                ::   :: ret
   | fork                               ::   :: fork
   | unit                                 ::   :: unit
+  | stop                                 ::   :: stop
+
+% Live modes
+livemodes, lm :: LM_ ::=
+  | comp                               ::    :: comp
+  | exp expr                           ::    :: expr
 
 % Terms
 expr, e :: E_ ::=
@@ -58,7 +64,8 @@ expr, e :: E_ ::=
   | expr expr'                           ::   :: apply 
   | expr >>= expr'                       ::   :: bind
   | function value_name : typexpr -> expr          ::   :: function (+ bind value_name in expr +)
-  | live expr                            ::   :: live_expr
+  | fix e                                ::   :: fix
+  | live lm                            ::   :: live_expr
   | { e , e' }                           ::   :: pair
   | ( expr )                             :: S :: paren {{ ich [[expr]] }} {{ ocaml [[expr]] }}
   | inl e                                ::   :: taggingleft
@@ -74,9 +81,10 @@ expr, e :: E_ ::=
 value, v :: V_ ::=
   | constant                           ::   :: constant
   | function value_name : typexpr -> expr        ::   :: function
-  | live expr                         ::   :: live_expr
+  | live lm                         ::   :: live_expr
   | inl v                              ::   :: taggedleft
   | inr v                              ::   :: taggedright
+  | fix v                              ::   :: fix
   | { v , v' }                         ::   :: valuepair
   | ( v )                             :: S :: paren {{ ich [[v]] }} {{ ocaml [[v]] }}
 
@@ -132,7 +140,10 @@ terminals :: terminals_ ::=
   | '['                                ::   :: leftsqbrack  {{ tex [ }}
   | ']'                                ::   :: rightsqbrack {{ tex ] }}
   | con                                ::   :: concurrent {{ tex \textbf{concurrent} }}
+  | comp                               ::   :: computation {{ tex comp }}
+  | exp                                ::   :: expression {{ tex exp }}
   | live                               ::   :: conlive    {{ tex Live }}
+  | fix                                ::   :: fix        {{ tex \textbf{fix} }}
   | >>=                                ::   :: bind {{ tex >>= }}
   | '*'                                ::   :: product_t    {{ tex * }}
   | ','                                ::   :: pair_elem   {{ tex , }}
@@ -209,6 +220,11 @@ G |- fork : (con t1) -> ((con t2) -> (con (((t1*t2) + (t1 * (con t2))) + ((con t
 G |- unit : tunit
 
 
+------------------------ :: stop
+G |- stop : t
+
+
+
 % typing rules
 defn 
 G |- e : t :: :: Get :: Get_ by
@@ -232,9 +248,15 @@ G,x1: ( ) t1 |- e : t
 G |- function x1 : t1 -> e : t1->t
 
 G |- e : t
----------------------------  :: live
-G |- live e : con t
+---------------------------  :: live_exp
+G |- live exp e : con t
 
+---------------------------  :: live_comp
+G |- live comp : con tunit
+
+G |- e : t -> t
+------------------------ :: fix
+G |- fix e : t
 
 G |- e : con t
 G |- e' : t -> con t'
@@ -290,26 +312,38 @@ e [ s ] --> e' :: :: red :: red_ by
 {{ ~ ( is_value_of_expr ( [[e']] ) ) }}
 e [ s ] --> e''
 --------------------------- :: forkmove1
-(:E_apply:fork (live e) ) (live e') [ First ] -->  (:E_apply:fork (live e'') ) (live e')
+(:E_apply:fork (live exp e) ) (live exp e') [ First ] -->  (:E_apply:fork (live exp e'') ) (live exp e')
 
 {{ ~ ( is_value_of_expr ( [[e]] ) ) }}
 e' [ s ] --> e''
 --------------------------- :: forkmove2
-(:E_apply:fork (live e) ) (live e') [ Second ] -->  (:E_apply:fork (live e) ) (live e'') 
+(:E_apply:fork (live exp e) ) (live exp e') [ Second ] -->  (:E_apply:fork (live exp e) ) (live exp e'') 
 
 --------------------------- :: forkdeath1
-(:E_apply:fork (live v) ) (live e) [ s ] -->  live { v , (live e) }
+(:E_apply:fork (live exp v) ) (live exp e) [ s ] -->  live exp ( inl ( inr ( { v , ( live exp e ) } ) ) )
 
 --------------------------- :: forkdeath2
-(:E_apply:fork (live e) ) (live v') [ s ] -->  live { (live e) , v' }
+(:E_apply:fork (live exp e) ) (live exp v') [ s ] -->  live exp ( inr ( { (live exp e) , v' } ) )
 
 --------------------------- :: forkdeath12
-(:E_apply:fork (live v) ) (live v') [ s ] -->  live { v , v' }
+(:E_apply:fork (live exp v) ) (live exp v') [ s ] -->  live exp ( inl ( inl ( { v , v' } ) ) )
+
+% Now for the evaluation steps that have to modified to incorporate the actual OCaml code
+
+--------------------------- :: forkdocomp1
+(:E_apply:fork (live comp) ) (live exp e) [ s ] -->  live exp ( inl ( inr ( { unit , (live exp e) } ) ) )
+
+--------------------------- :: forkdocomp2
+(:E_apply:fork (live exp e) ) (live comp) [ s ] -->  live exp ( inr ( { (live exp e) , unit } ) )
+
+--------------------------- :: forkdocomp12
+(:E_apply:fork (live comp) ) (live comp) [ s ] -->  live exp ( inl ( inl ( { unit , unit } ) ) )
+
 
 
 
 --------------------------- :: ret
-ret v [ s ] --> live v
+ret v [ s ] --> ( live exp v ) 
 
 e [ s ] --> e'
 --------------------------- :: evalbind
@@ -317,10 +351,13 @@ e >>= e'' [ s ] --> e' >>= e''
 
 e [ s ] --> e'
 --------------------------- :: movebind
-(live e) >>= e'' [ s ] --> (live e') >>= e'' 
+(live exp e) >>= e'' [ s ] --> (live exp e') >>= e'' 
+
+--------------------------- :: compbind
+(live comp) >>= e [ s ] --> e' unit
 
 --------------------------- :: dobind
-(live v) >>= e [ s ] --> e v 
+(live exp v) >>= e [ s ] --> e v 
 
 %Context-application
 % Evaluate argument first
@@ -335,6 +372,16 @@ e [ s ] --> e'
 ------------  :: context_app2
 e v [ s ] --> e' v
 
+
+%Fixpoint operator
+% This heavily relies on well typed-ness 
+
+e [ s ] --> e'
+------------------------------  :: fix_move
+( fix e ) [ s ] --> ( fix e' )
+
+----------------------- :: fix_app
+( fix v ) v' [ s ] --> ( fix v ) ( v v' )
 
 % Pairs
 % Note this could be defined to be parallel, but I want to constrain concurrency to fork
