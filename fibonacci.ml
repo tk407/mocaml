@@ -14,4 +14,20 @@ let p () = (print_int(!m); print_string " ";print_int (!k) ; print_string "\n" ;
 
 let bp = boxc p
 
+let funbf = func (vname 0) (tunit) ( ((bf)  >>= (func (vname 1) (tunit) (id 0)) ))
+(* (unit -> unit) -> (unit -> unit) *)
+
+let funbp = func (vname 2) (tunit) ( ((bp)  >>= (func (vname 3) (tunit) (id 2)) ))
+
+let fixfunbf = fix funbf
+
+let fixfunbp = fix funbp
+
+let armf = boxe ( app fixfunbf cunit )
+let armp = boxe ( app fixfunbp cunit )
+
+let fib = fork armf armp
+
+
+
 

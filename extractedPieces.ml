@@ -172,6 +172,7 @@ let rec xJO_red12 p1 p2 =
        (* | _ -> assert false (*  *) *))   (* No such possibility *)
      | true -> E_apply (e'', e)
  (*    | _ -> assert false (*  *) *) )      (* No such possibility *)
+  | (E_bind (E_live_expr (LM_comp f), e''), s) -> ( f () ; E_apply (e'', (E_constant CONST_unit)))   (* !!!!!! computation and bind has not been handled *)    
   | (E_bind (e, e''), s) ->
     (match xJO_red12 e s with
      | e' -> E_bind (e', e'')
