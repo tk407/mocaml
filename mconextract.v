@@ -54,7 +54,7 @@ Recursive Extraction selectstar.
 
 (* Extractable version of the reduction operation *)
 Inductive XJO_red : expr -> selectstar -> expr -> Prop :=    (* defn red *)
- | XJO_red_app : forall (x:value_name) (t : typexpr) (e v:expr) (s:selectstar),
+(* | XJO_red_app : forall (x:value_name) (t : typexpr) (e v:expr) (s:selectstar),
      (eq (xis_value_of_expr v) true) ->
      XJO_red (E_apply  (E_function x t e)  v) s  (subst_expr  v   x   e ) 
  | XJO_red_ret : forall (v:expr) (s:selectstar),
@@ -108,12 +108,19 @@ Inductive XJO_red : expr -> selectstar -> expr -> Prop :=    (* defn red *)
      (eq (xis_value_of_expr e') false) -> 
      XJO_red e' s e'' ->
      XJO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (LM_expr (e))) )   (E_live_expr (LM_expr (e'))) ) (Seq S_Second s) (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (LM_expr (e))) )   (E_live_expr (LM_expr (e''))) )
-(*| XJO_red_forkdocomp1 : forall (e:expr) (s:selectstar),
+*)(*| XJO_red_forkdocomp1 : forall (e:expr) (s:selectstar),
      XJO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr LM_comp) )   (E_live_expr (LM_expr e)) ) s (E_live_expr (LM_expr  (E_taggingleft  (E_taggingright  (E_pair (E_constant CONST_unit)  (E_live_expr (LM_expr e)) ) ) ) ))
  | XJO_red_forkdocomp2 : forall (e:expr) (s:selectstar),
      XJO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (LM_expr e)) )   (E_live_expr LM_comp) ) s (E_live_expr (LM_expr  (E_taggingright  (E_pair  (E_live_expr (LM_expr e))  (E_constant CONST_unit)) ) ))
  | XJO_red_forkdocomp12 : forall (s:selectstar),
      XJO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr LM_comp) )   (E_live_expr LM_comp) ) s (E_live_expr (LM_expr  (E_taggingleft  (E_taggingleft  (E_pair (E_constant CONST_unit) (E_constant CONST_unit)) ) ) ))
+*) | XJO_red_fix_move : forall (e:expr) (s:selectstar) (e':expr),
+     XJO_red e s e' ->
+     XJO_red  (E_fix e)  s  (E_fix e') 
+ | XJO_red_fix_app : forall (v v':expr) (s:selectstar),
+     (eq (xis_value_of_expr v) true) ->
+     (eq (xis_value_of_expr v') true) ->
+     XJO_red (E_apply  (E_fix v)  v') s (E_apply  (E_fix v)   (E_apply v v') )
 (* | XJO_red_forkdeathfp1 : forall (v v':expr),
      (eq (xis_value_of_expr v') true) ->
      (eq (xis_value_of_expr v) true) ->
@@ -143,7 +150,7 @@ Inductive XJO_red : expr -> selectstar -> expr -> Prop :=    (* defn red *)
      (eq (xis_value_of_expr v) true) ->
      XJO_red (E_apply  (E_apply (E_constant CONST_fork) v)  (E_constant CONST_ret)) (E_live_expr (E_pair v (E_constant CONST_ret)))
 *)
- | XJO_red_pair_1 : forall (e e'' e':expr) (s:selectstar),
+(* | XJO_red_pair_1 : forall (e e'' e':expr) (s:selectstar),
      (eq (xis_value_of_expr e) false) ->
      XJO_red e s e' ->
      XJO_red (E_pair e e'') s (E_pair e' e'')
