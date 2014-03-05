@@ -1,6 +1,9 @@
 metavar value_name, x ::=
   {{ isa string }} {{ coq nat }} {{ coq-equality }} {{ hol string }} {{ ocaml int }}
   {{ lex alphanum }} 
+metavar label, lab ::=
+  {{ isa string }} {{ coq nat }} {{ coq-equality }} {{ hol string }} {{ ocaml int }}
+  {{ lex alphanum }} 
 metavar ident ::=
   {{ isa string }} {{ coq nat }} {{ hol string }} {{ ocaml int }}
   {{ lex Alphanum }} 
@@ -50,10 +53,15 @@ constant, c :: CONST_ ::=
   | unit                                 ::   :: unit
   | stop                                 ::   :: stop
 
+redlabel, rl :: RL_ ::=
+  | tau                                    ::   :: tau
+  | lab                                ::   :: labelled
+
 % Live modes
 livemodes, lm :: LM_ ::=
-  | comp                               ::    :: comp
+  | comp rl                               ::    :: comp
   | exp expr                           ::    :: expr
+  | ( lm )                             :: S :: paren {{ ich [[lm]] }} {{ ocaml [[lm]] }}
 
 % Terms
 expr, e :: E_ ::=
@@ -144,6 +152,7 @@ terminals :: terminals_ ::=
   | exp                                ::   :: expression {{ tex exp }}
   | live                               ::   :: conlive    {{ tex Live }}
   | fix                                ::   :: fix        {{ tex \textbf{fix} }}
+  | tau                                ::   :: tau        {{ tex \textbf{tau} }}
   | >>=                                ::   :: bind {{ tex >>= }}
   | '*'                                ::   :: product_t    {{ tex * }}
   | ','                                ::   :: pair_elem   {{ tex , }}
@@ -252,11 +261,11 @@ G |- e : t
 G |- live exp e : con t
 
 ---------------------------  :: live_comp
-G |- live comp : con tunit
+G |- live ( comp rl ) : con tunit
 
-G |- e : t -> t
+G |- e : ( t -> t' ) -> ( t -> t' )
 ------------------------ :: fix
-G |- fix e : t
+G |- fix e : ( t -> t' )
 
 G |- e : con t
 G |- e' : t -> con t'
@@ -289,10 +298,10 @@ defns
 Jop :: JO_ ::= 
 
 defn 
-e [ s ] --> e' :: :: red :: red_ by
+e [ s ] --> [ rl ]  e' :: :: red :: red_ by
 
 ------------------------------- :: app
-(function x : t -> e)  v [ s ] --> {v/x}  e
+(function x : t -> e)  v [ s ] --> [ tau ] {v/x}  e
 
 %Concurrent constructs
 
@@ -310,105 +319,114 @@ e [ s ] --> e' :: :: red :: red_ by
 %Here should be the only path for concurrency
 
 {{ ~ ( is_value_of_expr ( [[e']] ) ) }}
-e [ s ] --> e''
+e [ s ] --> [ rl ] e''
 --------------------------- :: forkmove1
-(:E_apply:fork (live exp e) ) (live exp e') [ First ] -->  (:E_apply:fork (live exp e'') ) (live exp e')
+(:E_apply:fork (live exp e) ) (live exp e') [ First ] --> [ rl ] (:E_apply:fork (live exp e'') ) (live exp e')
 
 {{ ~ ( is_value_of_expr ( [[e]] ) ) }}
-e' [ s ] --> e''
+e' [ s ] --> [ rl ] e''
 --------------------------- :: forkmove2
-(:E_apply:fork (live exp e) ) (live exp e') [ Second ] -->  (:E_apply:fork (live exp e) ) (live exp e'') 
+(:E_apply:fork (live exp e) ) (live exp e') [ Second ] --> [ rl ] (:E_apply:fork (live exp e) ) (live exp e'') 
 
 --------------------------- :: forkdeath1
-(:E_apply:fork (live exp v) ) (live exp e) [ s ] -->  live exp ( inl ( inr ( { v , ( live exp e ) } ) ) )
+(:E_apply:fork (live exp v) ) (live exp e) [ s ] --> [ tau ] live exp ( inl ( inr ( { v , ( live exp e ) } ) ) )
 
 --------------------------- :: forkdeath2
-(:E_apply:fork (live exp e) ) (live exp v') [ s ] -->  live exp ( inr ( { (live exp e) , v' } ) )
+(:E_apply:fork (live exp e) ) (live exp v') [ s ] --> [ tau ] live exp ( inr ( { (live exp e) , v' } ) )
 
 --------------------------- :: forkdeath12
-(:E_apply:fork (live exp v) ) (live exp v') [ s ] -->  live exp ( inl ( inl ( { v , v' } ) ) )
+(:E_apply:fork (live exp v) ) (live exp v') [ s ] --> [ tau ] live exp ( inl ( inl ( { v , v' } ) ) )
 
 % Now for the evaluation steps that have to modified to incorporate the actual OCaml code
 
 --------------------------- :: forkdocomp1
-(:E_apply:fork (live comp) ) (live exp e) [ s ] -->  live exp ( inl ( inr ( { unit , (live exp e) } ) ) )
+(:E_apply:fork (live ( comp rl ) ) ) (live exp e) [ s ] --> [ rl ] live exp ( inl ( inr ( { unit , (live exp e) } ) ) )
 
 --------------------------- :: forkdocomp2
-(:E_apply:fork (live exp e) ) (live comp) [ s ] -->  live exp ( inr ( { (live exp e) , unit } ) )
+(:E_apply:fork (live exp e) ) (live ( comp rl )) [ s ] --> [ rl ]  live exp ( inr ( { (live exp e) , unit } ) )
 
 --------------------------- :: forkdocomp12
-(:E_apply:fork (live comp) ) (live comp) [ s ] -->  live exp ( inl ( inl ( { unit , unit } ) ) )
+(:E_apply:fork (live ( comp rl )) ) (live (comp rl')) [ First ] --> [ rl ] (:E_apply:fork (live ( exp unit )) ) (live (comp rl'))
+
+--------------------------- :: forkdocomp21
+(:E_apply:fork (live ( comp rl )) ) (live (comp rl')) [ Second ] --> [ rl' ] (:E_apply:fork (live ( comp rl )) ) (live (exp unit))
+
+--------------------------- :: forkfincomp12
+(:E_apply:fork (live ( exp unit )) ) (live (comp rl')) [ s ] --> [ rl' ] live exp ( inl ( inl ( { unit , unit } ) ) )
+
+--------------------------- :: forkfincomp21
+(:E_apply:fork (live ( comp rl )) ) (live (exp unit)) [ s ] --> [ rl ] live exp ( inl ( inl ( { unit , unit } ) ) )
 
 
 
 
 --------------------------- :: ret
-ret v [ s ] --> ( live exp v ) 
+ret v [ s ] --> [ tau ] ( live exp v ) 
 
-e [ s ] --> e'
+e [ s ] --> [ rl ] e'
 --------------------------- :: evalbind
-e >>= e'' [ s ] --> e' >>= e''
+e >>= e'' [ s ] --> [ rl ] e' >>= e''
 
-e [ s ] --> e'
+e [ s ] --> [ rl ] e'
 --------------------------- :: movebind
-(live exp e) >>= e'' [ s ] --> (live exp e') >>= e'' 
+(live exp e) >>= e'' [ s ] --> [ rl ] (live exp e') >>= e'' 
 
 --------------------------- :: compbind
-(live comp) >>= e [ s ] --> e' unit
+(live (comp rl) ) >>= e [ s ] --> [ rl ] e' unit
 
 --------------------------- :: dobind
-(live exp v) >>= e [ s ] --> e v 
+(live exp v) >>= e [ s ] --> [ tau ] e v 
 
 %Context-application
 % Evaluate argument first
 % then the function
 % the rest is taken care of by the app
 
-e' [ s ] --> e''
+e' [ s ] --> [ rl ] e''
 --------------  :: context_app1
-e e' [ s ] --> e e''
+e e' [ s ] --> [ rl ] e e''
 
-e [ s ] --> e'
+e [ s ] --> [ rl ] e'
 ------------  :: context_app2
-e v [ s ] --> e' v
+e v [ s ] --> [ rl ] e' v
 
 
 %Fixpoint operator
 % This heavily relies on well typed-ness 
 
-e [ s ] --> e'
+e [ s ] --> [ rl ] e'
 ------------------------------  :: fix_move
-( fix e ) [ s ] --> ( fix e' )
+( fix e ) [ s ] --> [ rl ] ( fix e' )
 
 ----------------------- :: fix_app
-( fix v ) v' [ s ] --> ( fix v ) ( v v' )
+( fix v ) v' [ s ] --> [ tau ] ( v ( fix v ) ) ( v' )
 
 % Pairs
 % Note this could be defined to be parallel, but I want to constrain concurrency to fork
-e [ s ] --> e' 
+e [ s ] --> [ rl ] e' 
 ----------------------- :: pair_1
-{ e , e'' } [ s ] --> { e' , e'' }
+{ e , e'' } [ s ] --> [ rl ] { e' , e'' }
 
-e [ s ] --> e'
+e [ s ] --> [ rl ] e'
 ----------------------- :: pair_2
-{ v , e } [ s ] --> { v, e' }
+{ v , e } [ s ] --> [ rl ] { v, e' }
 
 
 %Sum types
-    e [ s ] --> e'
----------------- :: evalinl
-inl e [ s ] --> inl e'
+    e [ s ] --> [ rl ] e'
+-------------------------- :: evalinl
+inl e [ s ] --> [ rl ] inl e'
 
-    e [ s ] --> e'
----------------- :: evalinr
-inr e [ s ] --> inr e'
+    e [ s ] --> [ rl ] e'
+-------------------------- :: evalinr
+inr e [ s ] --> [ rl ] inr e'
 
 --------------------------------------------------------- :: evalcaseinl
-case (inl v) of inl x => e | inr x' => e' [ s ] --> { v / x } e
+case (inl v) of inl x => e | inr x' => e' [ s ] --> [ tau ] { v / x } e
 
 --------------------------------------------------------- :: evalcaseinr
-case (inr v) of inl x => e | inr x' => e' [ s ] --> { v / x' } e'
+case (inr v) of inl x => e | inr x' => e' [ s ] --> [ tau ] { v / x' } e'
 
-                                      e [ s ] --> e'
+                                      e [ s ] --> [ rl ] e'
 ------------------------------------------------------------------------------------ :: evalcase
-case e of inl x => e'' | inr x' => e''' [ s ] --> case e' of inl x => e'' | inr x' => e'''
+case e of inl x => e'' | inr x' => e''' [ s ] --> [ rl ] case e' of inl x => e'' | inr x' => e'''
