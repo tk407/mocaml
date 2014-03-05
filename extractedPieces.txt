@@ -358,3 +358,21 @@ let rec xJO_red12 p1 p2 =
         | _ -> assert false (*  *))
      | _ -> assert false (*  *))
   | _ -> assert false (*  *)
+
+
+fix_move -> fix_app
+
+let rec xJO_red12 p1 p2 =
+  match (p1, p2) with
+  | (E_fix e, s) ->
+    (match xJO_red12 e s with
+     | e' -> E_fix e'
+     | _ -> assert false (*  *))
+  | (E_apply (E_fix v, v'), s) ->
+    (match xis_value_of_expr v' with
+     | true ->
+       (match xis_value_of_expr v with
+        | true -> E_apply ((E_fix v), (E_apply (v, v')))
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | _ -> assert false (*  *)
