@@ -45,7 +45,19 @@ Proof.
    rewrite -> H0 in H.
    apply diff_true_false.
    symmetry;trivial.
+   intros; simpl; auto.
+   apply IHe2.
+   simpl in H; trivial.
+   intuition.
+   inversion H1.
+   rewrite H0 in H.
+   trivial.
+   intuition.
+   rewrite H0 in H.
    inversion H.
+   intros; rewrite H0 in H; inversion H.
+   inversion H.
+   auto.
    inversion H.
    simpl.
    simpl in H.
@@ -59,17 +71,9 @@ Proof.
   (* bind *) 
    simpl.
    trivial.
-   simpl in H.
-   apply diff_true_false.
-   symmetry.
-   trivial.
-  (* function *) 
    simpl; trivial.
-  (* fix *)
-  simpl.
-  apply IHe.
-  simpl in H.
-  trivial.
+   simpl in H. 
+   apply IHe; trivial.
   (* live *)
    simpl; trivial.
   (* pair *)
@@ -122,26 +126,22 @@ Proof.
    intros.
    rewrite -> H0 in H.
    auto.
+   intros; rewrite H0 in H; auto.
+   intros; simpl.
+   rewrite H0 in H; apply IHe2; trivial.
+   intro H0; rewrite H0 in H; auto.
+   intro H0; rewrite H0 in H; auto.
    simpl in H.
-   simpl in H.
-   intros. 
-   rewrite -> H0 in H.
    auto.
-   elim H.
    simpl in H.
-   elim H.
-   simpl in H.
-   elim H.
-   simpl in H.
-   elim H.
-   simpl in H.
-   elim H.
-   simpl in H.
-   elim H.
-   simpl in H.
-   elim H.
-   simpl in H; contradiction.
-   elim H.
+   auto.
+   simpl; auto.
+   simpl; auto.
+   simpl; auto.
+   simpl; auto.
+   simpl; auto.
+   simpl; auto.
+   simpl; auto.
   (* bind *)
    simpl in H; contradiction.
   (* function *)

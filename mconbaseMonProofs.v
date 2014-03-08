@@ -95,6 +95,9 @@ Proof.
  auto.
  auto.
  auto.
+ auto.
+ auto.
+ auto.
  apply IHe1 in H6.
  intuition.
  induction e1.
@@ -116,13 +119,36 @@ Proof.
  simpl in H7; auto.
  simpl in H7; auto.
  simpl.
+ apply H6.
+ simpl.
+ auto.
+ apply H6.
+ simpl; auto.
+ apply H6; simpl; auto.
+ simpl in H7.
+ auto.
+ simpl in H7; auto.
+ simpl in H7; auto.
+ simpl in H7; auto.
+ simpl in H6; auto.
+ simpl in H7; auto.
+ simpl in H7; auto.
+ simpl in H7; auto.
+ simpl in H7; auto.
+ simpl; auto.
+ simpl;
  congruence.
  simpl.
  intros; congruence.
  intros.
+ simpl; congruence.
+ intros.
+ simpl; auto.
+ intros.
  inversion H.
  intros; inversion H.
  simpl.
+ auto.
  apply IHe in H1; auto.
  intros.
  inversion H.

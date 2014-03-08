@@ -38,7 +38,10 @@ Inductive constant : Set :=
  | CONST_ret : constant
  | CONST_fork : constant
  | CONST_unit : constant
- | CONST_stop : constant.
+ | CONST_stop : constant
+ | CONST_pair : constant
+ | CONST_proj1 : constant
+ | CONST_proj2 : constant.
 
 Inductive redlabel : Set := 
  | RL_tau : redlabel
@@ -120,7 +123,7 @@ Fixpoint is_value_of_expr (e_5:expr) : Prop :=
   | (E_ident value_name5) => False
   | (E_constant constant5) => (True)
 (* Manual change *)
-  | (E_apply expr5 expr') => match expr5 with | E_constant (CONST_fork) => is_value_of_expr (expr') | _ => False end
+  | (E_apply expr5 expr') => match expr5 with | E_constant (CONST_fork) => is_value_of_expr (expr') | E_constant (CONST_pair) => is_value_of_expr (expr') | _ => False end
   | (E_bind expr5 expr') => False
   | (E_function value_name5 typexpr5 expr5) => (True)
   | (E_fix e) => ((is_value_of_expr e))
@@ -294,6 +297,12 @@ with G_constant : G -> constant -> typexpr -> Prop :=    (* defn G_constant *)
      G_constant G5 CONST_unit (TE_constants TC_unit)
  | constant_stop : forall (G5:G) (t:typexpr),
      G_constant G5 CONST_stop t
+ | constant_pair : forall (G5:G) (t1 t2:typexpr),
+     G_constant G5 CONST_pair (TE_arrow t1  (TE_arrow t2  (TE_prod t1 t2) ) )
+ | constant_proj1 : forall (G5:G) (t1 t2:typexpr),
+     G_constant G5 CONST_proj1 (TE_arrow  (TE_prod t1 t2)  t1)
+ | constant_proj2 : forall (G5:G) (t1 t2:typexpr),
+     G_constant G5 CONST_proj2 (TE_arrow  (TE_prod t1 t2)  t2)
 with Get : G -> expr -> typexpr -> Prop :=    (* defn Get *)
  | Get_value_name : forall (G5:G) (x:value_name) (t:typexpr) (typscheme5:typscheme),
      VTSin x typscheme5 G5 ->
@@ -413,6 +422,18 @@ Inductive JO_red : expr -> select -> redlabel -> expr -> Prop :=    (* defn red 
      is_value_of_expr v ->
      JO_red e s rl e' ->
      JO_red (E_pair v e) s rl (E_pair v e')
+ | JO_red_inpair : forall (v v':expr) (s:select),
+     is_value_of_expr v ->
+     is_value_of_expr v' ->
+     JO_red (E_apply  (E_apply (E_constant CONST_pair) v)  v') s RL_tau (E_pair v v')
+ | JO_red_proj1 : forall (v v':expr) (s:select),
+     is_value_of_expr v ->
+     is_value_of_expr v' ->
+     JO_red (E_apply (E_constant CONST_proj1) (E_pair v v')) s RL_tau v
+ | JO_red_proj2 : forall (v v':expr) (s:select),
+     is_value_of_expr v ->
+     is_value_of_expr v' ->
+     JO_red (E_apply (E_constant CONST_proj2) (E_pair v v')) s RL_tau v'
  | JO_red_evalinl : forall (e:expr) (s:select) (rl:redlabel) (e':expr),
      JO_red e s rl e' ->
      JO_red (E_taggingleft e) s rl (E_taggingleft e')

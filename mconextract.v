@@ -18,6 +18,7 @@ Fixpoint xis_value_of_expr (e_5:expr) : bool :=
   | (E_ident value_name5) => false
   | (E_constant constant5) => (true)
   | (E_apply (E_constant (CONST_fork)) e) => ((xis_value_of_expr e))
+  | (E_apply (E_constant (CONST_pair)) e) => ((xis_value_of_expr e))
   | (E_apply expr5 expr') => false
   | (E_bind expr5 expr') => false
   | (E_function value_name5 typexpr5 expr5) => true
@@ -158,6 +159,18 @@ Inductive XJO_red : expr -> selectstar -> expr -> Prop :=    (* defn red *)
      (eq (xis_value_of_expr v) true) ->
      XJO_red e s e' ->
      XJO_red (E_pair v e) s' (E_pair v e')
+ | XJO_red_inpair : forall (v v':expr) (s:select),
+     xis_value_of_expr v ->
+     xis_value_of_expr v' ->
+     XJO_red (E_apply  (E_apply (E_constant CONST_pair) v)  v') s (E_pair v v')
+ | XJO_red_proj1 : forall (v v':expr) (s:select),
+     xis_value_of_expr v ->
+     xis_value_of_expr v' ->
+     XJO_red (E_apply (E_constant CONST_proj1) (E_pair v v')) s v
+ | XJO_red_proj2 : forall (v v':expr) (s:select),
+     xis_value_of_expr v ->
+     xis_value_of_expr v' ->
+     XJO_red (E_apply (E_constant CONST_proj2) (E_pair v v')) s  v'
  | XJO_red_evalinl : forall (e e':expr)(s:selectstar),
      XJO_red e s e' ->
      XJO_red (E_taggingleft e) s (E_taggingleft e')
