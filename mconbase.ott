@@ -62,7 +62,7 @@ redlabel, rl :: RL_ ::=
 
 % Live modes
 livemodes, lm :: LM_ ::=
-  | comp rl                               ::    :: comp
+  | comp lab                               ::    :: comp
   | exp expr                           ::    :: expr
   | ( lm )                             :: S :: paren {{ ich [[lm]] }} {{ ocaml [[lm]] }}
 
@@ -273,7 +273,7 @@ G |- e : t
 G |- live exp e : con t
 
 ---------------------------  :: live_comp
-G |- live ( comp rl ) : con tunit
+G |- live ( comp lab ) : con tunit
 
 G |- e : ( t -> t' ) -> ( t -> t' )
 ------------------------ :: fix
@@ -352,22 +352,22 @@ e' [ s ] --> [ rl ] e''
 % Now for the evaluation steps that have to modified to incorporate the actual OCaml code
 
 --------------------------- :: forkdocomp1
-(:E_apply:fork (live ( comp rl ) ) ) (live exp e) [ s ] --> [ rl ] live exp ( inl ( inr ( { unit , (live exp e) } ) ) )
+(:E_apply:fork (live ( comp lab ) ) ) (live exp e) [ s ] --> [ lab ] live exp ( inl ( inr ( { unit , (live exp e) } ) ) )
 
 --------------------------- :: forkdocomp2
-(:E_apply:fork (live exp e) ) (live ( comp rl )) [ s ] --> [ rl ]  live exp ( inr ( { (live exp e) , unit } ) )
+(:E_apply:fork (live exp e) ) (live ( comp lab )) [ s ] --> [ lab ]  live exp ( inr ( ( { (live exp e) , unit } ) ))
 
 --------------------------- :: forkdocomp12
-(:E_apply:fork (live ( comp rl )) ) (live (comp rl')) [ First ] --> [ rl ] (:E_apply:fork (live ( exp unit )) ) (live (comp rl'))
+(:E_apply:fork (live ( comp label )) ) (live (comp label'')) [ First ] --> [ label ] (:E_apply:fork (live ( exp unit )) ) (live (comp label''))
 
 --------------------------- :: forkdocomp21
-(:E_apply:fork (live ( comp rl )) ) (live (comp rl')) [ Second ] --> [ rl' ] (:E_apply:fork (live ( comp rl )) ) (live (exp unit))
+(:E_apply:fork (live ( comp label )) ) (live (comp label')) [ Second ] --> [ label' ] (:E_apply:fork (live ( comp label )) ) (live (exp unit))
 
 --------------------------- :: forkfincomp12
-(:E_apply:fork (live ( exp unit )) ) (live (comp rl')) [ s ] --> [ rl' ] live exp ( inl ( inl ( { unit , unit } ) ) )
+(:E_apply:fork (live ( exp unit )) ) (live (comp label')) [ s ] --> [ label' ] live exp ( inl ( inl ( { unit , unit } ) ) )
 
 --------------------------- :: forkfincomp21
-(:E_apply:fork (live ( comp rl )) ) (live (exp unit)) [ s ] --> [ rl ] live exp ( inl ( inl ( { unit , unit } ) ) )
+(:E_apply:fork (live ( comp label )) ) (live (exp unit)) [ s ] --> [ label ] live exp ( inl ( inl ( { unit , unit } ) ) )
 
 
 
@@ -384,7 +384,7 @@ e [ s ] --> [ rl ] e'
 (live exp e) >>= e'' [ s ] --> [ rl ] (live exp e') >>= e'' 
 
 --------------------------- :: compbind
-(live (comp rl) ) >>= e [ s ] --> [ rl ] e' unit
+(live (comp lab) ) >>= e [ s ] --> [ lab ] e' unit
 
 --------------------------- :: dobind
 (live exp v) >>= e [ s ] --> [ tau ] e v 

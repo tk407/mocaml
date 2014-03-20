@@ -252,8 +252,8 @@ Proof.
  rewrite <- H19; reflexivity.
  apply tStep with (s:=s); trivial.
  rewrite <- H13 in H10; simpl in H10; intuition.
- rewrite <- H14 in H10; simpl in H10; intuition.
- rewrite <- H13 in H10; simpl in H10; intuition.
+ subst.
+ simpl in H10; intuition.
 Qed.
 
 
