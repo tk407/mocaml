@@ -268,6 +268,28 @@ Proof.
  trivial.
 Qed. 
 
+Lemma ttau_midpoint : forall (e e' : expr), totalTauRed e e' -> ((fun x y => forall (z : expr), totalTauRed x z -> (totalTauRed z y \/ totalTauRed y z)) e e').
+Proof.
+ apply star_ind.
+ intros.
+ right.
+ assumption.
+ intros.
+ inversion H2.
+ subst.
+ left.
+ apply S_star with (y:=y).
+ assumption.
+ assumption.
+ inversion H.
+ intuition.
+ inversion H3.
+ intuition.
+ apply H12 in H15.
+ subst.
+ apply H1 in H4.
+ assumption.
+Qed.
 
 Lemma ttau_weakbisim_incl : forall (e e' : expr), totalTauRed e e' -> weakbisim e' e.
 Proof.
