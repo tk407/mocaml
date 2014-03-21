@@ -291,7 +291,7 @@ with G_constant : G -> constant -> typexpr -> Prop :=    (* defn G_constant *)
  | constant_ret : forall (G5:G) (t:typexpr),
      G_constant G5 CONST_ret (TE_arrow t (TE_concurrent t))
  | constant_fork : forall (G5:G) (t1 t2:typexpr),
-     G_constant G5 CONST_fork (TE_arrow  (TE_concurrent t1)   (TE_arrow  (TE_concurrent t2)   (TE_concurrent  (TE_sum  (TE_sum  (TE_prod t1 t2)   (TE_prod t1  (TE_concurrent t2) ) )   (TE_prod  (TE_concurrent t1)  t2) ) ) ) )
+     G_constant G5 CONST_fork (TE_arrow  (TE_concurrent t1)   (TE_arrow  (TE_concurrent t2)   (TE_concurrent  (TE_sum  (TE_prod t1  (TE_concurrent t2) )   (TE_prod  (TE_concurrent t1)  t2) ) ) ) )
  | constant_unit : forall (G5:G),
      G_constant G5 CONST_unit (TE_constants TC_unit)
  | constant_stop : forall (G5:G) (t:typexpr),
@@ -357,35 +357,21 @@ Inductive JO_red : expr -> select -> redlabel -> expr -> Prop :=    (* defn red 
      is_value_of_expr v ->
      JO_red (E_apply  (E_function x t e)  v) s RL_tau  (subst_expr  v   x   e ) 
  | JO_red_forkmove1 : forall (e e':expr) (rl:redlabel) (e'':expr) (s:select),
-     ~ ( is_value_of_expr ( e' ) )  ->
      JO_red e s rl e'' ->
      JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (LM_expr e)) )   (E_live_expr (LM_expr e')) ) S_First rl (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (LM_expr e'')) )   (E_live_expr (LM_expr e')) )
  | JO_red_forkmove2 : forall (e e':expr) (rl:redlabel) (e'':expr) (s:select),
-     ~ ( is_value_of_expr ( e ) )  ->
      JO_red e' s rl e'' ->
      JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (LM_expr e)) )   (E_live_expr (LM_expr e')) ) S_Second rl (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (LM_expr e)) )   (E_live_expr (LM_expr e'')) )
- | JO_red_forkdeath1 : forall (v e:expr) (s:select),
+ | JO_red_forkdeath1 : forall (v:expr) (lm:livemodes),
      is_value_of_expr v ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (LM_expr v)) )   (E_live_expr (LM_expr e)) ) s RL_tau (E_live_expr (LM_expr  (E_taggingleft  (E_taggingright  (E_pair v  (E_live_expr (LM_expr e)) ) ) ) ))
- | JO_red_forkdeath2 : forall (e v':expr) (s:select),
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (LM_expr v)) )   (E_live_expr lm) ) S_First RL_tau (E_live_expr (LM_expr  (E_taggingleft   (E_pair v  (E_live_expr lm) )  ) ))
+ | JO_red_forkdeath2 : forall (lm:livemodes) (v':expr),
      is_value_of_expr v' ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (LM_expr e)) )   (E_live_expr (LM_expr v')) ) s RL_tau (E_live_expr (LM_expr  (E_taggingright  (E_pair  (E_live_expr (LM_expr e))  v') ) ))
- | JO_red_forkdeath12 : forall (v v':expr) (s:select),
-     is_value_of_expr v ->
-     is_value_of_expr v' ->
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (LM_expr v)) )   (E_live_expr (LM_expr v')) ) s RL_tau (E_live_expr (LM_expr  (E_taggingleft  (E_taggingleft  (E_pair v v') ) ) ))
- | JO_red_forkdocomp1 : forall (lab:label) (e:expr) (s:select),
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr  (LM_comp lab) ) )   (E_live_expr (LM_expr e)) ) s (RL_labelled lab) (E_live_expr (LM_expr  (E_taggingleft  (E_taggingright  (E_pair (E_constant CONST_unit)  (E_live_expr (LM_expr e)) ) ) ) ))
- | JO_red_forkdocomp2 : forall (e:expr) (lab:label) (s:select),
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr (LM_expr e)) )   (E_live_expr  (LM_comp lab) ) ) s (RL_labelled lab) (E_live_expr (LM_expr  (E_taggingright   (E_pair  (E_live_expr (LM_expr e))  (E_constant CONST_unit))  ) ))
- | JO_red_forkdocomp12 : forall (label5 label'':label),
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr  (LM_comp label5) ) )   (E_live_expr  (LM_comp label'') ) ) S_First (RL_labelled label5) (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr  (LM_expr (E_constant CONST_unit)) ) )   (E_live_expr  (LM_comp label'') ) )
- | JO_red_forkdocomp21 : forall (label5 label':label),
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr  (LM_comp label5) ) )   (E_live_expr  (LM_comp label') ) ) S_Second (RL_labelled label') (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr  (LM_comp label5) ) )   (E_live_expr  (LM_expr (E_constant CONST_unit)) ) )
- | JO_red_forkfincomp12 : forall (label':label) (s:select),
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr  (LM_expr (E_constant CONST_unit)) ) )   (E_live_expr  (LM_comp label') ) ) s (RL_labelled label') (E_live_expr (LM_expr  (E_taggingleft  (E_taggingleft  (E_pair (E_constant CONST_unit) (E_constant CONST_unit)) ) ) ))
- | JO_red_forkfincomp21 : forall (label5:label) (s:select),
-     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr  (LM_comp label5) ) )   (E_live_expr  (LM_expr (E_constant CONST_unit)) ) ) s (RL_labelled label5) (E_live_expr (LM_expr  (E_taggingleft  (E_taggingleft  (E_pair (E_constant CONST_unit) (E_constant CONST_unit)) ) ) ))
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr lm) )   (E_live_expr (LM_expr v')) ) S_Second RL_tau (E_live_expr (LM_expr  (E_taggingright  (E_pair  (E_live_expr lm)  v') ) ))
+ | JO_red_forkdocomp1 : forall (lab:label) (lm:livemodes),
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr  (LM_comp lab) ) )   (E_live_expr lm) ) S_First (RL_labelled lab) (E_live_expr (LM_expr  (E_taggingleft   (E_pair (E_constant CONST_unit)  (E_live_expr lm) )  ) ))
+ | JO_red_forkdocomp2 : forall (lm:livemodes) (lab:label),
+     JO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr lm) )   (E_live_expr  (LM_comp lab) ) ) S_Second (RL_labelled lab) (E_live_expr (LM_expr  (E_taggingright   (E_pair  (E_live_expr lm)  (E_constant CONST_unit))  ) ))
  | JO_red_ret : forall (v:expr) (s:select),
      is_value_of_expr v ->
      JO_red (E_apply (E_constant CONST_ret) v) s RL_tau  (E_live_expr (LM_expr v)) 

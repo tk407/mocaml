@@ -225,7 +225,7 @@ G |- constant : t :: :: G_constant :: constant_ by
 G |- ret : t -> con t
 
 ------------------------ :: fork
-G |- fork : (con t1) -> ((con t2) -> (con (((t1*t2) + (t1 * (con t2))) + ((con t1) * t2))))
+G |- fork : (con t1) -> ((con t2) -> (con ((t1 * (con t2)) + ((con t1) * t2))))
 
 
 ------------------------ :: unit
@@ -330,44 +330,29 @@ e [ s ] --> [ rl ]  e' :: :: red :: red_ by
 
 %Here should be the only path for concurrency
 
-{{ ~ ( is_value_of_expr ( [[e']] ) ) }}
 e [ s ] --> [ rl ] e''
 --------------------------- :: forkmove1
 (:E_apply:fork (live exp e) ) (live exp e') [ First ] --> [ rl ] (:E_apply:fork (live exp e'') ) (live exp e')
 
-{{ ~ ( is_value_of_expr ( [[e]] ) ) }}
+
 e' [ s ] --> [ rl ] e''
 --------------------------- :: forkmove2
 (:E_apply:fork (live exp e) ) (live exp e') [ Second ] --> [ rl ] (:E_apply:fork (live exp e) ) (live exp e'') 
 
 --------------------------- :: forkdeath1
-(:E_apply:fork (live exp v) ) (live exp e) [ s ] --> [ tau ] live exp ( inl ( inr ( { v , ( live exp e ) } ) ) )
+(:E_apply:fork (live exp v) ) (live lm) [ First ] --> [ tau ] live exp ( inl ( ( { v , ( live lm ) } ) ) )
 
 --------------------------- :: forkdeath2
-(:E_apply:fork (live exp e) ) (live exp v') [ s ] --> [ tau ] live exp ( inr ( { (live exp e) , v' } ) )
-
---------------------------- :: forkdeath12
-(:E_apply:fork (live exp v) ) (live exp v') [ s ] --> [ tau ] live exp ( inl ( inl ( { v , v' } ) ) )
+(:E_apply:fork (live lm) ) (live exp v') [ Second ] --> [ tau ] live exp ( inr ( { (live lm) , v' } ) )
 
 % Now for the evaluation steps that have to modified to incorporate the actual OCaml code
 
 --------------------------- :: forkdocomp1
-(:E_apply:fork (live ( comp lab ) ) ) (live exp e) [ s ] --> [ lab ] live exp ( inl ( inr ( { unit , (live exp e) } ) ) )
+(:E_apply:fork (live ( comp lab ) ) ) (live lm) [ First ] --> [ lab ] live exp ( inl ( ( { unit , (live lm) } ) ) )
 
 --------------------------- :: forkdocomp2
-(:E_apply:fork (live exp e) ) (live ( comp lab )) [ s ] --> [ lab ]  live exp ( inr ( ( { (live exp e) , unit } ) ))
+(:E_apply:fork (live lm) ) (live ( comp lab )) [ Second ] --> [ lab ]  live exp ( inr ( ( { (live lm) , unit } ) ))
 
---------------------------- :: forkdocomp12
-(:E_apply:fork (live ( comp label )) ) (live (comp label'')) [ First ] --> [ label ] (:E_apply:fork (live ( exp unit )) ) (live (comp label''))
-
---------------------------- :: forkdocomp21
-(:E_apply:fork (live ( comp label )) ) (live (comp label')) [ Second ] --> [ label' ] (:E_apply:fork (live ( comp label )) ) (live (exp unit))
-
---------------------------- :: forkfincomp12
-(:E_apply:fork (live ( exp unit )) ) (live (comp label')) [ s ] --> [ label' ] live exp ( inl ( inl ( { unit , unit } ) ) )
-
---------------------------- :: forkfincomp21
-(:E_apply:fork (live ( comp label )) ) (live (exp unit)) [ s ] --> [ label ] live exp ( inl ( inl ( { unit , unit } ) ) )
 
 
 
