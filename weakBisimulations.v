@@ -13,6 +13,8 @@ Inductive idExp : expr -> expr -> Prop :=
 
 Inductive tauStep : relation expr :=
  | tStep :  forall (e e' : expr) (s : select), JO_red e s RL_tau e' -> tauStep e e'.
+Hint Constructors tauStep.
+
 
 Definition tauRed : relation expr := (star tauStep).
 
@@ -26,6 +28,7 @@ Qed.
 
 Inductive totalDetTauStep : relation expr :=
  | ttStep : forall (e e' : expr), ( (tauStep e e') /\ (forall (e'' : expr) (s : select) (l : label), JO_red e s (RL_labelled(l)) e'' -> False) /\ (forall (e''' : expr), tauStep e e''' -> e' = e''')) -> totalDetTauStep e e'.
+Hint Constructors totalDetTauStep.
 
 Lemma dettaustep : forall (e e' e'' : expr), totalDetTauStep e e' /\ tauStep e e'' -> e' = e''.
 Proof.
@@ -70,6 +73,11 @@ Qed.
 
 Inductive labRed : label -> relation expr :=
  | lab_r : forall (e0 e1 e2 e3 : expr) (s : select) (l : label), tauRed e0 e1 /\ JO_red e1 s (RL_labelled(l)) e2 /\ tauRed e2 e3 -> labRed l e0 e3.
+Hint Resolve labRed.
+
+Inductive weakred : redlabel -> relation expr :=
+ | weakred_T : forall ( e e' : expr ), tauRed e e' -> weakred RL_tau e e'
+ | weakred_L : forall ( e e' : expr) (l : label), labRed l e e' -> weakred (RL_labelled l) e e'.
 
 Inductive weaksim : relation expr := 
  | weaksim_id : forall (e : expr), weaksim e e
@@ -78,13 +86,15 @@ Inductive weaksim : relation expr :=
                     (forall (e0 : expr), labRed l e e0 -> (exists (e1 : expr), labRed l e' e1 /\ weaksim e0 e1)))
                   -> weaksim e e'
  | weaksim_tr : forall (e e' e'' : expr), weaksim e e' /\ weaksim e' e'' -> weaksim e e''.
-
+Hint Resolve weaksim_id.
+Hint Resolve weaksim_gen.
 
 Lemma weaksim_refl : forall (e : expr), weaksim e e.
 Proof.
  intros.
  apply weaksim_id.
 Qed.
+Hint Resolve weaksim_refl.
 (*
 Lemma induction_on_trans2 : forall ( e e' e1 e2 : expr). 
 *)
@@ -95,6 +105,46 @@ Qed.
 
 Inductive weakbisim : relation expr :=
  | weakbi : forall (e e' : expr), weaksim e e' /\ weaksim e' e -> weakbisim e e'.
+Hint Resolve weakbi.
+
+Inductive weakbisimalt : relation expr :=
+ | weakbialt_id : forall (p : expr), weakbisimalt p p
+ | weakbialt_gen : forall (p q : expr), (forall( l : label), (forall (q' : expr), labRed l q q' -> (exists (p' : expr), labRed l p p' /\ weakbisimalt p' q')) /\ (forall (p' : expr), labRed l p p' -> (exists (q' : expr), labRed l q q' /\ weakbisimalt p' q'))) -> weakbisimalt p q.
+(*
+Lemma weakbisim_eqv_alt : forall (e e' : expr), weakbisimalt e e' -> weaksim e e'.
+Proof.
+ apply weakbisimalt_ind.
+ apply weaksim_id.
+ intros.
+ Check labRed_ind.
+ apply weaksim_gen.
+ intro l.
+ elim H with (l:=l).
+ Check labRed_ind.
+ Check weaksim_ind.
+ intros.
+ induction H.
+ apply weaksim_gen.
+ Check labRed_ind.
+ Check weaksim_ind.
+ intros.
+ inversion H.
+ elim H1 with (l:=l).
+ intros.
+ intuition.
+ Check labRed_ind.
+ induction H.
+ apply weakbialt in H.
+ split.
+ intros.
+ generalize e e'.
+ Check weakbisim_ind.
+ apply weakbisim_ind in H.
+ apply weakbialt.
+ intros.
+ split.
+ induction
+*)
 
 Lemma bisimsymm : forall (e e' : expr), weakbisim e e' <-> weakbisim e' e.
 Proof.
@@ -111,6 +161,7 @@ Proof.
  inversion H.
  trivial.
 Qed.
+Hint Resolve bisimsymm.
 
 Lemma bisimrefl : forall (e : expr), weakbisim e e.
 Proof.
@@ -120,6 +171,7 @@ Proof.
  apply weaksim_id.
  apply weaksim_id.
 Qed.
+Hint Resolve bisimrefl.
 
 Lemma bisimtrans: forall (e e' e'': expr), weakbisim e e' /\ weakbisim e' e'' -> weakbisim e e''.
 Proof.
@@ -267,3 +319,36 @@ Proof.
  apply weaksim_id.
 Qed.
 
+(*
+
+ Theorem Weak_ind:
+       forall P: redlabel -> expr -> expr -> Prop,
+       (forall x, P RL_tau x x) ->
+       (forall y l x z s ,
+        JO_red x s RL_tau y -> weakred l y z -> P l y z -> P l x z) ->
+       (forall y a x z s,
+        JO_red x s (RL_labelled a) y -> weakred RL_tau y z -> P RL_tau y z -> P (RL_labelled a) x z) ->
+       forall l x x', weakred l x x' -> P l x x'.
+    Proof.
+      intros P Hrefl Htau Ha lab x x' Hxx'.
+      induction lab.
+      induction Hxx' as [ x | x1 x x' Hxx1 Hx1x' IH ]. induction H.
+      apply Hrefl.
+      inversion H.
+      apply Htau with (y:=y)(s:=s).
+      assumption.
+      apply weakred_T.
+      assumption.
+      assumption.
+      destruct Hxx1.
+      intuition.
+      as [ x1 Hxx1 Hx1x' ].
+      destruct Hx1x' as [ x2 Hx1x2 Hx2x' ].
+      induction Hxx1 as [ x | w x x1 Hxw Hwx1 IH ].
+      apply Ha with x2; simpl; auto.
+      clear Hx1x2.
+      induction Hx2x' as [ x2 | u x2 x' Hux1 Hx1x' IH ]; [ apply Hrefl | apply Htau with u; assumption ].
+      apply Htau with w; auto.
+      exists x1; auto; exists x2; assumption.
+    Qed.
+*)
