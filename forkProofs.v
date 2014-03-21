@@ -12,43 +12,22 @@ Load LibTactics.
 
 
 
-Definition swapbodyll : expr := E_apply ( E_constant CONST_ret )  
-                                   ( E_taggingleft 
-                                     ( E_taggingleft
-                                        (E_apply 
-                                          ( E_apply (E_constant CONST_pair)  
-                                                    (E_apply (E_constant CONST_proj2) (E_ident (3))) 
-                                          ) 
-                                          (E_apply (E_constant CONST_proj1) (E_ident (3)))  
-                                        )
-                                     )
-                                   ).
 
-Definition swapbodylr : expr :=   E_apply ( E_constant CONST_ret )  
-                                   (
+Definition swapbodyl : expr :=E_apply ( E_constant CONST_ret )  
+                                   ( 
                                      ( E_taggingright
                                         (E_apply 
                                           ( E_apply (E_constant CONST_pair)  
-                                                    (E_apply (E_constant CONST_proj2) (E_ident (4))) 
+                                                    (E_apply (E_constant CONST_proj2) (E_ident (1))) 
                                           ) 
-                                          (E_apply (E_constant CONST_proj1) (E_ident (4)))  
+                                          (E_apply (E_constant CONST_proj1) (E_ident (1)))  
                                         )
                                      )
-                                   ).
-
-
-Definition swapbodyl : expr := E_case (E_ident (1)) 
-                    (3) ( 
-                          swapbodyll
-                        ) 
-                    (4) (
-                          swapbodylr
-
-                        ).
+                                    ).
 
 Definition swapbodyr : expr :=E_apply ( E_constant CONST_ret )  
                                    (E_taggingleft  
-                                     ( E_taggingright
+                                     ( 
                                         (E_apply 
                                           ( E_apply (E_constant CONST_pair)  
                                                     (E_apply (E_constant CONST_proj2) (E_ident (2))) 
@@ -250,34 +229,30 @@ intros.
  split.
  intros.
  inversion H1.
- rewrite <- H3 in H; simpl in H; auto.
-rewrite <- H3 in H; simpl in H; auto.
+ rewrite <- H4 in H; simpl in H; auto.
+rewrite <- H4 in H; simpl in H; auto.
  rewrite <- H4 in H; simpl in H; auto.
  rewrite <- H4 in H; simpl in H; auto.
  rewrite <- H4 in H; simpl in H; auto.
- rewrite <- H4 in H; simpl in H; auto.
- rewrite <- H4 in H; simpl in H; auto.
- rewrite <- H4 in H; simpl in H; auto.
+ substs.
  inversion H0.
- elim H8; intros H11 H12; elim H12; intros.
- apply H13 in H7; auto.
+ intuition.
+ apply H2 in H7.
+ auto.
  contradiction.
  intros.
  inversion H1.
  inversion H2.
  contradiction.
- rewrite <- H6 in H; simpl in H; auto.
+ rewrite <- H7 in H; simpl in H; auto.
  intuition.
- rewrite <- H6 in H; simpl in H; auto.
+ rewrite <- H7 in H; simpl in H; auto.
  intuition.
  rewrite <- H7 in H; simpl in H; auto.
  intuition.
  rewrite <- H7 in H; simpl in H; auto; intuition.
- rewrite <- H6 in H; simpl in H; auto; intuition.
- rewrite <- H7 in H; simpl in H; auto; intuition.
+ contradiction.
  substs.
- intuition.
- substs; simpl in H; auto; intuition.
  inverts H0.
  intuition.
  f_equal.
@@ -380,55 +355,52 @@ intros.
  split.
  intros.
  inversion H2.
- rewrite <- H3 in H0; simpl in H0; intuition.
-rewrite <- H3 in H0; simpl in H0; intuition.
- rewrite <- H4 in H0; simpl in H0; intuition.
- rewrite <- H4 in H0; simpl in H0; intuition.
- rewrite <- H4 in H0; simpl in H0; intuition.
- rewrite <- H4 in H0; simpl in H0; intuition.
- rewrite <- H4 in H0; simpl in H0; intuition.
- rewrite <- H4 in H0; simpl in H0; intuition.
- apply red_not_value in H8.
- contradiction.
+ rewrite <- H3 in H0; simpl in H0; auto.
+ rewrite <- H3 in H0; simpl in H0; auto.
+ rewrite <- H4 in H0; simpl in H0; auto.
+ rewrite <- H4 in H0; simpl in H0; auto.
+ substs.
+ apply red_not_value in H8; intuition.
+ substs.
  inversion H1.
  intuition.
- apply H10 in H9; trivial.
+ apply H3 in H9.
+ auto.
  intros.
  inversion H2.
  inversion H3.
- intros.
+ substs; simpl in H0; auto.
+ intuition.
+ rewrite <- H6 in H0; simpl in H0; auto.
+ intuition.
+ rewrite <- H6 in H0; simpl in H0; auto.
+ intuition.
+ rewrite <- H6 in H0; simpl in H0; auto.
+ intuition.
  rewrite <- H6 in H0; simpl in H0; auto; intuition.
- rewrite <- H6 in H0; simpl in H0; auto; intuition.
- rewrite <- H6 in H0; simpl in H0; auto; intuition.
- rewrite <- H6 in H0; simpl in H0; auto; intuition.
- rewrite <- H6 in H0; simpl in H0; auto; intuition.
- rewrite <- H6 in H0; simpl in H0; auto; intuition. 
- substs.
- simpl in H0; intuition.
- substs.
+ substs; simpl in H0; intuition.
  apply red_not_value in H11; contradiction.
  substs.
+ inverts H1.
+ intuition.
  f_equal.
- inversion H1.
- substs; intuition; substs.
- apply H7.
- apply simpTau with (s:=s).
- trivial.
+ apply H6. 
+ apply tStep with (s:=s); trivial.
  substs.
- simpl in H0; intuition.
+ contradiction.
  substs.
- simpl in H0; intuition.
+ contradiction.
  substs.
- simpl in H0; intuition.
+ simpl in H0; intuition. 
  substs.
- simpl in H0; intuition.
+ simpl in H0; intuition. 
 Qed.
 
 
 Lemma swapf_right : forall (v v' : expr), 
            is_value_of_expr v ->
            is_value_of_expr v' ->
-           totalTauRed ( E_apply (swapf) (E_taggingright (( E_pair v v' )) ) ) (E_live_expr(LM_expr(E_taggingleft(E_taggingright ( ( E_pair v' v )) )))).
+           totalTauRed ( E_apply (swapf) (E_taggingright (( E_pair v v' )) ) ) (E_live_expr(LM_expr(E_taggingleft( ( ( E_pair v' v )) )))).
 Proof.
  intros.
  apply S_star with (y:=(subst_expr (E_taggingright ( ( E_pair v v' ))) 0 swapbody )).
@@ -441,7 +413,7 @@ Proof.
  simpl; auto.
  apply S_star with (y:=E_apply ( E_constant CONST_ret )
                                     ( E_taggingleft 
-                                     ( E_taggingright
+                                     (
                                         (E_apply 
                                           ( E_apply (E_constant CONST_pair)  
                                                     (E_apply (E_constant CONST_proj2) ( E_pair v v' )) 
@@ -455,8 +427,6 @@ Proof.
  intuition.
  apply JO_red_evalinl_td.
  simpl; auto.
-  apply JO_red_evalinr_td.
- simpl; auto.
  apply JO_red_context_app1_td.
  simpl; auto.
  apply JO_red_proj1_td.
@@ -464,7 +434,7 @@ Proof.
  trivial.
  apply S_star with (y:=E_apply ( E_constant CONST_ret ) 
                                     ( E_taggingleft 
-                                     ( E_taggingright
+                                     ( 
                                         (E_apply 
                                           ( E_apply (E_constant CONST_pair)  
                                                     (v') 
@@ -476,8 +446,6 @@ Proof.
  simpl; auto.
  apply JO_red_evalinl_td.
  simpl; auto.
-  apply JO_red_evalinr_td.
- simpl; auto.
  apply JO_red_context_app2_td.
  simpl; auto.
  simpl; auto.
@@ -488,17 +456,15 @@ Proof.
  trivial.
  apply S_star with (y:=((E_apply (E_constant CONST_ret)
      ( E_taggingleft (
-        (E_taggingright (E_pair v' v))))))).
+        ( (E_pair v' v))))))).
  apply JO_red_context_app1_td.
  simpl; auto.
  apply JO_red_evalinl_td.
  simpl; auto.
- apply JO_red_evalinr_td.
- simpl; auto.
  apply JO_red_inpair_td.
  simpl; auto.
  simpl; auto.
- apply S_star with (y:=(E_live_expr (LM_expr (E_taggingleft (E_taggingright((E_pair v' v))))))).
+ apply S_star with (y:=(E_live_expr (LM_expr (E_taggingleft (((E_pair v' v))))))).
  apply JO_red_ret_td.
  apply S_First.
  simpl;auto.
@@ -508,7 +474,7 @@ Qed.
 Lemma swapf_right_b : forall (v v' : expr), 
            is_value_of_expr v ->
            is_value_of_expr v' ->
-           totalTauRed ( (E_live_expr ( LM_expr (E_taggingright (( E_pair v v' )))) ) >>= swapf) (E_live_expr(LM_expr(E_taggingleft(E_taggingright ( ( E_pair v' v )) )))).
+           totalTauRed ( (E_live_expr ( LM_expr (E_taggingright (( E_pair v v' )))) ) >>= swapf) (E_live_expr(LM_expr(E_taggingleft( ( ( E_pair v' v )) )))).
 Proof.
  intros.
  apply S_star  with (y:=(E_apply (swapf) (E_taggingright (( E_pair v v' )) ))).
@@ -520,25 +486,20 @@ Proof.
  assumption.
 Qed.
 
-Lemma swapf_left_right : forall (v v' : expr), 
+Lemma swapf_left : forall (v v' : expr), 
            is_value_of_expr v ->
            is_value_of_expr v' ->
-           totalTauRed ( E_apply (swapf) (E_taggingleft (E_taggingright ( E_pair v v' )) ) ) (E_live_expr(LM_expr( (E_taggingright ( E_pair v' v )) ))).
+           totalTauRed ( E_apply (swapf) (E_taggingleft ( ( E_pair v v' )) ) ) (E_live_expr(LM_expr( (E_taggingright ( E_pair v' v )) ))).
 Proof.
  intros.
- apply S_star with (y:=(subst_expr (E_taggingleft (E_taggingright ( E_pair v v' ))) 0 swapbody )).
+ apply S_star with (y:=(subst_expr (E_taggingleft ( ( E_pair v v' ))) 0 swapbody )).
  apply JO_red_app_td.
  simpl.
  auto.
  simpl.
- apply S_star with (y:=(subst_expr   (E_taggingright ( E_pair v v' ))   1   swapbodyl )).
+ apply S_star with (y:=(subst_expr   ( ( E_pair v v' ))   1   swapbodyl )).
  apply JO_red_evalcaseinl_td.
  simpl; auto.
- apply S_star with (y:=(subst_expr    ( E_pair v v' )   4   swapbodylr )).
- simpl.
- apply JO_red_evalcaseinr_td.
- simpl; auto.
- simpl.
  apply S_star with (y:=E_apply ( E_constant CONST_ret )  
                                    (  
                                      ( E_taggingright
@@ -596,118 +557,22 @@ Proof.
  apply star_refl.
 Qed.
 
-Lemma swapf_left_right_b : forall (v v' : expr), 
+Lemma swapf_left_b : forall (v v' : expr), 
            is_value_of_expr v ->
            is_value_of_expr v' ->
-           totalTauRed (  (E_live_expr(LM_expr(E_taggingleft (E_taggingright ( E_pair v v' )) ))) >>= (swapf)) (E_live_expr(LM_expr( (E_taggingright ( E_pair v' v )) ))).
+           totalTauRed (  (E_live_expr(LM_expr(E_taggingleft ( ( E_pair v v' )) ))) >>= (swapf)) (E_live_expr(LM_expr( (E_taggingright ( E_pair v' v )) ))).
 Proof.
  intros.
- apply S_star  with (y:=(E_apply (swapf) ((E_taggingleft (E_taggingright (E_pair v v')) )))).
+ apply S_star  with (y:=(E_apply (swapf) ((E_taggingleft ( (E_pair v v')) )))).
  apply JO_red_dobind_td.
  apply S_First.
  simpl; auto.
- apply swapf_left_right.
+ apply swapf_left.
  assumption.
  assumption.
 Qed.
 
 
-Lemma swapf_left_left : forall (v v' : expr), 
-           is_value_of_expr v ->
-           is_value_of_expr v' ->
-           totalTauRed ( E_apply (swapf) (E_taggingleft (E_taggingleft ( E_pair v v' )) ) ) (E_live_expr(LM_expr(E_taggingleft (E_taggingleft ( E_pair v' v )) ))).
-Proof.
- intros.
- apply S_star with (y:=(subst_expr (E_taggingleft (E_taggingleft ( E_pair v v' ))) 0 swapbody )).
- apply JO_red_app_td.
- simpl.
- auto.
- simpl.
- apply S_star with (y:=(subst_expr   (E_taggingleft ( E_pair v v' ))   1   swapbodyl )).
- apply JO_red_evalcaseinl_td.
- simpl; auto.
- apply S_star with (y:=(subst_expr    ( E_pair v v' )   3   swapbodyll )).
- simpl.
- apply JO_red_evalcaseinl_td.
- simpl; auto.
- simpl.
- apply S_star with (y:=E_apply ( E_constant CONST_ret )  
-                                   ( E_taggingleft 
-                                     ( E_taggingleft
-                                        (E_apply 
-                                          ( E_apply (E_constant CONST_pair)  
-                                                    (E_apply (E_constant CONST_proj2) (E_pair v v' )) 
-                                          ) 
-                                          (v)  
-                                        )
-                                     )
-                                   )).
- simpl.
- apply JO_red_context_app1_td.
- simpl.
- intuition.
- apply JO_red_evalinl_td.
- simpl; auto.
- apply JO_red_evalinl_td.
- simpl; auto.
- apply JO_red_context_app1_td.
- simpl; auto.
- apply JO_red_proj1_td.
- trivial.
- trivial.
- apply S_star with (y:=(E_apply (E_constant CONST_ret)
-       (E_taggingleft
-          (E_taggingleft
-             (E_apply
-                (E_apply (E_constant CONST_pair)
-                   (v')) v))))).
- apply JO_red_context_app1_td.
- simpl; auto.
-  apply JO_red_evalinl_td.
- simpl; auto.
- apply JO_red_evalinl_td.
- simpl; auto.
- apply JO_red_context_app2_td.
- simpl; auto.
- simpl; auto.
- apply JO_red_context_app1_td.
- simpl; auto.
- apply JO_red_proj2_td.
- trivial.
- trivial.
- apply S_star with (y:=((E_apply (E_constant CONST_ret)
-     (E_taggingleft
-        (E_taggingleft (E_pair v' v)))))).
- apply JO_red_context_app1_td.
- simpl; auto.
- apply JO_red_evalinl_td.
- simpl; auto.
- apply JO_red_evalinl_td.
- simpl; auto.
- apply JO_red_inpair_td.
- simpl; auto.
- simpl; auto.
- apply S_star with (y:=(E_live_expr (LM_expr (E_taggingleft (E_taggingleft (E_pair v' v)))))).
- apply JO_red_ret_td.
- apply S_First.
- simpl;auto.
- apply star_refl.
-Qed.
-
-Lemma swapf_left_left_b : forall (v v' : expr), 
-           is_value_of_expr v ->
-           is_value_of_expr v' ->
-           totalTauRed (  (E_live_expr(LM_expr(E_taggingleft (E_taggingleft ( E_pair v v' )) ))) >>= (swapf)) (E_live_expr(LM_expr(E_taggingleft (E_taggingleft ( E_pair v' v )) ))).
-Proof.
- intros.
- apply S_star  with (y:=(E_apply (swapf) ((E_taggingleft (E_taggingleft (E_pair v v')))))).
- apply JO_red_dobind_td.
- apply S_First.
- simpl; auto.
- apply swapf_left_left.
- assumption.
- assumption.
-Qed.
 
 Lemma simp_lab_r : forall (e e' : expr) (s :select) (l : label), JO_red e s (RL_labelled l) e' -> labRed l e e'.
 Proof.
@@ -717,363 +582,6 @@ Proof.
  apply star_refl.
  trivial.
  apply star_refl.
-Qed.
-
-Inductive fork_tau_ce_int_s : relation expr :=
- | fork_tau_ce_int_step : forall (e e' : expr) (l : label), tauStep e e' -> fork_tau_ce_int_s (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp l)))
-          (E_live_expr (LM_expr e))) (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp l)))
-          (E_live_expr (LM_expr e'))).
-Inductive fork_tau_ce_ext_s : relation expr :=
- | fork_tau_ce_ext_step : forall (e e' : expr) (l : label), tauStep (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp l)))
-          (E_live_expr (LM_expr e))) e' -> fork_tau_ce_ext_s (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp l)))
-          (E_live_expr (LM_expr e))) e'.
-
-
-
-Lemma fork_tau_behave_ce: forall (expr5 e : expr) (lab : label), tauRed (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab)))
-          (E_live_expr (LM_expr expr5))) e -> e = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab)))
-          (E_live_expr (LM_expr expr5))) .
-Proof.
- intros.
- inversion H.
- substs.
- auto.
- substs.
- inversion H0.
- substs.
- inversion H2.
- apply red_not_value in H8; simpl in H8; intuition.
- apply red_not_value in H9; simpl in H9; intuition.
-Qed.
-
-Lemma fork_label_origin_ce: forall (expr5 e : expr) (lab l : label), labRed l (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab)))
-          (E_live_expr (LM_expr expr5))) e -> (l=lab).
-Proof.
- intros.
- inversion H; intuition; substs.
- apply fork_tau_behave_ce in H4.
- substs.
- inversion H0; intuition; substs.
- apply red_not_value in H7; simpl in H7; intuition.
- apply red_not_value in H8; simpl in H8; intuition.
-Qed.
-
-Lemma fork_tau_behave_ec: forall (expr5 e : expr) (lab : label), tauRed (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr expr5)) ) (E_live_expr (LM_comp lab))) e -> e = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr expr5))) (E_live_expr (LM_comp lab))) .
-Proof.
- intros.
- inversion H.
- substs.
- auto.
- substs.
- inversion H0.
- substs.
- inversion H2.
- apply red_not_value in H8; simpl in H8; intuition.
- apply red_not_value in H9; simpl in H9; intuition.
-Qed.
-
-Lemma fork_label_origin_ec: forall (expr5 e : expr) (lab l : label), labRed l (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr expr5))) (E_live_expr (LM_comp lab))) e -> (l=lab (* \/ (exists (e' : expr), labRed l expr5 e' /\ e = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr e'))) (E_live_expr (LM_comp lab))))*)).
-Proof.
- intros.
- inversion H; intuition; substs.
- apply fork_tau_behave_ec in H4.
- substs.
- inversion H0; intuition; substs.
- apply red_not_value in H7; simpl in H7; intuition.
- apply red_not_value in H8; simpl in H8; intuition.
-Qed.
-
-Lemma fork_tau_behave_cc : forall (e : expr) (lab1 lab2 : label), tauRed (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab1))) (E_live_expr (LM_comp lab2))) e -> e= (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab1))) (E_live_expr (LM_comp lab2))).
-Proof.
- intros.
- inversion H.
- reflexivity.
- substs.
- inversion H0.
- substs.
- inversion H2.
- substs.
-  apply red_not_value in H8; simpl in H8; intuition.
- apply red_not_value in H9; simpl in H9; intuition.
-Qed.
-
-Lemma fork_label_origin_cc: forall (e : expr) (lab1 lab2 l : label), labRed l (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab1))) (E_live_expr (LM_comp lab2))) e -> 
-((l=lab1 /\ e = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr (E_constant CONST_unit)))) (E_live_expr (LM_comp lab2)))) \/ (l=lab2 /\ e =(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab1))) (E_live_expr (LM_expr (E_constant CONST_unit)))) )).
-Proof.
- intros.
- inversion H; intuition; substs.
- inversion H4; intuition; substs.
- inversion H0; intuition; substs.
- left. splits. reflexivity.
- inversion H6. reflexivity. substs. inversion H1. substs.
- inversion H3.
- apply red_not_value in H11; simpl in H11; intuition.
- apply red_not_value in H12; simpl in H12; intuition.
- right.
- splits. reflexivity.
- inversion H6. reflexivity. substs. inversion H1. substs.
- inversion H3.
- apply red_not_value in H11; simpl in H11; intuition.
- apply red_not_value in H12; simpl in H12; intuition.
- apply red_not_value in H8; simpl in H8; intuition.
- apply red_not_value in H9; simpl in H9; intuition.
- inversion H1; intuition; substs.
- inversion H3; intuition; substs.
- apply red_not_value in H11; simpl in H11; intuition.
- apply red_not_value in H12; simpl in H12; intuition.
-Qed.
-
-
-Lemma fork_tau_step_behave_ee: forall (p q e : expr), tauStep (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p)) ) (E_live_expr (LM_expr q))) e -> 
-   ((exists (p' q' : expr), tauRed p p' /\ tauRed q q' /\ e = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p')) ) (E_live_expr (LM_expr q')))) \/ 
-  ((exists (p' vq : expr), is_value_of_expr vq /\ tauRed p p' /\ tauRed q vq /\ e = ((E_live_expr (LM_expr  (  (E_taggingright  (E_pair  (E_live_expr (LM_expr p')) vq ) ) ) )))) \/ 
-  ((exists (vp vq : expr), is_value_of_expr vq /\ is_value_of_expr vp /\ tauRed p vp /\ tauRed q vq /\ e = ((E_live_expr (LM_expr  (E_taggingleft  (E_taggingleft  (E_pair vp  vq ) ) ) )))) \/ 
-   (exists (vp q' : expr), is_value_of_expr vp /\ tauRed p vp /\ tauRed q q' /\ e=((E_live_expr (LM_expr  (E_taggingleft  (E_taggingright  (E_pair vp (E_live_expr (LM_expr q'))  ) ) ) ))))))) .
-Proof.
- intros.
- inversion H.
- substs.
- inversion H0; intuition; substs.
- left.
- exists e'' q; splits.
- apply S_star with (y:=e''); [ apply tStep with (s:=s0); assumption | apply star_refl]. apply star_refl.
- reflexivity.
- left.
- exists p e''; splits.
- apply star_refl.
- apply S_star with (y:=e''); [  apply tStep with (s:=s0); assumption | apply star_refl ]. 
- reflexivity.
- right. right. right.
- exists p q.
- splits; [ assumption | apply star_refl | apply star_refl | reflexivity ].
- right. left.
- exists p q.
- splits; [ assumption | apply star_refl | apply star_refl | reflexivity ].
- right. right. left.
- exists p q.
- splits; [ assumption | assumption | apply star_refl | apply star_refl | reflexivity ].
- apply red_not_value in H6; simpl in H6; intuition.
- apply red_not_value in H7; simpl in H7; intuition.
-Qed.
-
-
-Definition  fork_tau_step_ee : expr -> expr -> Prop := (fun b e => (forall (p q : expr), b=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p)) ) (E_live_expr (LM_expr q))) -> 
-   ((exists (p' q' : expr), tauRed p p' /\ tauRed q q' /\ e = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p')) ) (E_live_expr (LM_expr q')))) \/ 
-  ((exists (p' vq : expr), is_value_of_expr vq /\ tauRed p p' /\ tauRed q vq /\ e = ((E_live_expr (LM_expr  (  (E_taggingright  (E_pair  (E_live_expr (LM_expr p')) vq ) ) ) )))) \/ 
-  ((exists (vp vq : expr), is_value_of_expr vq /\ is_value_of_expr vp /\ tauRed p vp /\ tauRed q vq /\ e = ((E_live_expr (LM_expr  (E_taggingleft  (E_taggingleft  (E_pair vp  vq ) ) ) )))) \/ 
-   (exists (vp q' : expr), is_value_of_expr vp /\ tauRed p vp /\ tauRed q q' /\ e=((E_live_expr (LM_expr  (E_taggingleft  (E_taggingright  (E_pair vp (E_live_expr (LM_expr q'))  ) ) ) ))))))))) .
-
-
-Lemma fork_tau_behave_ee_h: forall (b e : expr), tauRed b e -> (fork_tau_step_ee) b e.
-Proof.
- apply star_ind.
- intros.
- unfolds.
- intros.
- substs.
- left; exists p q; splits; [apply star_refl | apply star_refl | reflexivity].
- intros.
- unfolds in H1.
- unfolds.
- intros.
- substs.
- apply fork_tau_step_behave_ee in H.
- intuition.
- destruct H2; destruct H.
- specialize (H1 x x0).
- elim H; intros; elim H3; intros.
- apply H1 in H5.
- destruct H5.
- left.
- destruct H5 as [ p' H5]; destruct H5 as [ q' H5 ].
- exists p' q'.
- splits.
- apply star_trans with (y:=x); [ jauto | jauto ].
- apply star_trans with (y:=x0); [ jauto | jauto ].
- jauto.
- destruct H5.
- right; left.
- destruct H5 as [ p' H5]; destruct H5 as [ vq H5 ].
- exists p' vq.
- splits.
- jauto.
- apply star_trans with (y:=x); [ jauto | jauto ].
- apply star_trans with (y:=x0); [ jauto | jauto ].
- jauto.
- destruct H5.
- right; right.
- destruct H5 as [ vp H5]; destruct H5 as [ vq H5 ].
- left.
- exists vp vq.
- splits.
- jauto.
- jauto.
- apply star_trans with (y:=x); [ jauto | jauto ].
- apply star_trans with (y:=x0); [ jauto | jauto ].
- jauto.
- right; right.
- right.
- destruct H5 as [ vp H5]; destruct H5 as [ q' H5 ].
- exists vp q'.
- splits.
- jauto.
- jauto.
- apply star_trans with (y:=x); [ jauto | jauto ].
- apply star_trans with (y:=x0); [ jauto | jauto ].
- jauto.
- destruct H as [ x H]; destruct H as [ vy H ].
- right; left.
- exists x vy.
- splits. jauto. jauto. jauto.
- elim H; intros; clear H; elim H3; intros; clear H3; elim H4; intros; clear H4; substs.
- inversion H0.
- reflexivity.
- inversion H4.
- apply red_not_value in H8; simpl in H8; intuition.
- right; right; left.
- destruct H2 as [ vp H2]; destruct H2 as [ vq H2 ]; exists vp vq; splits; jauto;jauto;jauto;jauto.
- elim H2; intros; clear H2. elim H3; intros; clear H3; elim H4; intros; clear H4; elim H5; intros; clear H5; substs.
- inversion H0 ; [  reflexivity |  inversion H5; apply red_not_value in H9; simpl in H9; intuition].
- right; right; right.
- destruct H2 as [ vp H2]; destruct H2 as [ q' H2 ]; exists vp q'; splits; jauto;jauto;jauto.
- elim H2; intros; clear H2; elim H3; intros; clear H3; elim H4; intros; clear H4; substs.
- inversion H0; [ reflexivity | inversion H4; apply red_not_value in H8; simpl in H8; intuition ].
-Qed.
- 
-Lemma fork_tau_behave_ee : forall (p q e : expr), tauRed (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p)) ) (E_live_expr (LM_expr q))) e -> 
-((exists (p' q' : expr), tauRed p p' /\ tauRed q q' /\ e = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p')) ) (E_live_expr (LM_expr q')))) \/ 
-  ((exists (p' vq : expr), is_value_of_expr vq /\ tauRed p p' /\ tauRed q vq /\ e = ((E_live_expr (LM_expr  (  (E_taggingright  (E_pair  (E_live_expr (LM_expr p')) vq ) ) ) )))) \/ 
-  ((exists (vp vq : expr), is_value_of_expr vq /\ is_value_of_expr vp /\ tauRed p vp /\ tauRed q vq /\ e = ((E_live_expr (LM_expr  (E_taggingleft  (E_taggingleft  (E_pair vp  vq ) ) ) )))) \/ 
-   (exists (vp q' : expr), is_value_of_expr vp /\ tauRed p vp /\ tauRed q q' /\ e=((E_live_expr (LM_expr  (E_taggingleft  (E_taggingright  (E_pair vp (E_live_expr (LM_expr q'))  ) ) ) ))))))) .
-Proof.
- intros.
- apply fork_tau_behave_ee_h in H.
- specialize (H p q).
- apply H.
- reflexivity.
-Qed.
-
-Lemma fork_label_origin_ee : forall (e' e e'' : expr) (l : label), labRed l (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr e)) ) (E_live_expr (LM_expr e'))) e'' -> 
- ((exists (f : expr), labRed l e f /\ (
-((exists ( q' : expr), tauRed e' q' /\ e'' = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr f)) ) (E_live_expr (LM_expr q')))) \/ 
-  ((exists ( vq : expr), is_value_of_expr vq /\ tauRed e' vq /\ e'' = ((E_live_expr (LM_expr  (  (E_taggingright  (E_pair  (E_live_expr (LM_expr f)) vq ) ) ) )))) \/ 
-  ((exists ( vq : expr), is_value_of_expr vq /\ is_value_of_expr f /\ tauRed e' vq /\ e'' = ((E_live_expr (LM_expr  (E_taggingleft  (E_taggingleft  (E_pair f  vq ) ) ) )))) \/ 
-   (exists ( q' : expr), is_value_of_expr f /\  tauRed e' q' /\ e''=((E_live_expr (LM_expr  (E_taggingleft  (E_taggingright  (E_pair f (E_live_expr (LM_expr q'))  ) ) ) )))))))
-
-)) 
-
-
-\/ 
-  (exists (f : expr), labRed l e' f /\ (
-((exists (p'  : expr), tauRed e p' /\ e'' = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p')) ) (E_live_expr (LM_expr f)))) \/ 
-  ((exists (p'  : expr), is_value_of_expr f /\ tauRed e p'  /\ e'' = ((E_live_expr (LM_expr  (  (E_taggingright  (E_pair  (E_live_expr (LM_expr p')) f ) ) ) )))) \/ 
-  ((exists (vp : expr), is_value_of_expr f /\ is_value_of_expr vp /\ tauRed e vp  /\ e'' = ((E_live_expr (LM_expr  (E_taggingleft  (E_taggingleft  (E_pair vp  f ) ) ) )))) \/ 
-   (exists (vp : expr), is_value_of_expr vp /\ tauRed e vp  /\ e''=((E_live_expr (LM_expr  (E_taggingleft  (E_taggingright  (E_pair vp (E_live_expr (LM_expr f))  ) ) ) ))))))) 
-
-))).
-Proof.
- intros.
- inversion H; substs.
- elim H0; intros; substs; clear H0.
- apply fork_tau_behave_ee in H1.
- destruct H1.
- destruct H0; destruct H0.
- elim H0; intros; clear H0.
- elim H3; intros; clear H3.
- substs.
- elim H2; intros; clear H2.
- inversion H3.
- substs.
- left. 
- apply fork_tau_behave_ee in H4.
- destruct H4.
- destruct H2; destruct H2.
- exists x1. splits. apply lab_r with (e1:=x)(e2:=e''0)(s:=s0).
- splits; [ assumption | assumption |  intuition ].
- substs.
- intuition.
- substs.
- left.
- exists x2; splits; [ apply star_trans with (y:=x0); [ assumption | assumption ] | reflexivity ].
- destruct H2; destruct H2.
- destruct H2.
- exists x1. splits. apply lab_r with (e1:=x)(e2:=e''0)(s:=s0).
- splits; [ assumption | assumption |  intuition ].
- substs.
- intuition.
- substs.
- right; left.
- exists x2; splits; [ assumption | apply star_trans with (y:=x0); [ assumption | assumption ] | reflexivity ].
- destruct H2; destruct H2.
- exists x1. splits. apply lab_r with (e1:=x)(e2:=e''0)(s:=s0).
- splits; [ assumption | assumption |  intuition ].
- substs.
- intuition.
- substs.
- right; right; left.
- exists x2; splits; [ assumption | assumption | apply star_trans with (y:=x0); [ assumption | assumption ] | reflexivity ].
- destruct H2; destruct H2.
- exists x1. splits. apply lab_r with (e1:=x)(e2:=e''0)(s:=s0).
- splits; [ assumption | assumption |  intuition ].
- substs.
- intuition.
- substs.
- right; right; right.
- exists x2; splits; [ assumption | apply star_trans with (y:=x0); [ assumption | assumption ] | reflexivity ].
- substs.
-
-
- right.
- 
- apply fork_tau_behave_ee in H4.
- destruct H4.
- destruct H2; destruct H2.
- exists x2. splits. apply lab_r with (e1:=x0)(e2:=e''0)(s:=s0).
- splits; [ assumption | assumption |  intuition ].
- substs.
- intuition.
- substs.
- left.
- exists x1; splits; [ apply star_trans with (y:=x); [ assumption | assumption ] | reflexivity ].
- destruct H2; destruct H2.
- destruct H2.
- exists x2. splits. apply lab_r with (e1:=x0)(e2:=e''0)(s:=s0).
- splits; [ assumption | assumption |  intuition ].
- substs.
- intuition.
- substs.
- right; left.
- exists x1; splits; [ assumption | apply star_trans with (y:=x); [ assumption | assumption ] | reflexivity ].
- destruct H2; destruct H2.
- exists x2. splits. apply lab_r with (e1:=x0)(e2:=e''0)(s:=s0).
- splits; [ assumption | assumption |  intuition ].
- substs.
- intuition.
- substs.
- right; right; left.
- exists x1; splits; [ assumption | assumption | apply star_trans with (y:=x); [ assumption | assumption ] | reflexivity ].
- destruct H2; destruct H2.
- exists x2. splits. apply lab_r with (e1:=x0)(e2:=e''0)(s:=s0).
- splits; [ assumption | assumption |  intuition ].
- substs.
- intuition.
- substs.
- right; right; right.
- exists x1; splits; [ assumption | apply star_trans with (y:=x); [ assumption | assumption ] | reflexivity ].
- substs.
- 
-
- apply red_not_value in H9; simpl in H9; intuition.
- substs.
- apply red_not_value in H10; simpl in H10; intuition.
- substs.
- elim H2; intros; clear H2.
- apply red_not_value in H1.
- destruct H0.
- destruct H0; destruct H0; intuition; substs; simpl in H1; intuition. 
- destruct H0.
- destruct H0; destruct H0; intuition; substs; simpl in H1; intuition.
- destruct H0; destruct H0; intuition; substs; simpl in H1; intuition.
 Qed.
 
 Lemma taured_val_id : forall (e e' : expr), tauRed e e' -> is_value_of_expr e -> e = e'.
@@ -1137,7 +645,6 @@ Proof.
  assumption.
  assumption.
  assumption.
- assumption.
 Qed.
 
 Lemma fork_tau_behave_edge2 : forall  (e e' x : expr), tauRed e' x -> ~ (is_value_of_expr e) -> tauRed (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr e))) (E_live_expr (LM_expr e'))) (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr e))) (E_live_expr (LM_expr x))).
@@ -1150,7 +657,6 @@ Proof.
  apply tStep with (s:=S_Second).
  inversion H1.
  apply  JO_red_forkmove2 with (s:=s).
- assumption.
  assumption.
  assumption.
  assumption.
@@ -1167,7 +673,7 @@ Proof.
      (E_live_expr (LM_expr e'))))(s:=S_First).
  splits.
  apply fork_tau_behave_edge1;[ assumption | assumption ].
- apply JO_red_forkmove1 with (s:=s); [ assumption |  assumption ].
+ apply JO_red_forkmove1 with (s:=s);  assumption .
  apply fork_tau_behave_edge1; [ assumption |  assumption ].
 Qed.
 
@@ -1200,9 +706,255 @@ Proof.
      (E_live_expr (LM_expr e2))))(s:=S_Second).
  splits.
  apply fork_tau_behave_edge2;[ assumption | assumption ].
- apply JO_red_forkmove2 with (s:=s); [ assumption |  assumption ].
+ apply JO_red_forkmove2 with (s:=s); assumption.
  apply fork_tau_behave_edge2; [ assumption |  assumption ].
 Qed.
+
+
+Inductive fork_tau_ce_int_s : relation expr :=
+ | fork_tau_ce_int_step : forall (e e' : expr) (l : label), tauStep e e' -> fork_tau_ce_int_s (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp l)))
+          (E_live_expr (LM_expr e))) (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp l)))
+          (E_live_expr (LM_expr e'))).
+Inductive fork_tau_ce_ext_s : relation expr :=
+ | fork_tau_ce_ext_step : forall (e e' : expr) (l : label), tauStep (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp l)))
+          (E_live_expr (LM_expr e))) e' -> fork_tau_ce_ext_s (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp l)))
+          (E_live_expr (LM_expr e))) e'.
+
+
+
+Lemma fork_tau_behave_ce: forall (expr5 e : expr) (lab : label), tauRed (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab)))
+          (E_live_expr (LM_expr expr5))) e -> ((e = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab)))
+          (E_live_expr (LM_expr expr5))))\/(e = E_live_expr
+       (LM_expr (E_taggingright (E_pair (E_live_expr (LM_comp lab)) expr5))) /\ is_value_of_expr expr5)) .
+Proof.
+ intros.
+ inversion H.
+ substs.
+ auto.
+ substs.
+ inversion H0.
+ substs.
+ inversion H2.
+ right.
+ substs.
+ apply taured_val_id in H1.
+ substs.
+ splits.
+ reflexivity.
+ assumption.
+ simpl; auto.
+ apply red_not_value in H8; simpl in H8; intuition.
+ apply red_not_value in H9; simpl in H9; intuition.
+Qed.
+
+Lemma fork_label_origin_ce: forall (expr5 e : expr) (lab l : label), labRed l (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab)))
+          (E_live_expr (LM_expr expr5))) e -> (l=lab).
+Proof.
+ intros.
+ inversion H; intuition; substs.
+ apply fork_tau_behave_ce in H4.
+ substs.
+ intuition; substs.
+ inversion H0; intuition; substs.
+ apply red_not_value in H7; simpl in H7; intuition.
+ apply red_not_value in H8; simpl in H8; intuition.
+ apply red_not_value in H0; simpl in H0; intuition.
+Qed.
+
+Lemma fork_tau_behave_ec: forall (expr5 e : expr) (lab : label), tauRed (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr expr5)) ) (E_live_expr (LM_comp lab))) e -> 
+ ((e = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr expr5))) (E_live_expr (LM_comp lab))))\/(e=E_live_expr
+       (LM_expr (E_taggingleft (E_pair expr5 (E_live_expr (LM_comp lab))))) /\ is_value_of_expr expr5)) .
+Proof.
+ intros.
+ inversion H.
+ left.
+ reflexivity.
+ substs.
+ inversion H0.
+ substs.
+ inversion H2.
+ substs.
+ apply taured_val_id in H1.
+ substs.
+ right.
+ splits.
+ reflexivity.
+ assumption.
+ simpl; auto.
+ apply red_not_value in H8; simpl in H8; intuition.
+ apply red_not_value in H9; simpl in H9; intuition.
+Qed.
+
+Lemma fork_label_origin_ec: forall (expr5 e : expr) (lab l : label), labRed l (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr expr5))) (E_live_expr (LM_comp lab))) e -> (l=lab (* \/ (exists (e' : expr), labRed l expr5 e' /\ e = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr e'))) (E_live_expr (LM_comp lab))))*)).
+Proof.
+ intros.
+ inversion H; intuition; substs.
+ apply fork_tau_behave_ec in H4.
+ substs.
+ intuition.
+ substs.
+ inversion H0; intuition; substs.
+ apply red_not_value in H7; simpl in H7; intuition.
+ apply red_not_value in H8; simpl in H8; intuition.
+ substs.
+ apply red_not_value in H0; simpl in H0; intuition.
+Qed.
+
+Lemma fork_tau_behave_cc : forall (e : expr) (lab1 lab2 : label), tauRed (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab1))) (E_live_expr (LM_comp lab2))) e -> e= (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab1))) (E_live_expr (LM_comp lab2))).
+Proof.
+ intros.
+ inversion H.
+ reflexivity.
+ substs.
+ inversion H0.
+ substs.
+ inversion H2.
+ substs.
+  apply red_not_value in H8; simpl in H8; intuition.
+ apply red_not_value in H9; simpl in H9; intuition.
+Qed.
+
+Lemma fork_label_origin_cc: forall (e : expr) (lab1 lab2 l : label), labRed l (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab1))) (E_live_expr (LM_comp lab2))) e -> 
+((l=lab1 /\ e = (E_live_expr
+       (LM_expr
+          (E_taggingleft
+             (E_pair (E_constant CONST_unit) (E_live_expr (LM_comp lab2))))))) 
+ \/ (l=lab2 /\ e =((E_live_expr
+          (LM_expr
+             (E_taggingright
+                (E_pair (E_live_expr (LM_comp lab1)) (E_constant CONST_unit)))))) )).
+Proof.
+ intros.
+ inversion H; intuition; substs.
+ inversion H4; intuition; substs.
+ inversion H0; intuition; substs.
+ left. splits. reflexivity.
+ inversion H6. reflexivity. substs. inversion H1. substs.
+ inversion H3.
+ apply taured_val_id in H6; substs.
+ right.
+ splits. reflexivity.
+ reflexivity.
+ simpl; auto.
+ apply red_not_value in H8; simpl in H8; intuition.
+ apply red_not_value in H9; simpl in H9; intuition.
+ inversion H1; intuition; substs.
+ inversion H3; intuition; substs.
+ apply red_not_value in H11; simpl in H11; intuition.
+ apply red_not_value in H12; simpl in H12; intuition.
+Qed.
+
+
+Lemma fork_tau_step_behave_ee: forall (p q e : expr), tauStep (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p)) ) (E_live_expr (LM_expr q))) e -> 
+   ((exists (p' q' : expr), tauRed p p' /\ tauRed q q' /\ e = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p')) ) (E_live_expr (LM_expr q')))) \/ 
+  ((exists (p' vq : expr), is_value_of_expr vq /\ tauRed p p' /\ tauRed q vq /\ e = ((E_live_expr (LM_expr  (  (E_taggingright  (E_pair  (E_live_expr (LM_expr p')) vq ) ) ) )))) \/ 
+  ((exists (vp q' : expr), is_value_of_expr vp /\ tauRed p vp /\ tauRed q q' /\ e=((E_live_expr (LM_expr  (E_taggingleft  (  (E_pair vp (E_live_expr (LM_expr q'))  ) ) ) ))))))) .
+Proof.
+ intros.
+ inversion H.
+ substs.
+ inversion H0; intuition; substs.
+ left.
+ exists e'' q; splits.
+ apply S_star with (y:=e''); [ apply tStep with (s:=s0); assumption | apply star_refl]. apply star_refl.
+ reflexivity.
+ left.
+ exists p e''; splits.
+ apply star_refl.
+ apply S_star with (y:=e''); [  apply tStep with (s:=s0); assumption | apply star_refl ]. 
+ reflexivity.
+ right. right.
+ exists p q.
+ splits; [ assumption | apply star_refl | apply star_refl | reflexivity ].
+ right. left.
+ exists p q.
+ splits; [ assumption | apply star_refl | apply star_refl | reflexivity ].
+ apply red_not_value in H6; simpl in H6; intuition.
+ apply red_not_value in H7; simpl in H7; intuition.
+Qed.
+
+
+Definition  fork_tau_step_ee : expr -> expr -> Prop := (fun b e => (forall (p q : expr), b=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p)) ) (E_live_expr (LM_expr q))) -> 
+   ((exists (p' q' : expr), tauRed p p' /\ tauRed q q' /\ e = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p')) ) (E_live_expr (LM_expr q')))) \/ 
+  ((exists (p' vq : expr), is_value_of_expr vq /\ tauRed p p' /\ tauRed q vq /\ e = ((E_live_expr (LM_expr  (  (E_taggingright  (E_pair  (E_live_expr (LM_expr p')) vq ) ) ) )))) \/ 
+  (
+   (exists (vp q' : expr), is_value_of_expr vp /\ tauRed p vp /\ tauRed q q' /\ e=((E_live_expr (LM_expr  (E_taggingleft  ( (E_pair vp (E_live_expr (LM_expr q'))  ) ) ) ))))))))) .
+
+
+Lemma fork_tau_behave_ee_h: forall (b e : expr), tauRed b e -> (fork_tau_step_ee) b e.
+Proof.
+ apply star_ind.
+ intros.
+ unfolds.
+ intros.
+ substs.
+ left; exists p q; splits; [apply star_refl | apply star_refl | reflexivity].
+ intros.
+ unfolds in H1.
+ unfolds.
+ intros.
+ substs.
+ apply fork_tau_step_behave_ee in H.
+ intuition.
+ destruct H2; destruct H.
+ specialize (H1 x x0).
+ elim H; intros; elim H3; intros.
+ apply H1 in H5.
+ destruct H5.
+ left.
+ destruct H5 as [ p' H5]; destruct H5 as [ q' H5 ].
+ exists p' q'.
+ splits.
+ apply star_trans with (y:=x); [ jauto | jauto ].
+ apply star_trans with (y:=x0); [ jauto | jauto ].
+ jauto.
+ destruct H5.
+ right; left.
+ destruct H5 as [ p' H5]; destruct H5 as [ vq H5 ].
+ exists p' vq.
+ splits.
+ jauto.
+ apply star_trans with (y:=x); [ jauto | jauto ].
+ apply star_trans with (y:=x0); [ jauto | jauto ].
+ jauto.
+ right; right.
+
+ destruct H5 as [ vp H5]; destruct H5 as [ q' H5 ].
+ exists vp q'.
+ splits.
+ jauto.
+ jauto.
+ apply star_trans with (y:=x); [ jauto | jauto ].
+ apply star_trans with (y:=x0); [ jauto | jauto ].
+ jauto.
+ destruct H as [ x H]; destruct H as [ vy H ].
+ right; left.
+ exists x vy.
+ splits. jauto. jauto. jauto.
+ elim H; intros; clear H; elim H3; intros; clear H3; elim H4; intros; clear H4; substs.
+ inversion H0.
+ reflexivity.
+ inversion H4.
+ apply red_not_value in H8; simpl in H8; intuition.
+ right; right.
+ destruct H as [ vp H2]; destruct H2 as [ vq H2 ]; exists vp vq; splits; jauto;jauto;jauto;jauto.
+ elim H2; intros; clear H2. elim H3; intros; clear H3. elim H4; intros; clear H4.  substs.
+ apply taured_val_id in H0; substs; reflexivity.
+Qed.
+ 
+Lemma fork_tau_behave_ee : forall (p q e : expr), tauRed (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p)) ) (E_live_expr (LM_expr q))) e -> 
+((exists (p' q' : expr), tauRed p p' /\ tauRed q q' /\ e = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p')) ) (E_live_expr (LM_expr q')))) \/ 
+  ((exists (p' vq : expr), is_value_of_expr vq /\ tauRed p p' /\ tauRed q vq /\ e = ((E_live_expr (LM_expr  (  (E_taggingright  (E_pair  (E_live_expr (LM_expr p')) vq ) ) ) )))) \/ 
+  (
+   (exists (vp q' : expr), is_value_of_expr vp /\ tauRed p vp /\ tauRed q q' /\ e=((E_live_expr (LM_expr  (E_taggingleft  (  (E_pair vp (E_live_expr (LM_expr q'))  ) ) ) ))))))) .
+Proof.
+ intros.
+ apply fork_tau_behave_ee_h in H.
+ specialize (H p q).
+ apply H.
+ reflexivity.
+Qed.
+(*
 
 Lemma fork_tau_serialise1 : forall (p q p' q': expr), tauRed
        (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p)))
@@ -1271,7 +1023,130 @@ Proof.
  destruct H1; destruct H0; intuition.
  discriminate H4.
 Qed.
+*)
+Lemma fork_label_origin_ee : forall (e' e e'' : expr) (l : label), labRed l (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr e)) ) (E_live_expr (LM_expr e'))) e'' -> 
+ ((exists (f : expr), labRed l e f /\ (
+((exists ( q' : expr), tauRed e' q' /\ e'' = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr f)) ) (E_live_expr (LM_expr q')))) \/ 
+  ((exists ( vq : expr), is_value_of_expr vq /\ tauRed e' vq /\ e'' = ((E_live_expr (LM_expr  (  (E_taggingright  (E_pair  (E_live_expr (LM_expr f)) vq ) ) ) )))) \/ 
+  (
+   (exists ( q' : expr), is_value_of_expr f /\  tauRed e' q' /\ e''=((E_live_expr (LM_expr  (E_taggingleft  (  (E_pair f (E_live_expr (LM_expr q'))  ) ) ) )))))))
+
+)) 
+
+
+\/ 
+  (exists (f : expr), labRed l e' f /\ (
+((exists (p'  : expr), tauRed e p' /\ e'' = (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p')) ) (E_live_expr (LM_expr f)))) \/ 
+  ((exists (p'  : expr), is_value_of_expr f /\ tauRed e p'  /\ e'' = ((E_live_expr (LM_expr  (  (E_taggingright  (E_pair  (E_live_expr (LM_expr p')) f ) ) ) )))) \/ 
+  (
+   (exists (vp : expr), is_value_of_expr vp /\ tauRed e vp  /\ e''=((E_live_expr (LM_expr  (E_taggingleft  (  (E_pair vp (E_live_expr (LM_expr f))  ) ) ) ))))))) 
+
+))).
+Proof.
+ intros.
+ inversion H; substs.
+ elim H0; intros; substs; clear H0.
+ apply fork_tau_behave_ee in H1.
+ destruct H1.
+ destruct H0; destruct H0.
+ elim H0; intros; clear H0.
+ elim H3; intros; clear H3.
+ substs.
+ elim H2; intros; clear H2.
+ inversion H3.
+ substs.
+ left. 
+ apply fork_tau_behave_ee in H4.
+ destruct H4.
+ destruct H2; destruct H2.
+ exists x1. splits. apply lab_r with (e1:=x)(e2:=e''0)(s:=s0).
+ splits; [ assumption | assumption |  intuition ].
+ substs.
+ intuition.
+ substs.
+ left.
+ exists x2; splits; [ apply star_trans with (y:=x0); [ assumption | assumption ] | reflexivity ].
+ destruct H2; destruct H2.
+ destruct H2.
+ exists x1. splits. apply lab_r with (e1:=x)(e2:=e''0)(s:=s0).
+ splits; [ assumption | assumption |  intuition ].
+ substs.
+ intuition.
+ substs.
+ right; left.
+ exists x2; splits; [ assumption | apply star_trans with (y:=x0); [ assumption | assumption ] | reflexivity ].
+ destruct H2; destruct H2.
+ exists x1. splits. apply lab_r with (e1:=x)(e2:=e''0)(s:=s0).
+ splits; [ assumption | assumption |  intuition ].
+ substs.
+ intuition.
+ substs.
+ (*right; left.
+ exists x2; splits; [ assumption | assumption | apply star_trans with (y:=x0); [ assumption | assumption ] | reflexivity ].
+ destruct H2; destruct H2.
+ exists x1. splits. apply lab_r with (e1:=x)(e2:=e''0)(s:=s0).
+ splits; [ assumption | assumption |  intuition ].
+ substs.
+ intuition.
+ substs. *)
+ right; right. 
+ exists x2; splits; [ assumption | apply star_trans with (y:=x0); [ assumption | assumption ] | reflexivity ].
+ substs.
+
+
+ right.
  
+ apply fork_tau_behave_ee in H4.
+ destruct H4.
+ destruct H2; destruct H2.
+ exists x2. splits. apply lab_r with (e1:=x0)(e2:=e''0)(s:=s0).
+ splits; [ assumption | assumption |  intuition ].
+ substs.
+ intuition.
+ substs.
+ left.
+ exists x1; splits; [ apply star_trans with (y:=x); [ assumption | assumption ] | reflexivity ].
+ destruct H2; destruct H2.
+ destruct H2.
+ exists x2. splits. apply lab_r with (e1:=x0)(e2:=e''0)(s:=s0).
+ splits; [ assumption | assumption |  intuition ].
+ substs.
+ intuition.
+ substs.
+ right; left.
+ exists x1; splits; [ assumption | apply star_trans with (y:=x); [ assumption | assumption ] | reflexivity ].
+ destruct H2; destruct H2.
+ exists x2. splits. apply lab_r with (e1:=x0)(e2:=e''0)(s:=s0).
+ splits; [ assumption | assumption |  intuition ].
+ substs.
+ intuition.
+ substs. (*
+ right; right; left.
+ exists x1; splits; [ assumption | assumption | apply star_trans with (y:=x); [ assumption | assumption ] | reflexivity ].
+ destruct H2; destruct H2.
+ exists x2. splits. apply lab_r with (e1:=x0)(e2:=e''0)(s:=s0).
+ splits; [ assumption | assumption |  intuition ].
+ substs.
+ intuition.
+ substs.*)
+ right; right.
+ exists x1; splits; [ assumption | apply star_trans with (y:=x); [ assumption | assumption ] | reflexivity ].
+ substs.
+ 
+
+ apply red_not_value in H9; simpl in H9; intuition.
+ substs.
+ apply red_not_value in H10; simpl in H10; intuition.
+ substs.
+ elim H2; intros; clear H2.
+ apply red_not_value in H1.
+ destruct H0.
+ destruct H0; destruct H0; intuition; substs; simpl in H1; intuition. 
+ destruct H0.
+ destruct H0; destruct H0; intuition; substs; simpl in H1; intuition.
+Qed.
+
+
 
 Lemma fork_tau_swap_ee_non_val : forall (p q p' q': expr), (~ (is_value_of_expr p)) -> (~(is_value_of_expr q)) ->  (~ (is_value_of_expr p')) -> (~(is_value_of_expr q')) ->  tauRed
        (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr p)))
@@ -1292,11 +1167,11 @@ Proof.
  assumption. assumption. assumption. assumption. assumption. assumption.
  destruct H3; destruct H3; intuition.
  simplify_eq H7; intros; substs.
- destruct H4; destruct H3; intuition.
- simplify_eq H8; intros; substs; assumption.
- destruct H4; destruct H3; intuition.
+ destruct H3; destruct H3; intuition.
  simplify_eq H7; intros; substs; assumption.
 Qed.
+
+
 
 
 Lemma star_rev_ind : forall (X :Type) (R: relation X) (P : X -> X -> Prop),
@@ -1350,17 +1225,11 @@ Proof.
  substs.
  exists (S_Second).
  apply JO_red_forkmove2 with (s:=s0).
- assumption. assumption.
+ assumption. 
  substs.
  exists (S_First).
  apply JO_red_forkmove1 with (s:=s0).
- assumption. assumption.
- substs.
- exists (S_Second).
- apply JO_red_forkdocomp21.
- substs.
- exists (S_First).
- apply JO_red_forkdocomp12.
+ assumption.
  substs.
  apply red_not_value in H4; simpl in H4; intuition.
  substs.
@@ -1443,7 +1312,6 @@ Proof.
  apply JO_red_forkmove2 with (s:=s0).
  intuition.
  assumption.
- assumption.
  substs.
  assert (exists p q p' q',
      E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr e)))
@@ -1472,7 +1340,6 @@ Proof.
  apply JO_red_forkmove1 with (s:=s0).
  assumption.
  assumption.
- assumption.
  substs.
  inversion H0.
  substs.
@@ -1487,13 +1354,10 @@ Proof.
  apply red_not_value in H5; simpl in H5; intuition.
  substs.
  inversion H0.
- substs.
- inversion H3.
- substs.
- apply red_not_value in H6; simpl in H6; intuition.
  substs.
  apply red_not_value in H8; simpl in H8; intuition.
  substs.
+ apply red_not_value in H8; simpl in H8; intuition.
  apply red_not_value in H9; simpl in H9; intuition.
 Qed.
 
@@ -1509,6 +1373,8 @@ Proof.
  exists p q p' q'; splits ; [reflexivity | reflexivity ].
 Qed.
 
+
+
 Lemma fork_comm_labred : forall (p q p' q' : livemodes)(l :label), labRed l (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (p))) (E_live_expr (q))) (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (p'))) (E_live_expr (q'))) -> 
                           labRed l (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (q))) (E_live_expr (p))) (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (q'))) (E_live_expr (p'))).
 Proof.
@@ -1521,25 +1387,15 @@ Proof.
  apply fork_tau_behave_cc in H1.
  substs.
  inversion H0.
+ substs.
+ apply taured_val_id in H3.
+ discriminate H3.
+ simpl; auto.
  intros. 
  substs.
- apply lab_r with (e1:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab0)))
-     (E_live_expr (LM_comp l))))(e2:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab0)))
-     (E_live_expr (LM_expr (E_constant CONST_unit)))))(s:=S_Second).
- splits.
- apply star_refl.
- apply JO_red_forkdocomp21.
- apply fork_comm_taured.
- assumption.
- substs.
- apply lab_r with (e1:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp l)))
-     (E_live_expr (LM_comp lab))))(e2:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr (E_constant CONST_unit))))
-     (E_live_expr (LM_comp lab))))(s:=S_First).
- splits.
- apply star_refl.
- apply JO_red_forkdocomp12.
- apply fork_comm_taured.
- assumption.
+ apply taured_val_id in H3.
+ discriminate H3.
+ simpl; auto.
  substs.
  apply red_not_value in H7; simpl in H7; intuition.
  substs.
@@ -1547,10 +1403,9 @@ Proof.
  substs.
   apply fork_tau_behave_ce in H1.
  substs.
- inversion H0.
+ intuition.
  substs.
- apply taured_val_id in H3. discriminate H3.
- simpl; auto.
+ inversion H0.
  substs.
  apply taured_val_id in H3. discriminate H3.
  simpl; auto.
@@ -1559,21 +1414,21 @@ Proof.
  substs.
  apply red_not_value in H8; simpl in H8; intuition.
  substs.
+ apply red_not_value in H0; simpl in H0; intuition.
  induction q.
  apply fork_tau_behave_ec in H1.
+ intuition.
  substs.
   inversion H0.
  substs.
  apply taured_val_id in H3. discriminate H3.
  simpl; auto.
  substs.
- apply taured_val_id in H3. discriminate H3.
- simpl; auto.
- substs.
  apply red_not_value in H7; simpl in H7; intuition.
  substs.
  apply red_not_value in H8; simpl in H8; intuition.
  substs.
+ apply red_not_value in H0; simpl in H0; intuition.
  assert (K:=H1).
  apply fork_tau_behave_ee in H1.
  intuition.
@@ -1591,7 +1446,6 @@ Proof.
  assumption.
  apply JO_red_forkmove2 with (s:=s0).
  assumption.
- assumption.
  apply fork_comm_taured.
  assumption.
  substs.
@@ -1604,7 +1458,6 @@ Proof.
  assumption.
  apply JO_red_forkmove1 with (s:=s0).
  assumption.
- assumption.
  apply fork_comm_taured.
  assumption.
  apply red_not_value in H9; simpl in H9; intuition.
@@ -1613,15 +1466,12 @@ Proof.
  intuition.
  substs.
  apply red_not_value in H0; simpl in H0; intuition.
- destruct H2; destruct H1.
- intuition.
- substs.
- apply red_not_value in H0; simpl in H0; intuition.
- destruct H2; destruct H1.
+ destruct H1; destruct H1.
  intuition.
  substs.
  apply red_not_value in H0; simpl in H0; intuition.
 Qed.
+
 
 Lemma fork_lab_behave : forall (p q : livemodes)(e : expr)(l : label),  labRed l (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (p))) (E_live_expr (q)))  e ->
  ((exists (p' q' : livemodes), e=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (p'))) (E_live_expr (q'))) ) \/ 
@@ -1633,110 +1483,94 @@ intros.
  inversion H.
  substs.
  intuition.
+ assert (K:=H1).
  induction p; induction q.
  apply fork_tau_behave_cc in H1.
  substs.
  inversion H0.
  substs.
- apply fork_tau_behave_ec in H3.
+ apply taured_val_id in H3.
  substs.
+ right.
+ splits.
+ exists ((LM_expr
+     (E_taggingleft
+        (E_pair (E_constant CONST_unit) (E_live_expr (LM_comp lab0)))))).
+ reflexivity.
+ exists (LM_comp l) (LM_comp lab0).
  left.
- exists (LM_expr (E_constant CONST_unit)) (LM_comp lab0); reflexivity.
+ splits.
+ exists S_First.
+ assumption.
+ apply star_refl.
+ simpl; auto.
  substs.
- apply fork_tau_behave_ce in H3.
+ apply taured_val_id in H3.
  substs.
+ right.
+ splits.
+ exists ((LM_expr
+            (E_taggingright
+               (E_pair (E_live_expr (LM_comp lab)) (E_constant CONST_unit))))).
+ reflexivity.
+ exists (LM_comp lab) (LM_comp l).
  left.
- exists   (LM_comp lab) (LM_expr (E_constant CONST_unit)); reflexivity.
+ splits.
+ exists S_Second.
+ assumption.
+ apply star_refl.
+ simpl; auto.
  substs.
  apply red_not_value in H7; simpl in H7; intuition.
- substs.
  apply red_not_value in H8; simpl in H8; intuition.
- substs.
  apply fork_tau_behave_ce in H1.
  substs.
+ intuition; substs.
  inversion H0.
  substs.
  apply taured_val_id in H3.
- substs. 
+ substs.
  right.
  splits.
  exists (LM_expr
      (E_taggingleft
-        (E_taggingright
-           (E_pair (E_constant CONST_unit) (E_live_expr (LM_expr expr5)))))); reflexivity.
- simpl; auto.
+        (E_pair (E_constant CONST_unit) (E_live_expr (LM_expr expr5))))).
+ reflexivity.
  exists (LM_comp l) (LM_expr expr5).
  left.
  splits.
- exists s.
+ exists S_First.
  assumption.
  apply star_refl.
- simpl.
- auto.
- substs.
- apply taured_val_id in H3.
- substs. 
- right.
- splits.
- exists (LM_expr
-     (E_taggingleft
-        (E_taggingleft
-           (E_pair (E_constant CONST_unit) (E_constant CONST_unit))))); reflexivity.
  simpl; auto.
- exists (LM_comp l) (LM_expr (E_constant CONST_unit)).
- left.
- splits.
- exists s.
- assumption.
- apply star_refl.
- simpl.
- auto.
  substs.
- apply red_not_value in H7; simpl in H7; intuition.
+ apply red_not_value in H7; simpl in H7; auto.
+ intuition.
  apply red_not_value in H8; simpl in H8; intuition.
+ apply red_not_value in H0; simpl in H0; intuition.
  apply fork_tau_behave_ec in H1.
- substs.
+ intuition; substs.
  inversion H0.
  substs.
- apply taured_val_id in H3.
- substs. 
+ apply taured_val_id in H3; substs.
  right.
  splits.
  exists (LM_expr
      (E_taggingright
-        (E_pair (E_live_expr (LM_expr expr5)) (E_constant CONST_unit)))); reflexivity.
- simpl; auto.
+        (E_pair (E_live_expr (LM_expr expr5)) (E_constant CONST_unit)))).
+ reflexivity.
  exists (LM_expr expr5) (LM_comp l).
  left.
  splits.
- exists s.
+ exists S_Second.
  assumption.
  apply star_refl.
- simpl.
- auto.
- substs.
- apply taured_val_id in H3.
- substs. 
- right.
- splits.
- exists (LM_expr
-     (E_taggingleft
-        (E_taggingleft
-           (E_pair (E_constant CONST_unit) (E_constant CONST_unit))))); reflexivity.
  simpl; auto.
-  exists (LM_expr (E_constant CONST_unit)) (LM_comp l).
- left.
- splits.
- exists s.
- assumption.
- apply star_refl.
- simpl.
- auto.
- 
  substs.
-  apply red_not_value in H7; simpl in H7; intuition.
+ apply red_not_value in H7; simpl in H7; intuition.
  apply red_not_value in H8; simpl in H8; intuition.
- assert (K:=H1).
+ apply red_not_value in H0; simpl in H0; intuition.
+
  apply fork_tau_behave_ee in H1.
  intuition.
  destruct H2; destruct H1.
@@ -1747,13 +1581,18 @@ intros.
  assert (L:=H3).
  apply fork_tau_behave_ee in H3.
  intuition.
- left.
  destruct H4. destruct H3.
- intuition; substs; exists (LM_expr x1) (LM_expr x2); reflexivity.
- right.
+ intuition; substs.
+ left.
+ exists (LM_expr x1) (LM_expr x2); reflexivity.
  destruct H3. destruct H3.
  intuition; substs.
- exists (LM_expr (E_taggingright (E_pair (E_live_expr (LM_expr x1)) x2))); reflexivity.
+ 
+ 
+ right.
+ splits.
+ exists (LM_expr (E_taggingright (E_pair (E_live_expr (LM_expr x1)) x2))).
+ reflexivity.
  exists ( (LM_expr e'')) (LM_expr x0).
  right.
  splits.
@@ -1762,24 +1601,11 @@ intros.
        (E_live_expr (LM_expr x0))))(s:=S_First).
  splits; [ assumption | assumption | apply star_refl ].
  assumption.
-  destruct H4. destruct H3.
- right.
+  destruct H3. destruct H3.
  intuition; substs.
-  exists (LM_expr (E_taggingleft (E_taggingleft (E_pair x1 x2)))); reflexivity.
- exists ( (LM_expr e'')) (LM_expr x0).
- right.
+  right.
  splits.
- apply lab_r with (e1:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr x)))
-         (E_live_expr (LM_expr x0))))(e2:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr e'')))
-       (E_live_expr (LM_expr x0))))(s:=S_First).
- splits; [ assumption | assumption | apply star_refl ].
- assumption.
-   destruct H4. destruct H3.
- right.
- intuition; substs.
- exists (LM_expr
-          (E_taggingleft
-             (E_taggingright (E_pair x1 (E_live_expr (LM_expr x2)))))); reflexivity.
+  exists (LM_expr (E_taggingleft (E_pair x1 (E_live_expr (LM_expr x2))))); reflexivity.
  exists ( (LM_expr e'')) (LM_expr x0).
  right.
  splits.
@@ -1789,18 +1615,23 @@ intros.
  splits; [ assumption | assumption | apply star_refl ].
  assumption.
  substs.
+
+
  assert (L:=H3).
  apply fork_tau_behave_ee in H3.
  intuition.
- destruct H4; destruct H3.
- intuition.
- substs.
+ destruct H4. destruct H3.
+ intuition; substs.
  left.
- intuition; substs; exists (LM_expr x1) (LM_expr x2); reflexivity.
- right.
+ exists (LM_expr x1) (LM_expr x2); reflexivity.
  destruct H3. destruct H3.
  intuition; substs.
- exists (LM_expr (E_taggingright (E_pair (E_live_expr (LM_expr x1)) x2))); reflexivity.
+ 
+ 
+ right.
+ splits.
+ exists (LM_expr (E_taggingright (E_pair (E_live_expr (LM_expr x1)) x2))).
+ reflexivity.
  exists ( (LM_expr x)) (LM_expr e'').
  right.
  splits.
@@ -1809,24 +1640,11 @@ intros.
        (E_live_expr (LM_expr e''))))(s:=S_Second).
  splits; [ assumption | assumption | apply star_refl ].
  assumption.
-  destruct H4. destruct H3.
- right.
+  destruct H3. destruct H3.
  intuition; substs.
- exists (LM_expr (E_taggingleft (E_taggingleft (E_pair x1 x2)))); reflexivity.
- exists ( (LM_expr x)) (LM_expr e'').
- right.
+  right.
  splits.
- apply lab_r with (e1:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr x)))
-         (E_live_expr (LM_expr x0))))(e2:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr x)))
-       (E_live_expr (LM_expr e''))))(s:=S_Second).
- splits; [ assumption | assumption | apply star_refl ].
- assumption.
-   destruct H4. destruct H3.
- right.
- intuition; substs.
- exists (LM_expr
-          (E_taggingleft
-             (E_taggingright (E_pair x1 (E_live_expr (LM_expr x2)))))); reflexivity.
+  exists (LM_expr (E_taggingleft (E_pair x1 (E_live_expr (LM_expr x2))))); reflexivity.
  exists ( (LM_expr x)) (LM_expr e'').
  right.
  splits.
@@ -1839,13 +1657,12 @@ intros.
  apply red_not_value in H9; simpl in H9; intuition.
  apply red_not_value in H10; simpl in H10; intuition.
  destruct H1; destruct H1; intuition; substs; apply red_not_value in H0; simpl in H0; intuition.
- destruct H2; destruct H1; intuition; substs; apply red_not_value in H0; simpl in H0; intuition.
- destruct H2; destruct H1; intuition; substs; apply red_not_value in H0; simpl in H0; intuition.
+ destruct H1; destruct H1; intuition; substs; apply red_not_value in H0; simpl in H0; intuition.
 Qed.
 
  
 
- 
+
 
 Lemma fork_comm_step_fin : forall (p q lm : livemodes) (s: select)(rl : redlabel), (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (p))) (E_live_expr (q))) [ s ] --> [ rl ] (E_live_expr lm )->
 (exists (s' : select ) (lm' : livemodes), (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (q))) (E_live_expr (p))) [ s' ] --> [ rl ] (E_live_expr lm') /\ totalTauRed ((E_live_expr lm') >>= swapf) (E_live_expr lm ) ).
@@ -1853,271 +1670,39 @@ Proof.
  intros.
  inversion H.
  substs.
- exists s.
- exists (
-      (LM_expr
-         ((E_taggingright (E_pair  (E_live_expr (LM_expr e)) v))))).
+ exists S_Second.
+ exists (LM_expr (E_taggingright (E_pair  (E_live_expr q) v))).
  splits.
  apply JO_red_forkdeath2.
  assumption.
- apply S_star with (y:= ( E_apply (swapf) (E_taggingright (( E_pair (E_live_expr (LM_expr e))  v )) ) )).
- apply ttStep.
- splits.
- apply tStep with (s:=S_First).
- apply JO_red_dobind.
- simpl; auto.
- intros.
- inversion H0.
- substs.
- apply red_not_value in H7; simpl in H7; intuition.
- substs.
- apply red_not_value in H7; simpl in H7; intuition.
- substs.
- intros.
- inversion H0.
- substs.
-  apply red_not_value in H1; simpl in H1; intuition.
- inversion H0.
- substs.
- inversion H2.
- substs.
-  apply red_not_value in H9; simpl in H9; intuition.
- substs.
- apply red_not_value in H2; simpl in H2; intuition.
- apply red_not_value in H9; simpl in H9; intuition. 
- reflexivity.
- apply swapf_right.
+ apply swapf_right_b.
  simpl; auto.
  assumption.
- substs.
-
-  exists s.
- exists (
-      (LM_expr
-         ((E_taggingleft(E_taggingright (E_pair   v' (E_live_expr (LM_expr e)))))))).
- splits.
+ subst.
+ exists (S_First)  (LM_expr (E_taggingleft (E_pair v' (E_live_expr p) ))).
+ splits. 
  apply JO_red_forkdeath1.
  assumption.
- apply S_star with (y:= ( E_apply (swapf) (E_taggingleft(E_taggingright (E_pair   v' (E_live_expr (LM_expr e))))) )).
- apply ttStep.
- splits.
- apply tStep with (s:=S_First).
- apply JO_red_dobind.
- simpl; auto.
- intros.
- inversion H0.
- substs.
- apply red_not_value in H7; simpl in H7; intuition.
- substs.
- apply red_not_value in H7; simpl in H7; intuition.
- substs.
- intros.
- inversion H0.
- substs.
-  apply red_not_value in H1; simpl in H1; intuition.
- inversion H0.
- substs.
- inversion H2.
- substs.
-  apply red_not_value in H9; simpl in H9; intuition.
- substs.
- apply red_not_value in H2; simpl in H2; intuition.
- apply red_not_value in H9; simpl in H9; intuition. 
- reflexivity.
- apply swapf_left_right.
- simpl; auto.
- simpl; auto.
- substs.
-
-
-  exists s.
- exists (
-      (LM_expr
-         ((E_taggingleft(E_taggingleft (E_pair   v' v)))))).
- splits.
- apply JO_red_forkdeath12.
+ apply swapf_left_b.
  assumption.
- assumption.
- apply S_star with (y:= ( E_apply (swapf) (E_taggingleft(E_taggingleft (E_pair   v' v ))) )).
- apply ttStep.
- splits.
- apply tStep with (s:=S_First).
- apply JO_red_dobind.
- simpl; auto.
- intros.
- inversion H0.
- substs.
- apply red_not_value in H8; simpl in H8; intuition.
- substs.
- apply red_not_value in H8; simpl in H8; intuition.
- substs.
- intros.
- inversion H0.
- substs.
-  apply red_not_value in H1; simpl in H1; intuition.
- inversion H0.
- substs.
- inversion H2.
- substs.
-  apply red_not_value in H10; simpl in H10; intuition.
- substs.
- apply red_not_value in H2; simpl in H2; intuition.
- apply red_not_value in H10; simpl in H10; intuition. 
- reflexivity.
- apply swapf_left_left.
- simpl; auto.
  simpl; auto.
  substs.
-
-
-  exists s.
- exists (
-      (LM_expr
-         (((E_taggingright (E_pair   (E_live_expr (LM_expr e)) (E_constant CONST_unit))))))).
+ exists S_Second.
+ exists (LM_expr (E_taggingright (E_pair  (E_live_expr q) (E_constant CONST_unit)))).
  splits.
  apply JO_red_forkdocomp2.
- apply S_star with (y:= ( E_apply (swapf) ((E_taggingright (E_pair (E_live_expr (LM_expr e)) (E_constant CONST_unit) ))) )).
- apply ttStep.
- splits.
- apply tStep with (s:=S_First).
- apply JO_red_dobind.
- simpl; auto.
- intros.
- inversion H0.
- substs.
- apply red_not_value in H6; simpl in H6; intuition.
- substs.
- apply red_not_value in H6; simpl in H6; intuition.
- substs.
- intros.
- inversion H0.
- substs.
-  apply red_not_value in H1; simpl in H1; intuition.
- inversion H0.
- substs.
- inversion H2.
- substs.
-  apply red_not_value in H8; simpl in H8; intuition.
- substs.
- apply red_not_value in H2; simpl in H2; intuition.
- apply red_not_value in H8; simpl in H8; intuition. 
- reflexivity.
- apply swapf_right.
+ apply swapf_right_b.
  simpl; auto.
  simpl; auto.
- substs.
-
- exists s.
- exists (
-      (LM_expr
-         ((E_taggingleft (E_taggingright (E_pair   (E_constant CONST_unit) (E_live_expr (LM_expr e)) )))))).
- splits.
+ subst.
+ exists (S_First)  (LM_expr (E_taggingleft (E_pair (E_constant CONST_unit) (E_live_expr p) ))).
+ splits. 
  apply JO_red_forkdocomp1.
- apply S_star with (y:= ( E_apply (swapf) (E_taggingleft (E_taggingright (E_pair  (E_constant CONST_unit) (E_live_expr (LM_expr e)) ))) )).
- apply ttStep.
- splits.
- apply tStep with (s:=S_First).
- apply JO_red_dobind.
- simpl; auto.
- intros.
- inversion H0.
- substs.
- apply red_not_value in H6; simpl in H6; intuition.
- substs.
- apply red_not_value in H6; simpl in H6; intuition.
- substs.
- intros.
- inversion H0.
- substs.
-  apply red_not_value in H1; simpl in H1; intuition.
- inversion H0.
- substs.
- inversion H2.
- substs.
-  apply red_not_value in H8; simpl in H8; intuition.
- substs.
- apply red_not_value in H2; simpl in H2; intuition.
- apply red_not_value in H8; simpl in H8; intuition. 
- reflexivity.
- apply swapf_left_right.
- simpl; auto.
- simpl; auto.
- substs.
-
- exists s.
- exists (
-      (LM_expr
-         ((E_taggingleft (E_taggingleft (E_pair   (E_constant CONST_unit)  (E_constant CONST_unit) )))))).
- splits.
- apply JO_red_forkfincomp21.
- apply S_star with (y:= ( E_apply (swapf) (E_taggingleft (E_taggingleft (E_pair   (E_constant CONST_unit)  (E_constant CONST_unit) ))) )).
- apply ttStep.
- splits.
- apply tStep with (s:=S_First).
- apply JO_red_dobind.
- simpl; auto.
- intros.
- inversion H0.
- substs.
- apply red_not_value in H6; simpl in H6; intuition.
- substs.
- apply red_not_value in H6; simpl in H6; intuition.
- substs.
- intros.
- inversion H0.
- substs.
-  apply red_not_value in H1; simpl in H1; intuition.
- inversion H0.
- substs.
- inversion H2.
- substs.
-  apply red_not_value in H8; simpl in H8; intuition.
- substs.
- apply red_not_value in H2; simpl in H2; intuition.
- apply red_not_value in H8; simpl in H8; intuition. 
- reflexivity.
- apply swapf_left_left.
- simpl; auto.
- simpl; auto.
- substs.
-
- exists s.
- exists (
-      (LM_expr
-         ((E_taggingleft (E_taggingleft (E_pair   (E_constant CONST_unit)  (E_constant CONST_unit) )))))).
- splits.
- apply JO_red_forkfincomp12.
- apply S_star with (y:= ( E_apply (swapf) (E_taggingleft (E_taggingleft (E_pair   (E_constant CONST_unit)  (E_constant CONST_unit) ))) )).
- apply ttStep.
- splits.
- apply tStep with (s:=S_First).
- apply JO_red_dobind.
- simpl; auto.
- intros.
- inversion H0.
- substs.
- apply red_not_value in H6; simpl in H6; intuition.
- substs.
- apply red_not_value in H6; simpl in H6; intuition.
- substs.
- intros.
- inversion H0.
- substs.
-  apply red_not_value in H1; simpl in H1; intuition.
- inversion H0.
- substs.
- inversion H2.
- substs.
-  apply red_not_value in H8; simpl in H8; intuition.
- substs.
- apply red_not_value in H2; simpl in H2; intuition.
- apply red_not_value in H8; simpl in H8; intuition. 
- reflexivity.
- apply swapf_left_left.
+ apply swapf_left_b.
  simpl; auto.
  simpl; auto.
 Qed.
- 
+
 
 Lemma fork_comm_tau_fin_h : forall (x y : expr), tauRed x y ->  ((fun x y => (exists ( p q lm : livemodes ), x = ((E_apply(E_apply (E_constant CONST_fork) (E_live_expr (p))) (E_live_expr (q)))) /\ y = (E_live_expr lm) ) ->
                (exists ( p q lm lm': livemodes ), x = ((E_apply(E_apply (E_constant CONST_fork) (E_live_expr (p))) (E_live_expr (q)))) /\ y = (E_live_expr lm) /\ tauRed (((E_apply(E_apply (E_constant CONST_fork) (E_live_expr (q))) (E_live_expr (p)))) >>= swapf) (E_live_expr lm) /\  tauRed (((E_apply(E_apply (E_constant CONST_fork) (E_live_expr (q))) (E_live_expr (p))))) (E_live_expr lm') /\ totalTauRed ((E_live_expr lm') >>= swapf) ((E_live_expr lm)))) x y).
@@ -2170,12 +1755,10 @@ Proof.
  apply JO_red_forkmove2 with (s:=s0).
  assumption.
  assumption.
- assumption.
  apply S_star with (y:=((E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr e')))
           (E_live_expr (LM_expr e''))))).
  apply tStep with (s:=S_Second).
  apply JO_red_forkmove2 with (s:=s0).
- assumption.
  assumption.
  assumption.
  assumption.
@@ -2211,12 +1794,10 @@ Proof.
  apply JO_red_forkmove1 with (s:=s0).
  assumption.
  assumption.
- assumption.
  apply S_star with (y:=((E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr e'')))
           (E_live_expr (LM_expr e))))).
  apply tStep with (s:=S_First).
  apply JO_red_forkmove1 with (s:=s0).
- assumption.
  assumption.
  assumption.
  assumption.
@@ -2226,7 +1807,7 @@ Proof.
  destruct H2.
  destruct H2; intuition.
  
- exists (LM_expr v) (LM_expr e) x2 x0.
+ exists (LM_expr v) x1 x2 x0.
  splits.
  reflexivity.
  reflexivity.
@@ -2252,18 +1833,18 @@ Proof.
  destruct H2.
  destruct H2; intuition.
  
-  exists (LM_expr e) (LM_expr v') x2 x0.
+  exists x0 (LM_expr v') x2 x1.
  splits.
  reflexivity.
  reflexivity.
- apply S_star with (y:=((E_live_expr x0) >>= swapf)).
+ apply S_star with (y:=((E_live_expr x1) >>= swapf)).
  apply tStep with (s:=x).
  apply JO_red_evalbind with (s:=x).
  assumption.
  apply tau_incl_totalTau.
  simplify_eq H0; intros; substs.
  assumption.
- apply S_star with (y:=((E_live_expr x0))).
+ apply S_star with (y:=((E_live_expr x1))).
  apply tStep with (s:=x).
  assumption.
  apply star_refl.
@@ -2273,30 +1854,7 @@ Proof.
  substs.
 
  apply taured_val_id in H0.
- apply fork_comm_step_fin in H2.
- destruct H2.
- destruct H2; intuition.
- 
- exists (LM_expr v) (LM_expr v') x2 x0.
- splits.
- reflexivity.
- reflexivity.
- apply S_star with (y:=((E_live_expr x0) >>= swapf)).
- apply tStep with (s:=x).
- apply JO_red_evalbind with (s:=x).
- assumption.
- apply tau_incl_totalTau.
- simplify_eq H0; intros; substs.
- assumption.
- apply S_star with (y:=((E_live_expr x0))).
- apply tStep with (s:=x).
- assumption.
- apply star_refl.
- simplify_eq H0; intros; substs.
- assumption.
- simpl; auto.
- substs.
- 
+ apply red_not_value in H8; simpl in H8; intuition.
  apply red_not_value in H8; simpl in H8; intuition.
  apply red_not_value in H9; simpl in H9; intuition.
 Qed.
@@ -2488,15 +2046,29 @@ Proof.
  exists (LM_comp lab) (LM_comp lab0).
  splits; [reflexivity | apply star_refl].
  apply fork_tau_behave_ce in H1.
+ intuition.
  substs.
  left.
  exists (LM_comp lab) (LM_expr expr5).
  splits; [reflexivity | apply star_refl].
+ substs.
+ right.
+ exists (LM_expr (E_taggingright (E_pair (E_live_expr (LM_comp lab)) expr5))).
+ splits.
+ assumption.
+ apply star_refl.
  apply fork_tau_behave_ec in H1.
+ intuition.
  substs.
  left.
  exists (LM_expr expr5) (LM_comp lab).
  splits; [reflexivity | apply star_refl].
+ substs.
+ right.
+ exists (LM_expr (E_taggingleft (E_pair expr5 (E_live_expr (LM_comp lab))))).
+ splits.
+ assumption. 
+ apply star_refl.
  assert (L:=H1).
  apply fork_tau_behave_ee in H1.
  intuition.
@@ -2510,281 +2082,213 @@ Proof.
  splits.
  assumption.
  apply star_refl.
- destruct H0; destruct H0; intuition; substs.
+ destruct H1; destruct H0; intuition; substs.
  right.
- exists ((LM_expr (E_taggingleft (E_taggingleft (E_pair x0 x1))))).
+ exists (LM_expr (E_taggingleft (E_pair x0 (E_live_expr (LM_expr x1))))).
  splits.
  assumption.
  apply star_refl.
- destruct H0; destruct H0; intuition; substs.
- right.
- exists ((LM_expr
-            (E_taggingleft
-               (E_taggingright (E_pair x0 (E_live_expr (LM_expr x1))))))).
- splits.
- assumption.
- apply star_refl.
- destruct H0.
- intuition.
+ destruct H0.  intuition; substs.
  destruct H3.
  intuition.
  substs.
- simplify_eq H1; clear H1; intros; substs.
+ simplify_eq H1. clear H1; intros; substs.
+ assert (L:=H).
  right.
- exists (LM_expr x1).
+ apply taured_val_id in H0.
+ substs.
+ exists (LM_expr x2).
  splits.
  assumption.
- induction p; induction q.
+ apply star_refl.
+ induction p.
+ induction q.
  apply fork_tau_behave_cc in H2.
  discriminate H2.
  apply fork_tau_behave_ce in H2.
- discriminate H2.
- apply fork_tau_behave_ec in H2.
- discriminate H2.
- assert (L:=H2).
+ intuition.
+ discriminate H1.
+ simplify_eq H2; intros; substs; simpl; auto.
+ induction q.
+  apply fork_tau_behave_ec in H2.
+ intuition.
+ discriminate H1.
+ simplify_eq H2; intros; substs; auto.
+ simpl; auto.
  apply fork_tau_behave_ee in H2.
  intuition.
  destruct H1; destruct H1; intuition.
  discriminate H4.
  destruct H2; destruct H1; intuition.
- simplify_eq H5; clear H5; intros; substs.
- apply taured_val_id in H0.
- substs.
- apply star_refl.
- simpl.
- auto.
- destruct H1; destruct H1; intuition.
- simplify_eq H6; clear H6; intros; substs.
- apply taured_val_id in H0.
- substs.
- apply star_refl.
- simpl.
- auto.
- destruct H1; destruct H1; intuition.
- simplify_eq H5; clear H5; intros; substs.
- apply taured_val_id in H0.
- substs.
- apply star_refl.
- simpl.
- auto.
- simplify_eq H1; clear H1; intros; substs.
+ simplify_eq H5; intros; substs; simpl; auto.
+ destruct H2; destruct H1; intuition.
+ simplify_eq H5; intros; substs; simpl; auto.
+ simplify_eq H1; intros; substs; simpl; auto.
+ 
  right.
- exists (LM_expr x1).
- induction p; induction q.
+ exists (LM_expr x2).
+ clear H1.
+ assert (L:=H2).
+ induction p.
+ induction q.
+ 
  apply fork_tau_behave_cc in H2.
  discriminate H2.
  apply fork_tau_behave_ce in H2.
- discriminate H2.
- apply fork_tau_behave_ec in H2.
- discriminate H2.
- assert (L:=H2).
- apply fork_tau_behave_ee in H2.
  intuition.
- destruct H1; destruct H1; intuition.
- discriminate H6.
- destruct H2; destruct H1; intuition.
- simplify_eq H7; clear H7; intros; substs.
+ discriminate H1.
+ simplify_eq H1; intros; substs; simpl; auto.
  apply taured_val_id in H0.
  substs.
- assert (totalTauRed (E_apply swapf (E_taggingright (E_pair (E_live_expr (LM_expr x)) x0)))
-    (E_live_expr
-       (LM_expr (E_taggingleft (E_taggingright (E_pair x0 (E_live_expr (LM_expr x)))))))).
+ assumption.
+ simplify_eq H2; intros; substs.
+ simpl; auto.
+ simplify_eq H2; intros; substs.
+ apply taured_val_id in H0.
+ substs.
+ assert ((totalTauRed
+       (E_apply swapf
+          (E_taggingright (E_pair (E_live_expr (LM_comp lab)) expr5))) (E_live_expr
+     (LM_expr (E_taggingleft (E_pair expr5 (E_live_expr (LM_comp lab)) ))))) /\ tauRed
+       (E_apply swapf
+          (E_taggingright (E_pair (E_live_expr (LM_comp lab)) expr5))) e).
+ splits.
  apply swapf_right.
  simpl; auto.
  assumption.
- assert (totalTauRed
-       (E_apply swapf (E_taggingright (E_pair (E_live_expr (LM_expr x)) x0)))
-       (E_live_expr
-          (LM_expr
-             (E_taggingleft
-                (E_taggingright (E_pair x0 (E_live_expr (LM_expr x))))))) /\ tauRed
+ assumption.
+ apply ttau_prefix in H0.
+ intuition.
+ apply S_star with (y:=(E_apply swapf
+          (E_taggingright (E_pair (E_live_expr (LM_comp lab)) expr5)))).
+ apply JO_red_dobind_td.
+ apply S_First.
+ simpl; auto.
+ assumption.
+ apply taured_val_id in H1.
+ substs.
+ apply swapf_right_b.
+ simpl; auto.
+ assumption.
+ simpl; auto.
+ simpl; auto.
+ induction q.
+  apply fork_tau_behave_ec in H2.
+ intuition.
+ discriminate H1.
+ simplify_eq H1; intros; substs; auto.
+ simplify_eq H2; intros; substs; auto.
+ apply taured_val_id in H0.
+ substs.
+ assumption.
+ simpl; auto.
+ simplify_eq H2; intros; substs.
+ apply taured_val_id in H0.
+ substs.
+ assert ((totalTauRed
+       (E_apply swapf
+          (E_taggingleft (E_pair expr5 (E_live_expr (LM_comp lab))))) (E_live_expr
+     (LM_expr (E_taggingright (E_pair  (E_live_expr (LM_comp lab)) expr5 ))))) /\ tauRed
+       (E_apply swapf
+          (E_taggingleft (E_pair expr5 (E_live_expr (LM_comp lab))))) e).
+ splits.
+ apply swapf_left.
+ simpl; auto.
+ simpl; auto.
+ assumption.
+ apply ttau_prefix in H0.
+ intuition.
+ apply S_star with (y:=(E_apply swapf
+          (E_taggingleft (E_pair expr5 (E_live_expr (LM_comp lab)))))).
+ apply JO_red_dobind_td.
+ apply S_First.
+ simpl; auto.
+ assumption.
+ apply taured_val_id in H1. 
+ substs.
+ apply swapf_left_b.
+ assumption.
+ simpl; auto.
+ simpl; auto.
+ simpl; auto.
+ apply fork_tau_behave_ee in H2.
+ destruct H2.
+  destruct H1; destruct H1.
+ elim H1.
+ intros.
+ elim H4.
+ intros.
+ discriminate H7.
+intuition.
+ destruct H2; destruct H1; intuition.
+ simplify_eq H7; intros; substs.
+ apply taured_val_id in H0.
+ substs.
+ assumption.
+ simpl; auto.
+ destruct H2; destruct H1; intuition.
+ simplify_eq H7; intros; substs.
+ apply taured_val_id in H0.
+ substs.
+ assert ((totalTauRed
+       (E_apply swapf (E_taggingright (E_pair (E_live_expr (LM_expr x)) x0))) (E_live_expr
+     (LM_expr (E_taggingleft (E_pair x0 (E_live_expr  (LM_expr x))  ))))) /\ tauRed
        (E_apply swapf (E_taggingright (E_pair (E_live_expr (LM_expr x)) x0)))
        e).
- splits; [assumption | assumption ].
- apply ttau_prefix in H6.
- intuition.
- apply S_star with (y:=(E_apply swapf (E_taggingright (E_pair (E_live_expr (LM_expr x)) x0)))).
- apply ttStep.
  splits.
- apply simpTau with (s:=S_First).
- apply JO_red_dobind.
+ apply swapf_right.
  simpl; auto.
- intros.
- inversion H7.
- apply red_not_value in H14; simpl in H14; intuition.
- apply red_not_value in H14; simpl in H14; intuition.
- intros.
- inversion H7.
- substs.
- inversion H9.
- substs.
- apply red_not_value in H15; simpl in H15; intuition.
- apply red_not_value in H15; simpl in H15; intuition.
- apply reflexivity.
- assumption.
- apply taured_val_id in H7.
- substs.
- apply S_star with (y:=(E_apply swapf (E_taggingright (E_pair (E_live_expr (LM_expr x)) x0)))).
- apply ttStep.
- splits.
- apply simpTau with (s:=S_First).
- apply JO_red_dobind.
- simpl; auto.
- intros.
- inversion H6.
- apply red_not_value in H12; simpl in H12; intuition.
- apply red_not_value in H12; simpl in H12; intuition.
- intros.
- inversion H6.
- substs.
- inversion H7.
- substs.
- apply red_not_value in H13; simpl in H13; intuition.
- apply red_not_value in H13; simpl in H13; intuition.
- apply reflexivity.
- assumption.
- apply taured_val_id in H7.
- substs.
- simpl; auto.
- simpl; auto.
- simpl; auto.
-
-
-destruct H1; destruct H1; intuition.
- simplify_eq H8; clear H8; intros; substs.
- apply taured_val_id in H0.
- substs.
- assert (totalTauRed
-       (E_apply swapf (E_taggingleft (E_taggingleft (E_pair x x0))))
-       (E_live_expr
-          (LM_expr
-             (E_taggingleft (E_taggingleft (E_pair x0 x))))) /\ tauRed (E_apply swapf (E_taggingleft (E_taggingleft (E_pair x x0)))) e).
- splits.
- apply swapf_left_left.
- assumption.
- assumption.
- assumption.
- apply ttau_prefix in H0.
- intuition.
- apply S_star with (y:=(E_apply swapf (E_taggingleft (E_taggingleft (E_pair x x0))))).
- apply ttStep.
- splits.
- apply simpTau with (s:=S_First).
- apply JO_red_dobind.
- simpl; auto.
- intros.
- inversion H7.
- apply red_not_value in H14; simpl in H14; intuition.
- apply red_not_value in H14; simpl in H14; intuition.
- intros.
- inversion H7.
- substs.
- inversion H9.
- substs.
- apply red_not_value in H15; simpl in H15; intuition.
- apply red_not_value in H15; simpl in H15; intuition.
- apply reflexivity.
- assumption.
- apply taured_val_id in H7.
- substs.
- apply S_star with (y:=(E_apply swapf (E_taggingleft (E_taggingleft (E_pair x x0))))).
- apply ttStep.
- splits.
- apply simpTau with (s:=S_First).
- apply JO_red_dobind.
- simpl; auto.
- intros.
- inversion H0.
- apply red_not_value in H12; simpl in H12; intuition.
- apply red_not_value in H12; simpl in H12; intuition.
- intros.
- inversion H0.
- substs.
- inversion H7.
- substs.
- apply red_not_value in H13; simpl in H13; intuition.
- apply red_not_value in H13; simpl in H13; intuition.
- apply reflexivity.
- apply swapf_left_left. 
-assumption.
- assumption.
- simpl; auto.
- simpl; auto.
-
-
-
-destruct H1; destruct H1; intuition.
- simplify_eq H7; clear H7; intros; substs.
- apply taured_val_id in H0.
- substs.
- assert (totalTauRed
-       (E_apply swapf
-          (E_taggingleft
-             (E_taggingright (E_pair x (E_live_expr (LM_expr x0))))))
-       (E_live_expr
-          (LM_expr
-             ( (E_taggingright (E_pair (E_live_expr (LM_expr x0)) x))))) /\ tauRed
-       (E_apply swapf
-          (E_taggingleft
-             (E_taggingright (E_pair x (E_live_expr (LM_expr x0)))))) e).
- splits.
- apply swapf_left_right.
- assumption.
  simpl; auto.
  assumption.
  apply ttau_prefix in H0.
  intuition.
- apply S_star with (y:=(E_apply swapf
-          (E_taggingleft
-             (E_taggingright (E_pair x (E_live_expr (LM_expr x0))))))).
- apply ttStep.
- splits.
- apply simpTau with (s:=S_First).
- apply JO_red_dobind.
+ apply S_star with (y:=(E_apply swapf (E_taggingright (E_pair (E_live_expr (LM_expr x)) x0)))).
+ apply JO_red_dobind_td.
+ apply S_First.
  simpl; auto.
- intros.
- inversion H6.
- apply red_not_value in H13; simpl in H13; intuition.
- apply red_not_value in H13; simpl in H13; intuition.
- intros.
- inversion H6.
- substs.
- inversion H8.
- substs.
- apply red_not_value in H14; simpl in H14; intuition.
- apply red_not_value in H14; simpl in H14; intuition.
- apply reflexivity.
  assumption.
- apply taured_val_id in H6.
- substs.
- apply S_star with (y:=(E_apply swapf
-          (E_taggingleft
-             (E_taggingright (E_pair x (E_live_expr (LM_expr x0))))))).
- apply ttStep.
- splits.
- apply simpTau with (s:=S_First).
- apply JO_red_dobind.
- simpl; auto.
- intros.
- inversion H0.
- apply red_not_value in H11; simpl in H11; intuition.
- apply red_not_value in H11; simpl in H11; intuition.
- intros.
- inversion H0.
- substs.
- inversion H6.
- substs.
- apply red_not_value in H12; simpl in H12; intuition.
- apply red_not_value in H12; simpl in H12; intuition.
- apply reflexivity.
- apply swapf_left_right. 
-assumption.
+ apply taured_val_id in H6; substs.
+ apply swapf_right_b.
  simpl; auto.
  simpl; auto.
  simpl; auto.
-
-
+ simpl; auto.
  
+
+ destruct H2; destruct H1; intuition.
+ simplify_eq H7; intros; substs.
+ apply taured_val_id in H0.
+ substs.
+ assumption.
+ simpl; auto.
+ destruct H2; destruct H1; intuition.
+ simplify_eq H7; intros; substs.
+ apply taured_val_id in H0.
+ substs.
+ assert ((totalTauRed
+       (E_apply swapf (E_taggingleft (E_pair x (E_live_expr (LM_expr x0)) ))) (E_live_expr
+     (LM_expr (E_taggingright (E_pair  (E_live_expr  (LM_expr x0)) x  ))))) /\ tauRed
+       (E_apply swapf (E_taggingleft (E_pair x (E_live_expr (LM_expr x0)) )))
+       e).
+ splits.
+ apply swapf_left.
+ simpl; auto.
+ simpl; auto.
+ assumption.
+ apply ttau_prefix in H0.
+ intuition.
+ apply S_star with (y:=(E_apply swapf (E_taggingleft (E_pair x (E_live_expr (LM_expr x0)) )))).
+ apply JO_red_dobind_td.
+ apply S_First.
+ simpl; auto.
+ assumption.
+ apply taured_val_id in H6; substs.
+ apply swapf_left_b.
+ simpl; auto.
+ simpl; auto.
+ simpl; auto.
+ simpl; auto.
+
  exists (E_apply (E_apply (E_constant CONST_fork) (E_live_expr p)) (E_live_expr q)) (swapf).
  reflexivity.
 Qed.
@@ -2859,16 +2363,16 @@ Proof.
 
  right.
  exists  (LM_expr
-          (E_taggingleft
-             (E_taggingright
-                (E_pair (E_constant CONST_unit) (E_live_expr (LM_expr e0)))))).
+          (
+             (E_taggingleft
+                (E_pair (E_constant CONST_unit) (E_live_expr (x0)))))).
  splits.
  apply lab_r with (e1:=( E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp l)))
-       (E_live_expr (LM_expr e0))))(e2:=(E_live_expr
+       (E_live_expr (x0))))(e2:=(E_live_expr
        (LM_expr
           (E_taggingleft
-             (E_taggingright
-                (E_pair (E_constant CONST_unit) (E_live_expr (LM_expr e0))))))))(s:=(s)).
+             (
+                (E_pair (E_constant CONST_unit) (E_live_expr (x0))))))))(s:=(S_First)).
  splits.
  assumption.
  assumption.
@@ -2876,21 +2380,21 @@ Proof.
  assert ((totalTauRed (E_live_expr
           (LM_expr
              (E_taggingleft
-                (E_taggingright
-                   (E_pair (E_constant CONST_unit) (E_live_expr (LM_expr e0)))))) >>=
+                (
+                   (E_pair (E_constant CONST_unit) (E_live_expr (x0)))))) >>=
         swapf) (E_live_expr
           (LM_expr
              (
                 (E_taggingright
-                   (E_pair  (E_live_expr (LM_expr e0)) (E_constant CONST_unit))))) )) /\ (tauRed
+                   (E_pair  (E_live_expr (x0)) (E_constant CONST_unit))))) )) /\ (tauRed
        (E_live_expr
           (LM_expr
              (E_taggingleft
-                (E_taggingright
-                   (E_pair (E_constant CONST_unit) (E_live_expr (LM_expr e0)))))) >>=
+                (
+                   (E_pair (E_constant CONST_unit) (E_live_expr (x0)))))) >>=
         swapf) e)).
  splits.
- apply swapf_left_right_b.
+ apply swapf_left_b.
  simpl; auto.
  simpl; auto.
  assumption.
@@ -2898,7 +2402,7 @@ Proof.
  intuition.
  apply taured_val_id in H2.
  substs.
- apply swapf_left_right_b.
+ apply swapf_left_b.
  simpl; auto.
  simpl; auto.
  simpl; auto.
@@ -2906,13 +2410,13 @@ Proof.
  right.
  exists ((LM_expr
           (E_taggingright
-             (E_pair (E_live_expr (LM_expr e0)) (E_constant CONST_unit))))).
+             (E_pair (E_live_expr (x)) (E_constant CONST_unit))))).
  splits.
- apply lab_r with (e1:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr e0)))
+ apply lab_r with (e1:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (x)))
        (E_live_expr (LM_comp l))))(e2:=( E_live_expr
        (LM_expr
           (E_taggingright
-             (E_pair (E_live_expr (LM_expr e0)) (E_constant CONST_unit))))))(s:=s). splits.
+             (E_pair (E_live_expr (x)) (E_constant CONST_unit))))))(s:=S_Second). splits.
  assumption.
  assumption.
  apply star_refl.
@@ -2920,16 +2424,16 @@ Proof.
        (E_live_expr
           (LM_expr
              (E_taggingright
-                (E_pair (E_live_expr (LM_expr e0)) (E_constant CONST_unit)))) >>=
+                (E_pair (E_live_expr (x)) (E_constant CONST_unit)))) >>=
         swapf) (E_live_expr
           (LM_expr
             (E_taggingleft
-             (E_taggingright
-                (E_pair  (E_constant CONST_unit) (E_live_expr (LM_expr e0)))))) )) /\ (tauRed
+             (
+                (E_pair  (E_constant CONST_unit) (E_live_expr (x)))))) )) /\ (tauRed
        (E_live_expr
           (LM_expr
              (E_taggingright
-                (E_pair (E_live_expr (LM_expr e0)) (E_constant CONST_unit)))) >>=
+                (E_pair (E_live_expr (x)) (E_constant CONST_unit)))) >>=
         swapf) e)).
  splits.
  apply swapf_right_b.
@@ -2944,163 +2448,78 @@ Proof.
  simpl; auto.
  simpl; auto.
  substs.
- apply fork_swap_tau_behave in H6.
- intuition.
- left.
- destruct H1; destruct H1.
- intuition; substs.
- exists x x0.
- splits.
- reflexivity.
- apply lab_r with (e1:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp l)))
-       (E_live_expr (LM_comp label''))))(e2:=(E_apply
-       (E_apply (E_constant CONST_fork)
-          (E_live_expr (LM_expr (E_constant CONST_unit))))
-       (E_live_expr (LM_comp label''))))(s:=S_First).
- splits.
- assumption.
- assumption.
- assumption.
- right.
- destruct H1; intuition.
- exists x.
- splits.
- apply fork_tau_behave_ec in H2.
- discriminate H2.
- apply fork_tau_behave_ec in H2.
- discriminate H2.
- substs.
- apply fork_swap_tau_behave in H6.
- intuition.
- left.
- destruct H1; destruct H1.
- intuition; substs.
- exists x x0.
- splits.
- reflexivity.
- apply lab_r with (e1:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp label5)))
-       (E_live_expr (LM_comp l))))(e2:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp label5)))
-       (E_live_expr (LM_expr (E_constant CONST_unit)))))(s:=S_Second).
- splits.
- assumption.
- assumption.
- assumption.
- right.
- destruct H1; intuition.
- exists x.
- splits.
- apply fork_tau_behave_ce in H2.
- discriminate H2.
- apply fork_tau_behave_ce in H2.
- discriminate H2.
- substs.
- right.
- exists ((LM_expr
-          (E_taggingleft
-             (E_taggingleft
-                (E_pair (E_constant CONST_unit) (E_constant CONST_unit)))))).
- splits.
- apply lab_r with (e1:=(E_apply
-       (E_apply (E_constant CONST_fork)
-          (E_live_expr (LM_expr (E_constant CONST_unit))))
-       (E_live_expr (LM_comp l))))(e2:=( E_live_expr
-       (LM_expr
-          (E_taggingleft
-             (E_taggingleft
-                (E_pair (E_constant CONST_unit) (E_constant CONST_unit)))))))(s:=s).
- splits.
- assumption.
- assumption.
- apply star_refl.
- assert ((totalTauRed
-       (E_live_expr
-          (LM_expr
-             (E_taggingleft
-                (E_taggingleft
-                   (E_pair (E_constant CONST_unit) (E_constant CONST_unit))))) >>=
-        swapf) (E_live_expr
-          (LM_expr
-             (E_taggingleft
-                (E_taggingleft
-                   (E_pair (E_constant CONST_unit) (E_constant CONST_unit))))))) /\ (tauRed
-       (E_live_expr
-          (LM_expr
-             (E_taggingleft
-                (E_taggingleft
-                   (E_pair (E_constant CONST_unit) (E_constant CONST_unit))))) >>=
-        swapf) e)).
- splits.
- apply swapf_left_left_b.
- simpl; auto.
- simpl; auto.
- assumption.
- apply ttau_prefix in H1.
- intuition.
- apply taured_val_id in H2.
- substs.
- apply swapf_left_left_b.
- simpl; auto.
- simpl; auto.
- simpl; auto.
- substs.
-
- right.
- exists ((LM_expr
-          (E_taggingleft
-             (E_taggingleft
-                (E_pair (E_constant CONST_unit) (E_constant CONST_unit)))))).
- splits.
- apply lab_r with (e1:=(E_apply
-       (E_apply (E_constant CONST_fork)
-          (E_live_expr (LM_comp l)))
-       (E_live_expr (LM_expr (E_constant CONST_unit)))))(e2:=( E_live_expr
-       (LM_expr
-          (E_taggingleft
-             (E_taggingleft
-                (E_pair (E_constant CONST_unit) (E_constant CONST_unit)))))))(s:=s).
- splits.
- assumption.
- assumption.
- apply star_refl.
- assert ((totalTauRed
-       (E_live_expr
-          (LM_expr
-             (E_taggingleft
-                (E_taggingleft
-                   (E_pair (E_constant CONST_unit) (E_constant CONST_unit))))) >>=
-        swapf) (E_live_expr
-          (LM_expr
-             (E_taggingleft
-                (E_taggingleft
-                   (E_pair (E_constant CONST_unit) (E_constant CONST_unit))))))) /\ (tauRed
-       (E_live_expr
-          (LM_expr
-             (E_taggingleft
-                (E_taggingleft
-                   (E_pair (E_constant CONST_unit) (E_constant CONST_unit))))) >>=
-        swapf) e)).
- splits.
- apply swapf_left_left_b.
- simpl; auto.
- simpl; auto.
- assumption.
- apply ttau_prefix in H1.
- intuition.
- apply taured_val_id in H2.
- substs.
- apply swapf_left_left_b.
- simpl; auto.
- simpl; auto.
- simpl; auto.
- substs.
  apply red_not_value in H9; simpl in H9; intuition.
  apply red_not_value in H10; simpl in H10; intuition.
- destruct H1.
- intuition.
+ destruct H1; intuition.
  induction p; induction q.
  apply fork_tau_behave_cc in H2; discriminate H2.
-  apply fork_tau_behave_ce in H2; discriminate H2.
- apply fork_tau_behave_ec in H2; discriminate H2.
+  apply fork_tau_behave_ce in H2.
+ intuition.
+  discriminate H1.
+ simplify_eq H2; intros; substs.
+ assert (totalTauRed
+       (E_live_expr
+          (LM_expr
+             (E_taggingright (E_pair (E_live_expr (LM_comp lab)) expr5))) >>=
+        swapf) (E_live_expr
+          (LM_expr
+             (E_taggingleft (E_pair expr5 (E_live_expr (LM_comp lab))))) )).
+ apply swapf_right_b.
+ simpl; auto.
+ assumption.
+ apply ttau_midpoint  with (e':=(E_live_expr
+          (LM_expr (E_taggingleft (E_pair expr5 (E_live_expr (LM_comp lab))))))) in H3.
+ intuition.
+ inversion H5.
+ substs.
+ apply red_not_value in H0; simpl in H0; intuition.
+ substs.
+ inversion H3.
+ intuition.
+ apply H8 in H0.
+ intuition.
+ apply tau_incl_totalTau in H5.
+ apply taured_val_id in H5.
+ substs.
+ apply red_not_value in H0; simpl in H0; intuition.
+ simpl; auto.
+ apply swapf_right_b.
+ simpl; auto.
+ simpl; auto.
+ apply fork_tau_behave_ec in H2.
+ intuition.
+  discriminate H1.
+ simplify_eq H2; clear H2; intros; substs.
+ assert (totalTauRed
+       (E_live_expr
+          (LM_expr
+             (E_taggingleft (E_pair expr5 (E_live_expr (LM_comp lab)) ))) >>=
+        swapf) (E_live_expr
+          (LM_expr
+             (E_taggingright (E_pair (E_live_expr (LM_comp lab)) expr5))) )).
+ apply swapf_left_b.
+ simpl; auto.
+ simpl; auto.
+ apply ttau_midpoint  with (e':=(E_live_expr
+          (LM_expr (E_taggingright (E_pair (E_live_expr (LM_comp lab)) expr5))))) in H3.
+ intuition.
+ inversion H2.
+ substs.
+ apply red_not_value in H0; simpl in H0; intuition.
+ substs.
+ inversion H3.
+ intuition.
+ apply H7 in H0.
+ intuition.
+ apply tau_incl_totalTau in H2.
+ apply taured_val_id in H2.
+ substs.
+ apply red_not_value in H0; simpl in H0; intuition.
+ simpl; auto.
+ apply swapf_left_b.
+ simpl; auto.
+ simpl; auto.
+
   apply fork_tau_behave_ee in H2.
  intuition.
  destruct H1.
@@ -3115,7 +2534,7 @@ Proof.
         swapf) (E_live_expr
           (LM_expr
              (E_taggingleft
-                (E_taggingright
+                (
                    (E_pair x1 (E_live_expr (LM_expr x0)))))))) /\ (tauRed
        (E_live_expr
           (LM_expr (E_taggingright (E_pair (E_live_expr (LM_expr x0)) x1))) >>=
@@ -3142,71 +2561,13 @@ Proof.
  inversion H0.
  simpl; auto.
 
- destruct H1; destruct H1; intuition.
- simplify_eq H8; clear H8; intros; substs.
- assert ((totalTauRed
-        (E_live_expr (LM_expr (E_taggingleft (E_taggingleft (E_pair x0 x1)))) >>=
-        swapf) (E_live_expr
-          (LM_expr
-             (E_taggingleft
-                (E_taggingleft
-                   (E_pair x1 x0)))))) /\ (tauRed
-       (E_live_expr (LM_expr (E_taggingleft (E_taggingleft (E_pair x0 x1)))) >>=
-        swapf) e1)).
- splits.
- apply swapf_left_left_b.
- simpl; auto.
- assumption.
- apply tau_incl_totalTau.
- assumption.
- apply ttau_prefix in H7.
- intuition.
- inversion H9.
- substs.
- apply red_not_value in H0; simpl in H0; intuition.
- substs.
- inversion H8.
- intuition.
- apply H11 in H0.
- intuition.
-
-
- assert ((totalTauRed
-        (E_live_expr (LM_expr (E_taggingleft (E_taggingleft (E_pair x0 x1)))) >>=
-        swapf) (E_live_expr
-          (LM_expr
-             (E_taggingleft
-                (E_taggingleft
-                   (E_pair x1 x0)))))) /\ (tauRed
-       (E_live_expr (LM_expr (E_taggingleft (E_taggingleft (E_pair x0 x1)))) >>=
-        swapf) e1)).
- splits.
- apply swapf_left_left_b.
- simpl; auto.
- assumption.
- apply tau_incl_totalTau.
- assumption.
- apply ttau_prefix in H7.
- intuition.
- inversion H10.
- substs.
- apply red_not_value in H0; simpl in H0; intuition.
- substs.
- inversion H9.
- intuition.
- apply H12 in H0.
- intuition.
- apply taured_val_id in H8; substs.
- apply red_not_value in H0; simpl in H0; intuition.
- simpl; auto.
-
- destruct H1; destruct H1; intuition.
+ destruct H2; destruct H1; intuition.
  simplify_eq H7; clear H7; intros; substs.
  assert ((totalTauRed
         (E_live_expr
           (LM_expr
              (E_taggingleft
-                (E_taggingright (E_pair x0 (E_live_expr (LM_expr x1)))))) >>=
+                ( (E_pair x0 (E_live_expr (LM_expr x1)))))) >>=
         swapf) (E_live_expr
           (LM_expr
              (
@@ -3214,10 +2575,10 @@ Proof.
        (E_live_expr
           (LM_expr
              (E_taggingleft
-                (E_taggingright (E_pair x0 (E_live_expr (LM_expr x1)))))) >>=
+                ( (E_pair x0 (E_live_expr (LM_expr x1)))))) >>=
         swapf) e1)).
  splits.
- apply swapf_left_right_b.
+ apply swapf_left_b.
  simpl; auto.
  simpl; auto.
  apply tau_incl_totalTau.
@@ -3345,17 +2706,8 @@ Proof.
  assumption.
  simpl; auto.
  exists x0 x1.
- destruct H3. destruct H2.
- intuition.
- substs.
- apply star_refl.
- substs.
- apply taured_val_id in H0.
- simplify_eq H0; clear H0; intros; substs.
- assumption.
- simpl; auto.
- exists x0 x1.
- destruct H3. destruct H2.
+
+ destruct H2. destruct H2.
  intuition.
  substs.
  apply star_refl.
@@ -3485,24 +2837,24 @@ Proof.
           (LM_expr
              (
                 (E_taggingright
-                   (E_pair  (E_live_expr (LM_expr e0)) (E_constant CONST_unit)))))).
+                   (E_pair  (E_live_expr x1) (E_constant CONST_unit)))))).
  splits.
  apply fork_comm_taured in H3.
- apply lab_r with (e1:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr e0)))
+ apply lab_r with (e1:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr x1))
           (E_live_expr (LM_comp l))))(e2:=(E_live_expr
      (LM_expr
         (E_taggingright
-           (E_pair (E_live_expr (LM_expr e0)) (E_constant CONST_unit))))))(s:=x2).
+           (E_pair (E_live_expr x1) (E_constant CONST_unit))))))(s:=S_Second).
  splits.
  assumption.
  apply JO_red_forkdocomp2.
  apply star_refl.
  apply forkee_tau with (lm':=(LM_expr
              (E_taggingleft
-                (E_taggingright
-                   (E_pair (E_constant CONST_unit) (E_live_expr (LM_expr e0))))))).
+                (
+                   (E_pair (E_constant CONST_unit) (E_live_expr x1)))))).
  splits.
- apply swapf_left_right_b.
+ apply swapf_left_b.
  simpl; auto.
  simpl; auto.
  assumption.
@@ -3512,23 +2864,23 @@ Proof.
  exists (E_live_expr
           (LM_expr
             (E_taggingleft
-             (E_taggingright
-                (E_pair (E_constant CONST_unit) (E_live_expr (LM_expr e0)) ))))).
+             (
+                (E_pair (E_constant CONST_unit) (E_live_expr x) ))))).
  splits.
  apply fork_comm_taured in H3.
  apply lab_r with (e1:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp l)))
-          (E_live_expr (LM_expr e0))))(e2:=(E_live_expr
+          (E_live_expr x)))(e2:=(E_live_expr
      (LM_expr
         (E_taggingleft
-           (E_taggingright
-              (E_pair (E_constant CONST_unit) (E_live_expr (LM_expr e0))))))))(s:=x2).
+           (
+              (E_pair (E_constant CONST_unit) (E_live_expr x)))))))(s:=S_First).
  splits.
  assumption.
  apply JO_red_forkdocomp1.
  apply star_refl.
  apply forkee_tau with (lm':=(LM_expr
              (E_taggingright
-                (E_pair (E_live_expr (LM_expr e0)) (E_constant CONST_unit))))).
+                (E_pair (E_live_expr x) (E_constant CONST_unit))))).
  splits.
  apply swapf_right_b.
  simpl; auto.
@@ -3536,72 +2888,79 @@ Proof.
  assumption.
  substs.
  
- exists (E_live_expr
-          (LM_expr
-             (E_taggingleft
-                (E_taggingleft
-                   (E_pair (E_constant CONST_unit) (E_constant CONST_unit)))))).
- splits.
- apply fork_comm_taured in H3.
- apply lab_r with (e1:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp l)))
-          (E_live_expr (LM_expr (E_constant CONST_unit)))))(e2:=(E_live_expr
-     (LM_expr
-        (E_taggingleft
-           (E_taggingleft
-              (E_pair (E_constant CONST_unit) (E_constant CONST_unit)))))))(s:=x2).
- splits.
- assumption.
- apply JO_red_forkfincomp21.
- apply star_refl.
- apply forkee_tau with (lm':=(LM_expr
-             (E_taggingleft
-                (E_taggingleft
-                   (E_pair (E_constant CONST_unit) (E_constant CONST_unit)))))).
- splits.
- apply swapf_left_left_b.
- simpl; auto.
- simpl; auto.
- assumption.
- substs.
-
- exists (E_live_expr
-          (LM_expr
-             (E_taggingleft
-                (E_taggingleft
-                   (E_pair (E_constant CONST_unit) (E_constant CONST_unit)))))).
- splits.
- apply fork_comm_taured in H3.
- apply lab_r with (e1:=(E_apply
-          (E_apply (E_constant CONST_fork)
-             (E_live_expr (LM_expr (E_constant CONST_unit))))
-          (E_live_expr (LM_comp l))))(e2:=(E_live_expr
-     (LM_expr
-        (E_taggingleft
-           (E_taggingleft
-              (E_pair (E_constant CONST_unit) (E_constant CONST_unit)))))))(s:=x2).
- splits.
- assumption.
- apply JO_red_forkfincomp12.
- apply star_refl.
- apply forkee_tau with (lm':=(LM_expr
-             (E_taggingleft
-                (E_taggingleft
-                   (E_pair (E_constant CONST_unit) (E_constant CONST_unit)))))).
- splits.
- apply swapf_left_left_b.
- simpl; auto.
- simpl; auto.
- assumption.
- substs.
+ assert (L:=H3).
+ assert(K:=H3).
  induction x; induction x1.
  apply fork_tau_behave_cc in H3.
  discriminate H3.
  apply fork_tau_behave_ce in H3.
- discriminate H3.
- apply fork_tau_behave_ec in H3.
- discriminate H3.
- assert (L:=H3).
+ intuition.
+ discriminate H1.
+ simplify_eq H3; clear H3; intros; substs.
+ apply fork_tau_behave_ce in L.
+ intuition.
+ discriminate H1.
+ exists (E_live_expr
+         (LM_expr (E_taggingleft (E_pair expr5 (E_live_expr (LM_comp lab)) )))).
+ splits.
+ apply fork_comm_labred in H0.
+ inversion H0.
+ intuition.
  substs.
+ apply lab_r with (e1:=e1)(e2:=e2)(s:=s).
+ splits.
+ assumption.
+ assumption.
+ apply star_trans with (y:=(E_apply
+           (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr expr5)))
+           (E_live_expr (LM_comp lab)))).
+ assumption.
+ apply S_star with (y:=(E_live_expr
+     (LM_expr (E_taggingleft (E_pair expr5 (E_live_expr (LM_comp lab))))))).
+ apply tStep with (s:=S_First).
+ apply JO_red_forkdeath1.
+ assumption.
+ apply star_refl.
+ apply forkee_tau with (lm':=(LM_expr
+             (E_taggingright (E_pair (E_live_expr (LM_comp lab)) expr5)))).
+ splits.
+ apply swapf_right_b.
+ simpl; auto.
+ assumption.
+ assumption.
+ apply fork_tau_behave_ec in H3.
+ intuition.
+ discriminate H1.
+ simplify_eq H3; clear H3; intros; substs.
+ exists (E_live_expr
+         (LM_expr (E_taggingright (E_pair (E_live_expr (LM_comp lab)) expr5 )))).
+ splits.
+ apply fork_comm_labred in H0.
+ inversion H0.
+ intuition.
+ substs.
+ apply lab_r with (e1:=e1)(e2:=e2)(s:=s).
+ splits.
+ assumption.
+ assumption.
+ apply star_trans with (y:=(E_apply
+           (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab)))
+           (E_live_expr (LM_expr expr5)))).
+ assumption.
+ apply S_star with (y:=(E_live_expr
+     (LM_expr (E_taggingright (E_pair (E_live_expr (LM_comp lab)) expr5))))).
+ apply tStep with (s:=S_Second).
+ apply JO_red_forkdeath2.
+ assumption.
+ apply star_refl.
+ apply forkee_tau with (lm':=(LM_expr
+             (E_taggingleft (E_pair expr5 (E_live_expr (LM_comp lab)))))).
+ splits.
+ apply swapf_left_b.
+ simpl; auto.
+ simpl; auto.
+ simpl; auto.
+
 
  apply fork_tau_behave_ee in H3.
  intuition.
@@ -3610,7 +2969,7 @@ Proof.
  destruct H3; destruct H1; intuition.
  simplify_eq H6; clear H6; intros; substs.
  exists (E_live_expr
-          (LM_expr (E_taggingleft (E_taggingright (E_pair  x1 (E_live_expr (LM_expr x))))))).
+          (LM_expr (E_taggingleft ( (E_pair  x1 (E_live_expr (LM_expr x))))))).
  splits.
  apply fork_comm_labred in H0.
  apply fork_comm_taured_ee_laststep_h in L.
@@ -3628,15 +2987,15 @@ Proof.
  inversion H5.
  substs.
  assert (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr x1)))
-       (E_live_expr (LM_expr x)) [s]--> [RL_tau]
+       (E_live_expr (LM_expr x)) [S_First]--> [RL_tau]
      E_live_expr
-       (LM_expr (E_taggingleft(E_taggingright (E_pair  x1 (E_live_expr (LM_expr x))))))).
+       (LM_expr (E_taggingleft( (E_pair  x1 (E_live_expr (LM_expr x))))))).
  apply JO_red_forkdeath1.
  assumption.
  apply fork_comm_taured in H6.
  inversion H0; intuition.
  substs.
- apply lab_r with (e1:=e1)(e2:=e2)(s:=s0).
+ apply lab_r with (e1:=e1)(e2:=e2)(s:=s).
  splits.
  assumption.
  assumption.
@@ -3648,8 +3007,8 @@ Proof.
  assumption.
  apply S_star with (y:=(E_live_expr
      (LM_expr
-        (E_taggingleft (E_taggingright (E_pair x1 (E_live_expr (LM_expr x)))))))).
- apply tStep with (s:=s).
+        (E_taggingleft ( (E_pair x1 (E_live_expr (LM_expr x)))))))).
+ apply tStep with (s:=S_First).
  assumption.
  apply star_refl.
  exists expr0 expr5 (LM_expr (E_taggingright (E_pair (E_live_expr (LM_expr x)) x1))).
@@ -3662,63 +3021,8 @@ Proof.
  assumption.
  assumption.
 
- destruct H1. destruct H1; intuition.
- simplify_eq H7; clear H7; intros; substs.
- exists (E_live_expr (LM_expr (E_taggingleft (E_taggingleft (E_pair x1 x)))) ).
- splits.
- apply fork_comm_labred in H0.
- inversion H0.
- substs.
- apply lab_r with (e1:=e1)(e2:=e2)(s:=s).
- splits.
- intuition.
- intuition.
- intuition.
- apply star_trans with (y:=(E_apply
-          (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr expr0)))
-          (E_live_expr (LM_expr expr5)))).
- 
- assumption.
 
- apply fork_comm_taured_ee_laststep_h in L.
- destruct L.
- destruct H8.
- destruct H8.
- intuition.
- simplify_eq  H10; clear H10; intros; substs.
- simplify_eq  H8; clear H8; intros; substs.
- destruct H12.
- destruct H8.
- intuition.
- inversion H11.
- substs.
- inversion H8.
- substs.
- assert (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr x1)))
-       (E_live_expr (LM_expr x)) [s0]--> [RL_tau]
-     E_live_expr (LM_expr (E_taggingleft (E_taggingleft (E_pair x1 x))))).
- apply JO_red_forkdeath12.
- assumption.
- assumption.
- apply fork_comm_taured in H10.
- apply star_trans with (y:=(E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr x1)))
-          (E_live_expr (LM_expr x)))).
- assumption.
- apply S_star with (y:=(E_live_expr (LM_expr (E_taggingleft (E_taggingleft (E_pair x1 x)))))).
- apply tStep with (s:=s0).
- assumption.
- apply star_refl.
- exists expr0 expr5 (LM_expr (E_taggingleft (E_taggingleft (E_pair x x1)))).
- splits; [reflexivity | reflexivity ].
- 
- apply forkee_tau with (lm':=(LM_expr (E_taggingleft (E_taggingleft (E_pair x x1))))).
-  splits.
- apply swapf_left_left_b.
- simpl; auto.
- assumption.
- assumption.
-
- destruct H1. destruct H1; intuition.
+ destruct H3. destruct H1; intuition.
  simplify_eq H6; clear H6; intros; substs.
  exists (E_live_expr
           (LM_expr
@@ -3754,7 +3058,7 @@ Proof.
  inversion H7.
  substs.
  assert (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_expr x1)))
-       (E_live_expr (LM_expr x)) [s0]--> [RL_tau]
+       (E_live_expr (LM_expr x)) [S_Second]--> [RL_tau]
      E_live_expr
        (LM_expr
           (
@@ -3767,18 +3071,18 @@ Proof.
  assumption.
  apply S_star with (y:=(E_live_expr
      (LM_expr (E_taggingright (E_pair (E_live_expr (LM_expr x1)) x))))).
- apply tStep with (s:=s0).
+ apply tStep with (s:=S_Second).
  assumption.
  apply star_refl.
  exists expr0 expr5 (LM_expr
-     (E_taggingleft (E_taggingright (E_pair x (E_live_expr (LM_expr x1)))))).
+     (E_taggingleft ( (E_pair x (E_live_expr (LM_expr x1)))))).
  splits; [reflexivity | reflexivity ].
  
  apply forkee_tau with (lm':=(LM_expr
              (E_taggingleft
-                (E_taggingright (E_pair x (E_live_expr (LM_expr x1))))))).
+                ( (E_pair x (E_live_expr (LM_expr x1))))))).
   splits.
- apply swapf_left_right_b.
+ apply swapf_left_b.
  simpl; auto.
  simpl; auto.
  assumption.
