@@ -61,12 +61,21 @@ CAR Hoareetal.
   exceptions, and foreign-language calls in haskell.
 \newblock {\em Engineering theories of software construction}, 180:47, 2001.
 
+\bibitem{functory}
+Jean-Christophe Filli{\^a}tre~K Kalyanasundaram.
+\newblock Functory.
+\newblock \url{https://www.lri.fr/~filliatr/functory/About.html}, 2010.
+
 \bibitem{kiselyov2010delimited}
 Oleg Kiselyov.
 \newblock Delimited control in ocaml, abstractly and concretely: System
   description.
 \newblock In {\em Functional and Logic Programming}, pages 304--320. Springer,
   2010.
+
+\bibitem{ocamlmpi}
+Xavier Leroy.
+\newblock Ocamlmpi: Interface with the mpi message-passing interface.
 
 \bibitem{leroy2009formal}
 Xavier Leroy.
@@ -90,6 +99,11 @@ Andreas Lochbihler.
 \newblock {\em A Machine-Checked, Type-Safe Model of Java Concurrency:
   Language, Virtual Machine, Memory Model, and Verified Compiler}.
 \newblock KIT Scientific Publishing, 2012.
+
+\bibitem{jocaml}
+Louis Mandel and Luc Maranget.
+\newblock The {JoCaml} system.
+\newblock \url{http://jocaml.inria.fr/}, 2007.
 
 \bibitem{Ott}
 Francesco~Zappa Nardelli.

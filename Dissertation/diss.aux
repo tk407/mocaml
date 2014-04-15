@@ -1,14 +1,22 @@
 \relax 
 \bibstyle{plain}
+\citation{sevvcik2011relaxed}
+\citation{lochbihler2012machine}
 \@writefile{toc}{\contentsline {chapter}{\numberline {1}Introduction}{1}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {1.1}Overview of concurrency}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.1}Motivation}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.2}Overview of concurrency}{1}}
 \citation{LWT}
 \citation{Async}
 \citation{vouillon2008lwt}
-\citation{sevvcik2011relaxed}
-\citation{lochbihler2012machine}
+\@writefile{toc}{\contentsline {section}{\numberline {1.3}Overview of OCaml}{2}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.4}Current implementations of a concurrency framework in OCaml}{2}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1.1}LWT example}{3}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1.2}Async example}{3}}
+\citation{jocaml}
+\citation{functory}
+\citation{ocamlmpi}
 \citation{deleuzelight}
 \citation{friedman1988applications}
 \citation{kiselyov2010delimited}
@@ -17,53 +25,79 @@
 \citation{Claessen99functionalpearls}
 \citation{liskov1988promises}
 \citation{Ocamlnet}
-\@writefile{toc}{\contentsline {section}{\numberline {1.2}Overview of OCaml}{2}}
-\@writefile{toc}{\contentsline {section}{\numberline {1.3}Current implementations of a concurrency framework in OCaml}{2}}
-\@writefile{toc}{\contentsline {section}{\numberline {1.4}Motivation}{2}}
 \citation{hoareetal2001tackling}
+\@writefile{toc}{\contentsline {section}{\numberline {1.5}Semantics of concurrency}{4}}
 \citation{benton2008mechanized}
 \citation{blazy2009mechanized}
 \citation{blazy2006formal}
 \citation{leroy2009formal}
 \citation{Coq}
 \citation{Ott}
-\@writefile{toc}{\contentsline {section}{\numberline {1.5}Semantics of concurrency}{3}}
-\@writefile{toc}{\contentsline {section}{\numberline {1.6}Semantics to logic}{3}}
 \citation{letouzey2008extraction}
-\@writefile{toc}{\contentsline {section}{\numberline {1.7}Logic to actual code}{4}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {2}Preparation}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.6}Semantics to logic}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.7}Logic to runnable code}{5}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}Preparation}{6}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {2.1}Design of monadic semantics}{5}}
-\@writefile{toc}{\contentsline {section}{\numberline {2.2}Design of concurrent semantics}{5}}
-\@writefile{toc}{\contentsline {section}{\numberline {2.3}Tools}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.1}Ott}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.2}Coq}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.3}OCaml}{5}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {3}Implementation}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.1}Design of monadic semantics}{6}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.2}Choice of concurrency model}{8}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}Design of concurrent semantics}{8}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.4}Tools}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Toolchain outline}}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}Ott}{8}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2.1}Ott metavariable definition}{9}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2.2}Ott grammar example}{9}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2.3}Ott value subgrammar example}{9}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2.4}Ott substitution example}{10}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2.5}Ott reduction relation example}{10}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2.6}Ott single reduction}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.2}Coq}{11}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2.7}Coq example}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.3}OCaml}{11}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Implementation}{13}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {3.1}Verbatim text}{7}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.2}Tables}{8}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}Simple diagrams}{8}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.4}Adding more complicated graphics}{8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces A picture composed of boxes and vectors.}}{9}}
-\newlabel{latexpic1}{{3.1}{9}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces A diagram composed of circles, lines and boxes.}}{9}}
-\newlabel{latexpic2}{{3.2}{9}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Example figure using encapsulated postscript}}{10}}
-\newlabel{epsfig}{{3.3}{10}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Example figure where a picture can be pasted in}}{10}}
-\newlabel{pastedfig}{{3.4}{10}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces Example diagram drawn using {\tt  xfig}}}{10}}
-\newlabel{xfig}{{3.5}{10}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {4}Evaluation}{11}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}The semantics}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Expressions}{14}}
+\@writefile{toc}{\contentsline {subsubsection}{Arrow types}{14}}
+\@writefile{toc}{\contentsline {subsubsection}{Sum types}{14}}
+\@writefile{toc}{\contentsline {subsubsection}{Product types}{14}}
+\@writefile{toc}{\contentsline {subsubsection}{Fixpoint combinator}{14}}
+\@writefile{toc}{\contentsline {subsubsection}{Monadic primitives}{14}}
+\@writefile{toc}{\contentsline {subsubsection}{Fork}{14}}
+\@writefile{toc}{\contentsline {subsubsection}{Computation placeholders}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}Transition system}{14}}
+\@writefile{toc}{\contentsline {subsubsection}{Labelled transitions}{14}}
+\@writefile{toc}{\contentsline {subsubsection}{Select operator}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.3}Type system}{14}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Proof assisstant system}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Outline of the proof assistant code}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Modification}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}Extractable version}{14}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}OCaml system}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Outline of the OCaml code}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Hand modifications and justifications}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Sugar}{14}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Evaluation}{15}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}Printing and binding}{11}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Things to note}{11}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}Further information}{12}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Conclusion}{13}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Theoretical evaluation}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Methods}{15}}
+\@writefile{toc}{\contentsline {subsubsection}{Weak bisimilarity}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Properties}{15}}
+\@writefile{toc}{\contentsline {subsubsection}{Monadic laws}{15}}
+\@writefile{toc}{\contentsline {subsubsection}{Fork commutativity}{15}}
+\@writefile{toc}{\contentsline {subsubsection}{Fork associativity}{16}}
+\@writefile{toc}{\contentsline {subsubsection}{Liveness?}{16}}
+\@writefile{toc}{\contentsline {subsubsection}{Type preservation?}{16}}
+\@writefile{toc}{\contentsline {subsubsection}{Progress?}{16}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Practical evaluation}{16}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Methods}{16}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Examples}{16}}
+\@writefile{toc}{\contentsline {subsubsection}{Kahn process network}{16}}
+\@writefile{toc}{\contentsline {subsubsection}{Eratosthene Sieve}{16}}
+\@writefile{toc}{\contentsline {subsubsection}{Concurrent sort}{16}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Conclusion}{17}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \bibdata{refs}
@@ -80,58 +114,61 @@
 \bibcite{friedman1988applications}{11}
 \bibcite{ganz1999trampolined}{12}
 \bibcite{hoareetal2001tackling}{13}
-\@writefile{toc}{\contentsline {chapter}{Bibliography}{15}}
-\bibcite{kiselyov2010delimited}{14}
-\bibcite{leroy2009formal}{15}
-\bibcite{letouzey2008extraction}{16}
-\bibcite{liskov1988promises}{17}
-\bibcite{lochbihler2012machine}{18}
-\bibcite{Ott}{19}
-\bibcite{OCamlLight}{20}
-\bibcite{sevvcik2011relaxed}{21}
-\bibcite{shan2004shift}{22}
-\bibcite{Ocamlnet}{23}
-\bibcite{Async}{24}
-\bibcite{vouillon2008lwt}{25}
-\@writefile{toc}{\contentsline {chapter}{\numberline {A}Latex source}{17}}
+\@writefile{toc}{\contentsline {chapter}{Bibliography}{19}}
+\bibcite{functory}{14}
+\bibcite{kiselyov2010delimited}{15}
+\bibcite{ocamlmpi}{16}
+\bibcite{leroy2009formal}{17}
+\bibcite{letouzey2008extraction}{18}
+\bibcite{liskov1988promises}{19}
+\bibcite{lochbihler2012machine}{20}
+\bibcite{jocaml}{21}
+\bibcite{Ott}{22}
+\bibcite{OCamlLight}{23}
+\bibcite{sevvcik2011relaxed}{24}
+\bibcite{shan2004shift}{25}
+\bibcite{Ocamlnet}{26}
+\bibcite{Async}{27}
+\bibcite{vouillon2008lwt}{28}
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Ott source}{23}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {A.1}diss.tex}{17}}
-\@writefile{toc}{\contentsline {section}{\numberline {A.2}proposal.tex}{25}}
-\@writefile{toc}{\contentsline {section}{\numberline {A.3}propbody.tex}{25}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {B}Makefile}{27}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.1}diss.tex}{23}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.2}proposal.tex}{34}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.3}propbody.tex}{34}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {B}Makefile}{35}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{makefile}{{B.1}{27}}
-\@writefile{toc}{\contentsline {section}{\numberline {B.1}Makefile}{27}}
-\@writefile{toc}{\contentsline {section}{\numberline {B.2}refs.bib}{27}}
+\newlabel{makefile}{{B.1}{35}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.1}Makefile}{35}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.2}refs.bib}{35}}
 \citation{OCaml}
 \citation{LWT}
 \citation{Async}
 \citation{Lem}
 \citation{Ott}
-\@writefile{toc}{\contentsline {chapter}{\numberline {C}Project Proposal}{33}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {C}Project Proposal}{41}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {C.1}Introduction of work to be undertaken}{33}}
-\@writefile{toc}{\contentsline {section}{\numberline {C.2}Description of starting point}{33}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.1}Introduction of work to be undertaken}{41}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.2}Description of starting point}{41}}
 \citation{Claessen99functionalpearls}
 \citation{deleuzelight}
 \citation{vouillon2008lwt}
-\@writefile{toc}{\contentsline {section}{\numberline {C.3}Substance and structure}{34}}
-\@writefile{toc}{\contentsline {section}{\numberline {C.4}Criteria}{34}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.3}Substance and structure}{42}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.4}Criteria}{42}}
 \citation{Coq}
 \citation{OCamlLight}
 \citation{OCamlLightWeb}
-\@writefile{toc}{\contentsline {section}{\numberline {C.5}Timetable}{35}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.1}Week 1 and 2}{35}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.2}Week 3 and 4}{35}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.3}Week 5 and 6}{35}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.4}Week 7 and 8}{35}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.5}Week 9 and 10}{36}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.6}Week 11 and 12}{36}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.7}Week 13 and 14}{36}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.8}Week 15 and 16}{36}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.9}Week 17 and 18}{36}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.10}Week 19 and 20}{36}}
-\@writefile{toc}{\contentsline {section}{\numberline {C.6}Resource Declaration}{36}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.5}Timetable}{43}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.1}Week 1 and 2}{43}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.2}Week 3 and 4}{43}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.3}Week 5 and 6}{43}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.4}Week 7 and 8}{43}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.5}Week 9 and 10}{44}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.6}Week 11 and 12}{44}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.7}Week 13 and 14}{44}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.8}Week 15 and 16}{44}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.9}Week 17 and 18}{44}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.10}Week 19 and 20}{44}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.6}Resource Declaration}{44}}

@@ -1,50 +1,81 @@
 \contentsline {chapter}{\numberline {1}Introduction}{1}
-\contentsline {section}{\numberline {1.1}Overview of concurrency}{1}
-\contentsline {section}{\numberline {1.2}Overview of OCaml}{2}
-\contentsline {section}{\numberline {1.3}Current implementations of a concurrency framework in OCaml}{2}
-\contentsline {section}{\numberline {1.4}Motivation}{2}
-\contentsline {section}{\numberline {1.5}Semantics of concurrency}{3}
-\contentsline {section}{\numberline {1.6}Semantics to logic}{3}
-\contentsline {section}{\numberline {1.7}Logic to actual code}{4}
-\contentsline {chapter}{\numberline {2}Preparation}{5}
-\contentsline {section}{\numberline {2.1}Design of monadic semantics}{5}
-\contentsline {section}{\numberline {2.2}Design of concurrent semantics}{5}
-\contentsline {section}{\numberline {2.3}Tools}{5}
-\contentsline {subsection}{\numberline {2.3.1}Ott}{5}
-\contentsline {subsection}{\numberline {2.3.2}Coq}{5}
-\contentsline {subsection}{\numberline {2.3.3}OCaml}{5}
-\contentsline {chapter}{\numberline {3}Implementation}{7}
-\contentsline {section}{\numberline {3.1}Verbatim text}{7}
-\contentsline {section}{\numberline {3.2}Tables}{8}
-\contentsline {section}{\numberline {3.3}Simple diagrams}{8}
-\contentsline {section}{\numberline {3.4}Adding more complicated graphics}{8}
-\contentsline {chapter}{\numberline {4}Evaluation}{11}
-\contentsline {section}{\numberline {4.1}Printing and binding}{11}
-\contentsline {subsection}{\numberline {4.1.1}Things to note}{11}
-\contentsline {section}{\numberline {4.2}Further information}{12}
-\contentsline {chapter}{\numberline {5}Conclusion}{13}
-\contentsline {chapter}{Bibliography}{15}
-\contentsline {chapter}{\numberline {A}Latex source}{17}
-\contentsline {section}{\numberline {A.1}diss.tex}{17}
-\contentsline {section}{\numberline {A.2}proposal.tex}{25}
-\contentsline {section}{\numberline {A.3}propbody.tex}{25}
-\contentsline {chapter}{\numberline {B}Makefile}{27}
-\contentsline {section}{\numberline {B.1}Makefile}{27}
-\contentsline {section}{\numberline {B.2}refs.bib}{27}
-\contentsline {chapter}{\numberline {C}Project Proposal}{33}
-\contentsline {section}{\numberline {C.1}Introduction of work to be undertaken}{33}
-\contentsline {section}{\numberline {C.2}Description of starting point}{33}
-\contentsline {section}{\numberline {C.3}Substance and structure}{34}
-\contentsline {section}{\numberline {C.4}Criteria}{34}
-\contentsline {section}{\numberline {C.5}Timetable}{35}
-\contentsline {subsection}{\numberline {C.5.1}Week 1 and 2}{35}
-\contentsline {subsection}{\numberline {C.5.2}Week 3 and 4}{35}
-\contentsline {subsection}{\numberline {C.5.3}Week 5 and 6}{35}
-\contentsline {subsection}{\numberline {C.5.4}Week 7 and 8}{35}
-\contentsline {subsection}{\numberline {C.5.5}Week 9 and 10}{36}
-\contentsline {subsection}{\numberline {C.5.6}Week 11 and 12}{36}
-\contentsline {subsection}{\numberline {C.5.7}Week 13 and 14}{36}
-\contentsline {subsection}{\numberline {C.5.8}Week 15 and 16}{36}
-\contentsline {subsection}{\numberline {C.5.9}Week 17 and 18}{36}
-\contentsline {subsection}{\numberline {C.5.10}Week 19 and 20}{36}
-\contentsline {section}{\numberline {C.6}Resource Declaration}{36}
+\contentsline {section}{\numberline {1.1}Motivation}{1}
+\contentsline {section}{\numberline {1.2}Overview of concurrency}{1}
+\contentsline {section}{\numberline {1.3}Overview of OCaml}{2}
+\contentsline {section}{\numberline {1.4}Current implementations of a concurrency framework in OCaml}{2}
+\contentsline {section}{\numberline {1.5}Semantics of concurrency}{4}
+\contentsline {section}{\numberline {1.6}Semantics to logic}{5}
+\contentsline {section}{\numberline {1.7}Logic to runnable code}{5}
+\contentsline {chapter}{\numberline {2}Preparation}{6}
+\contentsline {section}{\numberline {2.1}Design of monadic semantics}{6}
+\contentsline {section}{\numberline {2.2}Choice of concurrency model}{8}
+\contentsline {section}{\numberline {2.3}Design of concurrent semantics}{8}
+\contentsline {section}{\numberline {2.4}Tools}{8}
+\contentsline {subsection}{\numberline {2.4.1}Ott}{8}
+\contentsline {subsection}{\numberline {2.4.2}Coq}{11}
+\contentsline {subsection}{\numberline {2.4.3}OCaml}{11}
+\contentsline {chapter}{\numberline {3}Implementation}{13}
+\contentsline {section}{\numberline {3.1}The semantics}{14}
+\contentsline {subsection}{\numberline {3.1.1}Expressions}{14}
+\contentsline {subsubsection}{Arrow types}{14}
+\contentsline {subsubsection}{Sum types}{14}
+\contentsline {subsubsection}{Product types}{14}
+\contentsline {subsubsection}{Fixpoint combinator}{14}
+\contentsline {subsubsection}{Monadic primitives}{14}
+\contentsline {subsubsection}{Fork}{14}
+\contentsline {subsubsection}{Computation placeholders}{14}
+\contentsline {subsection}{\numberline {3.1.2}Transition system}{14}
+\contentsline {subsubsection}{Labelled transitions}{14}
+\contentsline {subsubsection}{Select operator}{14}
+\contentsline {subsection}{\numberline {3.1.3}Type system}{14}
+\contentsline {section}{\numberline {3.2}Proof assisstant system}{14}
+\contentsline {subsection}{\numberline {3.2.1}Outline of the proof assistant code}{14}
+\contentsline {subsection}{\numberline {3.2.2}Modification}{14}
+\contentsline {subsection}{\numberline {3.2.3}Extractable version}{14}
+\contentsline {section}{\numberline {3.3}OCaml system}{14}
+\contentsline {subsection}{\numberline {3.3.1}Outline of the OCaml code}{14}
+\contentsline {subsection}{\numberline {3.3.2}Hand modifications and justifications}{14}
+\contentsline {subsection}{\numberline {3.3.3}Sugar}{14}
+\contentsline {chapter}{\numberline {4}Evaluation}{15}
+\contentsline {section}{\numberline {4.1}Theoretical evaluation}{15}
+\contentsline {subsection}{\numberline {4.1.1}Methods}{15}
+\contentsline {subsubsection}{Weak bisimilarity}{15}
+\contentsline {subsection}{\numberline {4.1.2}Properties}{15}
+\contentsline {subsubsection}{Monadic laws}{15}
+\contentsline {subsubsection}{Fork commutativity}{15}
+\contentsline {subsubsection}{Fork associativity}{16}
+\contentsline {subsubsection}{Liveness?}{16}
+\contentsline {subsubsection}{Type preservation?}{16}
+\contentsline {subsubsection}{Progress?}{16}
+\contentsline {section}{\numberline {4.2}Practical evaluation}{16}
+\contentsline {subsection}{\numberline {4.2.1}Methods}{16}
+\contentsline {subsection}{\numberline {4.2.2}Examples}{16}
+\contentsline {subsubsection}{Kahn process network}{16}
+\contentsline {subsubsection}{Eratosthene Sieve}{16}
+\contentsline {subsubsection}{Concurrent sort}{16}
+\contentsline {chapter}{\numberline {5}Conclusion}{17}
+\contentsline {chapter}{Bibliography}{19}
+\contentsline {chapter}{\numberline {A}Ott source}{23}
+\contentsline {section}{\numberline {A.1}diss.tex}{23}
+\contentsline {section}{\numberline {A.2}proposal.tex}{34}
+\contentsline {section}{\numberline {A.3}propbody.tex}{34}
+\contentsline {chapter}{\numberline {B}Makefile}{35}
+\contentsline {section}{\numberline {B.1}Makefile}{35}
+\contentsline {section}{\numberline {B.2}refs.bib}{35}
+\contentsline {chapter}{\numberline {C}Project Proposal}{41}
+\contentsline {section}{\numberline {C.1}Introduction of work to be undertaken}{41}
+\contentsline {section}{\numberline {C.2}Description of starting point}{41}
+\contentsline {section}{\numberline {C.3}Substance and structure}{42}
+\contentsline {section}{\numberline {C.4}Criteria}{42}
+\contentsline {section}{\numberline {C.5}Timetable}{43}
+\contentsline {subsection}{\numberline {C.5.1}Week 1 and 2}{43}
+\contentsline {subsection}{\numberline {C.5.2}Week 3 and 4}{43}
+\contentsline {subsection}{\numberline {C.5.3}Week 5 and 6}{43}
+\contentsline {subsection}{\numberline {C.5.4}Week 7 and 8}{43}
+\contentsline {subsection}{\numberline {C.5.5}Week 9 and 10}{44}
+\contentsline {subsection}{\numberline {C.5.6}Week 11 and 12}{44}
+\contentsline {subsection}{\numberline {C.5.7}Week 13 and 14}{44}
+\contentsline {subsection}{\numberline {C.5.8}Week 15 and 16}{44}
+\contentsline {subsection}{\numberline {C.5.9}Week 17 and 18}{44}
+\contentsline {subsection}{\numberline {C.5.10}Week 19 and 20}{44}
+\contentsline {section}{\numberline {C.6}Resource Declaration}{44}

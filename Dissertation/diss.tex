@@ -28,15 +28,19 @@
 \renewcommand{\baselinestretch}{1.1}    % adjust line spacing to make
                                         % more readable
 
-\usepackage{listings}
-\usepackage{color}
+
+
+%  Listings set up
+\usepackage{listings, lstlangcoq, lstlangott, bold-extra}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{myseagreen}{rgb}{0.95,0.999,0.95}
 
 \lstset{ %
-  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  backgroundcolor=\color{myseagreen},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
   basicstyle=\footnotesize,        % the size of the fonts that are used for the code
   breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
   breaklines=true,                 % sets automatic line breaking
@@ -45,23 +49,29 @@
   deletekeywords={...},            % if you want to delete keywords from the given language
   escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
   extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
-  frame=single,                    % adds a frame around the code
+  frame=shadowbox,                    % adds a frame around the code
+  frameround=tttt,
   keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
   keywordstyle=\color{blue},       % keyword style
   language=[Objective]Caml,        % the language of the code
   morekeywords={*,...},            % if you want to add more keywords to the set
   numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
   numbersep=5pt,                   % how far the line-numbers are from the code
-  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
-  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  numberstyle=\tiny\color{Emerald}, % the style that is used for the line-numbers
+  rulecolor=\color{Emerald},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
   showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
   showstringspaces=false,          % underline spaces within strings only
   showtabs=false,                  % show tabs within strings adding particular underscores
-  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
   stringstyle=\color{mymauve},     % string literal style
   tabsize=2,                       % sets default tabsize to 2 spaces
   title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
 }
+
+% Tikz set up
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{arrows, shapes}
 
 \begin{document}
 
@@ -153,6 +163,8 @@ extent for a comparable purpose.
 
 \listoffigures
 
+\lstlistoflistings
+
 \newpage
 \section*{Acknowledgements}
 
@@ -165,22 +177,30 @@ extent for a comparable purpose.
 \setcounter{page}{1}
 \pagenumbering{arabic}
 \pagestyle{headings}
-
+% Proforma + Intro + prep = 3100
+% Implementation = 4700
+% Evaluation + conclustion = 2200
+% Appendicies = \infty
 \chapter{Introduction}
 
 The goal of this project is to build a concurrency framework for OCaml. This framework will be designed with correctness in mind: developing the well defined semantics, modelled in a proof assistant and finally extracted to actual code. This project aims to be a verifiable reference implementation. 
 
+\section{Motivation}
+Verification of core libraries is becoming increasingly important as we discover more and more subtle bugs that even extensive unit testing could not find. As Dijkstra said, testing shows the presence, not the absence of bugs. On the other hand verification can show the absence of bugs, at least with respect to the formal model of the system.
+
+Motivation of the project is to investigate the lack of certified implementation of a concurrency framework. Verified concurrent systems have been researched for languages like C\cite{sevvcik2011relaxed}, C++ and Java\cite{lochbihler2012machine}, but not yet for OCaml. 
+
 \section{Overview of concurrency}
-Concurrency is the concept of more than one thread of execution can make progress in the same time period. A particular form of concurrency is parallelism, when threads physically run simultaneously.
+Concurrency is the concept of more than one thread of execution making progress in the same time period. A particular form of concurrency is parallelism, when threads physically run simultaneously.
 
-Concurrent computation has became the norm for most applications with the rise of faster systems often with multiple cores. This can be exploited on multiple levels ranging from hardware supported instruction and thread level parallelism to software based heavy and lightweight models. 
+Concurrent computation has became the norm for most applications in computer schience with the rise of faster systems often with multiple cores. This can be exploited on multiple levels ranging from hardware supported instruction and thread level parallelism to software based heavy and lightweight models. 
 
-This project aims to model lightweight, cooperative concurrency. No threads are exposed to the underlying operating system or hardware. This means that blocking operations on the process level will still block all internal threads. The threads themselves expose the points of possible interleaving. 
+This project aims to model lightweight, cooperative concurrency. No threads are exposed to the underlying operating system or hardware. This means that blocking operations on the process level will still block all internal threads. The threads expose the points of possible interleaving and the scheduling is done in software.
 
-The issue of concurrency occurs in most general programming languages. However, functional languages often both less developed in this area and also fit well with concurrency without races for mutable data structures. Functional languages that have both actual industrial applications and large set of features are of particular interest. These languages include OCaml and Haskell. This project focuses on OCaml. 
+The issue of concurrency occurs in most general programming languages. However, functional languages are often both less developed in this area and also fit well with concurrency without races for mutable data structures. Functional languages that have both actual industrial applications and large set of features are of particular interest. These languages include OCaml and Haskell. This project focuses on OCaml. 
 
 \section{Overview of OCaml}
-OCaml is a high level programming language. It combines functional, object-oriented and imperative paradigms.  used in large scale industrial and academic projects where speed and correctness are of utmost importance. It uses one of the most powerful type systems and inference available to make efficient and correct software engineering possible.
+OCaml is a high level programming language. It combines functional, object-oriented and imperative paradigms and used in large scale industrial and academic projects where speed and correctness are of utmost importance. OCaml uses one of the most powerful type and inference systems available to make efficient and correct software engineering possible.
   
 
 \section{Current implementations of a concurrency framework in OCaml}
@@ -188,255 +208,365 @@ There are two very successful monadic concurrency frameworks, LWT\cite{LWT} and 
 
 LWT, the lightweight cooperative threading library\cite{vouillon2008lwt} was designed as an open source framework entirely written in OCaml in a monadic style. It was successfully used in several large projects including the Unison file synchroniser and the Ocsigen Web server. This library includes many primitives to provide a feature rich framework, including primitives for thread creation, composition and cancel, thread local storage and support for various synchronisation techniques. 
 
-\begin{lstlisting}
-let x = 3;;
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={LWT example}]
+ open Lwt
+ 
+ let main () =
+   let heads =
+     Lwt_unix.sleep 1.0 >>
+     return (print_endline "Heads");
+   in
+   let tails =
+     Lwt_unix.sleep 2.0 >>
+     return (print_endline "Tails");
+   in
+   lwt () = heads <&> tails in
+   return (print_endline "Finished")
+ 
+ let _ = Lwt_main.run (main ())
+\end{lstlisting}
+\end{minipage}
+
+In this example we can see some of the syntax of Lwt where we define \verb|heads|, a function that sleeps for 1 second and then prints ``Head" and \verb|tails| which does the same with 2 seconds and ``Tails". These are then both waited on, until they are both finished and followed by the text ``Finished". In Lwt semantics mostly follow the principle of a continuation monads, that is we build a sequence of continuations that the scheduler can pick between.
+
+An other implementation, Async is an open source concurrency library for OCaml developed by Jane Street. Unlike LWT the basic semantics are designed with the promise monads in mind.
+
+\begin{lstlisting}[caption={Async example}]
+open Jane.Std
+open Async.Std
+
+let heads  =  (after (sec 1.0)  >>| fun () -> (print_endline "Heads"));;
+let tails = (after (sec 2.0)  >>| fun () -> (print_endline "Tails"));;
+let head_and_tails = (Deferred.both
+   heads
+   tails);;
+
+
+let () = upon (head_and_tails) (fun _ -> ());;
+  
+let () = never_returns (Scheduler.go ());;
 \end{lstlisting}
 
-Async is an open source concurrency library for OCaml developed by Jane Street. Unlike LWT the basic semantics are designed with promise monads in mind. 
-\textit{Some more goes here}
+In this snippet we define \verb|heads| and \verb|tails| as Deferred values of the respective code sequences. A Deferred value is the promise of that value evaluating. It can be used in place of a value of the same type and binding on it returns a deferred value that is when is fulfilled applies the bound function. 
 
-\section{Motivation}
-With these implementations in mind the motivation of the project is to investigate the lack of certified implementation of a concurrency framework. Verified concurrent systems have been researched for languages like C\cite{sevvcik2011relaxed}, C++ and Java\cite{lochbihler2012machine}, but not yet for OCaml.
+
+There are a number of other experimental implementations for concurrency in OCaml, including JoCaml\cite{jocaml} that implements join calculus over Ocaml, Functory\cite{functory} that focuses on distributed computation, Ocamlnet that exploits multiple cores and OCamlMPI\cite{ocamlmpi} which provides bindings for the standard MPI message passing framework.
+
 
 \section{Semantics of concurrency}
 
 There have been a lot of work on how exactly to formulate the semantics of concurrent and distributed systems. Some of the most common models for lightweight concurrency\cite{deleuzelight} are captured\cite{friedman1988applications} and delimited\cite{kiselyov2010delimited} continuations\cite{shan2004shift}, trampolined style\cite{ganz1999trampolined}, continuation monads\cite{Claessen99functionalpearls}, promise monads\cite{liskov1988promises} and event based programming(used in the OCamlNet\cite{Ocamlnet} project). This work focuses on the continuation monad style.
 
-A monad\cite{hoareetal2001tackling} in functional programming is a construct to structure computations that are somehow "sequenced" together. A monad requires two operations, $ >>= $ and ret, which are related by the monadic associativity rules.
+A monad\cite{hoareetal2001tackling} in functional programming is a construct to structure computations that are in some sense "sequenced" together. This sequencing can be for example string concatenation, simple operation sequencing (the well known ;) or conditional execution. Two operations, commonly called bind and return form a monad when they obey a set of axioms called monadic laws.
 
 
-The continuation monad consists of a monadic type $ \alpha \, \textbf{con} $, where $ \alpha $ is a type parameter describing the type of operation enclosed and three key operations 
+The continuation monad consists of a parametric type $ \alpha \, \textbf{con} $, where $ \alpha $ is a type parameter describing the type of computation or value enclosed and three key operations 
 \begin{itemize}
-\item{$>>=$, also known as bind. The operation sequences two operations one after the other. More formally it has a type $ \alpha \, \textbf{con} \rightarrow ( \alpha \rightarrow \beta \, \textbf{con}) \rightarrow \beta \, \textbf{con}  $ and }
-\item{ret, also known as return. It has type $ \alpha \rightarrow \alpha \, \textbf{con} $ and simply evaluates its parameter and boxes up the result.}
+\item{ret, also known as return. It has type $ \alpha \rightarrow \alpha \, \textbf{con} $ and simply evaluates its parameter and boxes up the result in the parametric type}
+\item{$>>=$, also known as bind, sequences two operations. The second argument is the continuation for the first parameter. More formally it has a type $ \alpha \, \textbf{con} \rightarrow ( \alpha \rightarrow \beta \, \textbf{con}) \rightarrow \beta \, \textbf{con}  $, that is it takes a boxed up computation and a function that takes the value of the computation and returns a new box. Bind then evaluates the expression within the box of the first argument and passes it to the second argument.}
+
 \end{itemize}
 
-The third operation is fork, which is the way to spawn new threads (two in this particular case). The approach taken in this work is to have fork take two arguments, evaluate the two paths concurrently. The concurrency is achieved by reducing each path step by step based on some scheduler. When either path reduced to a value it returns a boxed up pair of results. 
-
-These results can be both values, or a value and a boxed up computation (that is, the partially reduced other path).
+The third operation is fork, which is the way to spawn new threads (two in this particular case). The approach taken in this work is to have fork take two arguments and evaluate the two paths concurrently. The concurrency is achieved by reducing either side of the fork step by step based on some scheduler. When either path reduced to a value it returns a boxed up pair of results. This result is value and a boxed up computation (that is, the partially reduced other path).
 
 Therefore the signature of fork is slightly more complicated
-\[ \textbf{fork} \, : \, \alpha \, \textbf{con} \rightarrow \beta \, \textbf{con} \rightarrow ((\alpha * \beta ) \, + \, (\alpha *  \beta \, \textbf{con}) \, + \, ( \alpha \, \textbf{con} * \beta) ) \, \textbf{con} \]
-Where $ + $ refers to sum types.  
+\[ \textbf{fork} \, : \, \alpha \, \textbf{con} \rightarrow \beta \, \textbf{con} \rightarrow ((\alpha *  \beta \, \textbf{con}) \, + \, ( \alpha \, \textbf{con} * \beta) ) \, \textbf{con} \]
+Where $ + $ refers to sum types, that is labelled variants.  
 
 \section{Semantics to logic}
-These semantics can be modelled in logic, in particular logics used by proof assistants. Mechanisation of semantics in proof assistant has been accepted as a way of formal verification of properties about said semantics \cite{benton2008mechanized,blazy2009mechanized, blazy2006formal, leroy2009formal}. Most often used proof assistants include Coq \cite{Coq}, HOL and Isabelle. There has been much effort to make this mechanisation as easy as possible with tools like Ott\cite{Ott}, which enable working semanticists to describe their language in a simple, ascii-art like style while versatile in destination languages, including the above mentioned proof assistants, \LaTeX \, and some direct OCaml representations.
-
-This project was developed with the Coq proof assistant in mind. 
-
-Coq is formal proof assistant with a mathematical higher-level language called \textit{Gallina}, based around the Calculus of Inductive Constructions, that can be used to define functions and predicates, state, formally prove and machine check mathematical theorems and extract certified programs to high level languages like Haskell and OCaml.
+These semantics can be modelled in logic, in particular logics used by proof assistants. A model like this can be used for formal verification of properties about said semantics \cite{benton2008mechanized,blazy2009mechanized, blazy2006formal, leroy2009formal}. Most often used proof assistants include Coq \cite{Coq}, HOL and Isabelle. There has been much effort to make the modelling as easy as possible with tools like Ott\cite{Ott} which enables semanticists to describe their language in a simple, ascii-art like style and export these models to destination languages, including the above mentioned proof assistants and \LaTeX.
 
 
-\section{Logic to actual code}
-This logical representation is more amenable to proofs than to actual execution and the evaluation with respect to other implementations, which is why much research has gone into extraction of these representations as certified programs in functional programming languages including OCaml \cite{letouzey2008extraction} and Haskell.
+\section{Logic to runnable code}
+While a number of proof assistants have utilities for direct computation, in most cases semantics is described as a set of logical relations. This representation is more amenable to proofs than to actual execution. Much research has gone into extraction of these representations as certified programs in functional programming languages like OCaml \cite{letouzey2008extraction} and Haskell. The extracted code then can be run and the certification is a proof that the code is faithful to the representation in the proof assistant.
 
-Inductive sets often map simply to data structures of type constructors and constructive proofs to computable functions. 
+
 
 \chapter{Preparation}
+During the preparation phase of this project many decisions had to be made, including the concurrency model, large scale semantics and the tool chain used in the process.
 
 \section{Design of monadic semantics}
+%Brief overview of monads
+Monads: Brief mathematical background.
+
+Category theory has been a general tool used to model functional programming languages and programs. Monads are a concept originating from this connection. 
+
+
+A monad on a category $ C $ is a triple $ (T, \eta, \mu) $ where $ T $ is an endofunctor on $ C $, that is, it maps the category to itself. The last two, $ \eta $ and $ \mu $ are natural transformations such that $ \eta:\, 1_C \rightarrow T $, that is between the identity functor and $ T $, and $ \mu:\, T^2 \rightarrow T $. The first transformation, $ \eta $ describes a lift operation: essentially we can wrap the object in $ C $ and preserving its properties. The second transformation, $ \mu $ is about an operation called join. This operation unwraps a layer of wrapping if there are two. To call a triple like this a monad it has to satisfy two conditions, called coherence conditions.
+\begin{enumerate}
+
+\item{
+\[ \mu \circ T \mu = \mu \circ \mu T \]
+Or as commutative diagram:
+\begin{center}
+\begin{tikzcd}
+T^3 \arrow{r}{T\mu} \arrow{d}[swap]{\mu T}
+& T^2 \arrow{d}{\mu} \\
+T^2 \ar{r}[swap]{\mu} & T
+\end{tikzcd}
+\end{center}
+This roughly demands that unwrapping from three layers to one is associative.
+
+
+
+}
+\item{
+\[ \mu \circ T\eta = \mu \circ \eta T = 1_T \]
+
+Or as commutative diagram:
+\begin{center}
+\begin{tikzcd}
+T \arrow{r}{\eta T} \arrow{d}[swap]{T \eta } \arrow[equal]{rd}
+& T^2 \arrow{d}{\mu} \\
+T^2 \ar{r}[swap]{\mu} & T
+\end{tikzcd}
+\end{center}
+
+This roughly translates to wrapping and then subsequently unwrapping behaves as an identity.
+}
+\end{enumerate}
+
+This description entails two operations (lift and join) and their behaviour (associativity and identity), however this is a formulation rarely used in practice. There is an equivalent pair of operations (ret and bind) with similar behaviour constraints that is used in most monadic programming constructs. 
+
+
+The \lstinline|ret| takes a value of the language and gives its monadic counterpart. With types this can be represented as $ \textbf{ret} \, :\, \forall \alpha. \alpha\, \rightarrow\, \textbf{con}\, \alpha $.
+
+The \lstinline|bind|   
+
+To call this system a monad, we need to satisfy three axioms:
+
+\begin{enumerate}
+\item{\lstinline|ret| is essentially a left neutral element:
+\[ (\textbf{ret} \, x) \, \gg=\, f \quad \equiv \quad f \, x \]}
+\item{\lstinline|ret| is essentially a right neutral element:
+\[ m \, \gg=\, \textbf{ret} \quad \equiv \quad m \]}
+\item{\lstinline|bind| (often written as $ \gg= $) is associative:
+\[ (m \, \gg= \, f) \, \gg= g \quad \equiv \quad m\, \gg= \, (\lambda\, x. (f\, x \, \gg= \, g) ) \]}
+\end{enumerate}
+
+We will return to the exact nature of $ \equiv $ used in this project in the evaluation section and the exact form this will take.
+
+
+
+\section{Choice of concurrency model}
+There are a number of lightweight concurrency models to choose from. 
+%Why I chose continuation monads vs. World
+
+
+
 
 \section{Design of concurrent semantics}
+%Brief overview of techiniques for concurrency
+Techniques for concurrency: processes, concurrent reductions, actors.
+
+%Choices for concurrency semantics
+
+
 
 \section{Tools}
+The project uses a chain of three tools: \begin{enumerate}
+\item{
+Ott, a tool for transforming informal, readable semantics to both \LaTeX and formal proof assistant code.}
+\item{Coq, a proof assistant supported by Ott. }
+\item{OCaml, the target language. }
+\end{enumerate}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[node distance=1.8cm, auto, >=stealth',pil/.style={
+           ->,
+           thick,
+           shorten <=2pt,
+           shorten >=2pt,}, pildashed/.style={
+                      ->,
+                      thick,
+                      dashed,
+                      shorten <=2pt,
+                      shorten >=2pt,},scale=1.2, every node/.style={scale=1.2}, ]
+\node[draw, rectangle] (o) {Ott};
+\node[right of=o] (otch) {};
+\node[below of={otch}] (otc) {Generation}
+  edge[pildashed] (otch);
+\node[draw, rectangle, right of={otch}] (c) {Coq}
+  edge[pil, <-] (o);
+\node[right of=c] (ceoh) {};
+\node[below of={ceoh}] (ceo) {Extraction}
+  edge[pildashed] (ceoh);
+\node[draw, rectangle, right of={ceoh}] (oc) {OCaml}
+  edge[pil, <-] (c);
+
+\end{tikzpicture}
+\caption{Toolchain outline}
+\end{figure}
+
+In the preparation phase I got acquainted with all three of these systems, as I have not used them before for any serious work.
 \subsection{Ott}
+% Why Ott (because it is awesome)
+To avoid duplication of the semantics in several formats I have to chosen to use a supporting tool called Ott. It enables the use of a simple ASCII-art like description of grammars, typing and reduction relations. Ott can export to various destination formats including most proof assistants and \LaTeX. This is the primary form of the semantics that all further forms are derived from in the project.
+
+For someone familiar to formal semantics Ott has an easy to use and intuitive syntax. 
+
+Metavariables used in productions are defined with their destination language equivalents and potentially (in the case of Coq) their equality operation 
+\begin{lstlisting}[language={Ott}, caption={Ott metavariable definition}]
+metavar termvar, x ::=   {{ com  term variable }} 
+{{ isa string}} {{ coq nat}} {{ hol string}} {{ coq-equality }}
+{{ ocaml int}} {{ lex alphanum}} {{ tex \mathit{[[termvar]]} }}
+\end{lstlisting}
+
+Term expression grammars and other grammars can be defined in the well known Backus-Naur form with some extensions.
+
+\begin{lstlisting}[language={Ott}, caption={Ott grammar example}]
+grammar
+t :: 't_' ::=                               {{ com term    }}
+  | x            ::  :: Var                   {{ com variable}}
+  | \ x . t      ::  :: Lam (+ bind x in t +) {{ com lambda  }}
+  | t t'         ::  :: App                   {{ com app     }}
+  | ( t )        :: S:: Paren                 {{ icho [[t]]  }} 
+  | { t / x } t' :: M:: Tsub  
+                        {{ icho (tsubst_t [[t]] [[x]] [[t']])}}
+\end{lstlisting}
+
+In this example the non-terminal t for terms is defined with 5 productions: variables, lambda abstractions, applications, parentheses grouping and variable substitution. Each of these rules have a name, for example Var and Lam. Each of these names are prefixed by the unique prefix t\_ to have non-ambiguous names. The right hand side of each line describes the translation to target languages, for example com will  generate the given description for the \LaTeX\, target. 
+
+There are meta flags S and M to describe syntactical sugar and meta productions that are not generated as data structure elements in target languages, but instead have their own instructions: for example the substitution term will be rewritten as an application of the tsubst\_t relation defined elsewhere. 
+
+In many languages one might want to define a value subgrammar, which can be used both in the reduction relation definition and in proving properties of the semantics. Ott has support for general subgrammar relation check.
+\begin{lstlisting}[language={Ott}, caption={Ott value subgrammar example}]
+v :: 'v_' ::=                               {{ com value   }}
+  | \ x . t      ::  :: Lam                   {{ com lambda  }}
+  
+subrules
+  v <:: t
+\end{lstlisting}
+Here v is a subgrammar of t. The statement v $<::$ t is exported as a target language subroutine that checks whether this holds and during translation it checks for obvious bugs.
+
+Another common feature of semantics is substitution of values for variables, for example in function application. This is so frequent that Ott provides both single and multiple variable substitutions for the target languages as subroutines in the translated code.
+\begin{lstlisting}[language={Ott}, caption={Ott substitution example}]
+substitutions
+  single t x :: tsubst 
+\end{lstlisting}
+The statement \lstinline[language={Ott}]|single t x :: tsubsts| defines a single substitution function called tsubsts\_t over terms defined by the grammar for t and for variables represented by the metavariable x. This is the relation mentioned in the grammar for the target language version for \{ t / x \} t'.
+
+
+
+Finally paramount to most semantics are relations like the reduction relation.
+\begin{lstlisting}[language={Ott}, caption={Ott reduction relation example}]
+defns
+Jop :: '' ::=
+
+ defn
+ t1 --> t2 :: ::reduce::'' {{ com [[t1]] reduces to [[t2]]}} by
+
+
+    --------------------------  :: ax_app
+    (\x.t12) v2 -->  {v2/x}t12
+
+    t1 --> t1'
+    -------------- :: ctx_app_fun
+    t1 t --> t1' t
+
+    t1 --> t1'
+    -------------- :: ctx_app_arg
+    v t1 --> v t1'
+\end{lstlisting}
+In this example I define a set of mutually recursive relations named Jop with one relation in it the $-->$ or reduce relation. Each element of this relation takes the form t1 $-->$ t2, where t1 and t2 are both terms of the grammar defined above. There are three statements for function application: the actual substitution, reduction of the first term and reduction of the second term. 
+\begin{lstlisting}[language={Ott}, caption={Ott single reduction}]
+t1 --> t1'
+-------------- :: ctx_app_fun
+t1 t --> t1' t
+\end{lstlisting}
+The premise(s) appear line-by-line above the ascii-art line, while and the result below the line. Next to the line is the name of the statement which is then prefixed by the name of the relation to avoid ambiguity. 
+
+
+
 \subsection{Coq}
+% Brief overview of proof assistants, reason for the choice of Coq
+There are a number of proof assistants available as destination for Ott, out of which Coq and Isabelle provide good extraction facilities to OCaml. They are at a glance rather similar. The choice between the two came down to advice from supervisors as I did not have experience with either systems. This project was developed with the Coq proof assistant. 
+
+Coq is formal proof assistant with a mathematical higher-level language called \textit{Gallina}, based around the Calculus of Inductive Constructions, that can be used to define functions and predicates, state, formally prove and machine check mathematical theorems and extract certified programs to high level languages like Haskell and OCaml.
+% Short guide to reading Coq
+\begin{lstlisting}[language={Coq},caption={Coq example}]
+Lemma tauRed_trans : forall (e e' e'' : expr), tauRed e e' -> tauRed e' e'' -> tauRed e e''.
+Proof.
+ unfold tauRed.
+ apply star_trans.
+Qed.
+\end{lstlisting}
+
+% Methods of extraction
+% Extraction plugin
+
 \subsection{OCaml}
+% Brief overview of OCaml
+% Short guide to reading OCaml
 
 \cleardoublepage
 \chapter{Implementation}
-
-\section{Verbatim text}
-
-Verbatim text can be included using \verb|\begin{verbatim}| and
-\verb|\end{verbatim}|. I normally use a slightly smaller font and
-often squeeze the lines a little closer together, as in:
-
-{\renewcommand{\baselinestretch}{0.8}\small\begin{verbatim}
-GET "libhdr"
- 
-GLOBAL { count:200; all  }
- 
-LET try(ld, row, rd) BE TEST row=all
-                        THEN count := count + 1
-                        ELSE { LET poss = all & ~(ld | row | rd)
-                               UNTIL poss=0 DO
-                               { LET p = poss & -poss
-                                 poss := poss - p
-                                 try(ld+p << 1, row+p, rd+p >> 1)
-                               }
-                             }
-LET start() = VALOF
-{ all := 1
-  FOR i = 1 TO 12 DO
-  { count := 0
-    try(0, 0, 0)
-    writef("Number of solutions to %i2-queens is %i5*n", i, count)
-    all := 2*all + 1
-  }
-  RESULTIS 0
-}
-\end{verbatim}
-}
-
-\section{Tables}
-
-\begin{samepage}
-Here is a simple example\footnote{A footnote} of a table.
-
-\begin{center}
-\begin{tabular}{l|c|r}
-Left      & Centred & Right \\
-Justified &         & Justified \\[3mm]
-%\hline\\%[-2mm]
-First     & A       & XXX \\
-Second    & AA      & XX  \\
-Last      & AAA     & X   \\
-\end{tabular}
-\end{center}
-
-\noindent
-There is another example table in the proforma.
-\end{samepage}
-
-\section{Simple diagrams}
-
-Simple diagrams can be written directly in \LaTeX.  For example, see
-figure~\ref{latexpic1} on page~\pageref{latexpic1} and see
-figure~\ref{latexpic2} on page~\pageref{latexpic2}.
-
-\begin{figure}
-\setlength{\unitlength}{1mm}
-\begin{center}
-\begin{picture}(125,100)
-\put(0,80){\framebox(50,10){AAA}}
-\put(0,60){\framebox(50,10){BBB}}
-\put(0,40){\framebox(50,10){CCC}}
-\put(0,20){\framebox(50,10){DDD}}
-\put(0,00){\framebox(50,10){EEE}}
-
-\put(75,80){\framebox(50,10){XXX}}
-\put(75,60){\framebox(50,10){YYY}}
-\put(75,40){\framebox(50,10){ZZZ}}
-
-\put(25,80){\vector(0,-1){10}}
-\put(25,60){\vector(0,-1){10}}
-\put(25,50){\vector(0,1){10}}
-\put(25,40){\vector(0,-1){10}}
-\put(25,20){\vector(0,-1){10}}
-
-\put(100,80){\vector(0,-1){10}}
-\put(100,70){\vector(0,1){10}}
-\put(100,60){\vector(0,-1){10}}
-\put(100,50){\vector(0,1){10}}
-
-\put(50,65){\vector(1,0){25}}
-\put(75,65){\vector(-1,0){25}}
-\end{picture}
-\end{center}
-\caption{\label{latexpic1}A picture composed of boxes and vectors.}
-\end{figure}
-
-\begin{figure}
-\setlength{\unitlength}{1mm}
-\begin{center}
-
-\begin{picture}(100,70)
-\put(47,65){\circle{10}}
-\put(45,64){abc}
-
-\put(37,45){\circle{10}}
-\put(37,51){\line(1,1){7}}
-\put(35,44){def}
-
-\put(57,25){\circle{10}}
-\put(57,31){\line(-1,3){9}}
-\put(57,31){\line(-3,2){15}}
-\put(55,24){ghi}
-
-\put(32,0){\framebox(10,10){A}}
-\put(52,0){\framebox(10,10){B}}
-\put(37,12){\line(0,1){26}}
-\put(37,12){\line(2,1){15}}
-\put(57,12){\line(0,2){6}}
-\end{picture}
-
-\end{center}
-\caption{\label{latexpic2}A diagram composed of circles, lines and boxes.}
-\end{figure}
-
-
-
-\section{Adding more complicated graphics}
-
-The use of \LaTeX\ format can be tedious and it is often better to use
-encapsulated postscript to represent complicated graphics.
-Figure~\ref{epsfig} and ~\ref{xfig} on page \pageref{xfig} are
-examples. The second figure was drawn using {\tt xfig} and exported in
-{\tt.eps} format. This is my recommended way of drawing all diagrams.
-
-
-\begin{figure}[tbh]
-%\centerline{\epsfbox{figs/cuarms.eps}}
-\caption{\label{epsfig}Example figure using encapsulated postscript}
-\end{figure}
-
-\begin{figure}[tbh]
-\vspace{4in}
-\caption{\label{pastedfig}Example figure where a picture can be pasted in}
-\end{figure}
-
-
-\begin{figure}[tbh]
-%\centerline{\epsfbox{figs/diagram.eps}}
-\caption{\label{xfig}Example diagram drawn using {\tt xfig}}
-\end{figure}
-
+\section{The semantics}
+\subsection{Expressions}
+\subsubsection{Arrow types}
+\subsubsection{Sum types}
+\subsubsection{Product types}
+\subsubsection{Fixpoint combinator}
+\subsubsection{Monadic primitives}
+\subsubsection{Fork}
+\subsubsection{Computation placeholders}
+\subsection{Transition system}
+\subsubsection{Labelled transitions}
+\subsubsection{Select operator}
+\subsection{Type system}
+\section{Proof assisstant system}
+\subsection{Outline of the proof assistant code}
+\subsection{Modification}
+\subsection{Extractable version}
+\section{OCaml system}
+\subsection{Outline of the OCaml code}
+\subsection{Hand modifications and justifications}
+\subsection{Sugar}
 
 
 
 \cleardoublepage
 \chapter{Evaluation}
 
-\section{Printing and binding}
+\section{Theoretical evaluation}
+Properties to evaluate: monadic laws, fork commutativity and associativity (liveness ?), type preservation and progress ?.
 
-If you have access to a laser printer that can print on two sides, you
-can use it to print two copies of your dissertation and then get them
-bound by the Computer Laboratory Bookshop. Otherwise, print your
-dissertation single sided and get the Bookshop to copy and bind it double
-sided.
+\subsection{Methods}
+\subsubsection{Weak bisimilarity}
+Intro to weak bisimilarity.
 
 
-Better printing quality can sometimes be obtained by giving the
-Bookshop an MSDOS 1.44~Mbyte 3.5" floppy disc containing the
-Postscript form of your dissertation. If the file is too large a
-compressed version with {\tt zip} but not {\tt gnuzip} nor {\tt
-compress} is acceptable. However they prefer the uncompressed form if
-possible. From my experience I do not recommend this method.
+What form does a general weak bisimilarity proof take.
 
-\subsection{Things to note}
 
-\begin{itemize}
-\item Ensure that there are the correct number of blank pages inserted
-so that each double sided page has a front and a back.  So, for
-example, the title page must be followed by an absolutely blank page
-(not even a page number).
+How does it appear here.
+\subsection{Properties}
+\subsubsection{Monadic laws}
+\subsubsection{Fork commutativity}
+Outline of fork commutativity
+\subsubsection{Fork associativity}
+\subsubsection{Liveness?}
+\subsubsection{Type preservation?}
+\subsubsection{Progress?} 
+%Theoretical evaluation
+% - Monadic laws
+% - Fork commutativity
+% - Fork associativity (limited?)
+% - Liveness ?
+% - Type preservation ?
+% - Progress
 
-\item Submitted postscript introduces more potential problems.
-Therefore you must either allow two iterations of the binding process
-(once in a digital form, falling back to a second, paper, submission if
-necessary) or submit both paper and electronic versions.
-
-\item There may be unexpected problems with fonts.
-
-\end{itemize}
-
-\section{Further information}
-
-See the Computer Lab's world wide web pages at URL:
-
-{\tt http://www.cl.cam.ac.uk/TeXdoc/TeXdocs.html}
-
+% Practical evaluation
+\section{Practical evaluation}
+Evaluation of speed and memory requirements absolutely and relative to implementations in LWT and Async.
+\subsection{Methods}
+\subsection{Examples}
+\subsubsection{Kahn process network}
+\subsubsection{Eratosthene Sieve}
+\subsubsection{Concurrent sort}
+%
 
 \cleardoublepage
 \chapter{Conclusion}
@@ -460,7 +590,7 @@ been helpful and saved you time.
 % the appendices
 \appendix
 
-\chapter{Latex source}
+\chapter{Ott source}
 
 \section{diss.tex}
 {\scriptsize\verbatiminput{diss.tex}}
