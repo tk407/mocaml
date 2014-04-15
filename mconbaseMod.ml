@@ -161,7 +161,7 @@ let rec xJO_red1 p1 select =
   | E_apply (E_function (x, t, e), v) ->
     (match xis_value_of_expr v with
      | true -> subst_expr v x e
-     | _ -> assert false (*  *))
+     | false -> E_apply (E_function(x, t, e), (xJO_red1 v select)))
   | E_apply (E_constant CONST_ret, v) ->
     (match xis_value_of_expr v with
      | true -> E_live_expr (Expr v)

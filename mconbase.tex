@@ -44,9 +44,14 @@
 \ottrulehead{\ottnt{typvar}  ,\ \ottnt{tv}}{::=}{}\ottprodnewline
 \ottfirstprodline{|}{\ottsym{'}  \ottmv{ident}}{}{}{}{}}
 
+\newcommand{\otttypconst}{
+\ottrulehead{\ottnt{typconst}  ,\ \ottnt{tc}}{::=}{}\ottprodnewline
+\ottfirstprodline{|}{\ottkw{unit}}{}{}{}{}}
+
 \newcommand{\otttypexpr}{
 \ottrulehead{\ottnt{typexpr}  ,\ \ottnt{t}}{::=}{}\ottprodnewline
-\ottfirstprodline{|}{\ottnt{typvar}}{}{}{}{}\ottprodnewline
+\ottfirstprodline{|}{\ottnt{typconst}}{}{}{}{}\ottprodnewline
+\ottprodline{|}{\ottnt{typvar}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\ottnt{typexpr}  \rightarrow  \ottnt{typexpr'}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\ottnt{typexpr}  *  \ottnt{typexpr'}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\textbf{concurrent} \, \ottnt{typexpr}}{}{}{}{}\ottprodnewline
@@ -61,7 +66,8 @@
 \newcommand{\ottconstant}{
 \ottrulehead{\ottnt{constant}  ,\ \ottnt{c}}{::=}{}\ottprodnewline
 \ottfirstprodline{|}{\ottkw{ret}}{}{}{}{}\ottprodnewline
-\ottprodline{|}{\ottkw{fork}}{}{}{}{}}
+\ottprodline{|}{\ottkw{fork}}{}{}{}{}\ottprodnewline
+\ottprodline{|}{\ottkw{unit}}{}{}{}{}}
 
 \newcommand{\ottexpr}{
 \ottrulehead{\ottnt{expr}  ,\ \ottnt{e}}{::=}{}\ottprodnewline
@@ -85,7 +91,8 @@
 \ottprodline{|}{Live \, \ottnt{expr}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{Left tag \, \ottnt{v}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{Right tag \, \ottnt{v}}{}{}{}{}\ottprodnewline
-\ottprodline{|}{\{  \ottnt{v}  ,  \ottnt{v'}  \}}{}{}{}{}}
+\ottprodline{|}{\{  \ottnt{v}  ,  \ottnt{v'}  \}}{}{}{}{}\ottprodnewline
+\ottprodline{|}{\ottsym{(}  \ottnt{v}  \ottsym{)}} {\textsf{S}}{}{}{}}
 
 \newcommand{\ottG}{
 \ottrulehead{\Gamma}{::=}{}\ottprodnewline
@@ -142,6 +149,7 @@
 \ottprodline{|}{\ottmv{ident}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\ottmv{index}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\ottnt{typvar}}{}{}{}{}\ottprodnewline
+\ottprodline{|}{\ottnt{typconst}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\ottnt{typexpr}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\ottnt{typscheme}}{}{}{}{}\ottprodnewline
 \ottprodline{|}{\ottnt{constant}}{}{}{}{}\ottprodnewline
@@ -153,6 +161,7 @@
 
 \newcommand{\ottgrammar}{\ottgrammartabular{
 \otttypvar\ottinterrule
+\otttypconst\ottinterrule
 \otttypexpr\ottinterrule
 \otttypscheme\ottinterrule
 \ottconstant\ottinterrule
@@ -204,9 +213,17 @@
 {\ottdrulename{constant\_fork}}{}%
 }}
 
+
+\newcommand{\ottdruleconstantXXunit}[1]{\ottdrule[#1]{%
+}{
+\Gamma  \vdash  \ottkw{unit}  :  \ottkw{unit}}{%
+{\ottdrulename{constant\_unit}}{}%
+}}
+
 \newcommand{\ottdefnGXXconstant}[1]{\begin{ottdefnblock}[#1]{$\Gamma  \vdash  \ottnt{constant}  :  \ottnt{t}$}{}
 \ottusedrule{\ottdruleconstantXXret{}}
 \ottusedrule{\ottdruleconstantXXfork{}}
+\ottusedrule{\ottdruleconstantXXunit{}}
 \end{ottdefnblock}}
 
 %% defn Get
@@ -322,6 +339,7 @@
 
 
 \newcommand{\ottdruleJOXXredXXforkmoveOne}[1]{\ottdrule[#1]{%
+\ottpremise{\texttt{~ ( is\_value\_of\_expr ( }\ottnt{e'}\texttt{ ) ) }}%
 \ottpremise{\ottnt{e}  \longrightarrow  \ottnt{e''}}%
 }{
 \ottsym{(}  \ottkw{fork} \, \ottsym{(}  Live \, \ottnt{e}  \ottsym{)}  \ottsym{)} \, \ottsym{(}  Live \, \ottnt{e'}  \ottsym{)}  \longrightarrow  \ottsym{(}  \ottkw{fork} \, \ottsym{(}  Live \, \ottnt{e''}  \ottsym{)}  \ottsym{)} \, \ottsym{(}  Live \, \ottnt{e'}  \ottsym{)}}{%
@@ -330,6 +348,7 @@
 
 
 \newcommand{\ottdruleJOXXredXXforkmoveTwo}[1]{\ottdrule[#1]{%
+\ottpremise{\texttt{~ ( is\_value\_of\_expr ( }\ottnt{e}\texttt{ ) ) }}%
 \ottpremise{\ottnt{e'}  \longrightarrow  \ottnt{e''}}%
 }{
 \ottsym{(}  \ottkw{fork} \, \ottsym{(}  Live \, \ottnt{e}  \ottsym{)}  \ottsym{)} \, \ottsym{(}  Live \, \ottnt{e'}  \ottsym{)}  \longrightarrow  \ottsym{(}  \ottkw{fork} \, \ottsym{(}  Live \, \ottnt{e}  \ottsym{)}  \ottsym{)} \, \ottsym{(}  Live \, \ottnt{e''}  \ottsym{)}}{%
@@ -496,7 +515,7 @@ Case \, \ottnt{e} \, of \, Left tag \, \ottmv{x}  \Rightarrow  \ottnt{e''}  \ott
 \ottall
 
 \begin{verbatim}
-Definition rules:        33 good    0 bad
-Definition rule clauses: 62 good    0 bad
+Definition rules:        34 good    0 bad
+Definition rule clauses: 65 good    0 bad
 \end{verbatim}
 \end{document}
