@@ -7,6 +7,11 @@
 
 \usepackage{a4}
 \usepackage{verbatim}
+\usepackage{etoolbox}
+
+\newtoggle{colourtoggle}
+
+\toggletrue{colourtoggle}
 
 \usepackage{url}
 \input{epsf}                            % to allow postscript inclusions
@@ -34,10 +39,21 @@
 \usepackage{listings, lstlangcoq, lstlangott, bold-extra}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 
+\iftoggle{colourtoggle}{
 \definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{myblue}{rgb}{0,0,1}
+\definecolor{myemerald}{rgb}{0.0,0.66,0.42}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
 \definecolor{myseagreen}{rgb}{0.95,0.999,0.95}
+}{
+\definecolor{mygreen}{rgb}{0.35,0.35,0.35}
+\definecolor{myblue}{RGB}{5,5,5}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{myemerald}{RGB}{111,111,111}
+\definecolor{mymauve}{rgb}{0.25,0.25,0.25}
+\definecolor{myseagreen}{rgb}{0.98,0.98,0.98}
+}
 
 \lstset{ %
   backgroundcolor=\color{myseagreen},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
@@ -52,13 +68,13 @@
   frame=shadowbox,                    % adds a frame around the code
   frameround=tttt,
   keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
-  keywordstyle=\color{blue},       % keyword style
+  keywordstyle=\color{myblue},       % keyword style
   language=[Objective]Caml,        % the language of the code
   morekeywords={*,...},            % if you want to add more keywords to the set
   numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
   numbersep=5pt,                   % how far the line-numbers are from the code
-  numberstyle=\tiny\color{Emerald}, % the style that is used for the line-numbers
-  rulecolor=\color{Emerald},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  numberstyle=\tiny\color{myemerald}, % the style that is used for the line-numbers
+  rulecolor=\color{myemerald},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
   showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
   showstringspaces=false,          % underline spaces within strings only
   showtabs=false,                  % show tabs within strings adding particular underscores
@@ -358,7 +374,7 @@ There are a number of lightweight concurrency models to choose from.
 
 \section{Design of concurrent semantics}
 %Brief overview of techiniques for concurrency
-Techniques for concurrency: processes, concurrent reductions, actors.
+Concurrency in a language can be modelled in various ways
 
 %Choices for concurrency semantics
 
@@ -486,16 +502,132 @@ There are a number of proof assistants available as destination for Ott, out of 
 
 Coq is formal proof assistant with a mathematical higher-level language called \textit{Gallina}, based around the Calculus of Inductive Constructions, that can be used to define functions and predicates, state, formally prove and machine check mathematical theorems and extract certified programs to high level languages like Haskell and OCaml.
 % Short guide to reading Coq
-\begin{lstlisting}[language={Coq},caption={Coq example}]
-Lemma tauRed_trans : forall (e e' e'' : expr), tauRed e e' -> tauRed e' e'' -> tauRed e e''.
-Proof.
- unfold tauRed.
- apply star_trans.
-Qed.
+
+Objects in Coq can divided into two sorts, \textit{Prop} (propositions) and \textit{Type}. A proposition like $ \forall A, B.\; A \wedge B \rightarrow B \vee B $ translates as
+
+\begin{lstlisting}[language={Coq},caption={Coq Prop logic example}]
+forall A B : Prop, A /\ B -> B \/ B
 \end{lstlisting}
 
+Predicates like equality and other sets can be used as well
+
+\begin{lstlisting}[language={Coq},caption={Coq Prop predicate example}]
+forall x y : Z, x * y = 0 -> x = 0 \/ y = 0
+\end{lstlisting}
+
+New predicates can be defined inductively
+
+\begin{lstlisting}[language={Coq},caption={Coq Prop new predicate example}]
+ Inductive even : N -> Prop :=
+  | even_0 : even 0
+  | even_S n : odd n -> even (n + 1)
+  with odd : N -> Prop :=
+  | odd_S n : even n -> odd (n + 1).
+\end{lstlisting}
+
+Data structures can also be defined both inductively and coinductively
+
+\begin{lstlisting}[language={Coq},caption={Coq inductive data structure example}]
+ Inductive seq : nat -> Set :=
+  | niln : seq 0
+  | consn : forall n : nat, nat -> seq n -> seq (S n).
+\end{lstlisting}
+
+\begin{lstlisting}[language={Coq},caption={Coq coinductive data structure example}]
+ CoInductive stream (A:Type) : Type :=
+  | Cons : A -> stream -> stream.
+\end{lstlisting}
+
+Functions over these data structures are defined as fixpoints and cofixpoints respectively.
+
+\begin{lstlisting}[language={Coq},caption={Coq fixpoint example}]
+ Fixpoint length (n : nat) (s : seq n) {struct s} : nat := 
+     match s with
+     | niln => 0
+     | consn i _ s' => S (length i s')
+     end.
+\end{lstlisting}
+
+Finally theorems can be proven with these propositions and structures.
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq},caption={Coq theorem example}]
+Theorem length_corr : forall (n : nat) (s : seq n), length n s = n.
+  Proof.
+    intros n s.
+
+    (* reasoning by induction over s. Then, we have two new goals
+       corresponding on the case analysis about s (either it is 
+       niln or some consn *)
+    induction s.
+
+      (* We are in the case where s is void. We can reduce the 
+         term: length 0 niln *)
+      simpl. 
+
+      (* We obtain the goal 0 = 0. *)
+      trivial.
+
+      (* now, we treat the case s = consn n e s with induction 
+         hypothesis IHs *)
+      simpl. 
+
+      (* The induction hypothesis has type length n s = n. 
+         So we can use it to perform some rewriting in the goal: *)
+      rewrite IHs. 
+
+      (* Now the goal is the trivial equality: S n = S n *)
+      trivial.
+
+    (* Now all sub cases are closed, we perform the ultimate
+       step: typing the term built using tactics and save it as
+       a witness of the theorem. *)
+  Qed.	  
+\end{lstlisting}
+\end{minipage}
+Each Lemma, Theorem, Example have a name and a statement. The statement is a proposition. This is followed by the proof in which a sequence of steps modify the assumed hypotheses and the goal proposition until it has been proven. These steps are called tactics which can be simple application of previous theorems and axioms or as complex as a SAT solver. Coq comes with a language Ltac to allow users to build their own tactics.
+
 % Methods of extraction
+
+Coq also provides built in facilities for the certified extraction of code to OCaml, Haskell and Scheme. These can be invoked with the keywords \lstinline[language={Coq}]|Extraction| and \lstinline[language={Coq}]|Recursive Extraction|. 
+
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={Coq to OCaml extraction of seq}]
+type nat =
+| O
+| S of nat
+
+type seq =
+| Niln
+| Consn of nat * nat * seq
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={Coq to OCaml extraction of length}]
+(** val length : nat -> seq -> nat **)
+
+let rec length n = function
+| Niln -> O
+| Consn (i, n0, s') -> S (length i s')
+\end{lstlisting}
+\end{minipage}
+
 % Extraction plugin
+
+Out of the box, Coq does not provide facilities for the extraction of so called logical inductive systems. These are essentially inductively defined propositions.
+
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq},caption={Coq logical inductive example}]
+Inductive add : nat -> nat -> nat -> Prop :=
+| addO : forall n , add n O n
+| addS : forall n m p, add n m p -> add n (S m) (S p).
+\end{lstlisting}
+\end{minipage}
+
+However with the help of a plugin developed by David Delahaye, Catherine Dubois, Jean-Fr\'ed\'eric \'Etienne and Pierre-Nicolas Tollitte \cite{tollitte2012producing} by marking different modalities of the elements of a relation we can generate code with an input-output convention.
 
 \subsection{OCaml}
 % Brief overview of OCaml

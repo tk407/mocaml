@@ -138,6 +138,11 @@ Gerd Stolpmann.
 Jane Street.
 \newblock Async, open source concurrency library.
 
+\bibitem{tollitte2012producing}
+Pierre-Nicolas Tollitte, David Delahaye, and Catherine Dubois.
+\newblock Producing certified functional code from inductive specifications.
+\newblock In {\em Certified Programs and Proofs}, pages 76--91. Springer, 2012.
+
 \bibitem{vouillon2008lwt}
 J{\'e}r{\^o}me Vouillon.
 \newblock Lwt: a cooperative thread library.
