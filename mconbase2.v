@@ -126,7 +126,7 @@ Fixpoint is_value_of_expr (e_5:expr) : Prop :=
   | (E_apply expr5 expr') => match expr5 with | E_constant (CONST_fork) => is_value_of_expr (expr') | E_constant (CONST_pair) => is_value_of_expr (expr') | _ => False end  
   | (E_bind expr5 expr') => False
   | (E_function value_name5 typexpr5 expr5) => (True)
-  | (E_fix e) => ((is_value_of_expr e))
+  | (E_fix e) => False
   | (E_live_expr lm) => (True)
   | (E_pair e e') => ((is_value_of_expr e) /\ (is_value_of_expr e'))
   | (E_taggingleft e) => ((is_value_of_expr e))
@@ -328,9 +328,9 @@ with Get : G -> expr -> typexpr -> Prop :=    (* defn Get *)
      Get G5 (E_live_expr (LM_expr e)) (TE_concurrent t)
  | Get_live_comp : forall (G5:G) (lab:label),
      Get G5 (E_live_expr  (LM_comp lab) ) (TE_concurrent (TE_constants TC_unit))
- | Get_fix : forall (G5:G) (e:expr) (t t':typexpr),
-     Get G5 e (TE_arrow  (TE_arrow t t')   (TE_arrow t t') ) ->
-     Get G5 (E_fix e)  (TE_arrow t t') 
+ | Get_fix : forall (G5:G) (e:expr) (t:typexpr),
+     Get G5 e (TE_arrow t t) ->
+     Get G5 (E_fix e) t
  | Get_bind : forall (G5:G) (e e':expr) (t' t:typexpr),
      Get G5 e (TE_concurrent t) ->
      Get G5 e' (TE_arrow t (TE_concurrent t')) ->
@@ -397,10 +397,8 @@ Inductive JO_red : expr -> select -> redlabel -> expr -> Prop :=    (* defn red 
  | JO_red_fix_move : forall (e:expr) (s:select) (rl:redlabel) (e':expr),
      JO_red e s rl e' ->
      JO_red  (E_fix e)  s rl  (E_fix e') 
- | JO_red_fix_app : forall (v v':expr) (s:select),
-     is_value_of_expr v ->
-     is_value_of_expr v' ->
-     JO_red (E_apply  (E_fix v)  v') s RL_tau (E_apply  (E_apply v  (E_fix v) )   v' )
+ | JO_red_fix_app : forall (x:value_name) (t:typexpr) (e:expr) (s:select),
+     JO_red  (E_fix  (E_function x t e) )  s RL_tau  (subst_expr (E_fix  (E_function  x   t   e ) )  x   e ) 
  | JO_red_pair_1 : forall (e e'':expr) (s:select) (rl:redlabel) (e':expr),
      JO_red e s rl e' ->
      JO_red (E_pair e e'') s rl (E_pair e' e'')

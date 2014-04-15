@@ -131,18 +131,13 @@ Proof.
  simpl; auto.
  simpl; auto.
  intros.
- simpl; congruence.
+ inversion H.
  intros.
  simpl; auto.
  intros.
  inversion H.
  intros; inversion H.
  simpl.
- apply IHe in H1; auto.
- intros.
- inversion H.
- intros; inversion H.
- simpl; auto.
  apply IHe1 in H5.
  intuition.
  apply IHe2 in H6; intuition.

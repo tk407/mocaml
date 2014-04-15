@@ -263,8 +263,6 @@ rewrite <- H4 in H; simpl in H; auto.
  substs.
  contradiction.
  substs.
- contradiction.
- substs.
  simpl in H.
  intuition.
  substs.
@@ -386,8 +384,6 @@ intros.
  f_equal.
  apply H6. 
  apply tStep with (s:=s); trivial.
- substs.
- contradiction.
  substs.
  contradiction.
  substs.
