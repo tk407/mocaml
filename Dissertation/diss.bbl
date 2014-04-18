@@ -39,6 +39,12 @@ Sandrine Blazy and Xavier Leroy.
 Koen Claessen.
 \newblock Functional pearls: A poor man's concurrency monad, 1999.
 
+\bibitem{delahaye2007extracting}
+David Delahaye, Catherine Dubois, and Jean-Fr{\'e}d{\'e}ric {\'E}tienne.
+\newblock Extracting purely functional contents from logical inductive types.
+\newblock In {\em Theorem Proving in Higher Order Logics}, pages 70--85.
+  Springer, 2007.
+
 \bibitem{deleuzelight}
 Christophe Deleuze.
 \newblock Light weight concurrency in ocaml: Continuations, monads, promises,

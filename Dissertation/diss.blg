@@ -8,6 +8,10 @@ I was expecting a `,' or a `}'---line 17 of file refs.bib
  :  howpublished = {\url{http://janestreet.github.io/}}
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
+Repeated entry---line 255 of file refs.bib
+ : @incollection{delahaye2007extracting
+ :                                     ,
+I'm skipping whatever remains of this entry
 Warning--to sort, need author or key in LWT
 Warning--to sort, need author or key in Coq
 Warning--to sort, need author or key in OCaml
@@ -18,45 +22,45 @@ Warning--empty year in deleuzelight
 Warning--can't use both volume and number fields in ganz1999trampolined
 Warning--can't use both volume and number fields in liskov1988promises
 Warning--can't use both volume and number fields in sevvcik2011relaxed
-You've used 29 entries,
+You've used 30 entries,
             2118 wiz_defined-function locations,
-            641 strings with 7459 characters,
-and the built_in function-call counts, 8230 in all, are:
-= -- 823
-> -- 251
-< -- 12
-+ -- 109
-- -- 76
-* -- 420
-:= -- 1250
-add.period$ -- 86
-call.type$ -- 29
-change.case$ -- 123
+            646 strings with 7667 characters,
+and the built_in function-call counts, 8689 in all, are:
+= -- 872
+> -- 269
+< -- 13
++ -- 116
+- -- 82
+* -- 448
+:= -- 1318
+add.period$ -- 90
+call.type$ -- 30
+change.case$ -- 129
 chr.to.int$ -- 0
-cite$ -- 39
-duplicate$ -- 371
-empty$ -- 799
-format.name$ -- 76
-if$ -- 1853
+cite$ -- 40
+duplicate$ -- 393
+empty$ -- 837
+format.name$ -- 82
+if$ -- 1959
 int.to.chr$ -- 0
-int.to.str$ -- 29
-missing$ -- 19
-newline$ -- 139
-num.names$ -- 48
-pop$ -- 210
+int.to.str$ -- 30
+missing$ -- 20
+newline$ -- 144
+num.names$ -- 50
+pop$ -- 219
 preamble$ -- 1
-purify$ -- 96
+purify$ -- 101
 quote$ -- 0
-skip$ -- 296
+skip$ -- 311
 stack$ -- 0
-substring$ -- 438
-swap$ -- 104
-text.length$ -- 12
+substring$ -- 467
+swap$ -- 112
+text.length$ -- 13
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 112
+type$ -- 116
 warning$ -- 10
-while$ -- 80
-width$ -- 31
-write$ -- 288
-(There was 1 error message)
+while$ -- 85
+width$ -- 32
+write$ -- 300
+(There were 2 error messages)

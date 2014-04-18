@@ -10,6 +10,9 @@
 \usepackage{etoolbox}
 
 \newtoggle{colourtoggle}
+\newtoggle{wordcount}
+
+\togglefalse{wordcount}
 
 \toggletrue{colourtoggle}
 
@@ -36,7 +39,7 @@
 
 
 %  Listings set up
-\usepackage{listings, lstlangcoq, lstlangott, bold-extra}
+\usepackage{listings, lstlangcoq, lstlangott, lstlanglwt, bold-extra}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 
 \iftoggle{colourtoggle}{
@@ -88,6 +91,7 @@
 \usepackage{tikz}
 \usepackage{tikz-cd}
 \usetikzlibrary{arrows, shapes}
+
 
 \begin{document}
 
@@ -209,23 +213,21 @@ Motivation of the project is to investigate the lack of certified implementation
 \section{Overview of concurrency}
 Concurrency is the concept of more than one thread of execution making progress in the same time period. A particular form of concurrency is parallelism, when threads physically run simultaneously.
 
-Concurrent computation has became the norm for most applications in computer schience with the rise of faster systems often with multiple cores. This can be exploited on multiple levels ranging from hardware supported instruction and thread level parallelism to software based heavy and lightweight models. 
+Concurrent computation has became common in many applications in computer science with the rise of faster systems often with multiple cores. This can be exploited on multiple levels ranging from hardware supported instruction and thread level parallelism to software based heavy and lightweight models. 
 
 This project aims to model lightweight, cooperative concurrency. No threads are exposed to the underlying operating system or hardware. This means that blocking operations on the process level will still block all internal threads. The threads expose the points of possible interleaving and the scheduling is done in software.
 
 The issue of concurrency occurs in most general programming languages. However, functional languages are often both less developed in this area and also fit well with concurrency without races for mutable data structures. Functional languages that have both actual industrial applications and large set of features are of particular interest. These languages include OCaml and Haskell. This project focuses on OCaml. 
-
-\section{Overview of OCaml}
-OCaml is a high level programming language. It combines functional, object-oriented and imperative paradigms and used in large scale industrial and academic projects where speed and correctness are of utmost importance. OCaml uses one of the most powerful type and inference systems available to make efficient and correct software engineering possible.
-  
+ 
 
 \section{Current implementations of a concurrency framework in OCaml}
-There are two very successful monadic concurrency frameworks, LWT\cite{LWT} and Async\cite{Async}. They both provide the primitives for concurrent development in OCaml, however neither is supported by a clear semantic description.  This is because their main focus was ease of use and speed. 
+There are two very successful monadic concurrency frameworks, LWT\cite{LWT} and Async\cite{Async}. They both provide the primitives and syntax extensions for concurrent development in OCaml, however neither is supported by a clear semantic description.  This is because their main focus was ease of use and speed. 
 
 LWT, the lightweight cooperative threading library\cite{vouillon2008lwt} was designed as an open source framework entirely written in OCaml in a monadic style. It was successfully used in several large projects including the Unison file synchroniser and the Ocsigen Web server. This library includes many primitives to provide a feature rich framework, including primitives for thread creation, composition and cancel, thread local storage and support for various synchronisation techniques. 
 
+
 \begin{minipage}{\linewidth}
-\begin{lstlisting}[caption={LWT example}]
+\begin{lstlisting}[alsolanguage={Lwt}, caption={LWT example}]
  open Lwt
  
  let main () =
@@ -243,6 +245,7 @@ LWT, the lightweight cooperative threading library\cite{vouillon2008lwt} was des
  let _ = Lwt_main.run (main ())
 \end{lstlisting}
 \end{minipage}
+
 
 In this example we can see some of the syntax of Lwt where we define \verb|heads|, a function that sleeps for 1 second and then prints ``Head" and \verb|tails| which does the same with 2 seconds and ``Tails". These are then both waited on, until they are both finished and followed by the text ``Finished". In Lwt semantics mostly follow the principle of a continuation monads, that is we build a sequence of continuations that the scheduler can pick between.
 
@@ -276,19 +279,7 @@ There have been a lot of work on how exactly to formulate the semantics of concu
 
 A monad\cite{hoareetal2001tackling} in functional programming is a construct to structure computations that are in some sense "sequenced" together. This sequencing can be for example string concatenation, simple operation sequencing (the well known ;) or conditional execution. Two operations, commonly called bind and return form a monad when they obey a set of axioms called monadic laws.
 
-
-The continuation monad consists of a parametric type $ \alpha \, \textbf{con} $, where $ \alpha $ is a type parameter describing the type of computation or value enclosed and three key operations 
-\begin{itemize}
-\item{ret, also known as return. It has type $ \alpha \rightarrow \alpha \, \textbf{con} $ and simply evaluates its parameter and boxes up the result in the parametric type}
-\item{$>>=$, also known as bind, sequences two operations. The second argument is the continuation for the first parameter. More formally it has a type $ \alpha \, \textbf{con} \rightarrow ( \alpha \rightarrow \beta \, \textbf{con}) \rightarrow \beta \, \textbf{con}  $, that is it takes a boxed up computation and a function that takes the value of the computation and returns a new box. Bind then evaluates the expression within the box of the first argument and passes it to the second argument.}
-
-\end{itemize}
-
-The third operation is fork, which is the way to spawn new threads (two in this particular case). The approach taken in this work is to have fork take two arguments and evaluate the two paths concurrently. The concurrency is achieved by reducing either side of the fork step by step based on some scheduler. When either path reduced to a value it returns a boxed up pair of results. This result is value and a boxed up computation (that is, the partially reduced other path).
-
-Therefore the signature of fork is slightly more complicated
-\[ \textbf{fork} \, : \, \alpha \, \textbf{con} \rightarrow \beta \, \textbf{con} \rightarrow ((\alpha *  \beta \, \textbf{con}) \, + \, ( \alpha \, \textbf{con} * \beta) ) \, \textbf{con} \]
-Where $ + $ refers to sum types, that is labelled variants.  
+Most monads support further operations and a concurrency monad is one such monad. Beside the two necessary operations (return and bind) it has to support at least one that deals with concurrent execution.  This operation can come in many forms and under many names, for example fork, join or choose. Each of these may have slightly differing signatures and semantics depending on the style.
 
 \section{Semantics to logic}
 These semantics can be modelled in logic, in particular logics used by proof assistants. A model like this can be used for formal verification of properties about said semantics \cite{benton2008mechanized,blazy2009mechanized, blazy2006formal, leroy2009formal}. Most often used proof assistants include Coq \cite{Coq}, HOL and Isabelle. There has been much effort to make the modelling as easy as possible with tools like Ott\cite{Ott} which enables semanticists to describe their language in a simple, ascii-art like style and export these models to destination languages, including the above mentioned proof assistants and \LaTeX.
@@ -302,10 +293,35 @@ While a number of proof assistants have utilities for direct computation, in mos
 \chapter{Preparation}
 During the preparation phase of this project many decisions had to be made, including the concurrency model, large scale semantics and the tool chain used in the process.
 
-\section{Design of monadic semantics}
-%Brief overview of monads
-Monads: Brief mathematical background.
+\section{Design of concurrent semantics}
+%Brief overview of techiniques for concurrency
+Concurrency may be modelled in many ways. A popular way of modelling concurrency is with a process calculus. A process calculus is an algebra of processes or threads where. A thread is a unit of control, sometimes also a unit of resources. This algebra often comes with a number of operations like 
+\begin{itemize}
+\item{$ P\, | \, Q $  for parallel composition where $ P $ and $ Q $ are processes}
+\item{ $ a.P  $ for sequential composition where $ a $ is an atomic action and $ P $ is a process executed sequentially}
+\item{$ !P $ for replication where $ P $ is a process and $ !P \equiv P \, | \, !P $}
+\item{$ x\langle y \rangle \cdot P $ and $ x(v) \cdot Q $ for sending and receiving messages through channel $ x $ respectively} 
+\end{itemize}
 
+%Process calculus ?
+
+%Choices for concurrency semantics
+This project aimed to have simple but powerful operational semantics. Simplicity is required in both the design and the interface. There is a short and limited timespan for implementation and an even shorter period for the user to understand the system. On the other hand, the model should have comparable formal properties to full, well known process calculi. 
+
+I focused on providing primitives for operations on processes including parallel and sequential composition and recursion. Formal treatment of communication channels have been left out to limit the scope of the project.  
+
+
+\section{Choice of implementation style}  
+%Why I chose continuation monads vs. World
+A number of implementation styles of lightweight concurrency were surveyed for OCaml by Christophe Deleuze\cite{deleuzelight}. These fall in two broad categories: direct and indirect styles. Direct styles like captured and delimited continuations involve keeping an explicit queue of continuations that can be executed at any given time and a scheduler that picks the next element from the queue. Indirect styles include the trampolined style and two monadic styles: continuations and promises.
+
+Simplicity and similarity to current implementations like Lwt and Async were the two factors in the decision between these styles. Both direct styles and the promise monad style keep concurrency state data that is external to the language and has to be maintained at runtime explicitly. This would make implementation slightly more complicated. Lwt and Async both provide monadic style interfaces therefore I chose the continuation monad style.
+
+
+
+
+
+\section{Design of monadic semantics}
 Category theory has been a general tool used to model functional programming languages and programs. Monads are a concept originating from this connection. 
 
 
@@ -343,12 +359,14 @@ This roughly translates to wrapping and then subsequently unwrapping behaves as 
 }
 \end{enumerate}
 
-This description entails two operations (lift and join) and their behaviour (associativity and identity), however this is a formulation rarely used in practice. There is an equivalent pair of operations (ret and bind) with similar behaviour constraints that is used in most monadic programming constructs. 
+This description entails three operations (lift, join and map) and their behaviour (associativity and identity), however this is a formulation rarely used in practice. There is an equivalent pair of operations (ret and bind) with similar behaviour constraints that is used in most monadic programming constructs. 
 
+
+Most implementations go along the following lines: there is a parametric type $ \textbf{con} \, \alpha $ where $ \alpha $ is the type parameter. Note $ \textbf{con} $ is an arbitrary name, marker for a particular monad. The I/O monad would have IO as the marker.
 
 The \lstinline|ret| takes a value of the language and gives its monadic counterpart. With types this can be represented as $ \textbf{ret} \, :\, \forall \alpha. \alpha\, \rightarrow\, \textbf{con}\, \alpha $.
 
-The \lstinline|bind|   
+The \lstinline|bind| (often written as $ \gg= $)  takes a monadic value (that is one in the parametric type $ \textbf{con} \, \alpha $) and a function that can map the inner value to a new monadic value (that is, it has type $ \alpha \, \rightarrow \, \textbf{con} \, \beta $). Bind then returns a $ \textbf{con} \, \beta $. With types this means: $ \gg= \, : \, \forall \alpha \, \beta. \; \textbf{con} \, \alpha \rightarrow (\alpha \rightarrow \textbf{con} \, \beta) \rightarrow \textbf{con} \, \beta $.
 
 To call this system a monad, we need to satisfy three axioms:
 
@@ -357,27 +375,11 @@ To call this system a monad, we need to satisfy three axioms:
 \[ (\textbf{ret} \, x) \, \gg=\, f \quad \equiv \quad f \, x \]}
 \item{\lstinline|ret| is essentially a right neutral element:
 \[ m \, \gg=\, \textbf{ret} \quad \equiv \quad m \]}
-\item{\lstinline|bind| (often written as $ \gg= $) is associative:
+\item{\lstinline|bind| is associative:
 \[ (m \, \gg= \, f) \, \gg= g \quad \equiv \quad m\, \gg= \, (\lambda\, x. (f\, x \, \gg= \, g) ) \]}
 \end{enumerate}
 
 We will return to the exact nature of $ \equiv $ used in this project in the evaluation section and the exact form this will take.
-
-
-
-\section{Choice of concurrency model}
-There are a number of lightweight concurrency models to choose from. 
-%Why I chose continuation monads vs. World
-
-
-
-
-\section{Design of concurrent semantics}
-%Brief overview of techiniques for concurrency
-Concurrency in a language can be modelled in various ways
-
-%Choices for concurrency semantics
-
 
 
 \section{Tools}
@@ -498,7 +500,7 @@ The premise(s) appear line-by-line above the ascii-art line, while and the resul
 
 \subsection{Coq}
 % Brief overview of proof assistants, reason for the choice of Coq
-There are a number of proof assistants available as destination for Ott, out of which Coq and Isabelle provide good extraction facilities to OCaml. They are at a glance rather similar. The choice between the two came down to advice from supervisors as I did not have experience with either systems. This project was developed with the Coq proof assistant. 
+There are a number of proof assistants available as destinations for Ott, out of which Coq and Isabelle provide good extraction facilities to OCaml. They are at a glance rather similar. The choice between the two came down to advice from supervisors as I did not have experience with either systems. This project was developed with the Coq proof assistant. 
 
 Coq is formal proof assistant with a mathematical higher-level language called \textit{Gallina}, based around the Calculus of Inductive Constructions, that can be used to define functions and predicates, state, formally prove and machine check mathematical theorems and extract certified programs to high level languages like Haskell and OCaml.
 % Short guide to reading Coq
@@ -627,10 +629,113 @@ Inductive add : nat -> nat -> nat -> Prop :=
 \end{lstlisting}
 \end{minipage}
 
-However with the help of a plugin developed by David Delahaye, Catherine Dubois, Jean-Fr\'ed\'eric \'Etienne and Pierre-Nicolas Tollitte \cite{tollitte2012producing} by marking different modalities of the elements of a relation we can generate code with an input-output convention.
+However with the help of a plugin developed by David Delahaye, Catherine Dubois, Jean-Fr\'ed\'eric \'Etienne and Pierre-Nicolas Tollitte \cite{delahaye2007extracting, tollitte2012producing} by marking different modalities of the inductively generated proposition we can generate code with an input-output convention.
+
+
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq},caption={Coq to OCaml extraction of a logical inductive relation}]
+(** val add12 : nat -> nat -> nat **)
+
+let rec add12 p1 p2 =
+  match (p1, p2) with
+  | (n, O) -> n
+  | (n, S m) ->
+    (match add12 n m with
+     | p -> S p
+     | _ -> assert false (*  *))
+  | _ -> assert false (*  *)
+\end{lstlisting}
+\end{minipage}
+
+Most descriptions of reduction relations and indeed the output of Ott is of this kind, therefore this plugin helps with the extraction of a reduction relation directly. 
 
 \subsection{OCaml}
 % Brief overview of OCaml
+OCaml is a high level programming language. It combines functional, object-oriented and imperative paradigms and used in large scale industrial and academic projects where speed and correctness are of utmost importance. OCaml uses one of the most powerful type and inference systems available to make efficient and correct software engineering possible.
+
+OCaml, like many other functional languages support a wide range of features, from simple functions, to mutually recursive functions with pattern matching.
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml simple function example: square}]
+let square x = x * x
+\end{lstlisting}
+\end{minipage}
+
+
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml recursive function example: factorial}]
+let rec fact x =
+    if x <= 1 then 1 else x * fact (x - 1)
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml complex function example: insertion sort}]
+let rec sort = function
+    | [] -> []
+    | x :: l -> insert x (sort l)
+  and insert elem = function
+    | [] -> [elem]
+    | x :: l -> if elem < x then elem :: x :: l
+                else x :: insert elem l
+\end{lstlisting}
+\end{minipage}
+
+Furthermore, it was designed as a versatile, general purpose programming language. OCaml features include objects, modules, support for imperative style and higher order functions.
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml imperative function example}]
+let add_polynom p1 p2 =
+    let n1 = Array.length p1
+    and n2 = Array.length p2 in
+    let result = Array.create (max n1 n2) 0 in
+    for i = 0 to n1 - 1 do result.(i) <- p1.(i) done;
+    for i = 0 to n2 - 1 do result.(i) <- result.(i) + p2.(i) done;
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml higher order functions example}]
+let rec sigma f = function
+    | [] -> 0
+    | x :: l -> f x + sigma f l
+\end{lstlisting}
+\end{minipage}
+    
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml data structure example}]
+type expression =
+    | Num of int
+    | Var of string
+    | Let of string * expression * expression
+    | Binop of string * expression * expression
+\end{lstlisting}
+\end{minipage}
+    
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml evaluation function example}]    
+let rec eval env = function
+    | Num i -> i
+    | Var x -> List.assoc x env
+    | Let (x, e1, in_e2) ->
+       let val_x = eval env e1 in
+       eval ((x, val_x) :: env) in_e2
+    | Binop (op, e1, e2) ->
+       let v1 = eval env e1 in
+       let v2 = eval env e2 in
+       eval_op op v1 v2
+  and eval_op op v1 v2 =
+    match op with
+    | "+" -> v1 + v2
+    | "-" -> v1 - v2
+    | "*" -> v1 * v2
+    | "/" -> v1 / v2
+    | _ -> failwith ("Unknown operator: " ^ op)
+\end{lstlisting}
+\end{minipage}
+
+
 % Short guide to reading OCaml
 
 \cleardoublepage
@@ -642,7 +747,18 @@ However with the help of a plugin developed by David Delahaye, Catherine Dubois,
 \subsubsection{Product types}
 \subsubsection{Fixpoint combinator}
 \subsubsection{Monadic primitives}
+ The concurrency monad consists of a parametric type $ \alpha \, \textbf{con} $, where $ \alpha $ is a type parameter describing the type of computation or value enclosed and three key operations 
+\begin{itemize}
+\item{ret, also known as return. It has type $ \alpha \rightarrow \alpha \, \textbf{con} $ and simply evaluates its parameter and boxes up the result in the parametric type}
+\item{$>>=$, also known as bind, sequences two operations. The second argument is the continuation for the first parameter. More formally it has a type $ \alpha \, \textbf{con} \rightarrow ( \alpha \rightarrow \beta \, \textbf{con}) \rightarrow \beta \, \textbf{con}  $, that is it takes a boxed up computation and a function that takes the value of the computation and returns a new box. Bind then evaluates the expression within the box of the first argument and passes it to the second argument.}
+
+\end{itemize}
+
 \subsubsection{Fork}
+The third operation is fork, which is the way to spawn new threads (two in this particular case). The approach taken in this work is to have fork take two arguments and evaluate the two paths concurrently. The concurrency is achieved by reducing either side of the fork step by step based on some scheduler. When either path reduced to a value it returns a boxed up pair of results. This result is value and a boxed up computation (that is, the partially reduced other path).
+
+Therefore the signature of fork is slightly more complicated
+\[ \textbf{fork} \, : \, \alpha \, \textbf{con} \rightarrow \beta \, \textbf{con} \rightarrow ((\alpha *  \beta \, \textbf{con}) \, + \, ( \alpha \, \textbf{con} * \beta) ) \, \textbf{con} \]  
 \subsubsection{Computation placeholders}
 \subsection{Transition system}
 \subsubsection{Labelled transitions}
