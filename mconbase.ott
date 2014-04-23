@@ -336,12 +336,12 @@ e [ s ] --> [ rl ]  e' :: :: red :: red_ by
 
 e [ s ] --> [ rl ] e''
 --------------------------- :: forkmove1
-(:E_apply:fork (live exp e) ) (live exp e') [ First ] --> [ rl ] (:E_apply:fork (live exp e'') ) (live exp e')
+(:E_apply:fork (live exp e) ) (live lm) [ First ] --> [ rl ] (:E_apply:fork (live exp e'') ) (live lm)
 
 
 e' [ s ] --> [ rl ] e''
 --------------------------- :: forkmove2
-(:E_apply:fork (live exp e) ) (live exp e') [ Second ] --> [ rl ] (:E_apply:fork (live exp e) ) (live exp e'') 
+(:E_apply:fork (live lm) ) (live exp e') [ Second ] --> [ rl ] (:E_apply:fork (live lm) ) (live exp e'') 
 
 --------------------------- :: forkdeath1
 (:E_apply:fork (live exp v) ) (live lm) [ First ] --> [ tau ] live exp ( inl ( ( { v , ( live lm ) } ) ) )
@@ -373,7 +373,7 @@ e [ s ] --> [ rl ] e'
 (live exp e) >>= e'' [ s ] --> [ rl ] (live exp e') >>= e'' 
 
 --------------------------- :: compbind
-(live (comp lab) ) >>= e [ s ] --> [ lab ] e' unit
+(live (comp lab) ) >>= e [ s ] --> [ lab ] e unit
 
 --------------------------- :: dobind
 (live exp v) >>= e [ s ] --> [ tau ] e v 

@@ -72,8 +72,8 @@ Proof.
    simpl.
    trivial.
    simpl; trivial.
-   simpl in H. 
-   apply IHe; trivial.
+   simpl in H.
+   intuition. 
   (* live *)
    simpl; trivial.
   (* pair *)
@@ -147,10 +147,7 @@ Proof.
   (* function *)
    simpl; trivial.
   (* fix *)
-  simpl; trivial.
-  apply IHe.
-  simpl in H.
-  trivial.
+  simpl in H. intuition.
   (* live *)
    simpl; trivial.
   (* pair *)
