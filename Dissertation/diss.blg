@@ -3,15 +3,6 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: diss.aux
 The style file: plain.bst
 Database file #1: refs.bib
-I was expecting a `,' or a `}'---line 17 of file refs.bib
- :  
- :  howpublished = {\url{http://janestreet.github.io/}}
-(Error may have been on previous line)
-I'm skipping whatever remains of this entry
-Repeated entry---line 255 of file refs.bib
- : @incollection{delahaye2007extracting
- :                                     ,
-I'm skipping whatever remains of this entry
 Warning--to sort, need author or key in LWT
 Warning--to sort, need author or key in Coq
 Warning--to sort, need author or key in OCaml
@@ -24,16 +15,16 @@ Warning--can't use both volume and number fields in liskov1988promises
 Warning--can't use both volume and number fields in sevvcik2011relaxed
 You've used 30 entries,
             2118 wiz_defined-function locations,
-            646 strings with 7667 characters,
-and the built_in function-call counts, 8689 in all, are:
-= -- 872
+            647 strings with 7701 characters,
+and the built_in function-call counts, 8700 in all, are:
+= -- 875
 > -- 269
 < -- 13
 + -- 116
 - -- 82
 * -- 448
-:= -- 1318
-add.period$ -- 90
+:= -- 1321
+add.period$ -- 91
 call.type$ -- 30
 change.case$ -- 129
 chr.to.int$ -- 0
@@ -41,17 +32,17 @@ cite$ -- 40
 duplicate$ -- 393
 empty$ -- 837
 format.name$ -- 82
-if$ -- 1959
+if$ -- 1962
 int.to.chr$ -- 0
 int.to.str$ -- 30
 missing$ -- 20
-newline$ -- 144
+newline$ -- 145
 num.names$ -- 50
 pop$ -- 219
 preamble$ -- 1
 purify$ -- 101
 quote$ -- 0
-skip$ -- 311
+skip$ -- 309
 stack$ -- 0
 substring$ -- 467
 swap$ -- 112
@@ -62,5 +53,5 @@ type$ -- 116
 warning$ -- 10
 while$ -- 85
 width$ -- 32
-write$ -- 300
-(There were 2 error messages)
+write$ -- 302
+(There were 10 warnings)

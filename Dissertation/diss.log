@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.1.11)  18 APR 2014 15:12
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.1.11)  23 APR 2014 05:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -89,6 +89,10 @@ Package: listings 2013/07/10 1.5 (Carsten Heinz)
 (./lstlangcoq.sty) (./lstlangott.sty) (./lstlanglwt.sty)
 (/usr/share/texlive/texmf-dist/tex/latex/bold-extra/bold-extra.sty
 Package: bold-extra 2001/11/13 v0.1 Use fonts from cm/mf-extra/bold
+)
+(/usr/share/texlive/texmf-dist/tex/latex/cleveref/cleveref.sty
+Package: cleveref 2013/03/22 v0.18.9 Intelligent cross-referencing
+Package cleveref Info: `listings' support loaded on input line 2857.
 )
 (/usr/share/texmf/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
@@ -480,18 +484,18 @@ File: pgflibraryshapes.multipart.code.tex 2010/01/07 v2.10 (rcs-revision 1.2)
 ))) (./diss.aux)
 \openout1 = `diss.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
 \c@lstlisting=\count119
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
@@ -562,22 +566,22 @@ e
 
 ]
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <14.4> on input line 133.
+(Font)              <14.4> on input line 137.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 133.
+(Font)              <7> on input line 137.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 146.
+(Font)              <5> on input line 150.
 
-Overfull \hbox (10.57771pt too wide) in paragraph at lines 133--148
+Overfull \hbox (10.57771pt too wide) in paragraph at lines 137--152
 []
  []
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 161.
+(Font)              <12> on input line 165.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 161.
+(Font)              <8> on input line 165.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 161.
+(Font)              <6> on input line 165.
 [1
 
 ] [2] (./diss.toc [3
@@ -606,90 +610,96 @@ Chapter 1.
 [1
 
 ]
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 235.
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 239.
 
  (/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
 File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 235.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 239.
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 229--248
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 233--252
 []$[]$ 
  []
 
 [2]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 258.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 263.
 
  (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 258.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 263.
+
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 258--275
+[]$[]$ 
+ []
+
 
 Overfull \hbox (77.07037pt too wide) has occurred while \output is active
 \OT1/cmr/m/sl/12 1.3.  CURRENT IMPLEMENTATIONS OF A CONCURRENCY FRAMEWORK IN OC
 AML \OT1/cmr/m/n/12 3
  []
 
-[3] [4] [5]
-Chapter 2.
+[3] [4]
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 300.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 290.
+ [5]
+Chapter 2.
 [6
 
 ] [7] [8] [9] [10] [11] [12]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 555--591
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 566--602
 []$[]$
  []
 
 [13]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 597--608
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 608--619
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 609--618
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 620--629
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 624--631
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 635--642
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 636--650
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 647--661
 []$[]$ 
  []
 
 [14]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 666--672
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 677--683
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 673--684
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 684--695
 []$[]$ 
  []
 
 [15]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 687--697
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 698--708
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 698--705
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 709--716
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 706--715
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 717--726
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 716--737
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 727--748
 []$[]$ 
  []
 
@@ -716,684 +726,23 @@ Chapter 5.
 
 ]
 Appendix A.
-File: diss.tex  (verbatim)
 [27
 
+] [28
+
 ]
-Overfull \hbox (119.31886pt too wide) in paragraph at lines 844--844
-[]  \OT1/cmtt/m/n/8 backgroundcolor=\color{myseagreen},   % choose the backgrou
-nd color; you must add \usepackage{color} or \usepackage{xcolor}[] 
- []
-
-
-Overfull \hbox (110.81874pt too wide) in paragraph at lines 844--844
-[]  \OT1/cmtt/m/n/8 extendedchars=true,              % lets you use non-ASCII c
-haracters; for 8-bits encodings only, does not work with UTF-8[] 
- []
-
-
-Overfull \hbox (144.81923pt too wide) in paragraph at lines 844--844
-[]  \OT1/cmtt/m/n/8 keepspaces=true,                 % keeps spaces in text, us
-eful for keeping indentation of code (possibly needs columns=flexible)[] 
- []
-
-
-Overfull \hbox (42.81776pt too wide) in paragraph at lines 844--844
-[]  \OT1/cmtt/m/n/8 numbers=left,                    % where to put the line-nu
-mbers; possible values are (none, left, right)[] 
- []
-
-
-Overfull \hbox (221.32033pt too wide) in paragraph at lines 844--844
-[]  \OT1/cmtt/m/n/8 rulecolor=\color{myemerald},         % if not set, the fram
-e-color may be changed on line-breaks within not-black text (e.g. comments (gre
-en here))[] 
- []
-
-
-Overfull \hbox (106.56868pt too wide) in paragraph at lines 844--844
-[]  \OT1/cmtt/m/n/8 showspaces=false,                % show spaces everywhere a
-dding particular underscores; it overrides 'showstringspaces'[] 
- []
-
-
-Overfull \hbox (51.31789pt too wide) in paragraph at lines 844--844
-[]  \OT1/cmtt/m/n/8 stepnumber=1,                    % the step between two lin
-e-numbers. If it's 1, each line will be numbered[] 
- []
-
-
-Overfull \hbox (136.3191pt too wide) in paragraph at lines 844--844
-[]  \OT1/cmtt/m/n/8 title=\lstname                   % show the filename of fil
-es included with \lstinputlisting; also try caption instead of title[] 
- []
-
-[28]
-Overfull \hbox (1564.33961pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 To write an OCaml framework for lightweight threading. This f
-ramework should be defined from basic semantics and have these semantics repres
-ented in a theorem prover setting for verification. The verification should inc
-lude proofs of basic monadic laws. This theorem prover representation should be
- extracted to OCaml where the extracted code should be as faithful to the repre
-sentation as possible. The extracted code should be able to run OCaml code conc
-urrently.[] 
- []
-
-[29]
-Overfull \hbox (858.82948pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 The goal of this project is to build a concurrency framework 
-for OCaml. This framework will be designed with correctness in mind: developing
- the well defined semantics, modelled in a proof assistant and finally extracte
-d to actual code. This project aims to be a verifiable reference implementation
-.[] 
- []
-
-
-Overfull \hbox (1050.08223pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Verification of core libraries is becoming increasingly impor
-tant as we discover more and more subtle bugs that even extensive unit testing 
-could not find. As Dijkstra said, testing shows the presence, not the absence o
-f bugs. On the other hand verification can show the absence of bugs, at least w
-ith respect to the formal model of the system.[] 
- []
-
-
-Overfull \hbox (731.32765pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Motivation of the project is to investigate the lack of certi
-fied implementation of a concurrency framework. Verified concurrent systems hav
-e been researched for languages like C\cite{sevvcik2011relaxed}, C++ and Java\c
-ite{lochbihler2012machine}, but not yet for OCaml.[] 
- []
-
-
-Overfull \hbox (425.32326pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Concurrency is the concept of more than one thread of executi
-on making progress in the same time period. A particular form of concurrency is
- parallelism, when threads physically run simultaneously.[] 
- []
-
-[30]
-Overfull \hbox (871.57967pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Concurrent computation has became common in many applications
- in computer science with the rise of faster systems often with multiple cores.
- This can be exploited on multiple levels ranging from hardware supported instr
-uction and thread level parallelism to software based heavy and lightweight mod
-els.[] 
- []
-
-
-Overfull \hbox (973.58113pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 This project aims to model lightweight, cooperative concurren
-cy. No threads are exposed to the underlying operating system or hardware. This
- means that blocking operations on the process level will still block all inter
-nal threads. The threads expose the points of possible interleaving and the sch
-eduling is done in software.[] 
- []
-
-
-Overfull \hbox (1356.08662pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 The issue of concurrency occurs in most general programming l
-anguages. However, functional languages are often both less developed in this a
-rea and also fit well with concurrency without races for mutable data structure
-s. Functional languages that have both actual industrial applications and large
- set of features are of particular interest. These languages include OCaml and 
-Haskell. This project focuses on OCaml.[] 
- []
-
-
-Overfull \hbox (918.33034pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 There are two very successful monadic concurrency frameworks,
- LWT\cite{LWT} and Async\cite{Async}. They both provide the primitives and synt
-ax extensions for concurrent development in OCaml, however neither is supported
- by a clear semantic description.  This is because their main focus was ease of
- use and speed.[] 
- []
-
-
-Overfull \hbox (1674.8412pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 LWT, the lightweight cooperative threading library\cite{vouil
-lon2008lwt} was designed as an open source framework entirely written in OCaml 
-in a monadic style. It was successfully used in several large projects includin
-g the Unison file synchroniser and the Ocsigen Web server. This library include
-s many primitives to provide a feature rich framework, including primitives for
- thread creation, composition and cancel, thread local storage and support for 
-various synchronisation techniques.[] 
- []
-
-
-Overfull \hbox (1538.83925pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 In this example we can see some of the syntax of Lwt where we
- define \verb|heads|, a function that sleeps for 1 second and then prints ``Hea
-d" and \verb|tails| which does the same with 2 seconds and ``Tails". These are 
-then both waited on, until they are both finished and followed by the text ``Fi
-nished". In Lwt semantics mostly follow the principle of a continuation monads,
- that is we build a sequence of continuations that the scheduler can pick betwe
-en.[] 
- []
-
-
-Overfull \hbox (357.32228pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 An other implementation, Async is an open source concurrency 
-library for OCaml developed by Jane Street. Unlike LWT the basic semantics are 
-designed with the promise monads in mind.[] 
- []
-
-
-Overfull \hbox (926.83046pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 In this snippet we define \verb|heads| and \verb|tails| as De
-ferred values of the respective code sequences. A Deferred value is the promise
- of that value evaluating. It can be used in place of a value of the same type 
-and binding on it returns a deferred value that is when is fulfilled applies th
-e bound function.[] 
- []
-
-
-Overfull \hbox (1105.33302pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 There are a number of other experimental implementations for 
-concurrency in OCaml, including JoCaml\cite{jocaml} that implements join calcul
-us over Ocaml, Functory\cite{functory} that focuses on distributed computation,
- Ocamlnet that exploits multiple cores and OCamlMPI\cite{ocamlmpi} which provid
-es bindings for the standard MPI message passing framework.[] 
- []
-
-[31]
-Overfull \hbox (2023.3462pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 There have been a lot of work on how exactly to formulate the
- semantics of concurrent and distributed systems. Some of the most common model
-s for lightweight concurrency\cite{deleuzelight} are captured\cite{friedman1988
-applications} and delimited\cite{kiselyov2010delimited} continuations\cite{shan
-2004shift}, trampolined style\cite{ganz1999trampolined}, continuation monads\ci
-te{Claessen99functionalpearls}, promise monads\cite{liskov1988promises} and eve
-nt based programming(used in the OCamlNet\cite{Ocamlnet} project). This work fo
-cuses on the continuation monad style.[] 
- []
-
-
-Overfull \hbox (1245.58504pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 A monad\cite{hoareetal2001tackling} in functional programming
- is a construct to structure computations that are in some sense "sequenced" to
-gether. This sequencing can be for example string concatenation, simple operati
-on sequencing (the well known ;) or conditional execution. Two operations, comm
-only called bind and return form a monad when they obey a set of axioms called 
-monadic laws.[] 
- []
-
-
-Overfull \hbox (1245.58504pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Most monads support further operations and a concurrency mona
-d is one such monad. Beside the two necessary operations (return and bind) it h
-as to support at least one that deals with concurrent execution.  This operatio
-n can come in many forms and under many names, for example fork, join or choose
-. Each of these may have slightly differing signatures and semantics depending 
-on the style.[] 
- []
-
-
-Overfull \hbox (2269.84975pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 These semantics can be modelled in logic, in particular logic
-s used by proof assistants. A model like this can be used for formal verificati
-on of properties about said semantics \cite{benton2008mechanized,blazy2009mecha
-nized, blazy2006formal, leroy2009formal}. Most often used proof assistants incl
-ude Coq \cite{Coq}, HOL and Isabelle. There has been much effort to make the mo
-delling as easy as possible with tools like Ott\cite{Ott} which enables semanti
-cists to describe their language in a simple, ascii-art like style and export t
-hese models to destination languages, including the above mentioned proof assis
-tants and \LaTeX.[] 
- []
-
-
-Overfull \hbox (1840.59358pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 While a number of proof assistants have utilities for direct 
-computation, in most cases semantics is described as a set of logical relations
-. This representation is more amenable to proofs than to actual execution. Much
- research has gone into extraction of these representations as certified progra
-ms in functional programming languages like OCaml \cite{letouzey2008extraction}
- and Haskell. The extracted code then can be run and the certification is a pro
-of that the code is faithful to the representation in the proof assistant.[] 
- []
-
-
-Overfull \hbox (310.57161pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 During the preparation phase of this project many decisions h
-ad to be made, including the concurrency model, large scale semantics and the t
-ool chain used in the process.[] 
- []
-
-
-Overfull \hbox (850.32936pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Concurrency may be modelled in many ways. A popular way of mo
-delling concurrency is with a process calculus. A process calculus is an algebr
-a of processes or threads where. A thread is a unit of control, sometimes also 
-a unit of resources. This algebra often comes with a number of operations like[
-] 
- []
-
-
-Overfull \hbox (98.06856pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 \item{ $ a.P  $ for sequential composition where $ a $ is an 
-atomic action and $ P $ is a process executed sequentially}[] 
- []
-
-
-Overfull \hbox (132.06905pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 \item{$ x\langle y \rangle \cdot P $ and $ x(v) \cdot Q $ for
- sending and receiving messages through channel $ x $ respectively}[] 
- []
-
-
-Overfull \hbox (1118.0832pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 This project aimed to have simple but powerful operational se
-mantics. Simplicity is required in both the design and the interface. There is 
-a short and limited timespan for implementation and an even shorter period for 
-the user to understand the system. On the other hand, the model should have com
-parable formal properties to full, well known process calculi.[] 
- []
-
-
-Overfull \hbox (518.8246pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 I focused on providing primitives for operations on processes
- including parallel and sequential composition and recursion. Formal treatment 
-of communication channels have been left out to limit the scope of the project.
-[] 
- []
-
-
-Overfull \hbox (1687.59138pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 A number of implementation styles of lightweight concurrency 
-were surveyed for OCaml by Christophe Deleuze\cite{deleuzelight}. These fall in
- two broad categories: direct and indirect styles. Direct styles like captured 
-and delimited continuations involve keeping an explicit queue of continuations 
-that can be executed at any given time and a scheduler that picks the next elem
-ent from the queue. Indirect styles include the trampolined style and two monad
-ic styles: continuations and promises.[] 
- []
-
-
-Overfull \hbox (1475.08833pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Simplicity and similarity to current implementations like Lwt
- and Async were the two factors in the decision between these styles. Both dire
-ct styles and the promise monad style keep concurrency state data that is exter
-nal to the language and has to be maintained at runtime explicitly. This would 
-make implementation slightly more complicated. Lwt and Async both provide monad
-ic style interfaces therefore I chose the continuation monad style.[] 
- []
-
-
-Overfull \hbox (246.8207pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Category theory has been a general tool used to model functio
-nal programming languages and programs. Monads are a concept originating from t
-his connection.[] 
- []
-
-
-Overfull \hbox (2529.10347pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 A monad on a category $ C $ is a triple $ (T, \eta, \mu) $ wh
-ere $ T $ is an endofunctor on $ C $, that is, it maps the category to itself. 
-The last two, $ \eta $ and $ \mu $ are natural transformations such that $ \eta
-:\, 1_C \rightarrow T $, that is between the identity functor and $ T $, and $ 
-\mu:\, T^2 \rightarrow T $. The first transformation, $ \eta $ describes a lift
- operation: essentially we can wrap the object in $ C $ and preserving its prop
-erties. The second transformation, $ \mu $ is about an operation called join. T
-his operation unwraps a layer of wrapping if there are two. To call a triple li
-ke this a monad it has to satisfy two conditions, called coherence conditions.[
-] 
- []
-
-[32]
-Overfull \hbox (914.08028pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 This description entails three operations (lift, join and map
-) and their behaviour (associativity and identity), however this is a formulati
-on rarely used in practice. There is an equivalent pair of operations (ret and 
-bind) with similar behaviour constraints that is used in most monadic programmi
-ng constructs.[] 
- []
-
-
-Overfull \hbox (701.57722pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Most implementations go along the following lines: there is a
- parametric type $ \textbf{con} \, \alpha $ where $ \alpha $ is the type parame
-ter. Note $ \textbf{con} $ is an arbitrary name, marker for a particular monad.
- The I/O monad would have IO as the marker.[] 
- []
-
-
-Overfull \hbox (472.07393pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 The \lstinline|ret| takes a value of the language and gives i
-ts monadic counterpart. With types this can be represented as $ \textbf{ret} \,
- :\, \forall \alpha. \alpha\, \rightarrow\, \textbf{con}\, \alpha $.[] 
- []
-
-
-Overfull \hbox (1734.34206pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 The \lstinline|bind| (often written as $ \gg= $)  takes a mon
-adic value (that is one in the parametric type $ \textbf{con} \, \alpha $) and 
-a function that can map the inner value to a new monadic value (that is, it has
- type $ \alpha \, \rightarrow \, \textbf{con} \, \beta $). Bind then returns a 
-$ \textbf{con} \, \beta $. With types this means: $ \gg= \, : \, \forall \alpha
- \, \beta. \; \textbf{con} \, \alpha \rightarrow (\alpha \rightarrow \textbf{co
-n} \, \beta) \rightarrow \textbf{con} \, \beta $.[] 
- []
-
-
-Overfull \hbox (17.3174pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 \[ (m \, \gg= \, f) \, \gg= g \quad \equiv \quad m\, \gg= \, 
-(\lambda\, x. (f\, x \, \gg= \, g) ) \]}[] 
- []
-
-
-Overfull \hbox (140.56917pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 We will return to the exact nature of $ \equiv $ used in this
- project in the evaluation section and the exact form this will take.[] 
- []
-
-
-Overfull \hbox (38.5677pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Ott, a tool for transforming informal, readable semantics to 
-both \LaTeX and formal proof assistant code.}[] 
- []
-
-[33]
-Overfull \hbox (127.81898pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 In the preparation phase I got acquainted with all three of t
-hese systems, as I have not used them before for any serious work.[] 
- []
-
-
-Overfull \hbox (1292.33571pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 To avoid duplication of the semantics in several formats I ha
-ve to chosen to use a supporting tool called Ott. It enables the use of a simpl
-e ASCII-art like description of grammars, typing and reduction relations. Ott c
-an export to various destination formats including most proof assistants and \L
-aTeX. This is the primary form of the semantics that all further forms are deri
-ved from in the project.[] 
- []
-
-
-Overfull \hbox (229.82045pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Metavariables used in productions are defined with their dest
-ination language equivalents and potentially (in the case of Coq) their equalit
-y operation[] 
- []
-
-
-Overfull \hbox (76.81825pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Term expression grammars and other grammars can be defined in
- the well known Backus-Naur form with some extensions.[] 
- []
-
-
-Overfull \hbox (1594.09004pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 In this example the non-terminal t for terms is defined with 
-5 productions: variables, lambda abstractions, applications, parentheses groupi
-ng and variable substitution. Each of these rules have a name, for example Var 
-and Lam. Each of these names are prefixed by the unique prefix t\_ to have non-
-ambiguous names. The right hand side of each line describes the translation to 
-target languages, for example com will  generate the given description for the 
-\LaTeX\, target.[] 
- []
-
-
-Overfull \hbox (888.57991pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 There are meta flags S and M to describe syntactical sugar an
-d meta productions that are not generated as data structure elements in target 
-languages, but instead have their own instructions: for example the substitutio
-n term will be rewritten as an application of the tsubst\_t relation defined el
-sewhere.[] 
- []
-
-[34]
-Overfull \hbox (527.32472pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 In many languages one might want to define a value subgrammar
-, which can be used both in the reduction relation definition and in proving pr
-operties of the semantics. Ott has support for general subgrammar relation chec
-k.[] 
- []
-
-
-Overfull \hbox (344.5721pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Here v is a subgrammar of t. The statement v $<::$ t is expor
-ted as a target language subroutine that checks whether this holds and during t
-ranslation it checks for obvious bugs.[] 
- []
-
-
-Overfull \hbox (705.82729pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Another common feature of semantics is substitution of values
- for variables, for example in function application. This is so frequent that O
-tt provides both single and multiple variable substitutions for the target lang
-uages as subroutines in the translated code.[] 
- []
-
-
-Overfull \hbox (909.83022pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 The statement \lstinline[language={Ott}]|single t x :: tsubst
-s| defines a single substitution function called tsubsts\_t over terms defined 
-by the grammar for t and for variables represented by the metavariable x. This 
-is the relation mentioned in the grammar for the target language version for \{
- t / x \} t'.[] 
- []
-
-
-Overfull \hbox (1224.33473pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 In this example I define a set of mutually recursive relation
-s named Jop with one relation in it the $-->$ or reduce relation. Each element 
-of this relation takes the form t1 $-->$ t2, where t1 and t2 are both terms of 
-the grammar defined above. There are three statements for function application:
- the actual substitution, reduction of the first term and reduction of the seco
-nd term.[] 
- []
-
-
-Overfull \hbox (497.5743pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 The premise(s) appear line-by-line above the ascii-art line, 
-while and the result below the line. Next to the line is the name of the statem
-ent which is then prefixed by the name of the relation to avoid ambiguity.[] 
- []
-
-
-Overfull \hbox (1101.08296pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 There are a number of proof assistants available as destinati
-ons for Ott, out of which Coq and Isabelle provide good extraction facilities t
-o OCaml. They are at a glance rather similar. The choice between the two came d
-own to advice from supervisors as I did not have experience with either systems
-. This project was developed with the Coq proof assistant.[] 
- []
-
-
-Overfull \hbox (1050.08223pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Coq is formal proof assistant with a mathematical higher-leve
-l language called \textit{Gallina}, based around the Calculus of Inductive Cons
-tructions, that can be used to define functions and predicates, state, formally
- prove and machine check mathematical theorems and extract certified programs t
-o high level languages like Haskell and OCaml.[] 
- []
-
-
-Overfull \hbox (331.82191pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Objects in Coq can divided into two sorts, \textit{Prop} (pro
-positions) and \textit{Type}. A proposition like $ \forall A, B.\; A \wedge B \
-rightarrow B \vee B $ translates as[] 
- []
-
-[35] [36]
-Overfull \hbox (1411.33742pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Each Lemma, Theorem, Example have a name and a statement. The
- statement is a proposition. This is followed by the proof in which a sequence 
-of steps modify the assumed hypotheses and the goal proposition until it has be
-en proven. These steps are called tactics which can be simple application of pr
-evious theorems and axioms or as complex as a SAT solver. Coq comes with a lang
-uage Ltac to allow users to build their own tactics.[] 
- []
-
-
-Overfull \hbox (591.07564pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Coq also provides built in facilities for the certified extra
-ction of code to OCaml, Haskell and Scheme. These can be invoked with the keywo
-rds \lstinline[language={Coq}]|Extraction| and \lstinline[language={Coq}]|Recur
-sive Extraction|.[] 
- []
-
-
-Overfull \hbox (276.57112pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Out of the box, Coq does not provide facilities for the extra
-ction of so called logical inductive systems. These are essentially inductively
- defined propositions.[] 
- []
-
-[37]
-Overfull \hbox (931.08052pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 However with the help of a plugin developed by David Delahaye
-, Catherine Dubois, Jean-Fr\'ed\'eric \'Etienne and Pierre-Nicolas Tollitte \ci
-te{delahaye2007extracting, tollitte2012producing} by marking different modaliti
-es of the inductively generated proposition we can generate code with an input-
-output convention.[] 
- []
-
-
-Overfull \hbox (13.06734pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 \begin{lstlisting}[language={Coq},caption={Coq to OCaml extra
-ction of a logical inductive relation}][] 
- []
-
-
-Overfull \hbox (302.07149pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Most descriptions of reduction relations and indeed the outpu
-t of Ott is of this kind, therefore this plugin helps with the extraction of a 
-reduction relation directly.[] 
- []
-
-
-Overfull \hbox (1088.33278pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 OCaml is a high level programming language. It combines funct
-ional, object-oriented and imperative paradigms and used in large scale industr
-ial and academic projects where speed and correctness are of utmost importance.
- OCaml uses one of the most powerful type and inference systems available to ma
-ke efficient and correct software engineering possible.[] 
- []
-
-
-Overfull \hbox (246.8207pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 OCaml, like many other functional languages support a wide ra
-nge of features, from simple functions, to mutually recursive functions with pa
-ttern matching.[] 
- []
-
-
-Overfull \hbox (353.07222pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Furthermore, it was designed as a versatile, general purpose 
-programming language. OCaml features include objects, modules, support for impe
-rative style and higher order functions.[] 
- []
-
-[38] [39]
-Overfull \hbox (416.82314pt too wide) in paragraph at lines 844--844
-[] \OT1/cmtt/m/n/8 The concurrency monad consists of a parametric type $ \alpha
- \, \textbf{con} $, where $ \alpha $ is a type parameter describing the type of
- computation or value enclosed and three key operations[] 
- []
-
-
-Overfull \hbox (323.3218pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 \item{ret, also known as return. It has type $ \alpha \righta
-rrow \alpha \, \textbf{con} $ and simply evaluates its parameter and boxes up t
-he result in the parametric type}[] 
- []
-
-
-Overfull \hbox (1708.84169pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 \item{$>>=$, also known as bind, sequences two operations. Th
-e second argument is the continuation for the first parameter. More formally it
- has a type $ \alpha \, \textbf{con} \rightarrow ( \alpha \rightarrow \beta \, 
-\textbf{con}) \rightarrow \beta \, \textbf{con}  $, that is it takes a boxed up
- computation and a function that takes the value of the computation and returns
- a new box. Bind then evaluates the expression within the box of the first argu
-ment and passes it to the second argument.}[] 
- []
-
-
-Overfull \hbox (1606.84023pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 The third operation is fork, which is the way to spawn new th
-reads (two in this particular case). The approach taken in this work is to have
- fork take two arguments and evaluate the two paths concurrently. The concurren
-cy is achieved by reducing either side of the fork step by step based on some s
-cheduler. When either path reduced to a value it returns a boxed up pair of res
-ults. This result is value and a boxed up computation (that is, the partially r
-educed other path).[] 
- []
-
-
-Overfull \hbox (399.82289pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 \[ \textbf{fork} \, : \, \alpha \, \textbf{con} \rightarrow \
-beta \, \textbf{con} \rightarrow ((\alpha *  \beta \, \textbf{con}) \, + \, ( \
-alpha \, \textbf{con} * \beta) ) \, \textbf{con} \][] 
- []
-
-
-Overfull \hbox (106.56868pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Properties to evaluate: monadic laws, fork commutativity and 
-associativity (liveness ?), type preservation and progress ?.[] 
- []
-
-[40]
-Overfull \hbox (30.06758pt too wide) in paragraph at lines 844--844
-[]\OT1/cmtt/m/n/8 Evaluation of speed and memory requirements absolutely and re
-lative to implementations in LWT and Async.[] 
- []
-
-[41]
-No file proposal.tex.
-No file propbody.tex.
-[42]
 Appendix B.
-No file makefile.txt.
-File: refs.bib  (verbatim)
+(./partIIproposal.tex [29
 
-Overfull \hbox (166.06953pt too wide) in paragraph at lines 862--862
-[]\OT1/cmtt/m/n/8 @MISC{Claessen99functionalpearls, author = {Koen Claessen}, t
-itle = {Functional Pearls: A Poor Man's Concurrency Monad}, year = {1999} }[] 
- []
-
-[43
-
-
-] [44] [45]
-Overfull \hbox (110.81874pt too wide) in paragraph at lines 862--862
-[]  \OT1/cmtt/m/n/8 title={Tackling the awkward squad: monadic input/output, co
-ncurrency, exceptions, and foreign-language calls in Haskell},[] 
- []
-
-
-Overfull \hbox (34.31764pt too wide) in paragraph at lines 862--862
-[]  \OT1/cmtt/m/n/8 title={Promises: linguistic support for efficient asynchron
-ous procedure calls in distributed systems},[] 
- []
-
-[46]
-Overfull \hbox (149.06929pt too wide) in paragraph at lines 862--862
-[]  \OT1/cmtt/m/n/8 author={{\^S}ev{\v{c}}ik, Jaroslav and Vafeiadis, Viktor an
-d Zappa Nardelli, Francesco and Jagannathan, Suresh and Sewell, Peter},[] 
- []
-
-
-Overfull \hbox (136.3191pt too wide) in paragraph at lines 862--862
-[]  \OT1/cmtt/m/n/8 title={A Machine-Checked, Type-Safe Model of Java Concurren
-cy: Language, Virtual Machine, Memory Model, and Verified Compiler},[] 
- []
-
-[47] [48]
-Appendix C.
-(./partIIproposal.tex [49
-
-
-] [50] [51] [52]) [53] (./diss.aux) ) 
+] [30] [31] [32]) [33] (./diss.aux) ) 
 Here is how much of TeX's memory you used:
- 15083 strings out of 493307
- 296363 string characters out of 6139905
- 585520 words of memory out of 5000000
- 18199 multiletter control sequences out of 15000+600000
+ 16656 strings out of 493307
+ 330298 string characters out of 6139905
+ 616306 words of memory out of 5000000
+ 19774 multiletter control sequences out of 15000+600000
  11429 words of font info for 42 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 56i,14n,72p,769b,1631s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 56i,14n,72p,769b,1663s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
 c/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
@@ -1408,13 +757,12 @@ nts/type1/public/amsfonts/cm/cmsl12.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmtt12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/latxfont/lc
-ircle1.pfb>
-Output written on diss.pdf (63 pages, 314156 bytes).
+s/cm/cmtt12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/latx
+font/lcircle1.pfb>
+Output written on diss.pdf (43 pages, 265406 bytes).
 PDF statistics:
- 279 PDF objects out of 1000 (max. 8388607)
- 195 compressed objects within 2 object streams
+ 212 PDF objects out of 1000 (max. 8388607)
+ 149 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

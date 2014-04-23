@@ -3,7 +3,7 @@
 \contentsline {section}{\numberline {1.2}Overview of concurrency}{1}
 \contentsline {section}{\numberline {1.3}Current implementations of a concurrency framework in OCaml}{2}
 \contentsline {section}{\numberline {1.4}Semantics of concurrency}{4}
-\contentsline {section}{\numberline {1.5}Semantics to logic}{4}
+\contentsline {section}{\numberline {1.5}Semantics to logic}{5}
 \contentsline {section}{\numberline {1.6}Logic to runnable code}{5}
 \contentsline {chapter}{\numberline {2}Preparation}{6}
 \contentsline {section}{\numberline {2.1}Design of concurrent semantics}{6}
@@ -55,26 +55,20 @@
 \contentsline {chapter}{\numberline {5}Conclusion}{21}
 \contentsline {chapter}{Bibliography}{23}
 \contentsline {chapter}{\numberline {A}Ott source}{27}
-\contentsline {section}{\numberline {A.1}diss.tex}{27}
-\contentsline {section}{\numberline {A.2}proposal.tex}{42}
-\contentsline {section}{\numberline {A.3}propbody.tex}{42}
-\contentsline {chapter}{\numberline {B}Makefile}{43}
-\contentsline {section}{\numberline {B.1}Makefile}{43}
-\contentsline {section}{\numberline {B.2}refs.bib}{43}
-\contentsline {chapter}{\numberline {C}Project Proposal}{49}
-\contentsline {section}{\numberline {C.1}Introduction of work to be undertaken}{49}
-\contentsline {section}{\numberline {C.2}Description of starting point}{49}
-\contentsline {section}{\numberline {C.3}Substance and structure}{50}
-\contentsline {section}{\numberline {C.4}Criteria}{50}
-\contentsline {section}{\numberline {C.5}Timetable}{51}
-\contentsline {subsection}{\numberline {C.5.1}Week 1 and 2}{51}
-\contentsline {subsection}{\numberline {C.5.2}Week 3 and 4}{51}
-\contentsline {subsection}{\numberline {C.5.3}Week 5 and 6}{51}
-\contentsline {subsection}{\numberline {C.5.4}Week 7 and 8}{51}
-\contentsline {subsection}{\numberline {C.5.5}Week 9 and 10}{52}
-\contentsline {subsection}{\numberline {C.5.6}Week 11 and 12}{52}
-\contentsline {subsection}{\numberline {C.5.7}Week 13 and 14}{52}
-\contentsline {subsection}{\numberline {C.5.8}Week 15 and 16}{52}
-\contentsline {subsection}{\numberline {C.5.9}Week 17 and 18}{52}
-\contentsline {subsection}{\numberline {C.5.10}Week 19 and 20}{52}
-\contentsline {section}{\numberline {C.6}Resource Declaration}{52}
+\contentsline {chapter}{\numberline {B}Project Proposal}{29}
+\contentsline {section}{\numberline {B.1}Introduction of work to be undertaken}{29}
+\contentsline {section}{\numberline {B.2}Description of starting point}{29}
+\contentsline {section}{\numberline {B.3}Substance and structure}{30}
+\contentsline {section}{\numberline {B.4}Criteria}{30}
+\contentsline {section}{\numberline {B.5}Timetable}{31}
+\contentsline {subsection}{\numberline {B.5.1}Week 1 and 2}{31}
+\contentsline {subsection}{\numberline {B.5.2}Week 3 and 4}{31}
+\contentsline {subsection}{\numberline {B.5.3}Week 5 and 6}{31}
+\contentsline {subsection}{\numberline {B.5.4}Week 7 and 8}{31}
+\contentsline {subsection}{\numberline {B.5.5}Week 9 and 10}{32}
+\contentsline {subsection}{\numberline {B.5.6}Week 11 and 12}{32}
+\contentsline {subsection}{\numberline {B.5.7}Week 13 and 14}{32}
+\contentsline {subsection}{\numberline {B.5.8}Week 15 and 16}{32}
+\contentsline {subsection}{\numberline {B.5.9}Week 17 and 18}{32}
+\contentsline {subsection}{\numberline {B.5.10}Week 19 and 20}{32}
+\contentsline {section}{\numberline {B.6}Resource Declaration}{32}
