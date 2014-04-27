@@ -74,8 +74,8 @@ Proof.
  congruence.
  simpl; congruence.
  subst.
- assert (L:=H5).
- apply IHe2 in H5.
+ assert (L:=H6).
+ apply IHe2 in H6.
  intuition.
  simpl in H0.
  induction e1.
@@ -97,32 +97,31 @@ Proof.
  auto.
  auto.
  auto.
- apply IHe1 in H6.
+ apply IHe1 in H5.
  intuition.
  induction e1.
  auto.
  induction constant5.
  auto.
+ simpl in H5.
+ auto.
+ simpl in H5; auto.
+ simpl in H5; auto.
+ simpl in H5.
+ auto.
+ simpl in H5; auto.
+ simpl in H5; auto.
+ simpl in H5; auto.
+ simpl in H5; auto.
+ simpl in H5; auto.
+ simpl in H5; auto.
+ simpl in H5; auto.
+ simpl in H5; auto.
+ simpl in H5.
+ auto.
+ simpl in H5.
+ auto.
  simpl in H6.
- auto.
- simpl in H6; auto.
- simpl in H6; auto.
- simpl in H7.
- simpl in H6.
- auto.
- simpl in H7; auto.
- simpl in H7; auto.
- simpl in H7; auto.
- simpl in H7; auto.
- simpl in H7; auto.
- simpl in H7; auto.
- simpl in H7; auto.
- simpl in H7; auto.
- simpl in H7.
- auto.
- simpl in H7.
- auto.
- simpl.
  apply H6.
  simpl.
  auto.
@@ -171,17 +170,15 @@ Proof.
   split.
   intros.
   inversion H0.
-  apply red_not_value in H6.
-  contradiction.
   apply red_not_value in H7.
-  simpl in H7.
-  intuition.
+  contradiction.
+  apply red_not_value in H6;  simpl in H6;  intuition.
   intros.
   inversion H0.
   inversion H1.
   reflexivity.
-  apply red_not_value in H9; contradiction.
-  apply red_not_value in H10; simpl in H10; intuition.
+  apply red_not_value in H10; contradiction.
+  apply red_not_value in H9; simpl in H9; intuition.
 Qed.
 
 
@@ -272,14 +269,14 @@ Proof.
  split.
  intros.
  inversion H0.
- apply red_not_value in H6; contradiction.
- apply red_not_value in H7; simpl in H7; intuition.
+ apply red_not_value in H7; contradiction.
+ apply red_not_value in H6; simpl in H6; intuition.
  intros.
  inversion H0.
  inversion H1.
  reflexivity.
- apply red_not_value in H9; contradiction.
- apply red_not_value in H10; simpl in H10; intuition.
+ apply red_not_value in H10; contradiction.
+ apply red_not_value in H9; simpl in H9; intuition.
 Qed.
 
 

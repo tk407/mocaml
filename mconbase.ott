@@ -342,12 +342,12 @@ e [ s ] --> [ rl ] e'
 % the rest is taken care of by the app
 
 e' [ s ] --> [ rl ] e''
---------------  :: context_app1
-e e' [ s ] --> [ rl ] e e''
+--------------  :: context_app2
+v e' [ s ] --> [ rl ] v e''
 
-e [ s ] --> [ rl ] e'
-------------  :: context_app2
-e v [ s ] --> [ rl ] e' v
+e [ s ] --> [ rl ] e''
+------------  :: context_app1
+e e' [ s ] --> [ rl ] e'' e'
 
 
 %Fixpoint operator

@@ -114,17 +114,13 @@ Proof.
  split.
  intros.
  inversion H1.
+ apply red_not_value in H8; contradiction.
  apply red_not_value in H7; contradiction.
- inversion H8.
- apply red_not_value in H14; contradiction.
- inversion H15.
  intros.
  inversion H1.
  inversion H2.
+ apply red_not_value in H11; contradiction.
  apply red_not_value in H10; contradiction.
- inversion H11.
- apply red_not_value in H17; contradiction.
- inversion H18.
  reflexivity.
 Qed.
 
@@ -145,16 +141,17 @@ Proof.
  intros.
  inversion H1.
  inversion H7.
- apply red_not_value in H13; contradiction.
- apply red_not_value in H14; contradiction.
  inversion H8.
+  apply red_not_value in H15; contradiction.
+ apply red_not_value in H16; contradiction.
+ inversion H7.
  intros.
  inversion H1.
  inversion H2.
- inversion H10.
- apply red_not_value in H16; contradiction.
- apply red_not_value in H17; contradiction.
  inversion H11.
+ apply red_not_value in H17; contradiction.
+ apply red_not_value in H18; contradiction.
+ inversion H10.
  reflexivity.
 Qed.
 
@@ -174,23 +171,23 @@ Proof.
  split.
  intros.
  inversion H1.
- inversion H7.
- apply red_not_value in H13; contradiction.
- apply red_not_value in H14; contradiction.
  inversion H8.
+ apply red_not_value in H14; contradiction.
+ apply red_not_value in H15; contradiction.
+ inversion H7.
  intros.
  inversion H1.
  inversion H2.
- inversion H10.
- apply red_not_value in H16; contradiction.
- apply red_not_value in H17; contradiction.
  inversion H11.
+ apply red_not_value in H17; contradiction.
+ apply red_not_value in H18; contradiction.
+ inversion H10.
  reflexivity.
 Qed.
 
 Lemma tau_app1 : forall (e e' e'' : expr),
-       tauStep (e') (e'') ->
-       tauStep (E_apply e e') (E_apply e e'').
+       tauStep (e) (e'') ->
+       tauStep (E_apply e e') (E_apply e'' e').
 Proof.
  intros.
  inversion H.
@@ -200,9 +197,9 @@ Proof.
 Qed.
 
 Lemma tau_app2 : forall (e e' e'' : expr),
-       is_value_of_expr e' ->
-       tauStep (e) (e'') ->
-       tauStep (E_apply e e') (E_apply e'' e').
+       is_value_of_expr e ->
+       tauStep (e') (e'') ->
+       tauStep (E_apply e e') (E_apply e e'').
 Proof.
  intros.
  inversion H0.
@@ -212,60 +209,87 @@ Proof.
  trivial.
 Qed.
 
+Lemma taustep_not_val : forall (e e' : expr), tauStep e e' -> (~ (is_value_of_expr e)).
+Proof.
+ intros.
+ inversion H.
+ apply red_not_value in H0.
+ assumption.
+Qed.
+
+
+Hint Resolve taustep_not_val.
+Lemma tdtstep_not_val : forall (e e' : expr), totalDetTauStep e e' -> (~ (is_value_of_expr e)).
+Proof.
+ intros e e' H; inversion H; intuition.
+ apply taustep_not_val in H4; contradiction.
+Qed.
+
 Lemma  JO_red_context_app1_td : forall (e e':expr) (e'':expr),
-     ~ (is_value_of_expr e') ->
-     totalDetTauStep e' e'' ->
-     totalDetTauStep (E_apply e e') (E_apply e e'').
+     totalDetTauStep e e'' ->
+     totalDetTauStep (E_apply e e') (E_apply e'' e').
 Proof.
 intros.
  apply ttStep.
- split.
+ intuition.
+ inversion H.
+ intuition.
+ substs.
+ inversion H3.
+ substs.
+ apply tStep with (s:=s).
+ apply JO_red_context_app1.
+ assumption.
  inversion H0.
- elim H1.
- intros.
- apply tau_app1.
- trivial.
- split.
- intros.
- inversion H1.
- rewrite <- H4 in H; simpl in H; auto.
-rewrite <- H4 in H; simpl in H; auto.
- rewrite <- H4 in H; simpl in H; auto.
- rewrite <- H4 in H; simpl in H; auto.
- rewrite <- H4 in H; simpl in H; auto.
  substs.
+ inversion H.
+ intuition.
+ substs.
+ inversion H4.
+ apply red_not_value in H2; simpl in H2; intuition.
+ substs.
+ inversion H.
+ intuition.
+ inversion H4.
+ apply red_not_value in H5; simpl in H5; intuition.
+ substs.
+ inversion H.
+ intuition.
+ inversion H4.
+ apply red_not_value in H5; simpl in H5; intuition.
+ substs.
+ inversion H.
+ apply tdtstep_not_val in H; simpl in H; intuition. 
+ apply tdtstep_not_val in H; simpl in H; intuition. 
+ inversion H.
+ intuition.
+ apply H7 in H6; intuition.
  inversion H0.
- intuition.
- apply H2 in H7.
- auto.
- contradiction.
- intros.
+ substs.
  inversion H1.
- inversion H2.
- contradiction.
- rewrite <- H7 in H; simpl in H; auto.
- intuition.
- rewrite <- H7 in H; simpl in H; auto.
- intuition.
- rewrite <- H7 in H; simpl in H; auto.
- intuition.
- rewrite <- H7 in H; simpl in H; auto; intuition.
- contradiction.
  substs.
- inverts H0.
- intuition.
- f_equal.
- apply H5. 
- apply tStep with (s:=s); trivial.
+ apply tdtstep_not_val in H; simpl in H; intuition. 
  substs.
- contradiction.
+ apply tdtstep_not_val in H; simpl in H; intuition. 
  substs.
- contradiction.
+ apply tdtstep_not_val in H; simpl in H; intuition. 
  substs.
- simpl in H.
- intuition.
+ apply tdtstep_not_val in H; simpl in H; intuition.
  substs.
- simpl in H; intuition.
+ apply tdtstep_not_val in H; simpl in H; intuition. 
+ substs.
+ apply tdtstep_not_val in H; simpl in H; intuition. 
+ substs.
+ apply tdtstep_not_val in H; simpl in H; intuition. 
+ substs.
+ inversion H; intuition.
+ apply tStep in H7; apply H8 in H7; substs; reflexivity.
+ substs.
+ apply tdtstep_not_val in H; simpl in H; intuition. 
+ substs.
+ apply tdtstep_not_val in H; simpl in H; intuition. 
+ substs.
+ apply tdtstep_not_val in H; simpl in H; intuition.  
 Qed.
 
 Lemma simpTau : forall(e e' : expr) (s: select),  
@@ -335,10 +359,10 @@ Proof.
 Qed.
 
 Lemma  JO_red_context_app2_td : forall (e e':expr) (e'':expr),
-     (is_value_of_expr e') ->
-     ~ (is_value_of_expr e) ->
-     totalDetTauStep e e'' ->
-     totalDetTauStep (E_apply e e') (E_apply e'' e').
+     (is_value_of_expr e) ->
+     ~ (is_value_of_expr e') ->
+     totalDetTauStep e' e'' ->
+     totalDetTauStep (E_apply e e') (E_apply e e'').
 Proof.
 intros.
  apply ttStep.
@@ -352,43 +376,45 @@ intros.
  split.
  intros.
  inversion H2.
- rewrite <- H3 in H0; simpl in H0; auto.
- rewrite <- H3 in H0; simpl in H0; auto.
- rewrite <- H4 in H0; simpl in H0; auto.
- rewrite <- H4 in H0; simpl in H0; auto.
  substs.
- apply red_not_value in H8; intuition.
+ simpl in H0; auto.
+ substs.
+ simpl in H0; auto.
+ substs.
+ simpl in H0; auto.
+ substs.
+ simpl in H0; auto.
  substs.
  inversion H1.
  intuition.
- apply H3 in H9.
- auto.
- intros.
- inversion H2.
+ apply H3 in H9; auto.
+ substs.
+ apply red_not_value in H8; intuition.
+ inversion H1.
+ intuition.
+ substs.
+ inversion H6.
+ substs.
  inversion H3.
- substs; simpl in H0; auto.
- intuition.
- rewrite <- H6 in H0; simpl in H0; auto.
- intuition.
- rewrite <- H6 in H0; simpl in H0; auto.
- intuition.
- rewrite <- H6 in H0; simpl in H0; auto.
- intuition.
- rewrite <- H6 in H0; simpl in H0; auto; intuition.
- substs; simpl in H0; intuition.
- apply red_not_value in H11; contradiction.
  substs.
- inverts H1.
  intuition.
- f_equal.
- apply H6. 
- apply tStep with (s:=s); trivial.
  substs.
+ simpl in  H0; intuition.
+ substs.
+ simpl in  H0; intuition. substs; simpl in  H0; intuition.
+ substs; simpl in  H0; intuition.
+ substs; simpl in  H0; intuition.
+ substs; simpl in  H0; intuition.
+ apply tStep in H13.
+ apply H7 in H13; substs.
+ reflexivity.
+ substs.
+ apply red_not_value in H12; contradiction.
  contradiction.
  substs.
- simpl in H0; intuition. 
+ assert (is_value_of_expr (E_pair e''' v')); simpl; intuition.
  substs.
- simpl in H0; intuition. 
+ assert (is_value_of_expr (E_pair v e''')); simpl; intuition.
 Qed.
 
 
@@ -411,20 +437,24 @@ Proof.
                                      (
                                         (E_apply 
                                           ( E_apply (E_constant CONST_pair)  
-                                                    (E_apply (E_constant CONST_proj2) ( E_pair v v' )) 
+                                                    (v') 
                                           ) 
-                                          (v)  
+                                          (E_apply (E_constant CONST_proj1) (E_pair v v')) 
                                         )
                                      ))).
  simpl.
- apply JO_red_context_app1_td.
+ apply JO_red_context_app2_td.
  simpl.
+ auto.
  intuition.
  apply JO_red_evalinl_td.
  simpl; auto.
  apply JO_red_context_app1_td.
  simpl; auto.
- apply JO_red_proj1_td.
+ apply JO_red_context_app2_td.
+ simpl; auto.
+ simpl; auto.
+ apply JO_red_proj2_td.
  trivial.
  trivial.
  apply S_star with (y:=E_apply ( E_constant CONST_ret ) 
@@ -437,22 +467,22 @@ Proof.
                                           (v)  
                                         )
                                      ))).
- apply JO_red_context_app1_td.
+ apply JO_red_context_app2_td.
+ simpl; auto.
  simpl; auto.
  apply JO_red_evalinl_td.
  simpl; auto.
  apply JO_red_context_app2_td.
  simpl; auto.
  simpl; auto.
- apply JO_red_context_app1_td.
- simpl; auto.
- apply JO_red_proj2_td.
+ apply JO_red_proj1_td.
  trivial.
  trivial.
  apply S_star with (y:=((E_apply (E_constant CONST_ret)
      ( E_taggingleft (
         ( (E_pair v' v))))))).
- apply JO_red_context_app1_td.
+ apply JO_red_context_app2_td.
+ simpl; auto.
  simpl; auto.
  apply JO_red_evalinl_td.
  simpl; auto.
@@ -500,21 +530,25 @@ Proof.
                                      ( E_taggingright
                                         (E_apply 
                                           ( E_apply (E_constant CONST_pair)  
-                                                    (E_apply (E_constant CONST_proj2) (E_pair v v' )) 
+                                                    (v') 
                                           ) 
-                                          (v)  
+                                          (E_apply (E_constant CONST_proj1) (E_pair v v'))  
                                         )
                                      )
                                    )).
  simpl.
- apply JO_red_context_app1_td.
+ apply JO_red_context_app2_td.
  simpl.
- intuition.
+ auto.
+ simpl; auto.
  apply JO_red_evalinr_td.
  simpl; auto.
  apply JO_red_context_app1_td.
  simpl; auto.
- apply JO_red_proj1_td.
+ apply JO_red_context_app2_td.
+ simpl; auto.
+ simpl; auto.
+ apply JO_red_proj2_td.
  trivial.
  trivial.
  apply S_star with (y:=(E_apply (E_constant CONST_ret)
@@ -523,22 +557,22 @@ Proof.
              (E_apply
                 (E_apply (E_constant CONST_pair)
                    (v')) v))))).
- apply JO_red_context_app1_td.
+ apply JO_red_context_app2_td.
+ simpl; auto.
  simpl; auto.
   apply JO_red_evalinr_td.
  simpl; auto.
  apply JO_red_context_app2_td.
  simpl; auto.
  simpl; auto.
- apply JO_red_context_app1_td.
- simpl; auto.
- apply JO_red_proj2_td.
+ apply JO_red_proj1_td.
  trivial.
  trivial.
  apply S_star with (y:=((E_apply (E_constant CONST_ret)
      (
         (E_taggingright (E_pair v' v)))))).
- apply JO_red_context_app1_td.
+ apply JO_red_context_app2_td.
+ simpl; auto.
  simpl; auto.
  apply JO_red_evalinr_td.
  simpl; auto.
@@ -925,8 +959,8 @@ Proof.
  exists x0. 
  splits; [apply star_refl | right; splits; [ reflexivity | assumption ] ].
  simpl; auto.
- apply red_not_value in H8; simpl in H8; intuition.
  apply red_not_value in H9; simpl in H9; intuition.
+ apply red_not_value in H8; simpl in H8; intuition.
 Qed.
 
 
@@ -1128,8 +1162,8 @@ Proof.
  exists x0. 
  splits; [apply star_refl | right; splits; [ reflexivity | assumption ] ].
  simpl; auto.
- apply red_not_value in H8; simpl in H8; intuition.
  apply red_not_value in H9; simpl in H9; intuition.
+ apply red_not_value in H8; simpl in H8; intuition.
 Qed.
 
 
@@ -1230,8 +1264,8 @@ Proof.
  splits; [assumption | assumption | apply star_refl ].
  substs.
  left; reflexivity.
- apply red_not_value in H8; simpl in H8; intuition.
  apply red_not_value in H9; simpl in H9; intuition.
+ apply red_not_value in H8; simpl in H8; intuition.
  substs.
  apply red_not_value in H0; simpl in H0; intuition.
 Qed.
@@ -1283,8 +1317,8 @@ Proof.
  exists x.
  splits; [assumption | reflexivity ].
  simpl; auto.
- apply red_not_value in H8; simpl in H8; intuition.
  apply red_not_value in H9; simpl in H9; intuition.
+ apply red_not_value in H8; simpl in H8; intuition.
  substs.
  apply red_not_value in H0; simpl in H0; intuition.
 Qed.
@@ -1397,8 +1431,8 @@ Proof.
  splits; [assumption | assumption | apply star_refl ].
  substs.
  left; reflexivity.
- apply red_not_value in H8; simpl in H8; intuition.
  apply red_not_value in H9; simpl in H9; intuition.
+ apply red_not_value in H8; simpl in H8; intuition.
  substs.
  apply red_not_value in H0; simpl in H0; intuition.
 Qed.
@@ -1451,8 +1485,8 @@ Proof.
  exists x.
  splits; [assumption | reflexivity ].
  simpl; auto.
- apply red_not_value in H8; simpl in H8; intuition.
  apply red_not_value in H9; simpl in H9; intuition.
+ apply red_not_value in H8; simpl in H8; intuition.
  substs.
  apply red_not_value in H0; simpl in H0; intuition.
 Qed.
@@ -1560,8 +1594,8 @@ Proof.
  substs.
  inversion H2.
  substs.
-  apply red_not_value in H8; simpl in H8; intuition.
- apply red_not_value in H9; simpl in H9; intuition.
+  apply red_not_value in H9; simpl in H9; intuition.
+ apply red_not_value in H8; simpl in H8; intuition.
 Qed.
 
 Lemma fork_tau_swap_cc : forall (e : expr) (lab1 lab2 : label), tauRed (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab1))) (E_live_expr (LM_comp lab2))) e -> (e= (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab1))) (E_live_expr (LM_comp lab2)))
@@ -1597,12 +1631,12 @@ Proof.
  splits. reflexivity.
  reflexivity.
  simpl; auto.
- apply red_not_value in H8; simpl in H8; intuition.
  apply red_not_value in H9; simpl in H9; intuition.
+ apply red_not_value in H8; simpl in H8; intuition.
  inversion H1; intuition; substs.
  inversion H3; intuition; substs.
- apply red_not_value in H11; simpl in H11; intuition.
  apply red_not_value in H12; simpl in H12; intuition.
+ apply red_not_value in H11; simpl in H11; intuition.
 Qed.
 
 Lemma fork_label_swap_cc: forall (e : expr) (lab1 lab2 l : label), labRed l (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (LM_comp lab1))) (E_live_expr (LM_comp lab2))) e -> 
@@ -1654,12 +1688,12 @@ Proof.
         (E_taggingleft
            (E_pair (E_constant CONST_unit) (E_live_expr (LM_comp lab1)))))))(s:=S_First).
  splits; [apply star_refl | apply JO_red_forkdocomp1 | apply star_refl].
- apply red_not_value in H8; simpl in H8; intuition.
  apply red_not_value in H9; simpl in H9; intuition.
+ apply red_not_value in H8; simpl in H8; intuition.
  inversion H1; intuition; substs.
  inversion H3; intuition; substs.
- apply red_not_value in H11; simpl in H11; intuition.
  apply red_not_value in H12; simpl in H12; intuition.
+ apply red_not_value in H11; simpl in H11; intuition.
 Qed.
 
 
@@ -1688,8 +1722,8 @@ Proof.
  right. left.
  exists p q.
  splits; [ assumption | apply star_refl | apply star_refl | reflexivity ].
- apply red_not_value in H6; simpl in H6; intuition.
  apply red_not_value in H7; simpl in H7; intuition.
+ apply red_not_value in H6; simpl in H6; intuition.
 Qed.
 
 
@@ -2021,9 +2055,9 @@ Proof.
  substs.
  
 
- apply red_not_value in H9; simpl in H9; intuition.
- substs.
  apply red_not_value in H10; simpl in H10; intuition.
+ substs.
+ apply red_not_value in H9; simpl in H9; intuition.
  substs.
  elim H2; intros; clear H2.
  apply red_not_value in H1.
@@ -5201,20 +5235,16 @@ Proof.
  apply JO_red_forkmove2 with (s:=S_First).
  apply JO_red_forkmove1 with (s:=s).
  assumption.
- apply red_not_value in H6.
- simpl in H6.
- intuition.
- apply red_not_value in H9.
- simpl in H9.
- intuition.
+ apply red_not_value in H9; simpl in H9; intuition.
+ apply red_not_value in H6; simpl in H6; intuition.
  substs.
  apply tStep with (s:=S_Second).
  apply JO_red_forkmove2 with (s:=S_Second).
  substs.
  apply JO_red_forkmove2 with (s:=s0).
  assumption.
+ apply red_not_value in H9; simpl in H9; intuition.
  apply red_not_value in H5; simpl in H5; intuition.
- apply red_not_value in H8; simpl in H8; intuition.
 Qed.
 
 
@@ -6281,9 +6311,9 @@ Proof.
  apply star_refl.
  simpl; auto.
  (* B1 - L1 - L5 *)
- apply red_not_value in H9; simpl in H9; intuition.
- (* B1 - L1 - L6 *)
  apply red_not_value in H10; simpl in H10; intuition.
+ (* B1 - L1 - L6 *)
+ apply red_not_value in H9; simpl in H9; intuition.
  (* B1 - L2 *)
  substs.
  apply fork_tau_assoc_total in H3.
@@ -6372,9 +6402,9 @@ Proof.
  auto.
  simpl; auto.
  (* B1 - L4 *)
- apply red_not_value in H8; simpl in H8; intuition.
- (* B1 - L5 *)
  apply red_not_value in H9; simpl in H9; intuition.
+ (* B1 - L5 *)
+ apply red_not_value in H8; simpl in H8; intuition.
  (* B2 *)
  destruct H1.
  destruct H1.
@@ -6531,9 +6561,9 @@ Proof.
  simpl; auto.
  (* B4 - L4 *)
  substs.
- apply red_not_value in H8; simpl in H8; intuition.
- (* B4 - L5 *)
  apply red_not_value in H9; simpl in H9; intuition.
+ (* B4 - L5 *)
+ apply red_not_value in H8; simpl in H8; intuition.
  (* B5 *)
  destruct H2.
  destruct H1.
@@ -6667,9 +6697,9 @@ Proof.
  simpl; auto.
  (* B5 - L4 *)
  substs.
- apply red_not_value in H8; simpl in H8; intuition.
- (* B4 - L5 *)
  apply red_not_value in H9; simpl in H9; intuition.
+ (* B4 - L5 *)
+ apply red_not_value in H8; simpl in H8; intuition.
  (* B6 *)
  destruct H1.
  destruct H1.
@@ -6909,9 +6939,9 @@ Proof.
  simplify_eq H6; clear H6; intros; substs.
  simpl; auto.
  substs.
- apply red_not_value in H9; simpl in H9; intuition.
- substs.
  apply red_not_value in H10; simpl in H10; intuition.
+ substs.
+ apply red_not_value in H9; simpl in H9; intuition.
  substs.
  branch 3.
  destruct H2.
@@ -6925,9 +6955,9 @@ Proof.
  apply taured_val_id in H4; substs; intuition.
  simpl; auto.
  substs.
- apply red_not_value in H8; simpl in H8; intuition.
- substs.
  apply red_not_value in H9; simpl in H9; intuition.
+ substs.
+ apply red_not_value in H8; simpl in H8; intuition.
  destruct H2.
  intuition; substs.
  apply red_not_value in H1; simpl in H1; intuition.

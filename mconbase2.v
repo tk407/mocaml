@@ -335,13 +335,13 @@ Inductive JO_red : expr -> select -> redlabel -> expr -> Prop :=    (* defn red 
  | JO_red_dobind : forall (v e:expr) (s:select),
      is_value_of_expr v ->
      JO_red (E_bind  (E_live_expr (LM_expr v))  e) s RL_tau (E_apply e v)
- | JO_red_context_app1 : forall (e e':expr) (s:select) (rl:redlabel) (e'':expr),
-     JO_red e' s rl e'' ->
-     JO_red (E_apply e e') s rl (E_apply e e'')
- | JO_red_context_app2 : forall (e v:expr) (s:select) (rl:redlabel) (e':expr),
+ | JO_red_context_app2 : forall (v e':expr) (s:select) (rl:redlabel) (e'':expr),
      is_value_of_expr v ->
-     JO_red e s rl e' ->
-     JO_red (E_apply e v) s rl (E_apply e' v)
+     JO_red e' s rl e'' ->
+     JO_red (E_apply v e') s rl (E_apply v e'')
+ | JO_red_context_app1 : forall (e e':expr) (s:select) (rl:redlabel) (e'':expr),
+     JO_red e s rl e'' ->
+     JO_red (E_apply e e') s rl (E_apply e'' e')
  | JO_red_fix_move : forall (e:expr) (s:select) (rl:redlabel) (e':expr),
      JO_red e s rl e' ->
      JO_red  (E_fix e)  s rl  (E_fix e') 
