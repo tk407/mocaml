@@ -7,6 +7,8 @@ Require Import WeakUpTo.Reductions.
 
 Load mconbase2.
 
+Load LibTactics.
+
 
 Inductive idExp : expr -> expr -> Prop :=
  | id_id: forall (e : expr ), idExp e e.
@@ -341,7 +343,238 @@ Proof.
  apply weaksim_id.
 Qed.
 
+Inductive livemodes_ctx : Set := 
+ | LM_ctx_expr (expr5:expr_ctx)
+ | LM_ctx_BASE (lm : livemodes)
+with expr_ctx : Set := 
+ | E_ctx_H
+ | E_ctx_apply (expr5:expr_ctx) (expr':expr_ctx)
+ | E_ctx_bind (expr5:expr_ctx) (expr':expr_ctx)
+ | E_ctx_function (value_name5:value_name) (typexpr5:typexpr) (expr5:expr_ctx)
+ | E_ctx_fix (e:expr_ctx)
+ | E_ctx_live_expr (lm:livemodes_ctx)
+ | E_ctx_pair (e:expr_ctx) (e':expr_ctx)
+ | E_ctx_taggingleft (e:expr_ctx)
+ | E_ctx_taggingright (e:expr_ctx)
+ | E_ctx_case (e1:expr_ctx) (x1:value_name) (e2:expr_ctx) (x2:value_name) (e3:expr_ctx)
+ | E_ctx_BASE (e:expr).
+
+(** context application *)
+Fixpoint appctx_lm (lmc:livemodes_ctx) (e:expr) : livemodes :=
+ match lmc with
+ | LM_ctx_expr (expr5) => LM_expr (appctx_E expr5 e)
+ | LM_ctx_BASE (lm) => lm
+ end
+with appctx_E (E5:expr_ctx) (e:expr) : expr :=
+  match E5 with
+  | E_ctx_H => e
+  | E_ctx_apply (expr5) (expr') => E_apply (appctx_E expr5 e) (appctx_E expr' e)
+  | E_ctx_bind (expr5) (expr') => E_bind (appctx_E expr5 e) (appctx_E expr' e) 
+  | E_ctx_function (value_name5) (typexpr5) (expr5) => E_function (value_name5) (typexpr5) (appctx_E expr5 e)
+  | E_ctx_fix (ex) => E_fix (appctx_E ex e)
+  | E_ctx_live_expr (lm) => E_live_expr (appctx_lm lm e) 
+  | E_ctx_pair (ex) (ex') => E_pair (appctx_E ex e) (appctx_E ex' e)
+  | E_ctx_taggingleft (ex) => E_taggingleft (appctx_E ex e)
+  | E_ctx_taggingright (ex) => E_taggingright (appctx_E ex e)
+  | E_ctx_case (e1) (x1) (e2) (x2) (e3) => E_case (appctx_E e1 e) (x1) (appctx_E e2 e) (x2) (appctx_E e3 e)
+  | E_ctx_BASE (ex) => ex end.
+
+Definition isExprRelationWeakBisimilarity (R : relation expr) : Prop :=
+   forall (p q : expr), R p q -> ((forall (p' : expr) (l : label), labRed l p p' -> (exists (q' : expr), labRed l q q' /\  R p' q' )) /\(forall (q' : expr) (l : label), labRed l q q' -> (exists (p' : expr), labRed l p p' /\  R p' q' ))
+               /\ (forall (p' : expr), tauRed p p' -> (exists (q' : expr), tauRed q q' /\  R p' q' )) /\(forall (q' : expr), tauRed q q' -> (exists (p' : expr), tauRed p p' /\  R p' q' ))
+ ).
+
+Definition isExprRelationValueEqualWeakBisimilarity (R : relation expr) : Prop :=
+   isExprRelationWeakBisimilarity R /\ (forall (vp vq : expr), is_value_of_expr vp -> is_value_of_expr vq -> R vp vq -> vp=vq).
+
+Inductive isExprWeaklyBisimilar : relation expr :=
+  | isexprweaklybisimilar : (forall (e e' : expr), (exists (R : relation expr), isExprRelationWeakBisimilarity R /\ R e e') -> isExprWeaklyBisimilar e e').
+
+Inductive isExprValueEqualWeaklyBisimilar : relation expr :=
+  | isexprvalueequalweaklybisimilar : (forall (e e' : expr), (exists (R : relation expr), isExprRelationValueEqualWeakBisimilarity R /\ R e e') -> isExprValueEqualWeaklyBisimilar e e').
 (*
+Definition composeExprWithExprRelation (e : expr) (R : relation expr) : relation expr :=
+*)
+(*
+Lemma E_apply_vewbsm : forall (f e f' e' : expr),  isExprValueEqualWeaklyBisimilar f f' -> isExprValueEqualWeaklyBisimilar e e' -> isExprValueEqualWeaklyBisimilar (E_apply f e) (E_apply f' e').
+Proof.
+Admitted.
+
+Lemma E_bind_vewbsm : forall (f e f' e' : expr),  isExprValueEqualWeaklyBisimilar f f' -> isExprValueEqualWeaklyBisimilar e e' -> isExprValueEqualWeaklyBisimilar (E_bind f e) (E_bind f' e').
+Proof.
+Admitted.
+
+(* FUNCTIONS ARE A PROBLEM: as they are values, they are only value equal weakly bisimilar with themselves. 
+Contextual equivalence wants to be the property that f and f' are contextually equivalent if for any contextually equivalent e e' the application is contextually equivalent. 
+This could be restricted to correctly typed expressions though.
+
+This means that value equal weak bisimilarity is a subset of contextual equivalence. *)
+
+(* this same effect happens for Live boxes. *)
+*)
+   
+(*
+Theorem ValueEqualWeakBisimilarityIsAContextualEquivalence : forall (e e' : expr) (c : expr_ctx), isExprValueEqualWeaklyBisimilar e e' -> isExprValueEqualWeaklyBisimilar (appctx_E c e) (appctx_E c e').
+Proof.
+ intros.
+ inversion H.
+ substs.
+ destruct H0 as [R H0].
+ destruct H0 as [H0 H1].
+ induction c.
+ simpl.
+ assumption.
+ simpl.
+ unfold isExprRelationValueEqualWeakBisimilarity in H0.
+ intuition.
+ apply isexprvalueequalweaklybisimilar.
+ induction c.
+ exists R.
+ intuition.
+ 
+ inversion H.
+ substs.
+ unfold Hrwbsim.
+*)
+
+Check weakred_ind.
+Check labRed_ind.
+Check star_ind.
+Check tauStep_ind.
+
+Lemma weakind: forall P : redlabel -> expr -> expr -> Prop,
+       (forall x : expr, P RL_tau x x) -> (
+       ((forall (e e' : expr) (s : select), JO_red e s RL_tau e' -> (fun x y => (forall (z : expr), tauRed y z -> P RL_tau y z -> P RL_tau x z)) e e'))) ->
+       ((forall (e0 e1 e2 e3 : expr) (s : select) (l : label),
+        tauRed e0 e1 /\ JO_red e1 s (RL_labelled l) e2 /\ tauRed e2 e3 ->
+        P (RL_labelled l) e0 e3)) ->
+       forall (r : redlabel) (e e0 : expr), weakred r e e0 -> P r e e0.
+Proof.
+ intros.
+ apply weakred_ind.
+ apply star_ind.
+ assumption.
+ intros.
+ inversion H3.
+ substs.
+ specialize H0 with (e:=x)(e':=y)(s:=s).
+ apply H0 with (z:=z)  in H6.
+ assumption.
+ assumption.
+ assumption.
+ intros.
+ apply labRed_ind with (P:=((fun x y z => (P (RL_labelled x) y z))) ).
+ apply H1.
+ assumption.
+ assumption.
+Qed.
+
+Lemma weakbisim_weakred : forall (R : relation expr), isExprRelationWeakBisimilarity R <-> forall (p q : expr), R p q -> 
+        ((forall (p' : expr) (r : redlabel), weakred r p p' -> (exists (q' : expr), weakred r q q' /\  R p' q' )) /\(forall (q' : expr) (r : redlabel), weakred r q q' -> (exists (p' : expr), weakred r p p' /\  R p' q' ))
+ ).
+ intros.
+ split.
+ intros.
+ unfold isExprRelationWeakBisimilarity in H.
+ intuition.
+ induction r.
+ inversion H1.
+ substs.
+ assert (exists q', tauRed q q' /\ R p' q').
+ specialize H with (p:=p)(q:=q).
+ apply H in H0.
+ intuition.
+ destruct H3.
+ exists x.
+ intuition.
+ apply weakred_T.
+ assumption.
+ inversion H1.
+ substs.
+ assert (exists q', labRed lab q q' /\ R p' q').
+ specialize H with (p:=p)(q:=q).
+ apply H in H0.
+ intuition.
+ destruct H2.
+ exists x.
+ intuition.
+ apply weakred_L.
+ assumption.
+ inversion H1.
+ substs.
+ assert (exists p', tauRed p p' /\ R p' q').
+ specialize H with (p:=p)(q:=q).
+ apply H in H0.
+ intuition.
+ destruct H3.
+ exists x.
+ intuition.
+ apply weakred_T.
+ assumption.
+ substs.
+ inversion H1.
+ substs.
+ assert (exists p', labRed l p p' /\ R p' q').
+ specialize H with (p:=p)(q:=q).
+ apply H in H0.
+ intuition.
+ destruct H3.
+ exists x.
+ intuition.
+ apply weakred_L.
+ assumption.
+ intros.
+ unfold isExprRelationWeakBisimilarity.
+ intros.
+ specialize H with (p:=p)(q:=q).
+ apply H in H0.
+ destruct H0.
+ intuition.
+ specialize H0 with (p':=p')(r:=RL_labelled l).
+ assert (weakred (RL_labelled l) p p'). apply weakred_L; assumption.
+ apply H0 in H3.
+ destruct H3 as [q' H3].
+ exists q'.
+ destruct H3.
+ inversion H3.
+ substs.
+ intuition.
+ specialize H1 with (q':=q')(r:=RL_labelled l).
+ assert (weakred (RL_labelled l) q q'). apply weakred_L; assumption.
+ apply H1 in H3.
+ destruct H3 as [p' H3].
+ exists p'.
+ destruct H3.
+ inversion H3.
+ substs.
+ intuition.
+ specialize H0 with (p':=p')(r:=RL_tau).
+ assert (weakred (RL_tau) p p'). apply weakred_T; assumption.
+ apply H0 in H3.
+ destruct H3 as [q' H3].
+ exists q'.
+ destruct H3.
+ inversion H3.
+ substs.
+ intuition.
+ specialize H1 with (q':=q')(r:=RL_tau).
+ assert (weakred (RL_tau) q q'). apply weakred_T; assumption.
+ apply H1 in H3.
+ destruct H3 as [p' H3].
+ exists p'.
+ destruct H3.
+ inversion H3.
+ substs.
+ intuition.
+Qed.
+
+(*
+Theorem weakredind : forall (X : Type) (R : relation X) (P : X -> X -> Prop),
+       (forall x : X, P x x) ->
+       (forall y x z : X, R x y -> star R y z -> P y z -> P x z) ->
+       forall x x0 : X, star R x x0 -> P x x0
+
+
 
  Theorem Weak_ind:
        forall P: redlabel -> expr -> expr -> Prop,
@@ -363,7 +596,9 @@ Qed.
       assumption.
       assumption.
       destruct Hxx1.
+      Check star_ind.
       intuition.
+      apply Ha with (y:=.
       as [ x1 Hxx1 Hx1x' ].
       destruct Hx1x' as [ x2 Hx1x2 Hx2x' ].
       induction Hxx1 as [ x | w x x1 Hxw Hwx1 IH ].

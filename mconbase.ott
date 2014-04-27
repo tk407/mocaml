@@ -33,19 +33,6 @@ typexpr, t :: TE_ ::=
   | typexpr '+' typexpr'               ::   :: sum
   | ( typexpr )                        :: S :: paren {{ ich [[typexpr]] }} {{ ocaml [[typexpr]] }}
 
-% Type scheme
-typscheme, ts :: TS_ ::=  
-  | ( typvar1 , .. , typvarn ) typexpr ::   :: ts  (+ bind typvar1 .. typvarn in typexpr +) 
-
-  | generalise ( G , t )               :: M :: ts3 
-    {{ isa (TS_ts (List.remdups (list_minus (ftv_typexpr [[t]]) (ftv_G [[G]]))) [[t]]) }}
-    {{ coq (TS_ts (remove_duplicates (make_list_typvar (list_minus eq_typvar (ftv_typexpr [[t]]) (ftv_G [[G]])))) [[t]]) }} 
-    {{ hol (TS_ts (remove_duplicates (list_minus (ftv_typexpr [[t]]) (ftv_G [[G]]))) [[t]]) }}
-    {{ ocaml TODO }}
-
-%TODO: it might be nicer to have ftv remove duplicates, or indeed
-%return a set
-
 % Constants
 constant, c :: CONST_ ::=
   | ret                                ::   :: ret
@@ -111,7 +98,7 @@ select, s :: S_ ::=
 %Type environment
 G {{ tex \Gamma }} :: G_ ::=
   | empty                              ::   :: em
-  | G , value_name : typscheme         ::   :: vn
+  | G , value_name : typexpr         ::   :: vn
 
 formula :: formula_ ::=
   | judgement                          ::   :: judgement
@@ -120,26 +107,6 @@ formula :: formula_ ::=
         {{ coq not([[formula]]) }}
         {{ hol ~([[formula]]) }}
         {{ ocaml TODO }}
-
-  | typscheme > t                      ::   :: gen 
-        {{ isa ? typvars . ? typexpr . ? s . 
-             [[typscheme]] = TS_ts typvars typexpr 
-             & typvars=List.map fst s 
-             & tsubst_typexpr s typexpr = [[t]] }}
-        {{ coq (exists tvs, exists txp, exists s, 
-             [[typscheme]] = TS_ts tvs txp 
-             /\ tvs = make_list_typvar
-                    (List.map (fun (x:typvar*typexpr) => match x with (x1,x2) => x1 end) 
-                              s)  
-             /\ tsubst_typexpr s txp = [[t]]) }}
-        {{ hol ? typvars typexpr s . 
-             ([[typscheme]] = TS_ts typvars typexpr )
-             /\ (typvars=MAP FST s )
-             /\ (tsubst_typexpr s typexpr = [[t]]) }}
-        {{ ocaml TODO }}
-
-  | typscheme = typscheme'             ::   :: eqt 
-        {{ ich [[typscheme]]=[[typscheme']] }} {{ ocaml TODO }}
   | value_name = value_name'           ::   :: eqv 
         {{ ich [[value_name]]=[[value_name']] }} {{ ocaml TODO }}
 
@@ -147,7 +114,7 @@ formula :: formula_ ::=
 %Terminals
 terminals :: terminals_ ::=
   |  ->                                ::   :: arrow      {{ tex \rightarrow }}
-  |  function                          ::   :: function   {{ tex \textbf{function} }}
+  |  function                          ::   :: function   {{ tex \lambda }}
   | |-                                 ::   :: turnstile  {{ tex \vdash }}
   | -->                                ::   :: red        {{ tex \longrightarrow }}
   | '{'                                ::   :: leftbrace  {{ tex \{ }}
@@ -184,17 +151,9 @@ substitutions
 
 freevars
   typexpr typvar :: ftv
+  expr value_name :: fv
 
 embed
-  {{ coq
-Fixpoint remove_duplicates (l:list_typvar) : list_typvar :=
-  match l with
-  | Nil_list_typvar => Nil_list_typvar
-  | Cons_list_typvar h t => 
-    if (list_mem eq_typvar h (unmake_list_typvar t))  
-    then remove_duplicates t
-    else Cons_list_typvar h (remove_duplicates t)
-end. }}
 
   {{ hol
 val _ = Define `
@@ -208,15 +167,15 @@ defns
 Jtype :: '' ::= 
 
 defn 
-value_name : typscheme in G  :: :: VTSin :: VTSin_ by
+value_name : typexpr in G  :: :: VTSin :: VTSin_ by
 
 --------------------------------------------------- :: vn1
-value_name : typscheme in G, value_name:typscheme
+value_name : typexpr in G, value_name:typexpr
 
-value_name : typscheme in G
+value_name : typexpr in G
 not(value_name = value_name')
 --------------------------------------------------- :: vn2
-value_name : typscheme in G, value_name':typscheme'
+value_name : typexpr in G, value_name':typexpr'
 
 
 % base typing rules
@@ -254,8 +213,7 @@ G |- proj2 : ( t1 * t2 ) -> t2
 defn 
 G |- e : t :: :: Get :: Get_ by
 
-x:typscheme in G
-typscheme > t   
+x:t in G   
 ---------------- :: value_name
 G |- x:t
 
@@ -268,7 +226,7 @@ G |- e' : t1
 ---------------- :: apply
 G |- e e' : t2
 
-G,x1: ( ) t1 |- e : t
+G,x1: t1 |- e : t
 --------------------------- I :: lambda
 G |- function x1 : t1 -> e : t1->t
 
@@ -304,8 +262,8 @@ G |- inl e : t + t'
 G |- inr e : t' + t 
 
 G |- e : t + t'
-G,x : ( ) t |- e' : t''
-G,x' : ( ) t' |- e'' : t''
+G,x : t |- e' : t''
+G,x' : t' |- e'' : t''
 --------------------------- :: TCase
 G |- case e of inl x => e' | inr x' => e'' : t''
 

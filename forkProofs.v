@@ -6,7 +6,6 @@ Require Import Classical_Prop.
 
 Load mconbaseMonProofs.
 
-Load LibTactics.
 
 
 
@@ -4481,7 +4480,285 @@ Inductive fork_comm_rel :  relation expr :=
  | forkee_tau : forall  ( lm lm' : livemodes) (e : expr),  totalTauRed (E_bind ((E_live_expr lm')) (swapf)) (E_live_expr lm) /\  totalTauRed (E_bind ((E_live_expr lm')) (swapf)) e  -> fork_comm_rel (E_live_expr lm) e.
 
 
-Theorem fork_comm_wbsm : forall (p q : expr), fork_comm_rel p q -> ((forall (l : label) (p' : expr), labRed l p p' -> (exists (q' : expr), labRed l q q' /\ fork_comm_rel p' q') ) /\ (forall (l : label) (q' : expr), labRed l q q' -> (exists (p' : expr), labRed l p p' /\ fork_comm_rel p' q') )).
+Lemma fork_comm_rel_value_equal : forall (vp vq : expr), is_value_of_expr vp -> is_value_of_expr vq -> fork_comm_rel vp vq -> vp=vq.
+Proof.
+ intros.
+ inversion H1.
+ substs.
+ simpl in H; intuition.
+ substs.
+ intuition.
+ assert ((totalTauRed vq (E_live_expr lm)) \/ (totalTauRed (E_live_expr lm) vq)).
+ apply ttau_midpoint with (e:=(E_live_expr lm' >>= swapf)).
+ assumption.
+ assumption.
+ intuition.
+ apply tau_incl_totalTau in H5.
+ apply taured_val_id in H5.
+ substs; intuition.
+ assumption.
+ apply tau_incl_totalTau in H5.
+ apply taured_val_id in H5.
+ substs; intuition.
+ assumption.
+Qed.
+
+Lemma fork_comm_rel_tau_bisim : forall (p q : expr), fork_comm_rel p q -> ((forall (p' : expr), tauRed  p p' -> (exists (q' : expr), tauRed  q q' /\ fork_comm_rel p' q') ) /\ (forall (q' : expr), tauRed  q q' -> (exists (p' : expr), tauRed  p p' /\ fork_comm_rel p' q') )).
+Proof.
+ intros.
+ intuition.
+ inversion H.
+ substs.
+
+ apply fork_tau_swap_total in H0.
+ intuition.
+ destruct H1.
+ destruct H0.
+ intuition.
+ substs.
+ exists ((E_apply (E_apply (E_constant CONST_fork) (E_live_expr x0)) (E_live_expr x) >>=
+   swapf)).
+ split.
+ apply bind_tau_behave_front.
+ assumption.
+ apply forkee_start.
+ destruct H0.
+ destruct H0.
+ intuition.
+ substs.
+ exists (((E_live_expr (LM_expr (E_taggingright (E_pair (E_live_expr x0) x)))))>>=swapf).
+ split.
+ apply bind_tau_behave_front.
+ assumption.
+ apply forkee_tau with (lm':=(LM_expr (E_taggingright (E_pair (E_live_expr x0) x)))).
+ split.
+ apply swapf_right_b.
+ simpl; auto.
+ simpl; auto.
+ apply star_refl.
+ destruct H0.
+ destruct H0.
+ intuition.
+ substs.
+ exists ((E_live_expr (LM_expr (E_taggingleft (E_pair x (E_live_expr x0)))))>>=swapf).
+ split.
+ apply bind_tau_behave_front.
+ assumption.
+ apply forkee_tau with (lm':=( (LM_expr (E_taggingleft (E_pair x (E_live_expr x0)))))).
+ split.
+ apply swapf_left_b.
+ simpl; auto.
+ simpl; auto.
+ apply star_refl.
+ intuition.
+ substs.
+ assert ((totalTauRed q (E_live_expr lm)) \/ (totalTauRed (E_live_expr lm) q)).
+ apply ttau_midpoint with (e:=(E_live_expr lm' >>= swapf)).
+ assumption.
+ assumption.
+ intuition.
+ exists (E_live_expr lm).
+ split.
+ apply tau_incl_totalTau in H2.
+ assumption.
+ apply taured_val_id in H0.
+ substs.
+ apply forkee_tau with (lm' := lm').
+ intuition.
+ simpl; auto.
+ apply tau_incl_totalTau in H2.
+ apply taured_val_id in H2.
+ substs.
+ exists (E_live_expr lm).
+ split.
+ apply star_refl.
+ apply taured_val_id in H0.
+ substs.
+ apply forkee_tau with (lm':=lm').
+ intuition.
+ simpl; auto.
+ simpl; auto.
+
+ inversion H.
+ substs.
+ apply bind_tau_behave_back_h in H0.
+ destruct H0.
+ destruct H0.
+ intuition.
+ destruct H0.
+ intuition.
+ simplify_eq H1; clear H1; intros; substs.
+
+ apply fork_tau_swap_total in H2.
+ intuition.
+ destruct H0.
+ destruct H0.
+ intuition.
+ substs.
+ exists ((E_apply (E_apply (E_constant CONST_fork) (E_live_expr x0)) (E_live_expr x))).
+ split.
+ assumption.
+ apply forkee_start.
+ destruct H1.
+ destruct H0.
+ intuition.
+ substs.
+ exists (((E_live_expr (LM_expr (E_taggingright (E_pair (E_live_expr x0) x)))))).
+ split.
+ assumption.
+ apply forkee_tau with (lm':=(LM_expr (E_taggingleft (E_pair x (E_live_expr x0))))).
+ split.
+ apply swapf_left_b.
+ simpl; auto.
+ simpl; auto.
+ apply star_refl.
+ destruct H1.
+ destruct H0.
+ intuition.
+ substs.
+ exists ((E_live_expr (LM_expr (E_taggingleft (E_pair x (E_live_expr x0)))))).
+ split.
+ assumption.
+ apply forkee_tau with (lm':=(LM_expr (E_taggingright (E_pair (E_live_expr x0) x)))).
+ split.
+ apply swapf_right_b.
+ simpl; auto.
+ simpl; auto.
+ apply star_refl.
+ destruct H0.
+ simplify_eq H1; clear H1; intros; substs.
+ intuition.
+ apply fork_tau_swap_total in H1.
+ intuition.
+ destruct H0; destruct H0. destruct H0; discriminate H0.
+ destruct H1; destruct H0; destruct H0. destruct H1; simplify_eq H1; clear H1; intros; substs.
+ exists (E_live_expr (LM_expr (E_taggingright (E_pair (E_live_expr x0) x)))).
+ intuition.
+ destruct H2.
+ intuition.
+ substs.
+ apply taured_val_id in H1.
+ substs.
+ apply forkee_tau with (lm':=(LM_expr (E_taggingleft (E_pair x (E_live_expr x0))))).
+ intuition.
+ apply swapf_left_b.
+ assumption.
+ simpl; auto.
+ apply star_refl.
+ simpl; auto.
+ apply taured_val_id in H1.
+ substs.
+ apply forkee_tau with (lm':=(LM_expr (E_taggingleft (E_pair x (E_live_expr x0))))).
+ intuition.
+ apply swapf_left_b.
+ assumption.
+ simpl; auto.
+ assert (totalTauRed
+  (E_apply swapf ( ( (E_taggingleft (E_pair x (E_live_expr x0)))))
+   ) (E_live_expr (LM_expr (E_taggingright (E_pair (E_live_expr x0) x))))).
+ apply swapf_left.
+ assumption.
+ simpl; auto.
+ assert ((totalTauRed (E_apply swapf (E_taggingleft (E_pair x (E_live_expr x0)))) q' /\ totalTauRed q' (E_live_expr (LM_expr (E_taggingright (E_pair (E_live_expr x0) x))))) \/ (tauRed (E_live_expr (LM_expr (E_taggingright (E_pair (E_live_expr x0) x)))) q')).
+ apply ttau_prefix.
+ intuition.
+ intuition.
+ apply S_star with (y:=(E_apply swapf (E_taggingleft (E_pair x (E_live_expr x0))))).
+ apply JO_red_dobind_td.
+ apply S_First.
+ simpl; auto.
+ assumption.
+ apply taured_val_id in H6.
+ substs.
+ apply swapf_left_b.
+ assumption.
+ simpl; auto.
+ simpl; auto.
+ simpl; auto.
+ destruct H1; destruct H0; destruct H0. destruct H1; simplify_eq H1; clear H1; intros; substs.
+ exists ((E_live_expr (LM_expr (E_taggingleft (E_pair x (E_live_expr x0)))))).
+ intuition.
+ destruct H2.
+ intuition.
+ substs.
+ apply taured_val_id in H1.
+ substs.
+ apply forkee_tau with (lm':=(LM_expr (E_taggingright (E_pair (E_live_expr x0) x)))).
+ intuition.
+ apply swapf_right_b.
+ simpl; auto.
+ assumption.
+ 
+ apply star_refl.
+ simpl; auto.
+ apply taured_val_id in H1.
+ substs.
+ apply forkee_tau with (lm':=(LM_expr (E_taggingright (E_pair (E_live_expr x0) x)))).
+ intuition.
+ apply swapf_right_b.
+ simpl; auto.
+ assumption.
+ assert (totalTauRed
+  (E_apply swapf ( ( (E_taggingright (E_pair (E_live_expr x0) x))))
+   ) (E_live_expr (LM_expr (E_taggingleft (E_pair x (E_live_expr x0) ))))).
+ apply swapf_right.
+ simpl; auto.
+ assumption.
+ assert ((totalTauRed (E_apply swapf (E_taggingright (E_pair (E_live_expr x0) x))) q' /\ totalTauRed q' (E_live_expr (LM_expr (E_taggingleft (E_pair x (E_live_expr x0)))))
+                 \/ (tauRed (E_live_expr (LM_expr (E_taggingleft (E_pair x (E_live_expr x0))))) q'))).
+ apply ttau_prefix.
+ intuition.
+ intuition.
+ apply S_star with (y:=(E_apply swapf (E_taggingright (E_pair (E_live_expr x0) x)))).
+ apply JO_red_dobind_td.
+ apply S_First.
+ simpl; auto.
+ simpl; auto.
+
+ apply taured_val_id in H6.
+ substs.
+ apply swapf_right_b.
+ simpl; auto.
+ simpl; auto.
+ simpl; auto.
+ simpl; auto.
+ exists (E_apply (E_apply (E_constant CONST_fork) (E_live_expr e')) (E_live_expr e)) swapf.
+ reflexivity.
+ substs.
+ exists (E_live_expr lm).
+ intuition.
+ apply star_refl.
+ apply forkee_tau with (lm':=lm').
+ intuition.
+ assert ((totalTauRed q (E_live_expr lm) \/ totalTauRed (E_live_expr lm) q)).
+ apply ttau_midpoint with (e:=(E_live_expr lm' >>= swapf)).
+ assumption.
+ assumption.
+ intuition.
+ assert (((totalTauRed q q' /\ totalTauRed q' (E_live_expr lm)) \/ (tauRed (E_live_expr lm) q'))).
+ apply ttau_prefix.
+ intuition.
+ intuition.
+ apply star_trans with (y:=q).
+ assumption.
+ assumption.
+ apply taured_val_id in H5.
+ substs.
+ assumption.
+ simpl; auto.
+ apply tau_incl_totalTau in H4.
+ apply taured_val_id in H4.
+ substs.
+ apply taured_val_id in H0.
+ substs.
+ assumption.
+ simpl; auto.
+ simpl; auto.
+Qed.
+ 
+
+
+Theorem fork_comm_rel_lab_bisim : forall (p q : expr), fork_comm_rel p q -> ((forall (l : label) (p' : expr), labRed l p p' -> (exists (q' : expr), labRed l q q' /\ fork_comm_rel p' q') ) /\ (forall (l : label) (q' : expr), labRed l q q' -> (exists (p' : expr), labRed l p p' /\ fork_comm_rel p' q') )).
 Proof. 
  intros.
  splits.
@@ -4869,6 +5146,35 @@ Proof.
  assumption.
  intuition.
 Qed.
+
+Lemma fork_comm_rel_vewbsm : isExprRelationValueEqualWeakBisimilarity fork_comm_rel.
+Proof.
+ unfold isExprRelationValueEqualWeakBisimilarity.
+ split.
+ unfold  isExprRelationWeakBisimilarity.
+ intros.
+ intuition.
+ specialize fork_comm_rel_lab_bisim with (p:=p)(q:=q).
+ intuition.
+ specialize fork_comm_rel_lab_bisim with (p:=p)(q:=q).
+ intuition.
+ specialize fork_comm_rel_tau_bisim with (p:=p)(q:=q).
+ intuition.
+ specialize fork_comm_rel_tau_bisim with (p:=p)(q:=q).
+ intuition.
+ apply fork_comm_rel_value_equal.
+Qed.
+
+Theorem fork_comm_vewbsm : forall (e e' : livemodes), isExprValueEqualWeaklyBisimilar (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (e))) (E_live_expr (e'))) (E_bind (E_apply (E_apply (E_constant CONST_fork) (E_live_expr (e'))) (E_live_expr (e))) (swapf)).
+Proof.
+ intros.
+ apply isexprvalueequalweaklybisimilar.
+ exists fork_comm_rel.
+ split.
+ apply fork_comm_rel_vewbsm.
+ apply forkee_start.
+Qed.
+
  
 Notation " A # B " := (E_apply (E_apply (E_constant CONST_fork) ( (E_live_expr A)) ) ( (E_live_expr B))) (at level 20).
 Notation " A <# B "  := (E_live_expr(LM_expr(E_taggingleft(E_pair A (E_live_expr B))))) (at level 20).
@@ -6387,9 +6693,468 @@ Proof.
  apply red_not_value in H0; simpl in H0; intuition.
 Qed.
 
+Lemma fork_tau_behave_v1 : forall (v e' : expr) (e : livemodes), is_value_of_expr v -> tauRed ((LM_expr v)# e) e' ->  
+      (
+      (exists (f : livemodes), e' = ( v) <# f /\ ((exists (g g' :expr ), e = LM_expr g /\ tauRed g g' /\ f = LM_expr g')  \/ (exists (l : label),e = LM_comp l /\ f = e ) ))
+      \/ 
+      (exists (f : livemodes), e' = (LM_expr v)# f  /\ ((exists (g g' :expr ), e = LM_expr g /\ tauRed g g' /\ f = LM_expr g')  \/ (exists (l : label),e = LM_comp l /\ f = e ) ))
+      \/ 
+      (exists (f : expr), e' = (LM_expr v) #> f   /\ ((exists (g :expr ), e = LM_expr g /\ tauRed g f /\ is_value_of_expr f)  ))
+      ).
+Proof.
+ intros.
+ induction e.
+ apply fork_tau_behave_ec in H0.
+ destruct H0.
+ intuition.
+ substs.
+ apply taured_val_id in H1.
+ substs.
+ branch 2.
+ exists (LM_comp lab).
+ intuition.
+ right.
+ exists lab.
+ intuition.
+ assumption.
+ substs.
+ left.
+ apply taured_val_id in H1.
+ substs.
+ exists (LM_comp lab).
+ intuition.
+ right.
+ exists lab; intuition.
+ assumption. 
+ apply fork_tau_behave_ee in H0.
+ intuition.
+ destruct H1; destruct H0; intuition.
+ substs.
+ apply taured_val_id in H1; substs.
+ branch 2.
+ exists (LM_expr x0).
+ intuition.
+ left.
+ exists expr5 x0.
+ intuition.
+ assumption.
+ destruct H0; destruct H0; intuition; substs.
+ apply taured_val_id in H0.
+ substs.
+ branch 3.
+ exists x0.
+ intuition.
+ exists expr5; intuition.
+ assumption.
+ destruct H0; destruct H0; intuition; substs.
+ apply taured_val_id in H0.
+ substs.
+ branch 1.
+ exists (LM_expr x0).
+ intuition.
+ left.
+ exists expr5 x0; intuition.
+ assumption.
+Qed.
+
+
+Lemma fork_tau_behave_v2 : forall (v e' : expr) (e : livemodes), is_value_of_expr v -> tauRed (e # (LM_expr v)) e' ->  
+      (
+      (exists (f : livemodes), e' = f #> v /\ ((exists (g g' :expr ), e = LM_expr g /\ tauRed g g' /\ f = LM_expr g')  \/ (exists (l : label),e = LM_comp l /\ f = e ) ))
+      \/ 
+      (exists (f : livemodes), e' = f # (LM_expr v)  /\ ((exists (g g' :expr ), e = LM_expr g /\ tauRed g g' /\ f = LM_expr g')  \/ (exists (l : label),e = LM_comp l /\ f = e ) ))
+      \/ 
+      (exists (f : expr), e' = f <# (LM_expr v)   /\ ((exists (g :expr ), e = LM_expr g /\ tauRed g f /\ is_value_of_expr f)  ))
+      ).
+Proof.
+ intros.
+ induction e.
+ apply fork_tau_behave_ce in H0.
+ destruct H0.
+ intuition.
+ substs.
+ apply taured_val_id in H1.
+ substs.
+ branch 2.
+ exists (LM_comp lab).
+ intuition.
+ right.
+ exists lab.
+ intuition.
+ assumption.
+ substs.
+ left.
+ apply taured_val_id in H1.
+ substs.
+ exists (LM_comp lab).
+ intuition.
+ right.
+ exists lab; intuition.
+ assumption. 
+ apply fork_tau_behave_ee in H0.
+ intuition.
+ destruct H1; destruct H0; intuition.
+ substs.
+ apply taured_val_id in H0; substs.
+ branch 2.
+ exists (LM_expr x).
+ intuition.
+ left.
+ exists expr5 x.
+ intuition.
+ assumption.
+ destruct H0; destruct H0; intuition; substs.
+ apply taured_val_id in H2.
+ substs.
+ branch 1.
+ exists (LM_expr x).
+ intuition.
+ left.
+ exists expr5 x.
+ intuition.
+ assumption.
+ destruct H0; destruct H0; intuition; substs.
+ apply taured_val_id in H2.
+ substs.
+ branch 3.
+ exists (x).
+ intuition.
+ exists expr5.
+ intuition.
+ assumption.
+Qed.
+ 
+
+Lemma fork_lab_behave_v1 : forall (v e' : expr) (e : livemodes) (l : label), is_value_of_expr v -> labRed l ((LM_expr v)# e) e' ->  
+      (
+      (exists (f : livemodes), e' = ( v) <# f /\ ((exists (g g' :expr ), e = LM_expr g /\ labRed l g g' /\ f = LM_expr g')  \/ (exists (l : label),e = LM_comp l /\ f = e ) ))
+      \/ 
+      (exists (f : livemodes), e' = (LM_expr v)# f  /\ ((exists (g g' :expr ), e = LM_expr g /\ labRed l g g' /\ f = LM_expr g')  ))
+      \/ 
+      (exists (f : expr), e' = (LM_expr v) #> f   /\ ((exists (g :expr ), e = LM_expr g /\ labRed l g f /\ is_value_of_expr f) \/ (e= LM_comp l /\ f=(E_constant CONST_unit))  ))
+      ).
+Proof.
+ intros.
+ inversion H0.
+ substs; intuition.
+ apply fork_tau_behave_v1 in H2.
+ intuition.
+ destruct H3. 
+ intuition.
+ substs.
+ apply red_not_value in H1; simpl in H1; intuition.
+ substs.
+ apply red_not_value in H1; simpl in H1; intuition.
+ destruct H2.
+ intuition.
+ substs.
+ inversion H1.
+ substs.
+ apply red_not_value in H9; simpl in H9; intuition.
+ substs.
+ apply fork_tau_behave_v1 in H4.
+ intuition.
+ branch 1.
+ destruct H2.
+ destruct H2.
+ intuition.
+ substs.
+ simplify_eq H6; clear H6; intros; substs.
+ destruct H3.
+ intuition.
+ substs.
+ exists x1.
+ intuition.
+ left.
+ destruct H3.
+ destruct H3.
+ intuition.
+ substs.
+ simplify_eq H4; clear H4; intros; substs.
+ exists x x3.
+ intuition.
+ apply lab_r with (e1:=x0)(e2:=x2)(s:=s0).
+ intuition.
+ destruct H3.
+ intuition.
+ simplify_eq H5; clear H5; intros; substs.
+ branch 2. 
+ destruct H4; intuition; substs.
+ destruct H2; destruct H2; destruct H3; destruct H3; intuition; substs.
+ simplify_eq H2; simplify_eq H7; clear H2; clear H7; intros; substs.
+ exists (LM_expr x3).
+ intuition.
+ exists x0 x3; intuition.
+ apply lab_r with (e1:=x1)(e2:=x2)(s:=s0).
+ intuition.
+  destruct H2; destruct H2; destruct H3; intuition; substs.
+ simplify_eq H2; simplify_eq H7; clear H2; clear H7; intros; substs.
+ branch 3. 
+ destruct H2. destruct H2; destruct H4; intuition; substs.
+ destruct H6; intuition.
+ simplify_eq H4; simplify_eq H7; clear H4; clear H7; intros; substs.
+ exists x1.
+ intuition.
+ left.
+ exists x.
+ intuition.
+ apply lab_r with (e1:=x0)(e2:=x2)(s:=s0).
+ intuition.
+ assumption.
+ substs.
+ branch 3.
+ destruct H2; destruct H2; intuition; substs.
+ apply taured_val_id in H4.
+ substs.
+ simplify_eq H6; clear H6; intros; substs.
+ simpl; auto.
+ substs.
+ apply red_not_value in H9; simpl in H9; intuition.
+ substs.
+ apply red_not_value in H10; simpl in H10; intuition.
+ substs.
+ branch 3.
+ destruct H2.
+ intuition.
+ substs.
+ exists (E_constant CONST_unit).
+ inversion H1.
+ substs.
+ apply red_not_value in H8; simpl in H8; intuition.
+ substs.
+ apply taured_val_id in H4; substs; intuition.
+ simpl; auto.
+ substs.
+ apply red_not_value in H8; simpl in H8; intuition.
+ substs.
+ apply red_not_value in H9; simpl in H9; intuition.
+ destruct H2.
+ intuition; substs.
+ apply red_not_value in H1; simpl in H1; intuition.
+ assumption.
+Qed.
+
+
+Lemma fork_lab_behave_v2 : forall (v e' : expr) (e : livemodes)(l: label), is_value_of_expr v -> labRed l (e # (LM_expr v)) e' ->  
+      (
+      (exists (f : livemodes), e' =   f #> ( v) /\ ((exists (g g' :expr ), e = LM_expr g /\ labRed l g g' /\ f = LM_expr g')  \/ (exists (l : label),e = LM_comp l /\ f = e ) ))
+      \/ 
+      (exists (f : livemodes), e' = f # (LM_expr v)  /\ ((exists (g g' :expr ), e = LM_expr g /\ labRed l g g' /\ f = LM_expr g')  ))
+      \/ 
+      (exists (f : expr), e' =  f <# (LM_expr v)  /\ ((exists (g :expr ), e = LM_expr g /\ labRed l g f /\ is_value_of_expr f) \/ (e= LM_comp l /\ f=(E_constant CONST_unit))  ))
+      ).
+Proof.
+ intros.
+ induction e.
+ apply fork_label_behave_ce in H0.
+ intuition.
+ substs.
+ destruct H2.
+ intuition.
+ substs.
+ apply taured_val_id in H1.
+ substs.
+ branch 3.
+ exists (E_constant CONST_unit).
+ intuition.
+ assumption.
+ destruct H0.
+ intuition.
+ apply labred_not_val in H1.
+ simpl in H1; intuition.
+ destruct H0.
+ intuition.
+ apply labred_not_val in H1.
+ simpl in H1; intuition.
+ apply fork_label_origin_ee in H0.
+ intuition.
+ destruct H1.
+ intuition.
+ destruct H0.
+ intuition.
+ substs.
+ apply taured_val_id in H2.
+ substs.
+ branch 2.
+ exists (LM_expr x).
+ intuition.
+ exists expr5 x.
+ intuition.
+ assumption.
+ destruct H2.
+ intuition.
+ apply taured_val_id in H0.
+ substs.
+ branch 1.
+ exists (LM_expr x).
+ intuition.
+ left.
+ exists expr5 x.
+ intuition.
+ assumption.
+ destruct H2.
+ intuition.
+ substs.
+ branch 3.
+ apply taured_val_id in H0; substs.
+ exists x; intuition.
+ left.
+ exists expr5.
+ intuition.
+ assumption.
+ destruct H1.
+ intuition.
+ apply labred_not_val in H1; simpl in H1; intuition.
+ apply labred_not_val in H1; simpl in H1; intuition.
+ apply labred_not_val in H1; simpl in H1; intuition.
+Qed.
+ 
+
+
+Inductive fork_assoc_rel :  relation expr := 
+ | forka_start : forall (a b c : livemodes), fork_assoc_rel ((LM_expr (a # b)) # c) (a # (LM_expr (b # c)))
+ | forka__end_sr : forall (a' b' : livemodes)(c' : expr), is_value_of_expr c' -> fork_assoc_rel ((LM_expr (a' # b')) #> c') (a' #> ( (b' #> c')))
+ | forka__end_rl : forall (a' c' : livemodes)(b' : expr), is_value_of_expr b' -> fork_assoc_rel (( (a' #> b')) <# c') (a' #> ( (b' <# c')))
+ | forka__end_rs : forall (a' c' : livemodes)(b' : expr), is_value_of_expr b' -> fork_assoc_rel ((LM_expr (a' #> b')) # c') (a' # ( LM_expr ((LM_expr b') # c')))
+ | forka__end_ls : forall (b' c' : livemodes)(a' : expr), is_value_of_expr a' -> fork_assoc_rel ((LM_expr (a' <# b')) # c') (a' <# ( LM_expr (b' # c')))
+ | forka__end_ll : forall (b' c' : livemodes)(a' : expr), is_value_of_expr a' -> fork_assoc_rel (( (a' <# b')) <# c') (a' <# ( LM_expr(b' # c')))
+ | forka__end_rr : forall (a' : livemodes)(b' c' : expr), is_value_of_expr b' -> is_value_of_expr c' -> fork_assoc_rel ((LM_expr (a' #> b')) #> c') (a' #> ( (LM_expr b' #> c')))
+ | forka__end_lr : forall (b' : livemodes)(a' c' : expr), is_value_of_expr c' -> is_value_of_expr a' -> fork_assoc_rel ((LM_expr (a' <# b')) #> c') (a' <# ( LM_expr (b' #> c')))
+ | forka_end_comp : forall (x : livemodes)(q' : expr), is_value_of_expr q' -> fork_assoc_rel ((LM_expr (x #> (E_constant CONST_unit))) #> q') (x #> (E_constant CONST_unit <# (LM_expr q'))).
+
+(*
+Lemma fork_assoc_wbsm_h : ((forall (q p p' : expr) (r : redlabel), (weakred r p p') ->
+                                                        ( (fork_assoc_rel p q) -> (exists (q' : expr), (weakred r q q') /\  (fork_assoc_rel p' q') )) ) 
+/\                        (forall (p q q' : expr) (r : redlabel), weakred r q q' -> ( fork_assoc_rel p q -> (exists (p' : expr), weakred r p p' /\  fork_assoc_rel p' q' )))).
+Proof.
+ intros.
+ split.
+ intro q.
+ assert ((forall x : expr, (fun r p p' => (( (fork_assoc_rel p q) -> (exists (q' : expr), (weakred r q q') /\  (fork_assoc_rel p' q') )))) RL_tau x x) ).
+ intros.
+ exists q.
+ intuition.
+ apply weakred_T.
+ apply star_refl.
+ intros.
+ apply weakind with (r:=r)(e:=p)(e0:=p') in H .
+ apply H.
+ assumption.
+ intros.
+ admit.
+ intros.
+ assert (labRed l e0 e3).
+ apply lab_r with (e1:=e1)(e2:=e2)(s:=s).
+ intuition.
+ assert (H5:=H4); clear H4.
+ intuition.
+ inversion H3.
+ substs.
+ apply fork_lab_assoc_total in H5.
+ intuition.
+ destruct H6 as [a'].
+ destruct H5 as [b'].
+ destruct H5 as [c'].
+ intuition.
+ substs.
+ exists (a' # LM_expr (b' # c')).
+ intuition.
+ apply weakred_L.
+ assumption.
+ apply forka_start.
+ destruct H5 as [a'].
+ destruct H5 as [b'].
+ destruct H5 as [c'].
+ intuition. substs.
+ exists (a' #> (b' #> c')).
+ intuition.
+ Hint Resolve weakred_L.
+ auto.
+ Hint Constructors fork_assoc_rel.
+ auto.
+ destruct H6 as [a'].
+ destruct H5 as [b'].
+ destruct H5 as [c'].
+ intuition. substs.
+ exists (a' #> (c' <# b')).
+ intuition.
+ destruct H5 as [a'].
+ destruct H5 as [c'].
+ destruct H5 as [b'].
+ intuition. substs.
+ exists (a' # LM_expr ((LM_expr b') # c')).
+ intuition.
+ destruct H6 as [b'].
+ destruct H5 as [c'].
+ destruct H5 as [a'].
+ intuition. substs.
+ exists (a' <# LM_expr (b' # c')).
+ intuition.
+ destruct H5 as [b'].
+ destruct H5 as [c'].
+ destruct H5 as [a'].
+ intuition. substs.
+ exists (a' <# LM_expr (b' # c')).
+ intuition.
+ destruct H6 as [a'].
+ destruct H5 as [b'].
+ destruct H5 as [c'].
+ intuition.
+ substs.
+ exists (a' #> (LM_expr b' #> c')).
+ intuition.
+ destruct H5 as [b'].
+ destruct H5 as [a'].
+ destruct H5 as [c'].
+ intuition. substs.
+ exists (a' <# LM_expr (b' #> c')).
+ intuition.
+ destruct H5 as [x].
+ destruct H5 as [q'].
+ intuition. substs.
+ exists (x #> (E_constant CONST_unit <# LM_expr q')).
+ intuition.
+ substs.
+ apply labred_not_val in H5.
+ simpl in H5.
+ intuition.
+ substs.
+ apply labred_not_val in H5.
+ simpl in H5.
+ intuition.
+ substs.
+ apply fork_lab_behave_v1 in H5.
+ intuition.
+ destruct H8.
+ intuition.
+ substs.
+ destruct H5.
+ destruct H5.
+ intuition.
+ substs.
+
+(* MARK *)
+
+ apply fork_tau_assoc_total in H4.
+ admit.
+ assumption.
+ apply H4.
+ 
+ apply weakind with (P:=(fun r p p' => (( (fork_assoc_rel p q) -> (exists (q' : expr), (weakred r q q') /\  (fork_assoc_rel p' q') ))))).
+ intros.
+
+ split.
+ revert p.
+ apply weakind.
+ intros.
+
+
+
 (*
  
 Inductive fork_assoc_rel :  relation expr := 
+
+
  | forka_start : forall (a b c : livemodes), fork_assoc_rel (E_apply (E_apply (E_constant CONST_fork) ( (E_live_expr (LM_expr (E_apply (E_apply (E_constant CONST_fork) ( (E_live_expr a)) ) ( (E_live_expr b)))))) ) ( (E_live_expr c))) (E_apply (E_apply (E_constant CONST_fork) ( (E_live_expr a)) ) ( (E_live_expr (LM_expr (E_apply (E_apply (E_constant CONST_fork) ( (E_live_expr b)) ) ( (E_live_expr c)))))))
  | forka_tau : forall  (e e' : expr),  is_value_of_expr e /\ is_value_of_expr e' -> fork_assoc_rel e e'.
 
@@ -6511,4 +7276,5 @@ Proof.
 Qed.
 
 -< (-< a b) (c) = -< (a) (-< b c)
+*)
 *)

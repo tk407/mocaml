@@ -43,10 +43,6 @@ Inductive constant : Set :=
  | CONST_proj1 : constant
  | CONST_proj2 : constant.
 
-Inductive list_typvar : Set := 
- | Nil_list_typvar : list_typvar
- | Cons_list_typvar (_:typvar) (_:list_typvar).
-
 Inductive livemodes : Set := 
  | LM_comp (lab:label)
  | LM_expr (expr5:expr)
@@ -63,9 +59,6 @@ with expr : Set :=
  | E_taggingright (e:expr)
  | E_case (e1:expr) (x1:value_name) (e2:expr) (x2:value_name) (e3:expr).
 
-Inductive typscheme : Set := 
- | TS_ts (_:list_typvar) (typexpr5:typexpr).
-
 Inductive redlabel : Set := 
  | RL_tau : redlabel
  | RL_labelled (lab:label).
@@ -76,46 +69,12 @@ Inductive select : Set :=
 
 Inductive G : Set := 
  | G_em : G
- | G_vn (G5:G) (value_name5:value_name) (typscheme5:typscheme).
+ | G_vn (G5:G) (value_name5:value_name) (typexpr5:typexpr).
 Lemma eq_typvar: forall (x y : typvar), {x = y} + {x <> y}.
 Proof.
 decide equality. apply eq_value_name.
 Defined.
 Hint Resolve eq_typvar : ott_coq_equality.
-Fixpoint map_list_typvar (A:Set) (f:typvar->A) (l:list_typvar) : list A :=
-  match l with
-  | Nil_list_typvar => nil
-  | Cons_list_typvar h tl_ => cons (f h) (map_list_typvar A f tl_)
-  end.
-Implicit Arguments map_list_typvar.
-
-Fixpoint make_list_typvar (l: list typvar): list_typvar :=
-  match l with
-  | nil  => Nil_list_typvar
-  | cons h tl_ => Cons_list_typvar h (make_list_typvar tl_)
-  end.
-
-Fixpoint unmake_list_typvar (l: list_typvar): list typvar :=
-  match l with
-  | Nil_list_typvar => nil
-  | Cons_list_typvar h tl_ => cons h (unmake_list_typvar tl_)
-  end.
-
-Fixpoint nth_list_typvar (n:nat) (l: list_typvar) {struct n} : option typvar :=
-  match n,l with
-  | O, Cons_list_typvar h tl_ => Some h
-  | O, _ => None
-  | S m, Nil_list_typvar => None
-  | S m, Cons_list_typvar h tl_ => nth_list_typvar m tl_
-  end.
-
-Fixpoint app_list_typvar (l m: list_typvar): list_typvar :=
-  match l with
-  | Nil_list_typvar => m
-  | Cons_list_typvar h tl_ => Cons_list_typvar h (app_list_typvar tl_ m)
-  end.
-
-
 
 (** subrules *)
 Fixpoint is_value_of_expr (e_5:expr) : Prop :=
@@ -148,13 +107,6 @@ Fixpoint list_assoc A B (eq:forall a b:A,{a=b}+{a<>b}) (x:A) (l:list (A*B)) {str
 end.
 Implicit Arguments list_assoc.
 
-Fixpoint list_minus2 A B (eq:forall a b:A,{a=b}+{a<>b}) (l1:list (A*B)) (l2:list A) {struct l1} : list (A*B) :=
-  match l1 with
-  | nil => nil
-  | cons a t => if (list_mem (A:=A) eq (@fst A B a) l2) then list_minus2 A B eq t l2 else cons a (list_minus2 A B eq t l2)
-end.
-Implicit Arguments list_minus2.
-
 
 (** substitutions *)
 Fixpoint tsubst_typexpr (sub:list (typvar*typexpr)) (t_6:typexpr) {struct t_6} : typexpr :=
@@ -167,9 +119,10 @@ Fixpoint tsubst_typexpr (sub:list (typvar*typexpr)) (t_6:typexpr) {struct t_6} :
   | (TE_sum typexpr5 typexpr') => TE_sum (tsubst_typexpr sub typexpr5) (tsubst_typexpr sub typexpr')
 end.
 
-Definition tsubst_typscheme (sub:list (typvar*typexpr)) (ts5:typscheme) : typscheme :=
-  match ts5 with
-  | (TS_ts typvar_list typexpr5) => TS_ts typvar_list (tsubst_typexpr (list_minus2 eq_typvar sub (unmake_list_typvar typvar_list)) typexpr5)
+Fixpoint tsubst_G (sub:list (typvar*typexpr)) (G_6:G) {struct G_6} : G :=
+  match G_6 with
+  | G_em => G_em 
+  | (G_vn G5 value_name5 typexpr5) => G_vn (tsubst_G sub G5) value_name5 (tsubst_typexpr sub typexpr5)
 end.
 
 Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr :=
@@ -212,12 +165,6 @@ with tsubst_livemodes (sub:list (typvar*typexpr)) (lm5:livemodes) {struct lm5} :
   | (LM_expr expr5) => LM_expr (tsubst_expr sub expr5)
 end.
 
-Fixpoint tsubst_G (sub:list (typvar*typexpr)) (G_6:G) {struct G_6} : G :=
-  match G_6 with
-  | G_em => G_em 
-  | (G_vn G5 value_name5 typscheme5) => G_vn (tsubst_G sub G5) value_name5 (tsubst_typscheme sub typscheme5)
-end.
-
 (** library functions *)
 Fixpoint list_minus A (eq:forall a b:A,{a=b}+{a<>b}) (l1:list A) (l2:list A) {struct l1} : list A :=
   match l1 with
@@ -236,11 +183,6 @@ Fixpoint ftv_typexpr (t5:typexpr) : list typvar :=
   | (TE_prod typexpr5 typexpr') => (app (ftv_typexpr typexpr5) (ftv_typexpr typexpr'))
   | (TE_concurrent typexpr5) => ((ftv_typexpr typexpr5))
   | (TE_sum typexpr5 typexpr') => (app (ftv_typexpr typexpr5) (ftv_typexpr typexpr'))
-end.
-
-Definition ftv_typscheme (ts5:typscheme) : list typvar :=
-  match ts5 with
-  | (TS_ts typvar_list typexpr5) => (app nil (list_minus eq_typvar (ftv_typexpr typexpr5) (unmake_list_typvar typvar_list)))
 end.
 
 Fixpoint ftv_expr (e_5:expr) : list typvar :=
@@ -266,27 +208,39 @@ end.
 Fixpoint ftv_G (G_6:G) : list typvar :=
   match G_6 with
   | G_em => nil
-  | (G_vn G5 value_name5 typscheme5) => (app (ftv_G G5) (ftv_typscheme typscheme5))
+  | (G_vn G5 value_name5 typexpr5) => (app (ftv_G G5) (ftv_typexpr typexpr5))
 end.
 
-Fixpoint remove_duplicates (l:list_typvar) : list_typvar :=
-  match l with
-  | Nil_list_typvar => Nil_list_typvar
-  | Cons_list_typvar h t => 
-    if (list_mem eq_typvar h (unmake_list_typvar t))  
-    then remove_duplicates t
-    else Cons_list_typvar h (remove_duplicates t)
-end. 
+Fixpoint fv_expr (e_5:expr) : list value_name :=
+  match e_5 with
+  | (E_ident value_name5) => (cons value_name5 nil)
+  | (E_constant constant5) => nil
+  | (E_apply expr5 expr') => (app (fv_expr expr5) (fv_expr expr'))
+  | (E_bind expr5 expr') => (app (fv_expr expr5) (fv_expr expr'))
+  | (E_function value_name5 typexpr5 expr5) => ((list_minus eq_value_name (fv_expr expr5) (cons value_name5 nil)))
+  | (E_fix e) => ((fv_expr e))
+  | (E_live_expr lm) => ((fv_livemodes lm))
+  | (E_pair e e') => (app (fv_expr e) (fv_expr e'))
+  | (E_taggingleft e) => ((fv_expr e))
+  | (E_taggingright e) => ((fv_expr e))
+  | (E_case e1 x1 e2 x2 e3) => (app (fv_expr e1) (app (fv_expr e2) (fv_expr e3)))
+end
+with fv_livemodes (lm5:livemodes) : list value_name :=
+  match lm5 with
+  | (LM_comp lab) => nil
+  | (LM_expr expr5) => ((fv_expr expr5))
+end.
+
 (** definitions *)
 
 (* defns Jtype *)
-Inductive VTSin : value_name -> typscheme -> G -> Prop :=    (* defn VTSin *)
- | VTSin_vn1 : forall (value_name5:value_name) (typscheme5:typscheme) (G5:G),
-     VTSin value_name5 typscheme5 (G_vn G5 value_name5 typscheme5)
- | VTSin_vn2 : forall (value_name5:value_name) (typscheme5:typscheme) (G5:G) (value_name':value_name) (typscheme':typscheme),
-     VTSin value_name5 typscheme5 G5 ->
+Inductive VTSin : value_name -> typexpr -> G -> Prop :=    (* defn VTSin *)
+ | VTSin_vn1 : forall (value_name5:value_name) (typexpr5:typexpr) (G5:G),
+     VTSin value_name5 typexpr5 (G_vn G5 value_name5 typexpr5)
+ | VTSin_vn2 : forall (value_name5:value_name) (typexpr5:typexpr) (G5:G) (value_name':value_name) (typexpr':typexpr),
+     VTSin value_name5 typexpr5 G5 ->
       not(  value_name5 = value_name'  )  ->
-     VTSin value_name5 typscheme5 (G_vn G5 value_name' typscheme')
+     VTSin value_name5 typexpr5 (G_vn G5 value_name' typexpr')
 with G_constant : G -> constant -> typexpr -> Prop :=    (* defn G_constant *)
  | constant_ret : forall (G5:G) (t:typexpr),
      G_constant G5 CONST_ret (TE_arrow t (TE_concurrent t))
@@ -303,14 +257,8 @@ with G_constant : G -> constant -> typexpr -> Prop :=    (* defn G_constant *)
  | constant_proj2 : forall (G5:G) (t1 t2:typexpr),
      G_constant G5 CONST_proj2 (TE_arrow  (TE_prod t1 t2)  t2)
 with Get : G -> expr -> typexpr -> Prop :=    (* defn Get *)
- | Get_value_name : forall (G5:G) (x:value_name) (t:typexpr) (typscheme5:typscheme),
-     VTSin x typscheme5 G5 ->
-      (exists tvs, exists txp, exists s, 
-              typscheme5  = TS_ts tvs txp 
-             /\ tvs = make_list_typvar
-                    (List.map (fun (x:typvar*typexpr) => match x with (x1,x2) => x1 end) 
-                              s)  
-             /\ tsubst_typexpr s txp =  t )  ->
+ | Get_value_name : forall (G5:G) (x:value_name) (t:typexpr),
+     VTSin x t G5 ->
      Get G5 (E_ident x) t
  | Get_constant : forall (G5:G) (constant5:constant) (t:typexpr),
      G_constant G5 constant5 t ->
@@ -320,7 +268,7 @@ with Get : G -> expr -> typexpr -> Prop :=    (* defn Get *)
      Get G5 e' t1 ->
      Get G5 (E_apply e e') t2
  | Get_lambda : forall (G5:G) (x1:value_name) (t1:typexpr) (e:expr) (t:typexpr),
-     Get (G_vn G5 x1 (TS_ts Nil_list_typvar t1)) e t ->
+     Get (G_vn G5 x1 t1) e t ->
      Get G5 (E_function x1 t1 e) (TE_arrow t1 t)
  | Get_live_exp : forall (G5:G) (e:expr) (t:typexpr),
      Get G5 e t ->
@@ -346,8 +294,8 @@ with Get : G -> expr -> typexpr -> Prop :=    (* defn Get *)
      Get G5 (E_taggingright e) (TE_sum t' t)
  | Get_TCase : forall (G5:G) (e:expr) (x:value_name) (e':expr) (x':value_name) (e'':expr) (t'' t t':typexpr),
      Get G5 e (TE_sum t t') ->
-     Get (G_vn G5 x (TS_ts Nil_list_typvar t)) e' t'' ->
-     Get (G_vn G5 x' (TS_ts Nil_list_typvar t')) e'' t'' ->
+     Get (G_vn G5 x t) e' t'' ->
+     Get (G_vn G5 x' t') e'' t'' ->
      Get G5 (E_case e x e' x' e'') t''.
 (** definitions *)
 

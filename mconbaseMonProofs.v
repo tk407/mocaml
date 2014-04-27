@@ -153,15 +153,6 @@ Proof.
  simpl; intuition.
 Qed.
 
-
-Lemma empty_VTSin_false : forall  (v : value_name)  (ts : typscheme), ~ (VTSin v ts G_em).
-Proof.
- intros.
- unfold not.
- intros.
- inversion H.
-Qed.
-
 Lemma is_value_of_expr_dec : forall (e : expr), ((is_value_of_expr e) \/ (~(is_value_of_expr e))).
  Proof.
  intros.
