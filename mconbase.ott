@@ -105,8 +105,8 @@ value, v :: V_ ::=
 
 %Selects
 select, s :: S_ ::=
-  | First                              ::   :: First
-  | Second                             ::   :: Second
+  | First                              ::   :: First {{ tex 1 }}
+  | Second                             ::   :: Second {{ tex 2 }}
 
 %Type environment
 G {{ tex \Gamma }} :: G_ ::=
@@ -154,17 +154,17 @@ terminals :: terminals_ ::=
   | '}'                                ::   :: rightbrace {{ tex \} }}
   | '['                                ::   :: leftsqbrack  {{ tex [ }}
   | ']'                                ::   :: rightsqbrack {{ tex ] }}
-  | con                                ::   :: concurrent {{ tex \textbf{concurrent} }}
+  | con                                ::   :: concurrent {{ tex \textbf{con} }}
   | comp                               ::   :: computation {{ tex comp }}
   | exp                                ::   :: expression {{ tex exp }}
   | live                               ::   :: conlive    {{ tex Live }}
   | fix                                ::   :: fix        {{ tex \textbf{fix} }}
-  | tau                                ::   :: tau        {{ tex \textbf{tau} }}
+  | tau                                ::   :: tau        {{ tex \tau }}
   | >>=                                ::   :: bind {{ tex >>= }}
   | '*'                                ::   :: product_t    {{ tex * }}
   | ','                                ::   :: pair_elem   {{ tex , }}
-  | inl                                ::   :: lefttag     {{ tex Left tag }}
-  | inr                                ::   :: righttag    {{ tex Right tag }}
+  | inl                                ::   :: lefttag     {{ tex \textbf{left} }}
+  | inr                                ::   :: righttag    {{ tex \textbf{right} }}
   | case                               ::   :: case    {{ tex Case }}
   | of                                 ::   :: of       {{ tex of }}
   | =>                                 ::   :: doublearrow {{ tex \Rightarrow }}
@@ -314,7 +314,7 @@ defns
 Jop :: JO_ ::= 
 
 defn 
-e [ s ] --> [ rl ]  e' :: :: red :: red_ by
+e [ s ] --> [ rl ]  e' :: :: red :: red_ {{ tex [[e]]\, \overset{ [[rl]] }{\underset{ [[s]] }{\longrightarrow} }\, [[e']] }} by 
 
 ------------------------------- :: app
 (function x : t -> e)  v [ s ] --> [ tau ] {v/x}  e

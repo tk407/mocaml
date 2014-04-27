@@ -123,6 +123,11 @@ Scott Owens.
 \newblock In {\em Programming Languages and Systems}, pages 1--15. Springer,
   2008.
 
+\bibitem{pierce2002types}
+Benjamin~C Pierce.
+\newblock {\em Types and programming languages}.
+\newblock MIT press, 2002.
+
 \bibitem{sevvcik2011relaxed}
 Jaroslav {\^S}ev{\v{c}}ik, Viktor Vafeiadis, Francesco Zappa~Nardelli, Suresh
   Jagannathan, and Peter Sewell.

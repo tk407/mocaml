@@ -7,7 +7,21 @@
 
 \usepackage{a4}
 \usepackage{verbatim}
+\usepackage{mathtools}% http://ctan.org/pkg/mathtools
 \usepackage{etoolbox}
+\usepackage{tabularx}
+
+% \overfence definition
+\let\overfence\overbrace % \overfence is similar to \overbrace
+\let\downfencefill\downbracefill % match components of \overbrace
+\patchcmd{\overfence}{\downbracefill}{\downfencefill}{}{}% patch \overfence...
+\patchcmd{\downfencefill}{\braceru \bracelu}{}{}{}%... and \downfencefill
+
+% \underfence definition
+\let\underfence\underbrace % \underfence is similar to \underbrace
+\let\upfencefill\upbracefill % match components of \underbrace
+\patchcmd{\underfence}{\upbracefill}{\upfencefill}{}{}% patch \underfence...
+\patchcmd{\upfencefill}{\bracerd \braceld}{}{}{}%... and \upfencefill
 
 \newtoggle{colourtoggle}
 \newtoggle{wordcount}
@@ -96,6 +110,10 @@
 \usetikzlibrary{arrows, shapes}
 
 %\usepackage{harvard}
+
+\usepackage[final]{pdfpages}
+
+\usepackage{mathpartir}
 
 \begin{document}
 
@@ -253,15 +271,15 @@ LWT, the lightweight cooperative threading library\cite{vouillon2008lwt} was des
 
 In \Cref{lst:lwtsyntax} we can see some of the syntax of LWT. Lines \ref{lst:lwtsyntaxHeadsDefStart}--\ref{lst:lwtsyntaxHeadsDefEnd} define heads, a function that sleeps for 1 second and then prints "Head", and lines \ref{lst:lwtsyntaxTailsDefStart}--\ref{lst:lwtsyntaxTailsDefEnd} define tails which sleeps for 2 seconds and then prints "Tails".  Lines \ref{lst:lwtsyntaxThreadStart}--\ref{lst:lwtsyntaxThreadEnd} create a thread that waits on heads and tails and then prints "Finished".  In LWT, semantics mostly follow the principle of continuations. We build a sequence of computations and the scheduler can pick between parallel computations at points of sequencing.
 
-An other implementation, Async is an open source concurrency library for OCaml developed by Jane Street. Unlike LWT the basic semantics are designed with promises in mind. A promise is a container that can be used in place of a value of the same type, but computations with it only evaluate when the actual value has been calculated. The concurrency arises naturally by interleaving the fulfilment of these containers. 
+An other implementation, Async is an open source concurrency library for OCaml developed by Jane Street. Unlike LWT the basic semantics are designed with promises in mind. A promise is a container that can be used in place of a value of the same type, but computations with a promise only evaluate when the actual value has been calculated. The concurrency arises naturally by interleaving the fulfilment of these containers. 
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[caption={Async example}, label={lst:asyncsyntax},escapeinside={@}{@}]
 open Core.Std
 open Async.Std
 
-let heads  =  (after (sec 1.0)  >>| fun () -> (print_endline "Heads"))
-let tails = (after (sec 2.0)  >>| fun () -> (print_endline "Tails"))
+let heads=(after (sec 1.0)  >>| fun () -> (print_endline "Heads"))
+let tails=(after (sec 2.0)  >>| fun () -> (print_endline "Tails"))
 let head_and_tails = (Deferred.both
    heads
    tails)
@@ -285,11 +303,11 @@ There has been a lot of work on formulating the semantics of concurrent and dist
 
 A monad\cite{hoareetal2001tackling} in functional programming is a construct to structure computations that are in some sense "sequenced" together. This sequencing can be for example string concatenation, simple operation sequencing (the well known semicolon of imperative programming) or conditional execution. Two operations commonly called bind and return and a type constructor of a parametric type, like $ \alpha \, M $ where $ \alpha $ is any type, form a monad when they obey a set of axioms called monadic laws.
 
-Most monads support further operations and a concurrency monad is one such monad. Beside the two necessary operations (return and bind) it has to support at least one that deals with concurrent execution.  This operation can come in many forms and under many names, for example fork, join or choose. Each with differing signatures and semantics:
+Most monads support further operations and a concurrency monad is one such monad. Beside the two necessary operations (return and bind) a concurrency monad has to support at least one that deals with concurrent execution.  This operation can come in many forms and under many names, for example fork, join or choose. Each with differing signatures and semantics:
 \begin{itemize}
 \item{Fork would commonly take two different computations and evaluate them together. Its return semantics would be to return when one thread finished but include the partially completed other computation if possible.}
-\item{Join may take many threads, but the return semantics is always that it waits for all threads to finish.}
-\item{Choose can also take many computations, however it would commonly either only evaluate one or discard every thread but the one that finished first.}
+\item{Join may take many threads, but it waits for all threads to finish.}
+\item{Choose can also take many computations, however it would commonly either only evaluate one thread or discard every thread but the one that finished first.}
 \end{itemize}
 
 \section{Semantics to logic}
@@ -374,9 +392,9 @@ This description entails three operations (lift, join and map) and their behavio
 
 Most implementations go along the following lines: there is a parametric type $ \textbf{con} \, \alpha $ where $ \alpha $ is the type parameter. Note $ \textbf{con} $ is an arbitrary name, marker for a particular monad. The I/O monad would have IO as the marker.
 
-The \lstinline|ret| takes a value of the language and gives its monadic counterpart. With types this can be represented as $ \textbf{ret} \, :\, \forall \alpha. \alpha\, \rightarrow\, \textbf{con}\, \alpha $.
+The \lstinline|ret| takes a value of the language and gives its monadic counterpart. With types \lstinline|ret| can be represented as $ \textbf{ret} \, :\, \forall \alpha. \alpha\, \rightarrow\, \textbf{con}\, \alpha $.
 
-The \lstinline|bind| (often written as $ \gg= $)  takes a monadic value (that is one in the parametric type $ \textbf{con} \, \alpha $) and a function that can map the inner value to a new monadic value (that is, it has type $ \alpha \, \rightarrow \, \textbf{con} \, \beta $). Bind then returns a $ \textbf{con} \, \beta $. With types this means: $ \gg= \, : \, \forall \alpha \, \beta. \; \textbf{con} \, \alpha \rightarrow (\alpha \rightarrow \textbf{con} \, \beta) \rightarrow \textbf{con} \, \beta $.
+The \lstinline|bind| (often written as $ \gg= $)  takes a monadic value (that is one in the parametric type $ \textbf{con} \, \alpha $) and a function that can map the inner value to a new monadic value (that is, it has type $ \alpha \, \rightarrow \, \textbf{con} \, \beta $). Bind then returns a $ \textbf{con} \, \beta $. With types $ \gg= $ means: $ \gg= \, : \, \forall \alpha \, \beta. \; \textbf{con} \, \alpha \rightarrow (\alpha \rightarrow \textbf{con} \, \beta) \rightarrow \textbf{con} \, \beta $.
 
 To call this system a monad, we need to satisfy three axioms:
 
@@ -389,7 +407,7 @@ To call this system a monad, we need to satisfy three axioms:
 \[ (m \, \gg= \, f) \, \gg= g \quad \equiv \quad m\, \gg= \, (\lambda\, x. (f\, x \, \gg= \, g) ) \]}
 \end{enumerate}
 
-We will return to the exact nature of $ \equiv $ used in this project in the evaluation section and the exact form this will take.
+We will return to the exact nature of $ \equiv $ used in this project in the evaluation section.
 
 
 \section{Tools}
@@ -447,7 +465,7 @@ Term expression grammars and other grammars can be defined in the well known Bac
 
 \begin{lstlisting}[language={Ott}, caption={Ott grammar example}, label={lst:ottgrammarex}]
 grammar
-t :: 't_' ::=                               {{ com term    }}
+t :: 't_' ::=                                 {{ com term    }}
   | x            ::  :: Var                   {{ com variable}}
   | \ x . t      ::  :: Lam (+ bind x in t +) {{ com lambda  }}
   | t t'         ::  :: App                   {{ com app     }}
@@ -462,19 +480,27 @@ There are meta flags S and M to describe syntactical sugar and meta productions 
 
 In many languages one might want to define a value subgrammar, which can be used both in the reduction relation definition and in proving properties of the semantics. Ott has support for general subgrammar relation check.
 \begin{lstlisting}[language={Ott}, caption={Ott value subgrammar example}, label={lst:ottvaluesubgrammarexample}]
-v :: 'v_' ::=                               {{ com value   }}
+v :: 'v_' ::=                                 {{ com value   }}
   | \ x . t      ::  :: Lam                   {{ com lambda  }}
   
 subrules
   v <:: t
 \end{lstlisting}
-In \Cref{lst:ottvaluesubgrammarexample} v is a subgrammar of t. The statement v $<::$ t is exported as a target language subroutine that checks whether this holds and during translation it checks for obvious bugs.
+In \Cref{lst:ottvaluesubgrammarexample} v is a subgrammar of t. The statement v $<::$ t is exported as a target language subroutine that checks whether the value relation holds and during translation Ott checks for obvious bugs.
 
 Another common feature of semantics is substitution of values for variables, for example in function application. Substitution is so frequent that Ott provides both single and multiple variable substitutions for the target languages as subroutines in the translated code.
+
+
+
+
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[language={Ott}, caption={Ott substitution example}, label={lst:ottsubstex}]
 substitutions
   single t x :: tsubst 
 \end{lstlisting}
+\end{minipage}
+
+
 The statement \lstinline[language={Ott}]|single t x :: tsubsts| in \Cref{lst:ottsubstex} defines a single substitution function called tsubsts\_t over terms defined by the grammar for t and for variables represented by the metavariable x. This is the relation mentioned in the grammar for the target language version for \{ t / x \} t'.
 
 
@@ -542,7 +568,7 @@ Data structures can also be defined both inductively and coinductively.
 
 \begin{lstlisting}[language={Coq},caption={Coq inductive data structure example}]
  Inductive seq : nat -> Set :=
-  | niln : seq 0
+  | niln  : seq 0
   | consn : forall n : nat, nat -> seq n -> seq (S n).
 \end{lstlisting}
 
@@ -751,13 +777,427 @@ let rec eval env = function
 
 \cleardoublepage
 \chapter{Implementation}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.5]{implOut}
+\caption{Detailed outline of the implementation}
+\end{center}
+\end{figure}
 \section{The semantics}
+efmowfiowfiwe
+
+
+
+nofnownfoiwnfoiw
+
 \subsection{Expressions}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=\linewidth]{mconbaseOttdep}
+\caption{Grammar dependencies}
+\end{center}
+\end{figure}
+
 \subsubsection{Arrow types}
+\begin{figure}[h!]
+  \centering
+  $\underbracket{\overbracket{\textrm{
+  \begin{tabular}{l | l}
+    \begin{minipage}{0.6\linewidth}
+    \begin{tabularx}{\textwidth}{l l >{\raggedleft}X}
+    \textit{Syntax} &  & \tabularnewline
+    e\, ::=  &  & \textit{terms:}\tabularnewline
+      & x  & \textit{value name}\tabularnewline
+      & $ \lambda $x:T.e  & \textit{abstraction}\tabularnewline
+      & e e  & \textit{application}\tabularnewline
+      &   & \tabularnewline
+      v\, ::=  &  & \textit{values:}\tabularnewline
+      & $ \lambda $x:T.e  & \textit{abstraction value}\tabularnewline
+      &   & \tabularnewline
+      TS\, ::=  &  & \textit{typescheme:}\tabularnewline
+      & (TV1, \dots, TVn) T  & \textit{general type}\tabularnewline
+      &   & \tabularnewline
+      T\, ::=  &  & \textit{types:}\tabularnewline
+      & TV  & \textit{type variable}\tabularnewline
+      & T$ \rightarrow $T  & $ \rightarrow $ \textit{type}\tabularnewline
+      &   & \tabularnewline
+      $ \Gamma $\, ::=  &  & \textit{contexts:}\tabularnewline
+      & $ \emptyset $  & \textit{empty context}\tabularnewline
+      & $ \Gamma,  $ x:TS  & \textit{term variable binding}\tabularnewline 
+      &   & \tabularnewline
+      $ rl $\, ::=  &  & \textit{labels:}\tabularnewline
+      & $ \tau $  & \textit{silent}\tabularnewline
+      & $ l $  & \textit{action}\tabularnewline
+      &   & \tabularnewline
+      $ s $\, ::=  &  & \textit{select:}\tabularnewline
+      & $ 1 $  & \textit{first}\tabularnewline
+      & $ 2 $  & \textit{second}\tabularnewline      
+    \end{tabularx}
+    \end{minipage} & \begin{minipage}{0.40\linewidth}
+        \begin{tabular}{l}
+        \begin{minipage}{\textwidth}
+         \begin{tabularx}{\textwidth}{>{\raggedright}X}
+             \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline   \begin{equation}
+                                     \inferrule
+                                       {  }
+                                       { ( \lambda\, x\,:\,T. e)\, v \overset{\tau}{\underset{s}{\longrightarrow}} \{v / x\}e } \tag{R-Subst}
+                                     \end{equation} \vspace{-9mm}
+                                     \tabularnewline   \begin{equation}
+                                      \inferrule
+                                       { e' \overset{rl}{\underset{s}{\longrightarrow}} e''}
+                                       { e\,e' \, \overset{rl}{\underset{s}{\longrightarrow}}\, e\, e''\,  } \tag{R-App1}
+                                       \end{equation}\vspace{-9mm}
+                                     \tabularnewline   \begin{equation}
+                                     \inferrule
+                                      { e \overset{rl}{\underset{s}{\longrightarrow}} e'}
+                                      { e\,v \, \overset{rl}{\underset{s}{\longrightarrow}}\, e'\, v\,  } \tag{R-App2}
+                                                               \end{equation}
+             \end{tabularx}
+        \end{minipage} \\ 
+        \begin{minipage}{\textwidth}
+           \begin{tabularx}{\textwidth}{>{\raggedright}X}
+                        \textit{Typing} \hfill \fbox{$ \Gamma\, \vdash \, $t : T}  \tabularnewline   \begin{equation}
+                        \inferrule
+                          { \textrm{x:TS}\in\, \Gamma \\\\ TS>T}
+                          { \Gamma\, \vdash \, \textrm{x : T}} \tag{T-Var}
+                        \end{equation} \vspace{-9mm}
+                        \tabularnewline   \begin{equation}
+                         \inferrule
+                          { \Gamma \, \vdash \, e \, : \, T_1\rightarrow T_2 \\\\ 
+                            \Gamma \, \vdash \, e' \, : \, T_1}
+                          { \Gamma\, \vdash \, e\,e' \, :\, T_2} \tag{T-App}
+                          \end{equation}\vspace{-9mm}
+                        \tabularnewline   \begin{equation}
+                        \inferrule
+                        { \Gamma, x : ()T_1 \, \vdash \, e \, : \, T_2}
+                        { \Gamma\, \vdash \, \lambda\, x\,:\,T_1. e \, :\, T_1 \rightarrow T_2} \tag{T-Fun}
+                                                  \end{equation}\vspace{-5mm}
+                      \end{tabularx}
+        \end{minipage}
+        \end{tabular}
+        \end{minipage} 
+    \end{tabular}
+}}}$
+  \caption{Syntax and semantics of arrow types}
+  \label{fig:semarrow}
+\end{figure}
+
+In this section I describe the implementation of arrow types defined in this language. The style and details are based on Pierce\cite[p.~103]{pierce2002types}.
 \subsubsection{Sum types}
+\begin{figure}[h!]
+  \centering
+  $\underbracket{\overbracket{\textrm{
+  \begin{tabular}{l | l}
+    \begin{minipage}[t][][t]{0.37\linewidth}
+    \begin{tabularx}{\textwidth}{l l >{\raggedleft}X}
+    \textit{Syntax} &  & \tabularnewline
+    e\, ::=  &  & \textit{terms:}\tabularnewline
+       $\textbf{left}\, e$ & & \textit{left}\tabularnewline
+       $\textbf{right}\, e$ & & \textit{right}\tabularnewline
+       Case $ e_1 $ of  &  & \textit{case}\tabularnewline
+       \hspace{9pt} \textbf{left} $ x_1 \Rightarrow e_2 $   &  & \tabularnewline
+       \hspace{3pt} \vline \, \textbf{right} $ x_2 \Rightarrow e_3 $  &  & \tabularnewline
+      &   & \tabularnewline
+      v\, ::=  &  & \textit{values:}\tabularnewline
+       $\textbf{left}\, v$ & & \textit{left}\tabularnewline
+       $\textbf{right}\, v$ & & \textit{right}\tabularnewline
+      &   & \tabularnewline
+      T\, ::=  &  & \textit{types:}\tabularnewline
+       $ T+T $  & &  \textit{sum type}\tabularnewline
+    \end{tabularx} 
+    \end{minipage} & \begin{minipage}{0.65\linewidth}
+        \begin{tabular}{l}
+        \begin{minipage}{\textwidth}
+         \begin{tabularx}{\textwidth}{>{\raggedright}X}
+             \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline   \begin{equation}
+                     \inferrule
+                                                    { e \overset{rl}{\underset{s}{\longrightarrow}} e' }
+                                                    { (\textrm{Case $  e $ of \textbf{left} $ x_1 \Rightarrow e_2 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_3 $ })\\\\ \overset{rl}{\underset{s}{\longrightarrow}}\\\\ 
+                                                    (\textrm{Case $  e' $ of \textbf{left} $ x_1 \Rightarrow e_2 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_3 $ }) } \tag{R-Case}
+                                                  \end{equation} \vspace{-12mm}
+                                                  \tabularnewline 
+                        \begin{equation}
+                                     \inferrule
+                                       {  }
+                                       { (\textrm{Case $  \textbf{left}\, v $ of \textbf{left} $ x_1 \Rightarrow e_2 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_3 $ })\\\\ \overset{\tau}{\underset{s}{\longrightarrow}} \{v / x_1\}e_2 } \tag{R-CaseL}
+                                     \end{equation} \vspace{-14mm}
+                                     \tabularnewline \begin{equation}
+                                         \inferrule
+                                         {  }
+                                         { (\textrm{Case $  \textbf{right}\, v $ of \textbf{left} $ x_1 \Rightarrow e_2 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_3 $ })\\\\ \overset{\tau}{\underset{s}{\longrightarrow}} \{v / x_2\}e_3 } \tag{R-CaseR}
+                                                                          \end{equation} \vspace{-9mm}
+                                                                          \tabularnewline
+                                        \begin{equation}
+                                      \inferrule
+                                       { e \overset{rl}{\underset{s}{\longrightarrow}} e'}
+                                       { \textbf{left}\,e \, \overset{rl}{\underset{s}{\longrightarrow}}\, \textbf{left}\,e'\,  } \tag{R-Left}
+                                       \end{equation}\vspace{-9mm}
+                                     \tabularnewline   \begin{equation}
+                                     \inferrule
+                                      { e \overset{rl}{\underset{s}{\longrightarrow}} e'}
+                                      { \textbf{right}\,e \, \overset{rl}{\underset{s}{\longrightarrow}}\, \textbf{right}\,e'\,  } \tag{R-Right}
+                                                               \end{equation}
+             \end{tabularx}
+        \end{minipage} \\ 
+        \begin{minipage}{\textwidth}
+           \begin{tabularx}{\textwidth}{>{\raggedright}X}
+                        \textit{Typing} \hfill \fbox{$ \Gamma\, \vdash \, $t : T}  \tabularnewline   \begin{equation}
+                        \inferrule
+                          { \Gamma\, \vdash \, \, e\, :\, T_1}
+                          { \Gamma\, \vdash \, \textbf{left} \, e\, :\, T_1 + T_2} \tag{T-Left}
+                        \end{equation} \vspace{-5mm}
+                        \tabularnewline   \begin{equation}
+                         \inferrule
+                          { \Gamma\, \vdash \, \, e\, :\, T_2}
+                          { \Gamma\, \vdash \, \textbf{right} \, e\, :\, T_1 + T_2} \tag{T-Right}
+                          \end{equation}\vspace{-5mm}
+                        \tabularnewline   \begin{equation}
+                        \inferrule
+                        { \Gamma\, \vdash \, \, e\, :\, T_1 + T_2 \\\\ \Gamma,x_1:()T_1\, \vdash \, \, e_2\, :\, T \\\\ \Gamma,x_2:()T_2\, \vdash \, \, e_3\, :\, T}
+                        { \Gamma\, \vdash \, (\textrm{Case $  e $ of \textbf{left} $ x_1 \Rightarrow e_2 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_3 $ })\, :\, T} \tag{T-Case}
+                                                  \end{equation}\vspace{-5mm}
+                      \end{tabularx}
+        \end{minipage}
+        \end{tabular}
+        \end{minipage} 
+    \end{tabular}
+}}}$
+  \caption{Syntax and semantics of sum types}
+  \label{fig:semsum}
+\end{figure}
+In this section I describe the implementation of sum types defined in this language. The style and details are based on Pierce\cite[p.~132]{pierce2002types}.
 \subsubsection{Product types}
+\begin{figure}[h!]
+  \centering
+  $\underbracket{\overbracket{\textrm{
+  \begin{tabular}{l | l}
+    \begin{minipage}{0.4\linewidth}
+    \begin{tabularx}{\textwidth}{l l >{\raggedleft}X}
+    \textit{Syntax} &  & \tabularnewline
+    e\, ::=  &  & \textit{terms:}\tabularnewline
+      & $\{e,e'\}$  & \textit{pair}\tabularnewline
+      & $\textbf{pair}$  & \textit{to pair}\tabularnewline
+      & $\textbf{proj}1$  & \textit{first projection}\tabularnewline
+      & $\textbf{proj}2$  & \textit{second projection}\tabularnewline
+      &   & \tabularnewline
+      v\, ::=  &  & \textit{values:}\tabularnewline
+      & $\{v,v'\}$  & \textit{pair}\tabularnewline
+      & $\textbf{pair}$  & \textit{to pair}\tabularnewline
+      & $\textbf{pair}\, v$  & \textit{to pair, partial}\tabularnewline
+      & $\textbf{proj}1$  & \textit{first projection}\tabularnewline
+      & $\textbf{proj}2$  & \textit{second projection}\tabularnewline
+      &   & \tabularnewline
+      T\, ::=  &  & \textit{types:}\tabularnewline
+      & $T\star T$  & \textit{product type}\tabularnewline
+    \end{tabularx}
+    \end{minipage} & \begin{minipage}{0.60\linewidth}
+        \begin{tabular}{l}
+        \begin{minipage}{\textwidth}
+         \begin{tabularx}{\textwidth}{>{\raggedright}X}
+             \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline   \begin{equation}
+                                     \inferrule
+                                       { e \overset{rl}{\underset{s}{\longrightarrow}} e''}
+                                       { \{e,e'\} \overset{rl}{\underset{s}{\longrightarrow}} \{e'',e'\} } \tag{R-Pair1}
+                                     \end{equation} \vspace{-5mm}
+                                     \tabularnewline
+                                     \begin{equation}
+                                       \inferrule
+                                         { e' \overset{rl}{\underset{s}{\longrightarrow}} e''}
+                                         { \{v,e'\} \overset{rl}{\underset{s}{\longrightarrow}} \{v,e''\} } \tag{R-Pair2}
+                                         \end{equation} \vspace{-5mm}
+                                                                          \tabularnewline
+                                        \begin{equation}
+                                      \inferrule
+                                       {}
+                                       { \textbf{pair}\,v\,v' \, \overset{\tau}{\underset{s}{\longrightarrow}}\, \{v, v'\}  } \tag{R-InPair}
+                                       \end{equation}\vspace{-9mm}
+                                     \tabularnewline
+                                     \begin{equation}
+                                       \inferrule
+                                         {}
+                                         { \textbf{proj1}\,\{v,\,\,v'\} \, \overset{\tau}{\underset{s}{\longrightarrow}}\, v  } \tag{R-Proj1}
+                                      \end{equation}\vspace{-9mm}
+                                     \tabularnewline
+                                     \begin{equation}
+                                      \inferrule
+                                      {}
+                                      { \textbf{proj2}\,\{v,\,\,v'\} \, \overset{\tau}{\underset{s}{\longrightarrow}}\, v'  } \tag{R-Proj2}
+                                                                           \end{equation}
+             \end{tabularx}
+        \end{minipage} \\ 
+        \begin{minipage}{\textwidth}
+           \begin{tabularx}{\textwidth}{>{\raggedright}X}
+                        \textit{Typing} \hfill \fbox{$ \Gamma\, \vdash \, $t : T}  \tabularnewline   \begin{equation}
+                        \inferrule
+                          { \Gamma\, \vdash \, e\,:\, T_1 \\ \Gamma\, \vdash \, e'\,:\, T_2}
+                          { \Gamma\, \vdash \, \{e,\,e'\}\,:\, T_1\star T_2} \tag{T-Pair}
+                        \end{equation} \vspace{-9mm}
+                        \tabularnewline   \begin{equation}
+                         \inferrule
+                          {}
+                          { \Gamma\, \vdash \, \textbf{pair} \, :\, T_1 \rightarrow T_2 \rightarrow T_1\star T_2} \tag{T-InPair}
+                          \end{equation}\vspace{-9mm}
+                        \tabularnewline
+                        \begin{equation}
+                          \inferrule
+                          {}
+                          { \Gamma\, \vdash \, \textbf{proj1} \, :\, T_1\star T_2 \rightarrow T_1} \tag{T-Proj1}
+                          \end{equation}\vspace{-9mm}
+                                                \tabularnewline
+                          \begin{equation}
+                          \inferrule
+                          {}
+                          { \Gamma\, \vdash \, \textbf{proj2} \, :\, T_1\star T_2 \rightarrow T_2} \tag{T-Proj2}
+                                                    \end{equation}
+                      \end{tabularx}
+        \end{minipage}
+        \end{tabular}
+        \end{minipage} 
+    \end{tabular}
+}}}$
+  \caption{Syntax and semantics of product types}
+  \label{fig:semprod}
+\end{figure}
+In this section I describe the implementation of sum types defined in this language. The style and details are based on Pierce\cite[p.~126]{pierce2002types}.
 \subsubsection{Fixpoint combinator}
+\begin{figure}[h!]
+  \centering
+  $\underbracket{\overbracket{\textrm{
+  \begin{tabular}{l | l}
+    \begin{minipage}{0.3\linewidth}
+    \begin{tabularx}{\textwidth}{l l >{\raggedleft}X}
+    \textit{Syntax} &  & \tabularnewline
+    e\, ::=  &  & \textit{terms:}\tabularnewline
+      & $\textbf{fix}$  & \textit{fixpoint}\tabularnewline
+      &   & \tabularnewline
+      v\, ::=  &  & \textit{values:}\tabularnewline
+      & $\textbf{fix}$  & \textit{fixpoint}\tabularnewline  
+    \end{tabularx}
+    \end{minipage} & \begin{minipage}{0.70\linewidth}
+        \begin{tabular}{l}
+        \begin{minipage}{\textwidth}
+         \begin{tabularx}{\textwidth}{>{\raggedright}X}
+             \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline    \begin{equation}
+                                     \inferrule
+                                      {}
+                                      { \textbf{fix}\,(\lambda x:T. e) \, \overset{\tau}{\underset{s}{\longrightarrow}}\, \{(\textbf{fix}\,(\lambda x:T. e))/x \}e  } \tag{R-Fix}
+                                                               \end{equation}
+             \end{tabularx}
+        \end{minipage} \\ 
+        \begin{minipage}{\textwidth}
+           \begin{tabularx}{\textwidth}{>{\raggedright}X}
+                        \textit{Typing} \hfill \fbox{$ \Gamma\, \vdash \, $t : T}  \tabularnewline    \begin{equation}
+                        \inferrule
+                        {}
+                        { \Gamma\, \vdash \, \textbf{fix}\, :\, (T \rightarrow T) \rightarrow T} \tag{T-Fix}
+                                                  \end{equation}\vspace{-5mm}
+                      \end{tabularx}
+        \end{minipage}
+        \end{tabular}
+        \end{minipage} 
+    \end{tabular}
+}}}$
+  \caption{Syntax and semantics of the fixpoint operator}
+  \label{fig:semfix}
+\end{figure}
+In this section I describe the implementation of a fixpoint operator defined in this language. The style and details are based on Pierce\cite[p.~144]{pierce2002types}.
 \subsubsection{Monadic primitives}
+\begin{figure}[h!]
+  \centering
+  $\underbracket{\overbracket{\textrm{
+  \begin{tabular}{l | l}
+    \begin{minipage}{0.5\linewidth}
+    \begin{tabularx}{\textwidth}{l l >{\raggedleft}X}
+    \textit{Syntax} &  & \tabularnewline
+    e\, ::=  &  & \textit{terms:}\tabularnewline
+      & LE  & \textit{live expression}\tabularnewline
+      & ()  & \textit{unit}\tabularnewline
+      & \textbf{ret}  & \textit{return}\tabularnewline
+      & e $\gg=$ e'  & \textit{bind}\tabularnewline
+      &   & \tabularnewline
+      v\, ::=  &  & \textit{values:}\tabularnewline
+      & LE  & \textit{live expression}\tabularnewline
+      & ()  & \textit{unit}\tabularnewline
+      & \textbf{ret}  & \textit{return}\tabularnewline
+      &   & \tabularnewline
+      LE\, ::=  & \textit{Live}\,LM & \textit{live expressions:}\tabularnewline
+      &   & \tabularnewline
+      T\, ::=  &  & \textit{types:}\tabularnewline
+      & \textbf{con}\,T  & \textit{concurrent}\tabularnewline
+       & \textbf{unit}  & \textit{unit}\tabularnewline
+      &   & \tabularnewline
+      $ LM $\, ::=  &  & \textit{live modes:}\tabularnewline
+      & expr $ e $  & \textit{expression}\tabularnewline
+      & comp $ l $  & \textit{computation}\tabularnewline     
+    \end{tabularx}
+    \end{minipage} & \begin{minipage}{0.50\linewidth}
+        \begin{tabular}{l}
+        \begin{minipage}{\textwidth}
+         \begin{tabularx}{\textwidth}{>{\raggedright}X}
+             \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline    \begin{equation}
+                                      \inferrule
+                                       {}
+                                       { \textbf{ret }\,v \, \overset{\tau}{\underset{s}{\longrightarrow}}\, \textit{Live } \text{expr }v } \tag{R-Return}
+                                       \end{equation}\vspace{-9mm}
+                                     \tabularnewline   \begin{equation}
+                                     \inferrule
+                                      { e \overset{rl}{\underset{s}{\longrightarrow}} e''}
+                                      { e\,\gg=\,e' \, \overset{rl}{\underset{s}{\longrightarrow}}\, e''\, \gg= e'\,  } \tag{R-Movebind}
+                                                               \end{equation}\vspace{-9mm}
+                                     \tabularnewline   \begin{equation}
+                                     \inferrule
+                                     {}
+                                     { \textit{Live } \text{expr } e\,\gg=\,e' \, \overset{\tau}{\underset{s}{\longrightarrow}}\, e' e  } \tag{R-Dobind}                                                                                                                              \end{equation}\vspace{-9mm}
+                                     \tabularnewline   \begin{equation}
+                                     \inferrule
+                                     {}
+                                     { \textit{Live } \text{comp } l\,\gg=\,e' \, \overset{l}{\underset{s}{\longrightarrow}}\, e' \, ()  } \tag{R-Compbind}
+                                                                          \end{equation}
+             \end{tabularx}
+        \end{minipage} \\ 
+        \begin{minipage}{\textwidth}
+           \begin{tabularx}{\textwidth}{>{\raggedright}X}
+                        \textit{Typing} \hfill \fbox{$ \Gamma\, \vdash \, $t : T}  \tabularnewline      \begin{equation}
+                         \inferrule
+                          { \Gamma \, \vdash \, e \, : \, \textbf{con } T_1 \\\\ 
+                            \Gamma \, \vdash \, e' \, : \, T_1 \rightarrow \textbf{con } T_2}
+                          { \Gamma\, \vdash \, e\, \gg= \,e' \, :\, \textbf{con } T_2} \tag{T-Bind}
+                          \end{equation}\vspace{-9mm}
+                        \tabularnewline
+                        \begin{equation}
+                        \inferrule
+                        {}
+                        { \Gamma\, \vdash \, \textbf{ret } \, :\, T \rightarrow \textbf{con } T} \tag{T-Ret}
+                                                                          \end{equation}\vspace{-9mm}
+                                                 \tabularnewline 
+                        \begin{equation}
+                        \inferrule
+                        {}
+                        { \Gamma\, \vdash \, \textit{Live } \, \text{comp }\, l \, :\, \textbf{con unit}} \tag{T-LMComp}
+                                                  \end{equation}\vspace{-9mm}
+                         \tabularnewline
+                          \begin{equation}
+                         \inferrule
+                         {\Gamma\, \vdash \, \, e \, :\, T}
+                         { \Gamma\, \vdash \, \textit{Live } \, \text{expr }\, e \, :\, \textbf{con }T} \tag{T-LMExpr}
+                         \end{equation}\vspace{-9mm}
+                         \tabularnewline
+                         \begin{equation}
+                         \inferrule
+                         {}
+                         { \Gamma\, \vdash \, () \, :\, \textbf{unit }} \tag{T-Unit}
+                                                  \end{equation}\vspace{-5mm}
+                      \end{tabularx}
+        \end{minipage}
+        \end{tabular}
+        \end{minipage} 
+    \end{tabular}
+}}}$
+  \caption{Syntax and semantics of the monadic primitives, ret and bind}
+  \label{fig:semmon}
+\end{figure}
  The concurrency monad consists of a parametric type $ \alpha \, \textbf{con} $, where $ \alpha $ is a type parameter describing the type of computation or value enclosed and three key operations 
 \begin{itemize}
 \item{ret, also known as return. It has type $ \alpha \rightarrow \alpha \, \textbf{con} $ and simply evaluates its parameter and boxes up the result in the parametric type}
@@ -766,15 +1206,74 @@ let rec eval env = function
 \end{itemize}
 
 \subsubsection{Fork}
+\begin{figure}[h!]
+  \centering
+  $\underbracket{\overbracket{\textrm{
+  \begin{tabular}{l | l}
+    \begin{minipage}{0.6\linewidth}
+     \begin{tabularx}{\textwidth}{>{\raggedright}X}
+                 \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline   \begin{equation}
+                                         \inferrule
+                                           {e \overset{rl}{\underset{s}{\longrightarrow}} e'}
+                                           { \textbf{fork } (\textit{Live expr } e) (\textit{Live } lm)  \overset{rl}{\underset{1}{\longrightarrow}}\\\\ \textbf{fork } (\textit{Live expr } e') (\textit{Live } lm)  } \tag{R-Forkmove1}
+                                         \end{equation} \vspace{-9mm}
+                                         \tabularnewline   \begin{equation}
+                                          \inferrule
+                                            {e \overset{rl}{\underset{s}{\longrightarrow}} e'}
+                                            { \textbf{fork } (\textit{Live } lm) (\textit{Live expr } e) \overset{rl}{\underset{2}{\longrightarrow}}\\\\ \textbf{fork }  (\textit{Live } lm) (\textit{Live expr } e')  } \tag{R-Forkmove2}
+                                           \end{equation}\vspace{-9mm}
+                                         \tabularnewline   \begin{equation}
+                                         \inferrule
+                                          {}
+                                          { \textbf{fork } (\textit{Live expr } v) (\textit{Live } lm)  \overset{\tau}{\underset{1}{\longrightarrow}}\\\\ \textit{Live expr } \textbf{left}  \{v, (\textit{Live } lm)\}  } \tag{R-Forkdeath1}   \end{equation}
+                                       \vspace{-9mm}
+                                       \tabularnewline   \begin{equation}
+                                       \inferrule
+                                       {}
+                                       { \textbf{fork } (\textit{Live } lm) (\textit{Live expr } v) \overset{\tau}{\underset{2}{\longrightarrow}}\\\\ \textit{Live expr } \textbf{right}  \{(\textit{Live } lm), v\}  } \tag{R-Forkdeath2}                                                                                                          \end{equation}\vspace{-9mm}
+                                       \tabularnewline   \begin{equation}
+                                       \inferrule
+                                       {}
+                                       { \textbf{fork } (\textit{Live comp } l) (\textit{Live } lm)  \overset{l}{\underset{1}{\longrightarrow}}\\\\ \textit{Live expr } \textbf{left}  \{(), (\textit{Live } lm)\}  } \tag{R-Forkdocomp1}   \end{equation}\vspace{-9mm}
+                                       \tabularnewline   \begin{equation}
+                                       \inferrule
+                                       {}
+                                       { \textbf{fork } (\textit{Live } lm) (\textit{Live comp } l) \overset{l}{\underset{2}{\longrightarrow}}\\\\ \textit{Live expr } \textbf{right}  \{(\textit{Live } lm), ()\}  } \tag{R-Forkdocomp2}                                                                                                          \end{equation}
+                 \end{tabularx}
+    \end{minipage} & \begin{minipage}{0.50\linewidth}
+        \begin{tabular}{l}
+        \begin{minipage}{\textwidth}
+            \begin{tabularx}{\textwidth}{l l >{\raggedleft}X}
+                    \textit{Syntax} &  & \tabularnewline
+                    e\, ::=  &  & \textit{terms:}\tabularnewline
+                      & \textbf{fork}  & \textit{fork}\tabularnewline
+                      &   & \tabularnewline
+                      v\, ::=  &  & \textit{values:}\tabularnewline
+                      & \textbf{fork}  & \textit{fork}\tabularnewline
+                      & \textbf{fork } v  & \textit{fork, partial}\tabularnewline
+                    \end{tabularx}
+        \end{minipage} \\ 
+        \begin{minipage}{\textwidth}
+           \begin{tabularx}{\textwidth}{>{\raggedright}X}
+                        \textit{Typing} \hfill \fbox{$ \Gamma\, \vdash \, $t : T}  \tabularnewline   \begin{equation}
+                        \inferrule
+                          {}
+                          { \Gamma\, \vdash \, \textbf{fork} \, :  \, \textbf{con } T_1 \rightarrow  \textbf{con } T_2 \rightarrow \\\\ \textbf{con } ((T_1\star \textbf{con } T_2)+((\textbf{con }T_1)\star  T_2)} \tag{T-Fork}
+                        \end{equation} \vspace{-5mm}
+                      \end{tabularx}
+        \end{minipage}
+        \end{tabular}
+        \end{minipage} 
+    \end{tabular}
+}}}$
+  \caption{Syntax and semantics of the fork operator}
+  \label{fig:semfork}
+\end{figure}
 The third operation is fork, which is the way to spawn new threads (two in this particular case). The approach taken in this work is to have fork take two arguments and evaluate the two paths concurrently. The concurrency is achieved by reducing either side of the fork step by step based on some scheduler. When either path reduced to a value it returns a boxed up pair of results. This result is value and a boxed up computation (that is, the partially reduced other path).
 
 Therefore the signature of fork is slightly more complicated
 \[ \textbf{fork} \, : \, \alpha \, \textbf{con} \rightarrow \beta \, \textbf{con} \rightarrow ((\alpha *  \beta \, \textbf{con}) \, + \, ( \alpha \, \textbf{con} * \beta) ) \, \textbf{con} \]  
 \subsubsection{Computation placeholders}
-\subsection{Transition system}
-\subsubsection{Labelled transitions}
-\subsubsection{Select operator}
-\subsection{Type system}
 \section{Proof assisstant system}
 \subsection{Outline of the proof assistant code}
 \subsection{Modification}
@@ -849,11 +1348,14 @@ been helpful and saved you time.
 % the appendices
 \appendix
 
-\chapter{Ott source}
+\chapter{Full semantics}
 
-%\section{diss.tex}
-%{\scriptsize\verbatiminput{diss.tex}}
 
+\section{diss.tex}
+
+\includepdf[pages=-]{../mconbase.pdf}
+
+\section{blah}
 %\section{proposal.tex}
 %{\scriptsize\verbatiminput{proposal.tex}}
 

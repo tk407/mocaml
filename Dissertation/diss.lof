@@ -2,6 +2,14 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces High level view of the tool chain}}{9}
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Detailed outline of the implementation}}{17}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Grammar dependencies}}{18}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Syntax and semantics of arrow types}}{19}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Syntax and semantics of sum types}}{22}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Syntax and semantics of product types}}{23}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Syntax and semantics of the fixpoint operator}}{24}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Syntax and semantics of the monadic primitives, ret and bind}}{25}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Syntax and semantics of the fork operator}}{26}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
