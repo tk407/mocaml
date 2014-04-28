@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.1.11)  28 APR 2014 03:04
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.1.11)  28 APR 2014 08:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1021,68 +1021,67 @@ Overfull \hbox (32.23323pt too wide) in paragraph at lines 1087--1122
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1217--1217
+[21] [22] [23]
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1222--1222
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1217--1217
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1222--1222
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1217--1217
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1222--1222
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1217--1217
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1222--1222
 [][] 
  []
 
 
-Overfull \hbox (32.23323pt too wide) in paragraph at lines 1129--1218
+Overfull \hbox (32.23323pt too wide) in paragraph at lines 1134--1223
  []$[]$ 
  []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[21] [22]
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1288--1288
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1293--1293
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1288--1288
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1293--1293
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1288--1288
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1293--1293
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1288--1288
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1293--1293
 [][] 
  []
 
 
-Overfull \hbox (73.42963pt too wide) in paragraph at lines 1231--1289
+Overfull \hbox (73.42963pt too wide) in paragraph at lines 1236--1294
  []$[]$ 
  []
 
-[23]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[24]
-Overfull \vbox (217.95906pt too high) has occurred while \output is active []
+[24] [25]
+Overfull \vbox (120.84798pt too high) has occurred while \output is active []
 
 
-[25] [26]
+[26]
 Chapter 4.
 [27
 
@@ -1103,12 +1102,12 @@ Appendix A.
 <../mconbase.pdf, id=174, 597.50829pt x 845.0471pt>
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf>
-Package pdftex.def Info: ../mconbase.pdf used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf used on input line 1389.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf>
-Package pdftex.def Info: ../mconbase.pdf used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf used on input line 1389.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
  [35
 
@@ -1117,105 +1116,105 @@ Package pdftex.def Info: ../mconbase.pdf used on input line 1373.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 1>
-Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1389.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 1>
-Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 1>
-Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 1>
-Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 1>
-Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
  [36 <../mconbase.pdf>]
 <../mconbase.pdf, id=229, page=2, 597.50829pt x 845.0471pt>
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 2>
-Package pdftex.def Info: ../mconbase.pdf, page2 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page2 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 2>
-Package pdftex.def Info: ../mconbase.pdf, page2 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page2 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 2>
-Package pdftex.def Info: ../mconbase.pdf, page2 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page2 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
  [37 <../mconbase.pdf>]
 <../mconbase.pdf, id=233, page=3, 597.50829pt x 845.0471pt>
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 3>
-Package pdftex.def Info: ../mconbase.pdf, page3 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page3 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 3>
-Package pdftex.def Info: ../mconbase.pdf, page3 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page3 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 3>
-Package pdftex.def Info: ../mconbase.pdf, page3 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page3 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
  [38 <../mconbase.pdf>]
 <../mconbase.pdf, id=237, page=4, 597.50829pt x 845.0471pt>
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 4>
-Package pdftex.def Info: ../mconbase.pdf, page4 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page4 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 4>
-Package pdftex.def Info: ../mconbase.pdf, page4 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page4 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 4>
-Package pdftex.def Info: ../mconbase.pdf, page4 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page4 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
  [39 <../mconbase.pdf>]
 <../mconbase.pdf, id=247, page=5, 597.50829pt x 845.0471pt>
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 5>
-Package pdftex.def Info: ../mconbase.pdf, page5 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page5 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 5>
-Package pdftex.def Info: ../mconbase.pdf, page5 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page5 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 5>
-Package pdftex.def Info: ../mconbase.pdf, page5 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page5 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
  [40 <../mconbase.pdf>]
 <../mconbase.pdf, id=256, page=6, 597.50829pt x 845.0471pt>
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 6>
-Package pdftex.def Info: ../mconbase.pdf, page6 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page6 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 6>
-Package pdftex.def Info: ../mconbase.pdf, page6 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page6 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 6>
-Package pdftex.def Info: ../mconbase.pdf, page6 used on input line 1373.
+Package pdftex.def Info: ../mconbase.pdf, page6 used on input line 1389.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
  [41 <../mconbase.pdf>] [42]
 Appendix B.
@@ -1226,7 +1225,7 @@ Appendix B.
 Here is how much of TeX's memory you used:
  18761 strings out of 493307
  361725 string characters out of 6139905
- 658235 words of memory out of 5000000
+ 658236 words of memory out of 5000000
  21801 multiletter control sequences out of 15000+600000
  17649 words of font info for 68 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
@@ -1252,7 +1251,7 @@ usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/sha
 re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/latxfont/lcircle1.pfb>
-Output written on diss.pdf (57 pages, 383473 bytes).
+Output written on diss.pdf (57 pages, 385865 bytes).
 PDF statistics:
  339 PDF objects out of 1000 (max. 8388607)
  244 compressed objects within 3 object streams

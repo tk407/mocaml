@@ -1122,7 +1122,12 @@ In \Cref{fig:semprod} I describe the precise implementation of product types def
   \caption{Syntax and semantics of the fixpoint operator}
   \label{fig:semfix}
 \end{figure}
-In this section I describe the implementation of a fixpoint operator defined in this language. The style and details are based on Pierce\cite[p.~144]{pierce2002types}.
+Recursion is very characteristic of functional programming languages. There are many ways to achieve recursive constructs in terms and even in types. A very elegant treatment surfaced from the formal study of recursive constructs in the form of fixpoint combinators. In denotational semantics for example loops and other recursions are treated as the greatest fixpoints of continuous functions. A fixpoint combinator $ y $ is defined as a term that given function $ f $ satisfies
+\[ y\,f\,\equiv\, f\,(y\,f) \] 
+This immediately poses a requirement on the type of $ y $, it should be $ (T \rightarrow T) \rightarrow T $
+In untyped $ \lambda $-calculus there are many simple terms that can achieve this, for example the Y combinator:
+\[ Y = \lambda f.(\lambda x.f\ (x\ x))\ (\lambda x.f\ (x\ x))  \]
+However in languages like the one implemented in this chapter, where arguments are always reduced before the function application can begin the Y combinator would always diverge. There are more than one option for implementation in languages like this, but I have chosen to use the one described in Pierce\cite[p.~144]{pierce2002types}. This style fits well with the tool chain I used as it does not require another partial function application and it is also very minimal.
 \subsection{Monadic primitives}
 \begin{figure}[h!]
   \centering
@@ -1322,10 +1327,21 @@ What form does a general weak bisimilarity proof take.
 How does it appear here.
 \subsection{Properties}
 \subsubsection{Monadic laws}
+
+\[ \textbf{ret } v\,\gg=\, e\quad \simeq \quad e\,v \]
+\[  \textit{Live expr }v\,\gg=\, \textbf{ret}\quad \simeq \quad \textit{Live expr }v \]
+
+\[ (\textit{Live expr }v\, \gg=\, f) \, \gg=\, g \quad \simeq \quad \textit{Live expr }v\, \gg=\, (\lambda x. (f\, v) \, \gg=\, g ) \]
+
 \subsubsection{Fork commutativity}
 Outline of fork commutativity
+\[ a\,|\,b\quad\simeq\quad b \, | \, a \]
 \subsubsection{Fork associativity}
-\subsubsection{Liveness?}
+Fork in this implementation is not associative:
+\subsubsection{Deadlock properties}
+\[ \delta \, |\, x \quad \simeq \quad x \]
+\[ \delta \, \gg=\, e\quad \simeq \quad \delta \]
+\subsubsection{Remarks on congruence}
 \subsubsection{Type preservation?}
 \subsubsection{Progress?} 
 %Theoretical evaluation

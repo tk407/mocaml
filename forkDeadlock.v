@@ -263,5 +263,120 @@ Proof.
  apply deadlock_rel_wbsm.
 Qed.
 *)
- 
+
+Inductive deadlock_bind_left_rel : relation expr :=
+ | deadlock_bind : forall (d e : expr), totalDetTauStep d d -> deadlock_bind_left_rel ((E_live_expr (LM_expr d)) >>= e) d.
+
+Lemma deadlock_bind_rel_wbsm_h : forall (p q : expr), deadlock_bind_left_rel p q -> 
+        ((forall (p' : expr) (r : redlabel), weakred r p p' -> (exists (q' : expr), weakred r q q' /\  deadlock_bind_left_rel p' q' )) /\(forall (q' : expr) (r : redlabel), weakred r q q' -> (exists (p' : expr), weakred r p p' /\  deadlock_bind_left_rel p' q' ))
+ ).
+Proof.
+ intros.
+ inversion H.
+ substs.
+ split.
+ intros.
+ inversion H1.
+ substs.
+ apply bind_tau_behave_back_h in H2.
+ destruct H2.
+ destruct H2.
+ intuition.
+ simplify_eq H3; clear H3; intros; substs.
+ destruct H2.
+ intuition.
+ substs.
+ apply taured_val_id in H3; substs.
+ exists q.
+ intuition.
+ apply weakred_T.
+ apply star_refl.
+ simpl; auto.
+ destruct H2.
+ intuition.
+ destruct H5.
+ intuition.
+ substs.
+ simplify_eq H3; clear H3; intros; substs.
+ apply taured_val_id in H4. simplify_eq H4; clear H4; intros; substs.
+ specialize deadlock_proc_tdr with (a:=x1)(b:=x2).
+ intros.
+ apply H3 with (a:=x1)(b:=x2) in H0.
+ substs.
+ exists x1.
+ intuition.
+ assumption.
+ reflexivity.
+ simpl; auto.
+ simplify_eq H3; clear H3; intros; substs.
+ apply taured_val_id in H4. simplify_eq H4; clear H4; intros; substs.
+ specialize deadlock_proc_tdr with (a:=x1)(b:=x2).
+ intros.
+ assert (L:=H0).
+ apply H3 with (a:=x1)(b:=x2) in H0.
+ substs.
+ inversion L.
+ intuition.
+ inversion H8.
+ apply red_not_value in H9; intuition.
+ assumption.
+ reflexivity.
+ simpl; auto.
+ exists (E_live_expr (LM_expr q)) e.
+ reflexivity.
+ substs.
+ apply bind_lab_behave_back_h in H2.
+ intuition.
+ destruct H3.
+ intuition.
+ apply labred_not_val in H3; simpl in H3; auto.
+ intuition.
+ destruct H2.
+ intuition.
+ destruct H4.
+ intuition.
+ apply taured_val_id in H3; substs.
+ simplify_eq H3; clear H3; intuition; substs.
+ assert (L:=H0).
+ apply deadlock_proc_labr with (d:=x)(a:=x)(b:=x0)(l:=l) in H0.
+ intuition.
+ specialize deadlock_proc_tdr with (d:=x).
+ intuition.
+ assumption.
+ reflexivity.
+ simpl; auto.
+ apply taured_val_id in H3; substs.
+ simplify_eq H3; clear H3; intuition; substs.
+ assert (L:=H0).
+ apply deadlock_proc_tdr with (d:=x)(a:=x)(b:=x0) in H0.
+ substs.
+ inversion L.
+ intuition.
+ inversion H7.
+ apply red_not_value in H8; intuition.
+ assumption.
+ reflexivity.
+ simpl; auto.
+ apply taured_val_id in H3; substs.
+ simplify_eq H3; clear H3; intuition; substs.
+ simpl; auto.
+ intros.
+ inversion H1.
+ substs.
+ assert (L:=H0).
+ apply deadlock_proc_tdr with (d:=q)(a:=q)(b:=q') in H0.
+ substs.
+ exists (E_live_expr (LM_expr q) >>= e).
+ intuition.
+ apply weakred_T; apply star_refl.
+ assumption.
+ reflexivity.
+ substs.
+ apply deadlock_proc_labr with (d:=q)(a:=q)(b:=q')(l:=l) in H0.
+ intuition.
+ specialize deadlock_proc_tdr with (d:=q).
+ intuition.
+ assumption.
+ reflexivity.
+Qed.
  
