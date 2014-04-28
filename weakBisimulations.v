@@ -9,6 +9,13 @@ Load mconbase2.
 
 Load LibTactics.
 
+Notation "A >>= F" := (E_bind A F) (at level 42, left associativity).
+Notation "A [ C ] --> [ D ] B" := (JO_red A C D B) (at level 54, no associativity).
+Notation " A # B " := (E_apply (E_apply (E_constant CONST_fork) ( (E_live_expr A)) ) ( (E_live_expr B))) (at level 20).
+Notation " A <# B "  := (E_live_expr(LM_expr(E_taggingleft(E_pair A (E_live_expr B))))) (at level 20).
+Notation " A #> B "  := (E_live_expr(LM_expr(E_taggingright(E_pair (E_live_expr A) B)))) (at level 20).
+Notation " A <|# B "  := (((E_taggingleft(E_pair A (E_live_expr B))))) (at level 20).
+Notation " A #|> B "  := (((E_taggingright(E_pair (E_live_expr B) A)))) (at level 20).
 
 Inductive idExp : expr -> expr -> Prop :=
  | id_id: forall (e : expr ), idExp e e.

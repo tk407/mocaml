@@ -1,0 +1,30 @@
+digraph G {
+subgraph cluster0 {
+node [style=filled,color=white];
+style=filled;
+color=lightgrey;
+label = "weakBisimulations.v";
+tauRed_trans;
+dettaustep;
+totalTauRed_trans;
+tau_step_incl_totalTau_step;
+tau_incl_totalTau;
+tau_incl_totalTau -> tau_step_incl_totalTau_step;
+weaksim_refl;
+weaksim_trans;
+weakbisim_eqv_alt;
+bisimsymm;
+bisimrefl;
+bisimtrans;
+bisimtrans -> weaksim_trans;
+tau_weaksim_incl;
+tau_weaksim_incl -> tauRed_trans;
+ttau_prefix;
+ttau_midpoint;
+ttau_weakbisim_incl;
+ttau_weakbisim_incl -> tau_weaksim_incl;
+ttau_weakbisim_incl -> tau_incl_totalTau;
+ttau_weakbisim_incl -> ttau_prefix;
+}
+
+}
