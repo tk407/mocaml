@@ -1169,12 +1169,19 @@ However in languages like the one implemented in this chapter, where arguments a
                                      \tabularnewline   \begin{equation}
                                      \inferrule
                                       { e \overset{rl}{\underset{s}{\longrightarrow}} e''}
-                                      { e\,\gg=\,e' \, \overset{rl}{\underset{s}{\longrightarrow}}\, e''\, \gg= e'\,  } \tag{R-Movebind}
+                                      { e\,\gg=\,e' \, \overset{rl}{\underset{s}{\longrightarrow}}\, e''\, \gg= e'\,  } \tag{R-Evalbind}
                                                                \end{equation}\vspace{-9mm}
-                                     \tabularnewline   \begin{equation}
+                                     \tabularnewline   
+                                     \begin{equation}
+                                      \inferrule
+                                      { e \overset{rl}{\underset{s}{\longrightarrow}} e''}
+                                      { \textit{Live } \text{expr } e\,\gg=\,e' \, \overset{rl}{\underset{s}{\longrightarrow}}\, \textit{Live } \text{expr } e''\, \gg= e'\,  } \tag{R-Movebind}
+                                                                                                    \end{equation}\vspace{-9mm}
+                                                                          \tabularnewline
+                                     \begin{equation}
                                      \inferrule
                                      {}
-                                     { \textit{Live } \text{expr } e\,\gg=\,e' \, \overset{\tau}{\underset{s}{\longrightarrow}}\, e' e  } \tag{R-Dobind}                                                                                                                              \end{equation}\vspace{-9mm}
+                                     { \textit{Live } \text{expr } v\,\gg=\,e' \, \overset{\tau}{\underset{s}{\longrightarrow}}\, e'\, v  } \tag{R-Dobind}                                                                                                                              \end{equation}\vspace{-9mm}
                                      \tabularnewline   \begin{equation}
                                      \inferrule
                                      {}
@@ -1312,12 +1319,16 @@ Putting this all together gives the full signature of \textbf{fork} as
 
 
 In \Cref{fig:semfork} I give the detailed semantics of fork. There is no need to describe reduction rules for arguments not of the form $ \textbf{fork }\, (\textit{Live } lm)\,(\textit{Live } lm') $ as the application rule in \Cref{fig:semarrow} has already reduced terms to values and due to the typing relation of \textbf{con } types (as defined in \Cref{fig:semmon}) only allows values tagged with \textit{Live}. Notice that this is the first time the selection operator of the reduction relation is explicitly specified. A selection value of 1 will reduce the first edge of the fork, a value of 2 will reduce the second edge. When an expression value of the for \textit{Live expr }$ v $ is encountered it reduces to the respective tagged value. It is important to note that when a computation is encountered it ``runs" that computation and immediately finishes the \textbf{fork}. The ``result" of such computation is a unit value for simplicity. 
-\subsection{Computation placeholders}
+\subsection{Computation place holders}
+In previous subsections I have referenced computation place holders of the form \textit{Live comp l}. These are essentially the holes that will be filled by actual OCaml $ \textbf{unit} \rightarrow \textbf{unit} $ functions to be evaluated. The reductions in \Cref{fig:semmon,fig:semfork} that evaluate such place holders are modified in the runnable OCaml code to just run the functions within these holes. The purpose of the labels is purely logical: they serve as the tool to prove that the sequence of actual code calls obey certain properties. These labels are not necessary for the runnable OCaml code.
+
+The decision that these always reduce to unit was one purely of scope: further work on this project could include reducing these expressions within the framework or other forms of dynamic information. \clearpage
 \section{Proof assisstant system}
+In this section I give a brief outline of the structure of the translated proof assistant representation and how I modified it to be extractable to OCaml. 
 \subsection{Outline of the proof assistant code}
-\subsection{Modification}
-\subsection{Extractable version}
+\subsection{Extractable reduction relation}
 \section{OCaml system}
+In this section I give a brief outline of the structure of the extracted OCaml, how it is modified to be runnable and a brief overview of potential syntactic sugar that can be used to aid development in such a framework. 
 \subsection{Outline of the OCaml code}
 \subsection{Hand modifications and justifications}
 \subsection{Sugar}

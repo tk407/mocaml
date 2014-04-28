@@ -8,8 +8,8 @@
 \contentsline {figure}{\numberline {3.4}{\ignorespaces Syntax and semantics of sum types}}{22}
 \contentsline {figure}{\numberline {3.5}{\ignorespaces Syntax and semantics of product types}}{23}
 \contentsline {figure}{\numberline {3.6}{\ignorespaces Syntax and semantics of the fixpoint operator}}{24}
-\contentsline {figure}{\numberline {3.7}{\ignorespaces Syntax and semantics of the monadic primitives, ret and bind}}{25}
-\contentsline {figure}{\numberline {3.8}{\ignorespaces Syntax and semantics of the fork operator}}{26}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Syntax and semantics of the monadic primitives, ret and bind}}{27}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Syntax and semantics of the fork operator}}{28}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

@@ -21,51 +21,50 @@
 \contentsline {subsection}{\numberline {3.1.4}Fixpoint combinator}{21}
 \contentsline {subsection}{\numberline {3.1.5}Monadic primitives}{24}
 \contentsline {subsection}{\numberline {3.1.6}Fork}{24}
-\contentsline {subsection}{\numberline {3.1.7}Computation placeholders}{28}
-\contentsline {section}{\numberline {3.2}Proof assisstant system}{28}
-\contentsline {subsection}{\numberline {3.2.1}Outline of the proof assistant code}{28}
-\contentsline {subsection}{\numberline {3.2.2}Modification}{28}
-\contentsline {subsection}{\numberline {3.2.3}Extractable version}{28}
-\contentsline {section}{\numberline {3.3}OCaml system}{28}
-\contentsline {subsection}{\numberline {3.3.1}Outline of the OCaml code}{28}
-\contentsline {subsection}{\numberline {3.3.2}Hand modifications and justifications}{28}
-\contentsline {subsection}{\numberline {3.3.3}Sugar}{28}
-\contentsline {chapter}{\numberline {4}Evaluation}{29}
-\contentsline {section}{\numberline {4.1}Theoretical evaluation}{29}
-\contentsline {subsection}{\numberline {4.1.1}Methods}{29}
-\contentsline {subsubsection}{Weak bisimilarity}{29}
-\contentsline {subsection}{\numberline {4.1.2}Properties}{29}
-\contentsline {subsubsection}{Monadic laws}{29}
-\contentsline {subsubsection}{Fork commutativity}{29}
-\contentsline {subsubsection}{Fork associativity}{30}
-\contentsline {subsubsection}{Deadlock properties}{30}
-\contentsline {subsubsection}{Remarks on congruence}{30}
-\contentsline {subsubsection}{Type preservation?}{30}
-\contentsline {subsubsection}{Progress?}{30}
-\contentsline {section}{\numberline {4.2}Practical evaluation}{30}
-\contentsline {subsection}{\numberline {4.2.1}Methods}{30}
-\contentsline {subsection}{\numberline {4.2.2}Examples}{30}
-\contentsline {subsubsection}{Kahn process network}{30}
-\contentsline {subsubsection}{Eratosthene Sieve}{30}
-\contentsline {subsubsection}{Concurrent sort}{30}
-\contentsline {chapter}{\numberline {5}Conclusion}{31}
-\contentsline {chapter}{Bibliography}{33}
-\contentsline {chapter}{\numberline {A}Full semantics}{37}
-\contentsline {section}{\numberline {A.1}blah}{44}
-\contentsline {chapter}{\numberline {B}Project Proposal}{45}
-\contentsline {section}{\numberline {B.1}Introduction of work to be undertaken}{45}
-\contentsline {section}{\numberline {B.2}Description of starting point}{45}
-\contentsline {section}{\numberline {B.3}Substance and structure}{46}
-\contentsline {section}{\numberline {B.4}Criteria}{46}
-\contentsline {section}{\numberline {B.5}Timetable}{47}
-\contentsline {subsection}{\numberline {B.5.1}Week 1 and 2}{47}
-\contentsline {subsection}{\numberline {B.5.2}Week 3 and 4}{47}
-\contentsline {subsection}{\numberline {B.5.3}Week 5 and 6}{47}
-\contentsline {subsection}{\numberline {B.5.4}Week 7 and 8}{47}
-\contentsline {subsection}{\numberline {B.5.5}Week 9 and 10}{48}
-\contentsline {subsection}{\numberline {B.5.6}Week 11 and 12}{48}
-\contentsline {subsection}{\numberline {B.5.7}Week 13 and 14}{48}
-\contentsline {subsection}{\numberline {B.5.8}Week 15 and 16}{48}
-\contentsline {subsection}{\numberline {B.5.9}Week 17 and 18}{48}
-\contentsline {subsection}{\numberline {B.5.10}Week 19 and 20}{48}
-\contentsline {section}{\numberline {B.6}Resource Declaration}{48}
+\contentsline {subsection}{\numberline {3.1.7}Computation place holders}{26}
+\contentsline {section}{\numberline {3.2}Proof assisstant system}{29}
+\contentsline {subsection}{\numberline {3.2.1}Outline of the proof assistant code}{29}
+\contentsline {subsection}{\numberline {3.2.2}Extractable reduction relation}{29}
+\contentsline {section}{\numberline {3.3}OCaml system}{29}
+\contentsline {subsection}{\numberline {3.3.1}Outline of the OCaml code}{29}
+\contentsline {subsection}{\numberline {3.3.2}Hand modifications and justifications}{29}
+\contentsline {subsection}{\numberline {3.3.3}Sugar}{29}
+\contentsline {chapter}{\numberline {4}Evaluation}{31}
+\contentsline {section}{\numberline {4.1}Theoretical evaluation}{31}
+\contentsline {subsection}{\numberline {4.1.1}Methods}{31}
+\contentsline {subsubsection}{Weak bisimilarity}{31}
+\contentsline {subsection}{\numberline {4.1.2}Properties}{31}
+\contentsline {subsubsection}{Monadic laws}{31}
+\contentsline {subsubsection}{Fork commutativity}{31}
+\contentsline {subsubsection}{Fork associativity}{32}
+\contentsline {subsubsection}{Deadlock properties}{32}
+\contentsline {subsubsection}{Remarks on congruence}{32}
+\contentsline {subsubsection}{Type preservation?}{32}
+\contentsline {subsubsection}{Progress?}{32}
+\contentsline {section}{\numberline {4.2}Practical evaluation}{32}
+\contentsline {subsection}{\numberline {4.2.1}Methods}{32}
+\contentsline {subsection}{\numberline {4.2.2}Examples}{32}
+\contentsline {subsubsection}{Kahn process network}{32}
+\contentsline {subsubsection}{Eratosthene Sieve}{32}
+\contentsline {subsubsection}{Concurrent sort}{32}
+\contentsline {chapter}{\numberline {5}Conclusion}{33}
+\contentsline {chapter}{Bibliography}{35}
+\contentsline {chapter}{\numberline {A}Full semantics}{39}
+\contentsline {section}{\numberline {A.1}blah}{46}
+\contentsline {chapter}{\numberline {B}Project Proposal}{47}
+\contentsline {section}{\numberline {B.1}Introduction of work to be undertaken}{47}
+\contentsline {section}{\numberline {B.2}Description of starting point}{47}
+\contentsline {section}{\numberline {B.3}Substance and structure}{48}
+\contentsline {section}{\numberline {B.4}Criteria}{48}
+\contentsline {section}{\numberline {B.5}Timetable}{49}
+\contentsline {subsection}{\numberline {B.5.1}Week 1 and 2}{49}
+\contentsline {subsection}{\numberline {B.5.2}Week 3 and 4}{49}
+\contentsline {subsection}{\numberline {B.5.3}Week 5 and 6}{49}
+\contentsline {subsection}{\numberline {B.5.4}Week 7 and 8}{49}
+\contentsline {subsection}{\numberline {B.5.5}Week 9 and 10}{50}
+\contentsline {subsection}{\numberline {B.5.6}Week 11 and 12}{50}
+\contentsline {subsection}{\numberline {B.5.7}Week 13 and 14}{50}
+\contentsline {subsection}{\numberline {B.5.8}Week 15 and 16}{50}
+\contentsline {subsection}{\numberline {B.5.9}Week 17 and 18}{50}
+\contentsline {subsection}{\numberline {B.5.10}Week 19 and 20}{50}
+\contentsline {section}{\numberline {B.6}Resource Declaration}{50}
