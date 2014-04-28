@@ -14,23 +14,22 @@
 \contentsline {subsection}{\numberline {2.4.2}Coq}{11}
 \contentsline {subsection}{\numberline {2.4.3}OCaml}{15}
 \contentsline {chapter}{\numberline {3}Implementation}{17}
-\contentsline {section}{\numberline {3.1}The semantics}{18}
-\contentsline {subsection}{\numberline {3.1.1}Expressions}{18}
-\contentsline {subsubsection}{Arrow types}{18}
-\contentsline {subsubsection}{Sum types}{18}
-\contentsline {subsubsection}{Product types}{18}
-\contentsline {subsubsection}{Fixpoint combinator}{19}
-\contentsline {subsubsection}{Monadic primitives}{20}
-\contentsline {subsubsection}{Fork}{20}
-\contentsline {subsubsection}{Computation placeholders}{21}
-\contentsline {section}{\numberline {3.2}Proof assisstant system}{21}
-\contentsline {subsection}{\numberline {3.2.1}Outline of the proof assistant code}{21}
-\contentsline {subsection}{\numberline {3.2.2}Modification}{21}
-\contentsline {subsection}{\numberline {3.2.3}Extractable version}{21}
-\contentsline {section}{\numberline {3.3}OCaml system}{21}
-\contentsline {subsection}{\numberline {3.3.1}Outline of the OCaml code}{21}
-\contentsline {subsection}{\numberline {3.3.2}Hand modifications and justifications}{21}
-\contentsline {subsection}{\numberline {3.3.3}Sugar}{21}
+\contentsline {section}{\numberline {3.1}The semantics}{17}
+\contentsline {subsection}{\numberline {3.1.1}Arrow types}{20}
+\contentsline {subsection}{\numberline {3.1.2}Sum types}{21}
+\contentsline {subsection}{\numberline {3.1.3}Product types}{21}
+\contentsline {subsection}{\numberline {3.1.4}Fixpoint combinator}{21}
+\contentsline {subsection}{\numberline {3.1.5}Monadic primitives}{21}
+\contentsline {subsection}{\numberline {3.1.6}Fork}{24}
+\contentsline {subsection}{\numberline {3.1.7}Computation placeholders}{25}
+\contentsline {section}{\numberline {3.2}Proof assisstant system}{25}
+\contentsline {subsection}{\numberline {3.2.1}Outline of the proof assistant code}{25}
+\contentsline {subsection}{\numberline {3.2.2}Modification}{25}
+\contentsline {subsection}{\numberline {3.2.3}Extractable version}{25}
+\contentsline {section}{\numberline {3.3}OCaml system}{25}
+\contentsline {subsection}{\numberline {3.3.1}Outline of the OCaml code}{25}
+\contentsline {subsection}{\numberline {3.3.2}Hand modifications and justifications}{25}
+\contentsline {subsection}{\numberline {3.3.3}Sugar}{25}
 \contentsline {chapter}{\numberline {4}Evaluation}{27}
 \contentsline {section}{\numberline {4.1}Theoretical evaluation}{27}
 \contentsline {subsection}{\numberline {4.1.1}Methods}{27}
@@ -51,8 +50,7 @@
 \contentsline {chapter}{\numberline {5}Conclusion}{29}
 \contentsline {chapter}{Bibliography}{31}
 \contentsline {chapter}{\numberline {A}Full semantics}{35}
-\contentsline {section}{\numberline {A.1}diss.tex}{35}
-\contentsline {section}{\numberline {A.2}blah}{42}
+\contentsline {section}{\numberline {A.1}blah}{42}
 \contentsline {chapter}{\numberline {B}Project Proposal}{43}
 \contentsline {section}{\numberline {B.1}Introduction of work to be undertaken}{43}
 \contentsline {section}{\numberline {B.2}Description of starting point}{43}

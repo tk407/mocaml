@@ -10,6 +10,7 @@
 \usepackage{mathtools}% http://ctan.org/pkg/mathtools
 \usepackage{etoolbox}
 \usepackage{tabularx}
+\usepackage{amsfonts}
 
 % \overfence definition
 \let\overfence\overbrace % \overfence is similar to \overbrace
@@ -777,30 +778,49 @@ let rec eval env = function
 
 \cleardoublepage
 \chapter{Implementation}
-
+This concurrency framework was implemented as a small language of expressions and a reduction relation. These two were then translated to OCaml as constructors and an evaluation function respectively. To use the framework the user constructs an expression of the language, including within the expression the computations he wants to evaluate. The expression is than passed the evaluation function.  This language provides tools for sequencing, running computations in parallel and to make decisions based on what computations have finished. The implementation of the language was done in 6 stages as shown in \Cref{fig:detailedimploutline}. 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.5]{implOut}
 \caption{Detailed outline of the implementation}
+\label{fig:detailedimploutline}
 \end{center}
 \end{figure}
+
+The overall semantics were defined in Ott. These semantics were then extracted to Coq by Ott in a logical inductive format. This format, as previously mentioned, is well suited for proofs, but not for extraction. Furthermore, Ott did not correctly handle values that are partial applications of primitives taking more than one argument (\textbf{fork} and \textbf{pair}). The incorrect value predicate is fixed in the Modified Coq stage appearing in \Cref{fig:detailedimploutline}. This is the only change.
+
+I modified the logical inductive format of the semantics in the Extractable Coq stage to have a well formed input for the extraction plugin. This plugin will be detailed later. After the extraction the generated OCaml contains computation place holders and unused labels for the transitions. I replace these place holders with the actual computations and provide some syntactic sugar, as the generated OCaml is rather cumbersome to write in.
 \section{The semantics}
-efmowfiowfiwe
+In this section I will describe the implemented semantics. These semantics were written in Ott. Much of the inspiration for the semantics of basic features comes from Benjamin C. Pierce: \textit{Types and Programming Languages}\cite{pierce2002types}. The Ott code was based on the simply typed $ \lambda $-calculus and polymorphic $ \lambda $-calculus examples provided with the tool\cite{Ott}. For a \LaTeX\, render of the full semantics as produced by Ott see \cref{chap:fullsemantics}.
 
+The language of this concurrency framework is simply typed. 
 
-
-nofnownfoiwnfoiw
-
-\subsection{Expressions}
-
+The reduction semantics is given as small step labelled transitions. Small step semantics means that there is a reduction relation that is between two expressions $ e, \, e' $ where $ e $ can directly and atomically transition to $ e' $. Labelled transitions further extend this idea. In this project I used a 4-tuple $ (e, s, rl, e') $ of the starting expression, a selection operator that will be supplied by a scheduler to pick between potential reductions, a reduction label that describes the observable action and the ending expression of the transition. What this four tuple means that given the selection operator, which may be 1 or 2, given $ e $ as a starting expression can move to $ e' $ and with an effect $ rl $. This $ rl $ may be an atomic action $ l $ that can be observed or be $ \tau $ which is a silent action. Silent actions are not observed from the outside. I used the notation $ e \overset{rl}{\underset{s}{\longrightarrow}} e' $.
+ 
+The semantics splits into three main parts
+\begin{enumerate}
+\item{Grammars:\begin{itemize}
+\item{expressions}
+\item{values}
+\item{constants}
+\item{types}
+\item{terminals}
+\end{itemize}
+For the dependence between different parts of the grammars, see \Cref{fig:grammardep}.}
+\item{Type judgements}
+\item{Reduction judgements}
+\end{enumerate}
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=\linewidth]{mconbaseOttdep}
 \caption{Grammar dependencies}
+\label{fig:grammardep}
 \end{center}
 \end{figure}
 
-\subsubsection{Arrow types}
+I will detail the semantics feature-by-feature: arrow types or functions, sum types or tagged unions, product types or pairs, the fixpoint combinator, the monadic primitives and the fork operator. The presentation of semantics for each of the features were inspired by Pierce\cite{pierce2002types}. Each section will have a corresponding table of syntax, evaluation rules and typing rules.  In the syntax section I will introduce every new syntactic form used in the evaluation and typing rules, but I will not repeat previously mentioned syntax. The presentation of both the syntax and the evaluation and typing rules were slightly simplified for better readability.  
+
+\subsection{Arrow types}
 \begin{figure}[h!]
   \centering
   $\underbracket{\overbracket{\textrm{
@@ -816,16 +836,13 @@ nofnownfoiwnfoiw
       v\, ::=  &  & \textit{values:}\tabularnewline
       & $ \lambda $x:T.e  & \textit{abstraction value}\tabularnewline
       &   & \tabularnewline
-      TS\, ::=  &  & \textit{typescheme:}\tabularnewline
-      & (TV1, \dots, TVn) T  & \textit{general type}\tabularnewline
-      &   & \tabularnewline
       T\, ::=  &  & \textit{types:}\tabularnewline
       & TV  & \textit{type variable}\tabularnewline
       & T$ \rightarrow $T  & $ \rightarrow $ \textit{type}\tabularnewline
       &   & \tabularnewline
       $ \Gamma $\, ::=  &  & \textit{contexts:}\tabularnewline
       & $ \emptyset $  & \textit{empty context}\tabularnewline
-      & $ \Gamma,  $ x:TS  & \textit{term variable binding}\tabularnewline 
+      & $ \Gamma,  $ x:T  & \textit{term variable binding}\tabularnewline 
       &   & \tabularnewline
       $ rl $\, ::=  &  & \textit{labels:}\tabularnewline
       & $ \tau $  & \textit{silent}\tabularnewline
@@ -846,13 +863,13 @@ nofnownfoiwnfoiw
                                      \end{equation} \vspace{-9mm}
                                      \tabularnewline   \begin{equation}
                                       \inferrule
-                                       { e' \overset{rl}{\underset{s}{\longrightarrow}} e''}
-                                       { e\,e' \, \overset{rl}{\underset{s}{\longrightarrow}}\, e\, e''\,  } \tag{R-App1}
+                                       { e \overset{rl}{\underset{s}{\longrightarrow}} e''}
+                                       { e\,e' \, \overset{rl}{\underset{s}{\longrightarrow}}\, e''\, e'\,  } \tag{R-App1}
                                        \end{equation}\vspace{-9mm}
                                      \tabularnewline   \begin{equation}
                                      \inferrule
-                                      { e \overset{rl}{\underset{s}{\longrightarrow}} e'}
-                                      { e\,v \, \overset{rl}{\underset{s}{\longrightarrow}}\, e'\, v\,  } \tag{R-App2}
+                                      { e' \overset{rl}{\underset{s}{\longrightarrow}} e''}
+                                      { v\,e' \, \overset{rl}{\underset{s}{\longrightarrow}}\, v\, e''\,  } \tag{R-App2}
                                                                \end{equation}
              \end{tabularx}
         \end{minipage} \\ 
@@ -860,7 +877,7 @@ nofnownfoiwnfoiw
            \begin{tabularx}{\textwidth}{>{\raggedright}X}
                         \textit{Typing} \hfill \fbox{$ \Gamma\, \vdash \, $t : T}  \tabularnewline   \begin{equation}
                         \inferrule
-                          { \textrm{x:TS}\in\, \Gamma \\\\ TS>T}
+                          { \textrm{x:T}\in\, \Gamma}
                           { \Gamma\, \vdash \, \textrm{x : T}} \tag{T-Var}
                         \end{equation} \vspace{-9mm}
                         \tabularnewline   \begin{equation}
@@ -871,7 +888,7 @@ nofnownfoiwnfoiw
                           \end{equation}\vspace{-9mm}
                         \tabularnewline   \begin{equation}
                         \inferrule
-                        { \Gamma, x : ()T_1 \, \vdash \, e \, : \, T_2}
+                        { \Gamma, x : T_1 \, \vdash \, e \, : \, T_2}
                         { \Gamma\, \vdash \, \lambda\, x\,:\,T_1. e \, :\, T_1 \rightarrow T_2} \tag{T-Fun}
                                                   \end{equation}\vspace{-5mm}
                       \end{tabularx}
@@ -884,9 +901,11 @@ nofnownfoiwnfoiw
   \label{fig:semarrow}
 \end{figure}
 
-In this section I describe the implementation of arrow types defined in this language. The style and details are based on Pierce\cite[p.~103]{pierce2002types}.
-\subsubsection{Sum types}
-\begin{figure}[h!]
+
+
+Arrow types or functions are ubiquitous in functional programming languages. In \Cref{fig:semarrow} I detail the basic syntax and semantics of functions. The style and details are based on Pierce\cite[p.~103]{pierce2002types}. A function abstraction $ \lambda x:T. e $ encloses a yet unreduced expression $ e $ that may involve the variable $ x $ that is bound by the abstraction. I used call-by-value semantics for functions and head-first reduction. Furthermore, arguments are explicitly annotated in functions and substitution does not provide facilities for renaming. It is presumed that the user of the framework takes care of picking fresh variable names. 
+\subsection{Sum types}
+\begin{figure}[p]
   \centering
   $\underbracket{\overbracket{\textrm{
   \begin{tabular}{l | l}
@@ -955,7 +974,7 @@ In this section I describe the implementation of arrow types defined in this lan
                           \end{equation}\vspace{-5mm}
                         \tabularnewline   \begin{equation}
                         \inferrule
-                        { \Gamma\, \vdash \, \, e\, :\, T_1 + T_2 \\\\ \Gamma,x_1:()T_1\, \vdash \, \, e_2\, :\, T \\\\ \Gamma,x_2:()T_2\, \vdash \, \, e_3\, :\, T}
+                        { \Gamma\, \vdash \, \, e\, :\, T_1 + T_2 \\\\ \Gamma,x_1:T_1\, \vdash \, \, e_2\, :\, T \\\\ \Gamma,x_2:T_2\, \vdash \, \, e_3\, :\, T}
                         { \Gamma\, \vdash \, (\textrm{Case $  e $ of \textbf{left} $ x_1 \Rightarrow e_2 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_3 $ })\, :\, T} \tag{T-Case}
                                                   \end{equation}\vspace{-5mm}
                       \end{tabularx}
@@ -967,8 +986,9 @@ In this section I describe the implementation of arrow types defined in this lan
   \caption{Syntax and semantics of sum types}
   \label{fig:semsum}
 \end{figure}
-In this section I describe the implementation of sum types defined in this language. The style and details are based on Pierce\cite[p.~132]{pierce2002types}.
-\subsubsection{Product types}
+Many circumstances require the ability to describe expressions that are either one type or the other. Sum types or otherwise known as labelled unions are a simple solution to this. An expression $ e $ that has type $ T $ can be labelled as a variant in a sum type by attaching a label $ \textbf{left } e $ and $ \textbf{right } e $ will give force it to have type $ T + T' $ and $ T' + T $ for some type $ T' $. This expression can be then destructed by the expression "$ \textrm{Case $  e $ of \textbf{left} $ x_1 \Rightarrow e_2 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_3 $ } $" which will evaluate to either a substitution of $ e_2 $ or $ e_3 $ depending on what the tag said. In this project I use sum types in the signature of \textbf{fork} that will be detailed later. In \Cref{fig:semsum} I detail the implementation of sum types that is based on Pierce\cite[p.~132]{pierce2002types}. 
+\subsection{Product types}
+One very common feature of functional languages is pairs or product types. Grouping different types of data together in one logical unit often makes code more simple. For example computations with complex numbers would be rather unintuitive if we always had to handle the real and imaginary parts separately. To define products, first I introduce the syntax $ \{e, e' \} $, the pair of expressions $ e $ and $ e' $. If they had types $ T $ and $ T' $ respectively I define the type construct for this $ T\star T' $. I have introduce three primitive functions to deal with pairs: \textbf{pair} places two values in a pair, \textbf{proj1} takes the first element of a pair and \textbf{proj2} takes the second.
 \begin{figure}[h!]
   \centering
   $\underbracket{\overbracket{\textrm{
@@ -1060,8 +1080,8 @@ In this section I describe the implementation of sum types defined in this langu
   \caption{Syntax and semantics of product types}
   \label{fig:semprod}
 \end{figure}
-In this section I describe the implementation of sum types defined in this language. The style and details are based on Pierce\cite[p.~126]{pierce2002types}.
-\subsubsection{Fixpoint combinator}
+In \Cref{fig:semprod} I describe the precise implementation of product types defined in this language. The style and details are based on Pierce\cite[p.~126]{pierce2002types}.
+\subsection{Fixpoint combinator}
 \begin{figure}[h!]
   \centering
   $\underbracket{\overbracket{\textrm{
@@ -1103,7 +1123,7 @@ In this section I describe the implementation of sum types defined in this langu
   \label{fig:semfix}
 \end{figure}
 In this section I describe the implementation of a fixpoint operator defined in this language. The style and details are based on Pierce\cite[p.~144]{pierce2002types}.
-\subsubsection{Monadic primitives}
+\subsection{Monadic primitives}
 \begin{figure}[h!]
   \centering
   $\underbracket{\overbracket{\textrm{
@@ -1205,7 +1225,7 @@ In this section I describe the implementation of a fixpoint operator defined in 
 
 \end{itemize}
 
-\subsubsection{Fork}
+\subsection{Fork}
 \begin{figure}[h!]
   \centering
   $\underbracket{\overbracket{\textrm{
@@ -1273,7 +1293,7 @@ The third operation is fork, which is the way to spawn new threads (two in this 
 
 Therefore the signature of fork is slightly more complicated
 \[ \textbf{fork} \, : \, \alpha \, \textbf{con} \rightarrow \beta \, \textbf{con} \rightarrow ((\alpha *  \beta \, \textbf{con}) \, + \, ( \alpha \, \textbf{con} * \beta) ) \, \textbf{con} \]  
-\subsubsection{Computation placeholders}
+\subsection{Computation placeholders}
 \section{Proof assisstant system}
 \subsection{Outline of the proof assistant code}
 \subsection{Modification}
@@ -1349,10 +1369,7 @@ been helpful and saved you time.
 \appendix
 
 \chapter{Full semantics}
-
-
-\section{diss.tex}
-
+\label{chap:fullsemantics}
 \includepdf[pages=-]{../mconbase.pdf}
 
 \section{blah}
