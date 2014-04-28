@@ -575,6 +575,92 @@ Lemma weakbisim_weakred : forall (R : relation expr), isExprRelationWeakBisimila
  intuition.
 Qed.
 
+Lemma weakbisim_trans: forall (e e' e'' : expr ), isExprWeaklyBisimilar e e' /\ isExprWeaklyBisimilar e' e'' -> isExprWeaklyBisimilar e e''.
+Proof. 
+ intros.
+ intuition.
+ inversion H0.
+ inversion H1.
+ substs.
+ destruct H.
+ destruct H4.
+ intuition. 
+ apply isexprweaklybisimilar.
+ exists (comp x x0).
+ intuition.
+ apply weakbisim_weakred.
+ specialize weakbisim_weakred with (R:=x).
+ intuition.
+ specialize weakbisim_weakred with (R:=x0).
+ intuition.
+ unfold comp.
+ inversion H7.
+ apply H9 in H12.
+ intuition.
+ apply H2 in H11.
+ intuition.
+ apply H12 in H8.
+ destruct H8.
+ intuition.
+ apply H13 in H11.
+ destruct H11.
+ intuition.
+ exists x3.
+ intuition.
+ exists x2.
+ intuition.
+ assumption.
+ inversion H7.
+ specialize weakbisim_weakred with (R:=x0).
+ intuition.
+ apply H11 in H10.
+
+ intuition.
+ apply H2 in H9.
+ intuition.
+ apply H14 in H8.
+ destruct H8.
+ intuition.
+ unfold comp.
+ apply H15 in H9.
+ destruct H9.
+ intuition.
+ exists x3.
+ intuition.
+ exists x2.
+ assumption.
+ assumption.
+ unfold comp.
+ exists e'.
+ assumption.
+ assumption.
+Qed.
+
+Lemma weakbisim_sym : forall (e e' : expr), isExprWeaklyBisimilar e e' -> isExprWeaklyBisimilar e' e.
+Proof.
+ intros.
+ apply isexprweaklybisimilar.
+ inversion H.
+ substs.
+ destruct H0.
+ intuition.
+ exists (trans x).
+ split.
+ apply weakbisim_weakred.
+ specialize weakbisim_weakred with (R:=x).
+ intros.
+ unfold trans in H3.
+ unfold trans.
+ intuition.
+ apply H0 in H3.
+ intuition.
+ apply H0 in H3.
+ intuition.
+ unfold trans.
+ assumption.
+Qed.
+ 
+
 (*
 Theorem weakredind : forall (X : Type) (R : relation X) (P : X -> X -> Prop),
        (forall x : X, P x x) ->

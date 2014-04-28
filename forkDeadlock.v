@@ -53,7 +53,7 @@ Inductive deadlock_left_rel : relation expr :=
  | deadlock_live : forall (d e : expr), totalDetTauStep d d -> deadlock_left_rel ((LM_expr d) # (LM_expr e)) e
  | deadlock_dead : forall (d e : expr), totalDetTauStep d d -> is_value_of_expr e -> deadlock_left_rel ((LM_expr d) #> (e)) e.
 
-Lemma deadlock_rel_wbsm : forall (p q : expr), deadlock_left_rel p q -> 
+Lemma deadlock_rel_wbsm_h : forall (p q : expr), deadlock_left_rel p q -> 
         ((forall (p' : expr) (r : redlabel), weakred r p p' -> (exists (q' : expr), weakred r q q' /\  deadlock_left_rel p' q' )) /\(forall (q' : expr) (r : redlabel), weakred r q q' -> (exists (p' : expr), weakred r p p' /\  deadlock_left_rel p' q' ))
  ).
 Proof.
@@ -219,7 +219,10 @@ Proof.
  exists (LM_expr d #> q).
  intuition.
  inversion H0.
+ Hint Constructors weakred.
+ Hint Immediate star_refl.
  apply weakred_T.
+ auto.
  apply star_refl.
  substs.
  apply labred_not_val in H3; intuition.
@@ -235,8 +238,30 @@ Proof.
  apply labred_not_val in H3; intuition.
 Qed.
 
+Theorem deadlock_rel_wbsm : isExprRelationWeakBisimilarity deadlock_left_rel. 
+Proof.
+ apply weakbisim_weakred.
+ apply deadlock_rel_wbsm_h.
+Qed.
 
+Theorem deadlock_left_wbsm :  forall (d e : expr), totalDetTauStep d d -> isExprWeaklyBisimilar ((LM_expr d) # (LM_expr e)) e.
+Proof.
+ intros.
+ apply isexprweaklybisimilar.
+ exists deadlock_left_rel.
+ intuition.
+ apply deadlock_rel_wbsm.
+Qed.
 
- 
+(*
+Theorem deadlock_right_wbsm :  forall (d e : expr), totalDetTauStep d d -> isExprWeaklyBisimilar ((LM_expr e) # (LM_expr d)) e.
+Proof.
+ intros.
+ apply isexprweaklybisimilar.
+ exists deadlock_left_rel.
+ intuition.
+ apply deadlock_rel_wbsm.
+Qed.
+*)
  
  
