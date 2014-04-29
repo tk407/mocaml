@@ -173,7 +173,7 @@ Hint Resolve eq_value_name : ott_coq_equality.
 Lemma eq_typscheme: forall (x y : typscheme), {x = y} + {x <> y}.
 Proof.
 decide equality. decide equality. apply eq_typvar. decide equality. apply eq_typvar.
-Defined.
+Qed.
 Hint Resolve eq_typscheme : ott_coq_equality.
 
 (* Extractable VTSin *)
@@ -261,7 +261,7 @@ end.
 Lemma eq_typexpr: forall (x y : typexpr), {x = y} + {x <> y}.
 Proof.
 decide equality. apply eq_typvar. 
-Defined.
+Qed.
 Hint Resolve eq_typexpr : ott_coq_equality.
 
 Fixpoint newTV0 (l : list_typvar) (s : nat) : typvar :=
@@ -639,7 +639,7 @@ Proof.
 (* assert (tsubst_typexpr l e1_1 = tsubst_typexpr l (TE_arrow e2_1 e2_2)).
  apply IHe1_1.
  simpl in H. *)
-Admitted.
+Qed.
 
 
 
@@ -812,8 +812,8 @@ Proof.
  induction constant0.
  elim H30.
  in *)
-Admitted.
-(* apply 
+Qed.
+(*  
  simpl.
  
  induction e2_1.
@@ -881,6 +881,7 @@ Admitted.
  simpl in H4.
  simpl in H.
  simpl.
+Qed.
  *)
 
 (* Proof that reduction and the extractable reduction is equivalent *)
@@ -906,7 +907,7 @@ Proof.
  apply not_true_is_false.
  trivial.
  trivial.
-Admitted.*) 
+Qed.*) 
 (*
 Theorem red_if_xred : forall (e e' : expr), XJO_red e e' -> (JO_red e e').
 Proof.
@@ -955,5 +956,5 @@ Proof.
  induction e.
  apply JO_red_forkmove1.
  simpl.
-Admitted.
+Qed.
 *)
