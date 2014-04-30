@@ -1,7 +1,107 @@
 Load progress.
 
+Lemma simp_lab_r : forall (e e' : expr) (s :select) (l : label), JO_red e s (RL_labelled l) e' -> labRed l e e'.
+Proof.
+ intros.
+ apply lab_r with (e1:=e)(e2:=e')(s:=s).
+ splits.
+ apply star_refl.
+ trivial.
+ apply star_refl.
+Qed.
+
+Lemma taured_val_id : forall (e e' : expr), tauRed e e' -> is_value_of_expr e -> e = e'.
+Proof.
+ intros.
+ inversion H.
+ reflexivity.
+ inversion H1.
+ apply red_not_value in H5; contradiction.
+Qed.
+
+Lemma labred_not_val : forall (e e' : expr)(l : label), labRed l e e' -> ~(is_value_of_expr e).
+Proof.
+ intros.
+ inversion H.
+ intuition.
+ apply taured_val_id in H5; intuition; substs.
+ apply red_not_value in H0.
+ contradiction.
+Qed. 
+
+Lemma bind_tau_behave_front : forall ( e e' x : expr), tauRed e x -> tauRed (e >>= e') (x >>= e').
+Proof.
+ intros.
+ apply star_ind with (R:=tauStep)(X:=expr)(P:= (fun y z => tauRed (y >>= e') (z >>= e'))).
+ intros.
+ apply star_refl.
+ intros.
+ apply S_star with (y:=(y>>=e')).
+ inversion H0.
+ apply tStep with (s:= s).
+ apply JO_red_evalbind.
+ assumption.
+ assumption.
+ assumption.
+Qed.
+
+Lemma bind_tau_behave_front_boxed : forall ( e e' x : expr), tauRed e x -> tauRed ((E_live_expr ( e)) >>= e') ((E_live_expr ( x)) >>= e').
+Proof.
+ intros.
+ apply star_ind with (R:=tauStep)(X:=expr)(P:= (fun y z => tauRed ((E_live_expr ( y)) >>= e') ((E_live_expr ( z)) >>= e'))).
+ intros.
+ apply star_refl.
+ intros.
+ apply S_star with (y:=((E_live_expr (y))>>=e')).
+ inversion H0.
+ apply tStep with (s:= s).
+ apply JO_red_movebind.
+ assumption.
+ assumption.
+ assumption.
+Qed.
+
+Lemma bind_lab_behave_front : forall ( e e' x : expr) (l : label), labRed l e x -> labRed l (e >>= e') (x >>= e').
+Proof.
+ intros.
+ inversion H.
+ intuition.
+ substs.
+ apply lab_r with (e1:=(e1 >>= e'))(e2:=(e2 >>= e'))(s:=s).
+ splits; [apply bind_tau_behave_front; assumption | apply JO_red_evalbind; assumption | apply bind_tau_behave_front; assumption ].
+Qed.
+
+
+
+Lemma ttr_val_not_labred : forall (e v e' : expr)(l:label), totalTauRed e v /\ is_value_of_expr v -> (~ (labRed l e e')).
+Proof.
+ intros.
+ intuition.
+ inversion H0.
+ intuition.
+ assert (totalTauRed e v /\ tauRed e e1).
+ auto.
+ apply ttau_prefix in H7.
+ intuition.
+ inversion H10.
+ substs.
+ apply red_not_value in H; contradiction.
+ substs.
+ inversion H9.
+ intuition.
+ apply H3 in H.
+ auto.
+ substs.
+ inversion H9.
+ substs.
+ apply red_not_value in H; contradiction.
+ substs.
+ inversion H3.
+ apply red_not_value in H5; contradiction.
+Qed.
+
 Lemma JO_red_ret_td : forall (v:expr) (s:select),
-     is_value_of_expr v -> totalDetTauStep (E_apply (E_constant CONST_ret) v) (E_live_expr (LM_expr v)).
+     is_value_of_expr v -> totalDetTauStep (E_apply (E_constant CONST_ret) v) (E_live_expr ( v)).
 Proof. 
   intros.
   apply ttStep.
@@ -49,31 +149,41 @@ Proof.
  inversion H4.
  rewrite <- H9 in H15.
  inversion H15.
- inversion H4.
- rewrite <- H10 in H14; inversion H14.
  intros.
  inversion H1.
- inversion H.
- elim H5; intros.
- inversion H8.
- apply red_not_value in H10.
+ substs.
+ 
  inversion H2.
- cut (tauStep e e'3).
- intros.
- elim H9.
- intros.
- apply H21 in H19.
- rewrite <- H19; reflexivity.
- apply tStep with (s:=s); trivial.
- rewrite <- H13 in H10; simpl in H10; intuition.
- subst.
- simpl in H10; intuition.
+ substs.
+ inversion H.
+ intuition.
+ apply tStep in H8.
+ apply H9 in H8; substs; intuition.
+ substs.
+ inversion H2.
+ substs.
+ inversion H.
+ apply tStep in H7.
+ intuition.
+ substs.
+ apply H10 in H7; substs.
+ reflexivity.
+ substs.
+ inversion H.
+ substs.
+ intuition.
+ inversion H4.
+ substs.
+ apply red_not_value in H5; simpl in H5; intuition.
+ substs.
+ apply tts_not_val in H.
+ simpl in H; intuition.
 Qed.
 
 
 Lemma JO_red_dobind_td : forall (v e:expr) (s:select),
      is_value_of_expr v ->
-     totalDetTauStep (E_bind  (E_live_expr (LM_expr v))  e) (E_apply e v).
+     totalDetTauStep (E_bind  (E_live_expr ( v))  e) (E_apply e v).
 Proof. 
   intros.
   apply ttStep.
@@ -324,28 +434,15 @@ intros.
  assumption.
  inversion H0.
  substs.
- inversion H.
- intuition.
+ apply tts_not_val in H; simpl in H; intuition.
  substs.
- inversion H4.
- apply red_not_value in H2; simpl in H2; intuition.
+ apply tts_not_val in H; simpl in H; intuition.
  substs.
- inversion H.
- intuition.
- inversion H4.
- apply red_not_value in H5; simpl in H5; intuition.
+ apply tts_not_val in H; simpl in H; intuition.
  substs.
  inversion H.
  intuition.
- inversion H4.
- apply red_not_value in H5; simpl in H5; intuition.
- substs.
- inversion H.
- apply tdtstep_not_val in H; simpl in H; intuition. 
- apply tdtstep_not_val in H; simpl in H; intuition. 
- inversion H.
- intuition.
- apply H7 in H6; intuition.
+ apply H1 in H6; assumption.
  inversion H0.
  substs.
  inversion H1.
