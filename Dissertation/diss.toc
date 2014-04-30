@@ -24,47 +24,47 @@
 \contentsline {subsection}{\numberline {3.1.7}Computation place holders}{26}
 \contentsline {section}{\numberline {3.2}Proof assisstant system}{29}
 \contentsline {subsection}{\numberline {3.2.1}Outline of the proof assistant code}{29}
-\contentsline {subsection}{\numberline {3.2.2}Extractable reduction relation}{29}
-\contentsline {section}{\numberline {3.3}OCaml system}{29}
-\contentsline {subsection}{\numberline {3.3.1}Outline of the OCaml code}{29}
-\contentsline {subsection}{\numberline {3.3.2}Hand modifications and justifications}{29}
-\contentsline {subsection}{\numberline {3.3.3}Sugar}{29}
-\contentsline {chapter}{\numberline {4}Evaluation}{31}
-\contentsline {section}{\numberline {4.1}Theoretical evaluation}{31}
-\contentsline {subsection}{\numberline {4.1.1}Methods}{31}
-\contentsline {subsubsection}{Weak bisimilarity}{31}
-\contentsline {subsection}{\numberline {4.1.2}Properties}{31}
-\contentsline {subsubsection}{Monadic laws}{31}
-\contentsline {subsubsection}{Fork commutativity}{31}
-\contentsline {subsubsection}{Fork associativity}{32}
-\contentsline {subsubsection}{Deadlock properties}{32}
-\contentsline {subsubsection}{Remarks on congruence}{32}
-\contentsline {subsubsection}{Type preservation?}{32}
-\contentsline {subsubsection}{Progress?}{32}
-\contentsline {section}{\numberline {4.2}Practical evaluation}{32}
-\contentsline {subsection}{\numberline {4.2.1}Methods}{32}
-\contentsline {subsection}{\numberline {4.2.2}Examples}{32}
-\contentsline {subsubsection}{Kahn process network}{32}
-\contentsline {subsubsection}{Eratosthene Sieve}{32}
-\contentsline {subsubsection}{Concurrent sort}{32}
-\contentsline {chapter}{\numberline {5}Conclusion}{33}
-\contentsline {chapter}{Bibliography}{35}
-\contentsline {chapter}{\numberline {A}Full semantics}{39}
-\contentsline {section}{\numberline {A.1}blah}{46}
-\contentsline {chapter}{\numberline {B}Project Proposal}{47}
-\contentsline {section}{\numberline {B.1}Introduction of work to be undertaken}{47}
-\contentsline {section}{\numberline {B.2}Description of starting point}{47}
-\contentsline {section}{\numberline {B.3}Substance and structure}{48}
-\contentsline {section}{\numberline {B.4}Criteria}{48}
-\contentsline {section}{\numberline {B.5}Timetable}{49}
-\contentsline {subsection}{\numberline {B.5.1}Week 1 and 2}{49}
-\contentsline {subsection}{\numberline {B.5.2}Week 3 and 4}{49}
-\contentsline {subsection}{\numberline {B.5.3}Week 5 and 6}{49}
-\contentsline {subsection}{\numberline {B.5.4}Week 7 and 8}{49}
-\contentsline {subsection}{\numberline {B.5.5}Week 9 and 10}{50}
-\contentsline {subsection}{\numberline {B.5.6}Week 11 and 12}{50}
-\contentsline {subsection}{\numberline {B.5.7}Week 13 and 14}{50}
-\contentsline {subsection}{\numberline {B.5.8}Week 15 and 16}{50}
-\contentsline {subsection}{\numberline {B.5.9}Week 17 and 18}{50}
-\contentsline {subsection}{\numberline {B.5.10}Week 19 and 20}{50}
-\contentsline {section}{\numberline {B.6}Resource Declaration}{50}
+\contentsline {subsection}{\numberline {3.2.2}Extractable reduction relation}{33}
+\contentsline {section}{\numberline {3.3}OCaml system}{35}
+\contentsline {subsection}{\numberline {3.3.1}Outline of the OCaml code}{35}
+\contentsline {subsection}{\numberline {3.3.2}Hand modifications and justifications}{36}
+\contentsline {subsection}{\numberline {3.3.3}Syntactic sugar}{38}
+\contentsline {chapter}{\numberline {4}Evaluation}{41}
+\contentsline {section}{\numberline {4.1}Theoretical evaluation}{41}
+\contentsline {subsection}{\numberline {4.1.1}Methods}{41}
+\contentsline {subsubsection}{Weak bisimilarity}{41}
+\contentsline {subsection}{\numberline {4.1.2}Properties}{41}
+\contentsline {subsubsection}{Monadic laws}{41}
+\contentsline {subsubsection}{Fork commutativity}{41}
+\contentsline {subsubsection}{Fork associativity}{42}
+\contentsline {subsubsection}{Deadlock properties}{42}
+\contentsline {subsubsection}{Remarks on congruence}{42}
+\contentsline {subsubsection}{Type preservation?}{42}
+\contentsline {subsubsection}{Progress?}{42}
+\contentsline {section}{\numberline {4.2}Practical evaluation}{42}
+\contentsline {subsection}{\numberline {4.2.1}Methods}{42}
+\contentsline {subsection}{\numberline {4.2.2}Examples}{42}
+\contentsline {subsubsection}{Kahn process network}{42}
+\contentsline {subsubsection}{Eratosthene Sieve}{42}
+\contentsline {subsubsection}{Concurrent sort}{42}
+\contentsline {chapter}{\numberline {5}Conclusion}{43}
+\contentsline {chapter}{Bibliography}{45}
+\contentsline {chapter}{\numberline {A}Full semantics}{49}
+\contentsline {section}{\numberline {A.1}blah}{56}
+\contentsline {chapter}{\numberline {B}Project Proposal}{57}
+\contentsline {section}{\numberline {B.1}Introduction of work to be undertaken}{57}
+\contentsline {section}{\numberline {B.2}Description of starting point}{57}
+\contentsline {section}{\numberline {B.3}Substance and structure}{58}
+\contentsline {section}{\numberline {B.4}Criteria}{58}
+\contentsline {section}{\numberline {B.5}Timetable}{59}
+\contentsline {subsection}{\numberline {B.5.1}Week 1 and 2}{59}
+\contentsline {subsection}{\numberline {B.5.2}Week 3 and 4}{59}
+\contentsline {subsection}{\numberline {B.5.3}Week 5 and 6}{59}
+\contentsline {subsection}{\numberline {B.5.4}Week 7 and 8}{59}
+\contentsline {subsection}{\numberline {B.5.5}Week 9 and 10}{60}
+\contentsline {subsection}{\numberline {B.5.6}Week 11 and 12}{60}
+\contentsline {subsection}{\numberline {B.5.7}Week 13 and 14}{60}
+\contentsline {subsection}{\numberline {B.5.8}Week 15 and 16}{60}
+\contentsline {subsection}{\numberline {B.5.9}Week 17 and 18}{60}
+\contentsline {subsection}{\numberline {B.5.10}Week 19 and 20}{60}
+\contentsline {section}{\numberline {B.6}Resource Declaration}{60}

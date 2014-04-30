@@ -29,6 +29,9 @@
 
 \togglefalse{wordcount}
 
+
+
+
 \toggletrue{colourtoggle}
 
 \usepackage{url}
@@ -116,6 +119,16 @@
 
 \usepackage{mathpartir}
 
+\usepackage{float}
+%\usepackage{comment}
+%\excludecomment{wc}
+%\includecomment{nwc}
+%\renewenvironment{comment}{}{}
+%\renewenvironment{lstlisting}{\begin{lstlisting}}{\end{}
+%\renewenvironment{figure}{}{}
+%\renewenvironment{equation}{}{}
+%\renewcommand{\cite}{}
+
 \begin{document}
 
 \bibliographystyle{plain}
@@ -175,6 +188,7 @@ by {\tt detex diss.tex | tr -cd '0-9A-Za-z $\tt\backslash$n' | wc -w}
 To write an OCaml framework for lightweight threading. This framework should be defined from basic semantics and have these semantics represented in a theorem prover setting for verification. The verification should include proofs of basic monadic laws. This theorem prover representation should be extracted to OCaml where the extracted code should be as faithful to the representation as possible. The extracted code should be able to run OCaml code concurrently.
 
 
+
 \section*{Work Completed}
 
 All that has been completed appears in this dissertation.
@@ -207,6 +221,7 @@ extent for a comparable purpose.
 \listoffigures
 
 \lstlistoflistings
+
 
 \newpage
 \section*{Acknowledgements}
@@ -270,9 +285,11 @@ LWT, the lightweight cooperative threading library\cite{vouillon2008lwt} was des
 \end{minipage}
 
 
+
 In \Cref{lst:lwtsyntax} we can see some of the syntax of LWT. Lines \ref{lst:lwtsyntaxHeadsDefStart}--\ref{lst:lwtsyntaxHeadsDefEnd} define heads, a function that sleeps for 1 second and then prints "Head", and lines \ref{lst:lwtsyntaxTailsDefStart}--\ref{lst:lwtsyntaxTailsDefEnd} define tails which sleeps for 2 seconds and then prints "Tails".  Lines \ref{lst:lwtsyntaxThreadStart}--\ref{lst:lwtsyntaxThreadEnd} create a thread that waits on heads and tails and then prints "Finished".  In LWT, semantics mostly follow the principle of continuations. We build a sequence of computations and the scheduler can pick between parallel computations at points of sequencing.
 
 An other implementation, Async is an open source concurrency library for OCaml developed by Jane Street. Unlike LWT the basic semantics are designed with promises in mind. A promise is a container that can be used in place of a value of the same type, but computations with a promise only evaluate when the actual value has been calculated. The concurrency arises naturally by interleaving the fulfilment of these containers. 
+
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[caption={Async example}, label={lst:asyncsyntax},escapeinside={@}{@}]
@@ -291,6 +308,8 @@ let () = upon (head_and_tails) (fun _ -> ())
 let () = never_returns (Scheduler.go ())
 \end{lstlisting}
 \end{minipage}
+
+
 
 In \Cref{lst:asyncsyntax} we define \verb|heads| and \verb|tails| as Deferred values of the respective code sequences. A Deferred is an implementation of a promise.
 
@@ -358,7 +377,9 @@ A monad on a category $ C $ is a triple $ (T, \eta, \mu) $ where $ T $ is an end
 \begin{enumerate}
 
 \item{
+\iftoggle{wordcount}{}{
 \[ \mu \circ T \mu = \mu \circ \mu T \]
+}
 Or as commutative diagram:
 \begin{center}
 \begin{tikzcd}
@@ -812,7 +833,7 @@ For the dependence between different parts of the grammars, see \Cref{fig:gramma
 \end{enumerate}
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=\linewidth]{mconbaseOttdep}
+\includegraphics[width=\linewidth]{./../mconbaseDep}
 \caption{Grammar dependencies}
 \label{fig:grammardep}
 \end{center}
@@ -1230,10 +1251,10 @@ However in languages like the one implemented in this chapter, where arguments a
   \caption{Syntax and semantics of the monadic primitives, ret and bind}
   \label{fig:semmon}
 \end{figure}
- The concurrency monad consists of a parametric type $ \alpha \, \textbf{con} $, where $ \alpha $ is a type parameter describing the type of computation or value enclosed and three key operations 
+ The concurrency monad consists of a parametric type $  \textbf{con } T  $, where $ T $ is a type parameter describing the type of computation or value enclosed and three key operations 
 \begin{itemize}
-\item{ret, also known as return. It has type $ \alpha \rightarrow \alpha \, \textbf{con} $ and simply evaluates its parameter and boxes up the result in the parametric type}
-\item{$>>=$, also known as bind, sequences two operations. The second argument is the continuation for the first parameter. More formally it has a type $ \alpha \, \textbf{con} \rightarrow ( \alpha \rightarrow \beta \, \textbf{con}) \rightarrow \beta \, \textbf{con}  $, that is it takes a boxed up computation and a function that takes the value of the computation and returns a new box. Bind then evaluates the expression within the box of the first argument and passes it to the second argument.}
+\item{ret, also known as return. It has type $ T \rightarrow \textbf{con }T   $ and simply evaluates its parameter and boxes up the result in the parametric type}
+\item{$>>=$, also known as bind, sequences two operations. The second argument is the continuation for the first parameter. More formally it has a type $ \textbf{con } T_1  \rightarrow ( T_1 \rightarrow \textbf{con } T_2 ) \rightarrow \textbf{con } T_2  $, that is it takes a boxed up computation and a function that takes the value of the computation and returns a new box. Bind then evaluates the expression within the box of the first argument and passes it to the second argument.}
 
 \end{itemize}
 
@@ -1247,12 +1268,12 @@ However in languages like the one implemented in this chapter, where arguments a
                  \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline   \begin{equation}
                                          \inferrule
                                            {e \overset{rl}{\underset{s}{\longrightarrow}} e'}
-                                           { \textbf{fork } (\textit{Live expr } e) (\textit{Live } lm)  \overset{rl}{\underset{1}{\longrightarrow}}\\\\ \textbf{fork } (\textit{Live expr } e') (\textit{Live } lm)  } \tag{R-Forkmove1}
+                                           { \textbf{fork } (\textit{Live expr } e) (\textit{Live } lm)  \overset{rl}{\underset{1}{\longrightarrow}}\\\\ \textbf{fork } (\textit{Live expr } e') (\textit{Live } lm)  } \tag{R-Forkmove1} \label{eq:forkmove1}
                                          \end{equation} \vspace{-9mm}
                                          \tabularnewline   \begin{equation}
                                           \inferrule
                                             {e \overset{rl}{\underset{s}{\longrightarrow}} e'}
-                                            { \textbf{fork } (\textit{Live } lm) (\textit{Live expr } e) \overset{rl}{\underset{2}{\longrightarrow}}\\\\ \textbf{fork }  (\textit{Live } lm) (\textit{Live expr } e')  } \tag{R-Forkmove2}
+                                            { \textbf{fork } (\textit{Live } lm) (\textit{Live expr } e) \overset{rl}{\underset{2}{\longrightarrow}}\\\\ \textbf{fork }  (\textit{Live } lm) (\textit{Live expr } e')  } \tag{R-Forkmove2} \label{eq:forkmove2}
                                            \end{equation}\vspace{-9mm}
                                          \tabularnewline   \begin{equation}
                                          \inferrule
@@ -1324,15 +1345,293 @@ In previous subsections I have referenced computation place holders of the form 
 
 The decision that these always reduce to unit was one purely of scope: further work on this project could include reducing these expressions within the framework or other forms of dynamic information. \clearpage
 \section{Proof assisstant system}
-In this section I give a brief outline of the structure of the translated proof assistant representation and how I modified it to be extractable to OCaml. 
+In this section I briefly outline the structure of the translated proof assistant representation and how I modified it to be extractable to OCaml. 
 \subsection{Outline of the proof assistant code}
-\subsection{Extractable reduction relation}
-\section{OCaml system}
-In this section I give a brief outline of the structure of the extracted OCaml, how it is modified to be runnable and a brief overview of potential syntactic sugar that can be used to aid development in such a framework. 
-\subsection{Outline of the OCaml code}
-\subsection{Hand modifications and justifications}
-\subsection{Sugar}
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{coqBaseStruct.pdf}
+\caption{Dependencies in the Coq semantics}
+\label{fig:coqBaseStruct}
+\end{figure}
+In \Cref{fig:coqBaseStruct} I detail the dependencies between different parts of the Coq version of the semantics. There are four types of objects in the Coq file:
+\begin{enumerate}
+\item{Inductive sets: they are the inductive data structures. These are the expression grammar objects mentioned in \Cref{fig:grammardep} with the same structure and the types of metavariables. Inductive sets are denoted by ovals with solid outlines. As an example, type expressions are translated from the Ott version in \Cref{lst:otttypexpr} to the Coq equivalent in \Cref{lst:coqtypexpr}. Simple grammars generate a set of tagged variants. 
 
+
+\begin{lstlisting}[language={Ott}, caption={Ott type expressions}, label={lst:otttypexpr}]
+typexpr, t :: TE_ ::=
+  | typconst                           ::   :: constants
+  | typvar                             ::   :: var
+  | typexpr -> typexpr'                ::   :: arrow
+  | typexpr '*' typexpr'               ::   :: prod
+  | con typexpr                        ::   :: concurrent
+  | typexpr '+' typexpr'               ::   :: sum
+  | ( typexpr )                        :: S :: paren {{ ich [[typexpr]] }} {{ ocaml [[typexpr]] }}
+\end{lstlisting}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq},caption={Coq type expr}, label={lst:coqtypexpr}]
+Inductive typexpr : Set := 
+ | TE_constants (typconst5:typconst)
+ | TE_var (typvar5:typvar)
+ | TE_arrow (typexpr5:typexpr) (typexpr':typexpr)
+ | TE_prod (typexpr5:typexpr) (typexpr':typexpr)
+ | TE_concurrent (typexpr5:typexpr)
+ | TE_sum (typexpr5:typexpr) (typexpr':typexpr).
+\end{lstlisting}
+\end{minipage}
+}
+\item{Fixpoints, the functions in Coq: The functions in this are all automatically generated from the Ott file. The most important ones are the expression substitution, free variable, value check fixpoints. The script also includes a few functions supporting the previous ones. Fixpoints are denoted by rectangles. The value subgrammar is translated as a fixpoint over expressions. 
+
+\begin{lstlisting}[language={Ott}, caption={Ott value subgrammar}, label={lst:ottvaluesub}]
+value, v :: V_ ::=
+  | constant                           ::   :: constant
+  | function value_name : typexpr -> expr        ::   :: function
+  | live lm                         ::   :: live_expr
+  | inl v                              ::   :: taggedleft
+  | inr v                              ::   :: taggedright
+  | { v , v' }                         ::   :: valuepair
+  | ( v )                             :: S :: paren {{ ich [[v]] }} {{ ocaml [[v]] }}
+\end{lstlisting}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq},caption={Coq value subgrammar}, label={lst:coqvaluesub}, escapeinside={@}{@}]
+Fixpoint is_value_of_expr (e_5:expr) : Prop :=
+  match e_5 with
+  | (E_ident value_name5) => False
+  | (E_constant constant5) => (True)
+(* Manual change *)
+@\label{lst:coqhandmod}@  | (E_apply expr5 expr') => match expr5 with | E_constant (CONST_fork) => is_value_of_expr (expr') | E_constant (CONST_pair) => is_value_of_expr (expr') | _ => False end  
+  | (E_bind expr5 expr') => False
+  | (E_function value_name5 typexpr5 expr5) => (True)
+  | (E_fix e) => False
+  | (E_live_expr lm) => (True)
+  | (E_pair e e') => ((is_value_of_expr e) /\ (is_value_of_expr e'))
+  | (E_taggingleft e) => ((is_value_of_expr e))
+  | (E_taggingright e) => ((is_value_of_expr e))
+  | (E_case e1 x1 e2 x2 e3) => False
+end.
+\end{lstlisting}
+\end{minipage}	
+Notice however, that I was not able to define the value property of partial applications of primitives \textbf{fork} and \textbf{pair}, therefore I manually changed the incorrect value subgrammar check. Ott offers single and multiple substitution predicates for its destination languages. These are implemented as fixpoints in Coq. As an example, see the expression substitution in \Cref{lst:coqexprsubst}.
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq},caption={Coq expression substitution}, label={lst:coqexprsubst}]
+Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr :=
+  match e__6 with
+  | (E_ident value_name5) => (if eq_value_name value_name5 x_5 then e_5 else (E_ident value_name5))
+  | (E_constant constant5) => E_constant constant5
+  | (E_apply expr5 expr') => E_apply (subst_expr e_5 x_5 expr5) (subst_expr e_5 x_5 expr')
+  | (E_bind expr5 expr') => E_bind (subst_expr e_5 x_5 expr5) (subst_expr e_5 x_5 expr')
+  | (E_function value_name5 typexpr5 expr5) => E_function value_name5 typexpr5 (if list_mem eq_value_name x_5 (cons value_name5 nil) then expr5 else (subst_expr e_5 x_5 expr5))
+  | (E_fix e) => E_fix (subst_expr e_5 x_5 e)
+  | (E_live_expr lm) => E_live_expr (subst_livemodes e_5 x_5 lm)
+  | (E_pair e e') => E_pair (subst_expr e_5 x_5 e) (subst_expr e_5 x_5 e')
+  | (E_taggingleft e) => E_taggingleft (subst_expr e_5 x_5 e)
+  | (E_taggingright e) => E_taggingright (subst_expr e_5 x_5 e)
+  | (E_case e1 x1 e2 x2 e3) => E_case (subst_expr e_5 x_5 e1) x1 (subst_expr e_5 x_5 e2) x2 (subst_expr e_5 x_5 e3)
+end
+\end{lstlisting}
+\end{minipage}	
+}
+\item{Logical inductive sets: As mentioned previously a logical inductive set is an inductively defined set of propositions. This is the way the reduction relation and the typing relation is represented. Logical inductive sets are represented in \Cref{fig:coqBaseStruct} by ovals with dashed outline. For example a clause in the reduction relation is translated from the simple inference rule presentation in \Cref{lst:ottcontextapp1} to proposition in the logical inductive set \verb|JO_red| in \Cref{lst:coqlogind}.
+
+\begin{lstlisting}[language={Ott}, caption={Ott reduction relation example}, label={lst:ottcontextapp1}]
+e [ s ] --> [ rl ] e''
+----------------------------  :: context_app1
+e e' [ s ] --> [ rl ] e'' e'
+\end{lstlisting}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq},caption={Coq reduction relation example}, label={lst:coqlogind}]
+Inductive JO_red : expr -> select -> redlabel -> expr -> Prop :=    (* defn red *)
+ | JO_red_context_app1 : forall (e e':expr) (s:select) (rl:redlabel) (e'':expr),
+     JO_red e s rl e'' ->
+     JO_red (E_apply e e') s rl (E_apply e'' e')
+  ...
+\end{lstlisting}
+\end{minipage}	
+}
+\item{Lemmas: There are a few supporting lemmas about the equality of variables. These are automatically generated by Ott. Lemmas are denoted with diamonds. An easy example would be the straightforward lemma that says labels are either equal or not in \Cref{lst:coqeqlabel}.
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq},caption={Coq label equality lemma}, label={lst:coqeqlabel}]
+Lemma eq_label: forall (x y : label), {x = y} + {x <> y}.
+Proof.
+  decide equality; auto with ott_coq_equality arith.
+Defined.
+\end{lstlisting}
+\end{minipage}	
+
+}
+\end{enumerate} 
+The automatically generated Coq representation had a slight issue in that I could not easily define partial application of curried primitive functions as values. Instead, I hand modified the fixpoint in the translated Coq the particular case on \Cref{lst:coqhandmod} in \Cref{lst:coqvaluesub}.
+\subsection{Extractable reduction relation}
+Coq provides extraction facilities to OCaml and Haskell. However, the built in extraction only deals with inductive sets and fixpoints that do not involve propositions, more specifically the \textit{Prop} sort. There are good reasons why logical inductive definitions are not extracted from Coq. Logical inductive types do not need to conform to any input/output relationship and computations that correspond to a logical inductive relation need not always terminate. Extraction from Coq is required to produce a certification of equivalence and the Calculus of Inductive Constructions, the logic underlying Coq, cannot directly express a certification for a non-terminating program. 
+
+
+Logical inductive types are often used for description of various concepts in semantics, especially reduction relations. Ott generates a logical inductive relation as seen in \Cref{lst:coqlogind}. For simple relations, like the value relation in \Cref{lst:coqvaluesub} it is simple to rewrite in a set inductive manner. However, for complex non-terminating relations, like the reduction relation in this project, rewriting is not feasible.  Delahaye et al.\cite{delahaye2007extracting,tollitte2012producing} proposed a method of extracting such relations to OCaml by annotating the input/output modes of the elements of the relation. 
+
+I rewrote the value check logical fixpoint to an extractable version by simply replacing the True and False propositions by their boolean counterpart and successfully extracted it by the built-in Coq extraction. However, not even the Coq plugin based on element modes could extract the reduction relation generated by Ott. 
+
+The first issue with the extraction to a functional program was the way the selection argument was supplied. Originally, the required a single selection value. In the case of fork reduction rules this would not be enough to generate a certified program.
+\begin{equation}
+                                         \inferrule
+                                           {e \overset{rl}{\underset{s}{\longrightarrow}} e'}
+                                           { \textbf{fork } (\textit{Live expr } e) (\textit{Live } lm)  \overset{rl}{\underset{1}{\longrightarrow}}\\\\ \textbf{fork } (\textit{Live expr } e') (\textit{Live } lm)  } \tag{R-Forkmove1} \label{eq:forkmove1}
+                                         \end{equation}
+                                            \begin{equation}
+                                          \inferrule
+                                            {e \overset{rl}{\underset{s}{\longrightarrow}} e'}
+                                            { \textbf{fork } (\textit{Live } lm) (\textit{Live expr } e) \overset{rl}{\underset{2}{\longrightarrow}}\\\\ \textbf{fork }  (\textit{Live } lm) (\textit{Live expr } e')  } \tag{R-Forkmove2} \label{eq:forkmove2}
+                                           \end{equation}
+The extracted program would have to somehow pick a possible value for $ s $ in $ e \overset{rl}{\underset{s}{\longrightarrow}} e' $ while it is only supplied with the value 1. Clearly always picking one or the other would not be satisfactory. As I had no way of choosing it non-deterministically, I wanted the argument to fully describe all $ s $ values the system used. I opted for a co-inductive stream of selections because there can be an arbitrary number of \textbf{fork}s nested in each other with arbitrary number of selection values to make a single step . 
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq},caption={Coq co-inductive selection sequence}, label={lst:coqselectstar}]
+CoInductive selectstar : Set := Seq : select -> selectstar -> selectstar.
+\end{lstlisting}
+\end{minipage}
+
+Co-inductive data structures represent potentially infinite data and featured in a number of programming languages: lazy lists, trees and streams all describe co-inductive structures. In \Cref{lst:coqselectstar} I define \verb|selectstar| where each element is pair of a selection value and a further \verb|selectstar| representing the rest of the selection values.  With an infinite sequence of selection values the program can make arbitrary many decisions and it is extractable.
+
+The second problem that surfaced was that the extraction plugin does not generate code that backtracks from a case where we invoked the reduction relation on an internal part. If an expression $ e $ does not reduce and the extracted reduction function is invoked it will fail with an \lstinline|assert false|. I chose to add a logically superfluous assumption of expression $ e $ not being a value. This assumption is superfluous as an expression that reduces cannot be a value by the \verb|red_not_value| theorem.  \Cref{lst:coqredunsafe,lst:coqxredsafe} are a good example of how this transformation happens. \vspace{4mm}
+
+\begin{minipage}{0.9\linewidth}
+\begin{lstlisting}[language={Coq},caption={Coq reduction clause with unsafe assumption}, label={lst:coqredunsafe}]
+| JO_red_evalbind : forall (e e'':expr) (s:select) (rl:redlabel) (e':expr),
+     JO_red e s rl e' ->
+     JO_red (E_bind e e'') s rl (E_bind e' e'')
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq},caption={Coq extractable reduction clause with safe assumption}, label={lst:coqxredsafe}]
+ | XJO_red_evalbind : forall (e e'' e':expr) (s:selectstar),
+    (eq (xis_value_of_expr e) false) ->
+     XJO_red e s e' ->
+     XJO_red (E_bind e e'') s (E_bind e' e'')
+\end{lstlisting}
+\end{minipage}
+
+
+The last issue was due to the experimental nature of the plugin: the optimisations and inference algorithm ran out of stack space when invoked with all 26 rules. Therefore I extracted in three parts and recombined them by hand.
+
+\section{OCaml system}
+In this section I give a brief outline of the structure of the extracted OCaml, how it is modified to be runnable and a brief overview of potential syntactic sugar that can be used to aid development in the framework. 
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{ocamlBaseStruct.pdf}
+\caption{Dependencies in the OCaml code}
+\label{fig:ocamlBaseStruct}
+\end{figure}
+\subsection{Outline of the OCaml code}
+The OCaml code consists of the extracted versions of the following:
+\begin{itemize}
+\item{Inductive sets like expressions, constants and type expressions as tagged variants. These are represented as ovals in \Cref{fig:ocamlBaseStruct}.}
+\item{Functions like the expression substitution or XJO\_red12, the reduction function. These are the rectangles in \Cref{fig:ocamlBaseStruct}.}
+\item{The metavariables \verb|value_name, label, ident| are all of OCaml type \lstinline|int| instead of constructor based extractions of Coq \lstinline[language={Coq}]|nat|. This has the caveat that \lstinline|int| may overflow or represent negative numbers, while the Coq \lstinline[language={Coq}]|nat| cannot. Realistically, no program would have this problem.}
+\end{itemize}
+Their interdependence is shown on \Cref{fig:ocamlBaseStruct}. 
+\subsection{Hand modifications and justifications}
+I have made a number of modifications to the OCaml code to make it runnable. This includes changing the type of labels from int to $ \textbf{unit}\rightarrow\textbf{unit} $ and inserting terms in the relevant cases to run these computations. 
+
+Furthermore I have changed the way \verb|selectstar| is implemented. The extraction results in the type in \Cref{lst:ocamllazystar} which involves the Lazy module of OCaml. While the extraction of co-inductive types to lazy types is sound, for simplicity I used a simple lazy stream in \Cref{lst:ocamlstreamstar}. 
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml lazy selectstar}, label={lst:ocamllazystar}]
+type selectstar = __selectstar Lazy.t
+and __selectstar =
+| Seq of select * selectstar
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml stream selectstar}, label={lst:ocamlstreamstar}]
+type selectstar = | Seq of select * (unit -> selectstar) 
+\end{lstlisting}
+\end{minipage}
+
+As the extraction plugin is experimental there were a number of inefficiencies and a few issues due to the fact that the semantics of OCaml pattern matching is sequential, while it is parallel in Coq. While Tollitte\cite{tollitte2012producing} made progress on the merging of cases when one case subsumes the other, these were not always correctly identified. For example the case \Crefrange{lst:ocamlvalexpappcaseStart}{lst:ocamlvalexpappcaseEnd} in \Cref{lst:ocamlorigapp} subsumes the case \Cref{lst:ocamlorigsub}. The plugin was unable to infer this as that would have required it to show that function term is always a value, regardless of its parameters. This is an issue as any function with a parameter that can be reduced will fail, as the case in \Cref{lst:ocamlorigsub} comes first.
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml original substitution case}, label={lst:ocamlorigsub}]
+  | (E_apply (E_function (x, t, e), v), s) ->
+    (match xis_value_of_expr v with
+     | true -> subst_expr v x e
+     | _ -> assert false (*  *))
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml original application case}, label={lst:ocamlorigapp}, escapeinside={@}{@}]
+  | (E_apply (e, e'), s) ->
+    (match xis_value_of_expr e with
+     | false ->
+ @\label{lst:ocamlunneededmatchonfun}@      (match xJO_red12 e s with
+        | e'' -> E_apply (e'', e')
+        | _ -> assert false (*  *))
+ @\label{lst:ocamlvalexpappcaseStart}@    | true ->
+       (match xJO_red12 e' s with
+        | e'' -> E_apply (e, e'')
+ @\label{lst:ocamlvalexpappcaseEnd}@       | _ -> assert false (*  *))
+ @\label{lst:ocamlunneededdefault2}@    | _ -> assert false (*  *))
+\end{lstlisting}
+\end{minipage}
+My solution was to insert the correct step into the failing match as in \Cref{lst:ocamlfixsub}. Note, that taking that reduction may fail, but that is the expected behaviour.
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml fixed substitution case}, label={lst:ocamlfixsub}]
+  | (E_apply (E_function (x, t, e), v), s) ->
+    (match xis_value_of_expr v with
+     | true -> subst_expr v x e
+     | false -> E_apply (E_function (x, t, e), (xJO_red12 v s)))
+\end{lstlisting}
+\end{minipage}
+A reoccurring inefficiency comes from the extraction plugin generating a default failing case in all situations, even if the default case may never happen. \Cref{lst:ocamlunneededdefault2} in \Cref{lst:ocamlorigapp} is an example of this: a boolean may only take the values true or false. A similar issue occurs when evaluating a function:  \Cref{lst:ocamlunneededmatchonfun} in the same listing matches by giving a name to the return value, but generates a default case as well. To this latter problem I simply removed the match and replaced the name of the return value with the function call.
+
+A further issue occurs when occasionally the plugin reorders matches on assumptions. Even though the safe assumption was inserted in the case in \Cref{lst:ocamlswapassume} it was reordered by the plugin to come after the unsafe assumption. 
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml swapped assumptions}, label={lst:ocamlswapassume}]
+  | (E_bind (e, e''), s) ->
+    (match xJO_red12 e s with
+     | e' ->
+       (match xis_value_of_expr e with
+        | false -> E_bind (e', e'')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+\end{lstlisting}
+\end{minipage}
+The simple solution to this is to swap the assumptions, however in some cases that leads to to the issues mentioned above.
+\subsection{Syntactic sugar}
+Due to the multiple layers of automatic naming developing in this framework directly could be cumbersome. I have defined a few OCaml functions to serve as syntactic sugar. The two broad categories of sugar are syntax to build expressions and schedulers. 
+\begin{itemize}
+\item{Boxing expressions and computations: \lstinline|let boxe e = E_live_expr (LM_expr e)|, \lstinline|let boxc f = E_live_expr (LM_comp f)|}
+\item{An infix bind operator: \lstinline|let ( >>= ) a b = E_bind (a, b)|}
+\item{Application: \lstinline|let app a b = E_apply (a, b)|}
+\item{Fork: \lstinline|let fork a b = app ( app (E_constant CONST_fork) a ) b|}
+\item{Round-robin and random schedulers in \Cref{lst:ocamlrrsched} and \Cref{lst:ocamlrandsched} respectively.}
+\end{itemize}
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml round-robin scheduler}, label={lst:ocamlrrsched}]
+  let rec makerr1 () = Seq(S_First, makerr2) 
+  and makerr2 () = Seq(S_Second, makerr1) 
+  
+  let rec evalrr1 e n = (match n with 
+           | 0 -> e
+           | m -> evalrr2 (xJO_red12 e (makerr1 ())) (m-1))
+  and evalrr2 e n = (match n with 
+           | 0 -> e
+           | m -> evalrr1 (xJO_red12 e (makerr2 ())) (m-1))
+\end{lstlisting}
+\end{minipage}
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption={OCaml random scheduler}, label={lst:ocamlrandsched}]
+  let rec makerand () = if Random.bool() then Seq(S_First, makerand) else Seq(S_Second, makerand)
+  
+  let rec evalrand e n = (match n with 
+                       | 0 -> e
+                       | m -> evalrand (xJO_red12 e (makerand ())) (m-1))
+\end{lstlisting}
+\end{minipage}
 
 
 \cleardoublepage

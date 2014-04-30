@@ -111,12 +111,6 @@ Louis Mandel and Luc Maranget.
 \newblock The {JoCaml} system.
 \newblock \url{http://jocaml.inria.fr/}, 2007.
 
-\bibitem{Ott}
-Francesco~Zappa Nardelli.
-\newblock Ott, a tool for writing definitions of programming languages and
-  calculi.
-\newblock \url{http://www.cl.cam.ac.uk/~pes20/ott/}.
-
 \bibitem{OCamlLight}
 Scott Owens.
 \newblock A sound semantics for ocaml light.
@@ -133,6 +127,13 @@ Jaroslav {\^S}ev{\v{c}}ik, Viktor Vafeiadis, Francesco Zappa~Nardelli, Suresh
   Jagannathan, and Peter Sewell.
 \newblock Relaxed-memory concurrency and verified compilation.
 \newblock In {\em ACM SIGPLAN Notices}, volume~46, pages 43--54. ACM, 2011.
+
+\bibitem{Ott}
+Peter Sewell, Francesco~Zappa Nardelli, Scott Owens, Gilles Peskine, Thomas
+  Ridge, Susmit Sarkar, and Rok Strni{\v{s}}a.
+\newblock Ott, a tool for writing definitions of programming languages and
+  calculi.
+\newblock \url{http://www.cl.cam.ac.uk/~pes20/ott/}.
 
 \bibitem{shan2004shift}
 Chung-chieh Shan.

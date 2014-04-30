@@ -1,0 +1,27 @@
+digraph G {
+ G;
+select;
+expr;
+livemodes;
+redlabel;
+constant;
+typexpr;
+typconst;
+typvar;
+
+G -> value_name;
+G -> G;
+G -> typexpr;
+expr -> value_name;
+expr -> expr;
+expr -> livemodes;
+expr -> constant;
+expr -> typexpr;
+livemodes -> label;
+livemodes -> expr;
+redlabel -> label;
+typexpr -> typexpr;
+typexpr -> typconst;
+typexpr -> typvar;
+typvar -> ident;
+}

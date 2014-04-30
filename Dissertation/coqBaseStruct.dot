@@ -1,13 +1,12 @@
 digraph G{
+size="7.5,2";
+ratio=compress;
 value_name;
+typvar;
+
 "label";
 ident;
 index;
-typvar -> ident;
-typconst;
-typexpr;
-typexpr -> typvar;
-typexpr -> typconst;
 constant;
 livemodes;
 livemodes -> "label";
@@ -21,90 +20,111 @@ expr -> expr;
 redlabel;
 redlabel -> "label";
 select;
-G;
-G -> value_name;
-G -> typexpr;
 
 
+is_value_of_expr [shape=box];
 is_value_of_expr -> expr;
-list_mem;
-list_assoc;
-tsubst_typexpr;
-tsubst_typexpr -> typvar;
-tsubst_typexpr -> typexpr;
-tsubst_typexpr -> list_assoc;
-tsubst_G;
-tsubst_G -> typvar;
-tsubst_G -> typexpr;
-tsubst_G -> G;
-tsubst_G -> tsubst_typexpr;
-subst_expr;
+list_mem [shape=box];
+list_assoc [shape=box];
+
+subst_expr [shape=box];
 subst_expr -> expr;
 subst_expr -> value_name;
 subst_expr -> subst_livemodes;
-subst_livemodes;
+subst_expr -> list_mem;
+subst_expr -> eq_value_name;
+subst_livemodes [shape=box];
 subst_livemodes -> typvar;
 subst_livemodes -> typexpr;
 subst_livemodes -> subst_expr;
-tsubst_expr;
-tsubst_expr -> typvar;
-tsubst_expr -> expr;
-tsubst_expr -> tsubst_typexpr;
-tsubst_expr -> tsubst_livemodes;
-tsubst_livemodes;
-tsubst_livemodes -> typvar;
-tsubst_livemodes -> expr;
-tsubst_livemodes -> tsubst_typexpr;
-tsubst_livemodes -> tsubst_expr;
-list_minus;
+list_minus [shape=box];
+list_minus -> list_mem;
 
-ftv_typexpr;
-ftv_typexpr -> typexpr;
-ftv_typexpr -> typvar;
-ftv_expr;
-ftv_expr -> expr;
-ftv_expr -> typvar;
-ftv_expr -> ftv_typexpr;
-ftv_expr -> ftv_livemodes
-ftv_livemodes;
-ftv_livemodes -> livemodes;
-ftv_livemodes -> typvar;
-ftv_livemodes -> ftv_expr;
 
-ftv_G;
-ftv_G -> G;
-ftv_G -> typvar;
-ftv_G -> ftv_typexpr;
-
-fv_expr;
+fv_expr [shape=box];
 fv_expr -> expr;
 fv_expr -> value_name;
 fv_expr -> list_minus;
 fv_expr -> fv_livemodes;
-fv_livemodes;
+fv_livemodes [shape=box];
 fv_livemodes -> livemodes;
 fv_livemodes -> value_name;
 fv_livemodes -> fv_expr;
 
 
-VTSin;
-VTSin -> value_name;
-VTSin -> typexpr;
-VTSin -> G;
-G_constant;
-G_constant -> constant;
-G_constant -> typexpr;
-G_constant -> G;
-Get;
-Get -> expr;
-Get -> typexpr;
-Get -> G_constant;
 
 
-JO_red;
+JO_red [style=dashed];
 JO_red -> expr;
 JO_red -> select;
 JO_red -> redlabel;
 
+JO_red -> is_value_of_expr;
+JO_red -> subst_expr;
+
+eq_value_name [shape = diamond];
+eq_value_name -> value_name;
+eq_label [shape = diamond];
+eq_label -> "label";
+
+
+typvar -> ident;
+typconst;
+typexpr;
+typexpr -> typvar;
+typexpr -> typconst;
+G;
+G -> value_name;
+G -> typexpr;
+tsubst_typexpr [shape=box];
+tsubst_typexpr -> typvar;
+tsubst_typexpr -> typexpr;
+tsubst_typexpr -> list_assoc;
+tsubst_G [shape=box];
+tsubst_G -> typvar;
+tsubst_G -> typexpr;
+tsubst_G -> G;
+tsubst_G -> tsubst_typexpr;
+tsubst_expr [shape=box];
+tsubst_expr -> typvar;
+tsubst_expr -> expr;
+tsubst_expr -> tsubst_typexpr;
+tsubst_expr -> tsubst_livemodes;
+tsubst_livemodes [shape=box];
+tsubst_livemodes -> typvar;
+tsubst_livemodes -> expr;
+tsubst_livemodes -> tsubst_typexpr;
+tsubst_livemodes -> tsubst_expr;
+ftv_typexpr [shape=box];
+ftv_typexpr -> typexpr;
+ftv_typexpr -> typvar;
+ftv_expr [shape=box];
+ftv_expr -> expr;
+ftv_expr -> typvar;
+ftv_expr -> ftv_typexpr;
+ftv_expr -> ftv_livemodes
+ftv_livemodes [shape=box];
+ftv_livemodes -> livemodes;
+ftv_livemodes -> typvar;
+ftv_livemodes -> ftv_expr;
+VTSin [style=dashed];
+VTSin -> value_name;
+VTSin -> typexpr;
+VTSin -> G;
+G_constant [style=dashed];
+G_constant -> constant;
+G_constant -> typexpr;
+G_constant -> G;
+Get [style=dashed];
+Get -> expr;
+Get -> typexpr;
+Get -> G_constant;
+
+ftv_G [shape=box];
+ftv_G -> G;
+ftv_G -> typvar;
+ftv_G -> ftv_typexpr;
+eq_typvar [shape = diamond];
+eq_typvar -> typvar;
 
 }

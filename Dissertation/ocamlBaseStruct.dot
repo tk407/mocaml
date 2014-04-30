@@ -1,0 +1,55 @@
+digraph G{
+size="7.5,1";
+ratio=compress;
+ranksep=0.5;
+int [label="value_name=typvar=label=int"];
+constant;
+livemodes;
+livemodes -> int;
+livemodes -> expr;
+expr;
+expr -> int;
+expr -> constant;
+expr -> typexpr;
+expr -> livemodes;
+expr -> expr;
+select;
+selectstar;
+selectstar -> select;
+
+
+xis_value_of_expr [shape=box];
+xis_value_of_expr -> expr;
+list_mem [shape=box];
+
+subst_expr [shape=box];
+subst_expr -> expr;
+subst_expr -> list_mem;
+subst_expr -> int;
+subst_expr -> subst_livemodes;
+subst_expr -> eq_value_name;
+subst_livemodes [shape=box];
+subst_livemodes -> int;
+subst_livemodes -> typexpr;
+subst_livemodes -> subst_expr;
+
+
+
+
+
+XJO_red12 [shape=box];
+XJO_red12 -> expr;
+XJO_red12 -> select;
+
+XJO_red12 -> xis_value_of_expr;
+XJO_red12 -> subst_expr;
+
+eq_value_name [shape = box];
+eq_value_name -> int;
+
+
+typconst;
+typexpr;
+typexpr -> int;
+typexpr -> typconst;
+}

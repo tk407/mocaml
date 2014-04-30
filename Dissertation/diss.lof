@@ -10,6 +10,8 @@
 \contentsline {figure}{\numberline {3.6}{\ignorespaces Syntax and semantics of the fixpoint operator}}{24}
 \contentsline {figure}{\numberline {3.7}{\ignorespaces Syntax and semantics of the monadic primitives, ret and bind}}{27}
 \contentsline {figure}{\numberline {3.8}{\ignorespaces Syntax and semantics of the fork operator}}{28}
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Dependencies in the Coq semantics}}{29}
+\contentsline {figure}{\numberline {3.10}{\ignorespaces Dependencies in the OCaml code}}{36}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

@@ -15,32 +15,32 @@ Warning--can't use both volume and number fields in liskov1988promises
 Warning--can't use both volume and number fields in sevvcik2011relaxed
 You've used 31 entries,
             2118 wiz_defined-function locations,
-            652 strings with 7778 characters,
-and the built_in function-call counts, 8915 in all, are:
-= -- 894
-> -- 276
+            652 strings with 7894 characters,
+and the built_in function-call counts, 9106 in all, are:
+= -- 907
+> -- 307
 < -- 13
-+ -- 119
-- -- 84
-* -- 456
-:= -- 1359
++ -- 131
+- -- 96
+* -- 481
+:= -- 1395
 add.period$ -- 94
 call.type$ -- 31
-change.case$ -- 132
+change.case$ -- 138
 chr.to.int$ -- 0
 cite$ -- 41
 duplicate$ -- 405
 empty$ -- 859
-format.name$ -- 84
-if$ -- 2008
+format.name$ -- 96
+if$ -- 2040
 int.to.chr$ -- 0
 int.to.str$ -- 31
 missing$ -- 22
 newline$ -- 150
 num.names$ -- 52
-pop$ -- 227
+pop$ -- 233
 preamble$ -- 1
-purify$ -- 104
+purify$ -- 110
 quote$ -- 0
 skip$ -- 315
 stack$ -- 0
