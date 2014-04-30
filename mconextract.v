@@ -8,7 +8,7 @@ Require Import Sumbool.
 Require Import List.
 Require Import Classical_Prop.
 
-Load mconbase2.
+Load progress.
 
 
 
@@ -161,8 +161,10 @@ Extract Inductive list => "list" [ "[]" "(::)" ].
 
 Extract Inductive prod => "(*)"  [ "(,)" ].
 
+Extraction selectstar.
 
 Extraction Relation Relaxed XJO_red [1 1 2].
 
+Recursive Extraction is_value_of_expr.
 
 (* Extraction Relation G_constant [1 2]. *)

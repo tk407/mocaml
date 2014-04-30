@@ -84,7 +84,7 @@ let rec subst_expr e_5 x_5 = function
   E_bind ((subst_expr e_5 x_5 expr5), (subst_expr e_5 x_5 expr'))
 | E_function (value_name5, typexpr5, expr5) ->
   E_function (value_name5, typexpr5,
-    (if list_mem eq_value_name x_5 (value_name5::[])
+    (if list_mem eq_value_name x_5 (value_name5::[])                             (* this is just silly *)
      then expr5
      else subst_expr e_5 x_5 expr5))
 | E_fix e -> E_fix (subst_expr e_5 x_5 e)
@@ -112,7 +112,7 @@ let rec xis_value_of_expr = function
      (match constant5 with
       | CONST_fork -> xis_value_of_expr expr'
       | CONST_pair -> xis_value_of_expr expr'
-      | _ ->
+      | _ ->                                                     (* what even is this? *)
         (match expr5 with
          | E_constant constant6 ->
            (match constant6 with
@@ -166,12 +166,12 @@ let rec xJO_red12 p1 p2 =
   | (E_bind (E_live_expr LM_comp l, e), s) ->
     E_apply (e, (E_constant CONST_unit))
   | (E_bind (e, e''), s) ->
-    (match xJO_red12 e s with                                                               (* the logical inductive assumption xJO_red12 e s e' converts to this, but this can just be folded in *)
-     | e' ->
-       (match xis_value_of_expr e with                                                      (* by the red_not_value theorem, this is not needed *)
-        | false -> E_bind (e', e'')
-        | _ -> assert false (*  *))
-  (*   | _ -> assert false (*  *) *))                                                            (* is not needed *)
+    (match xis_value_of_expr e  with                                                          (* I had to change the order of the value check and the internal reduction to make sense *)                                                                                                
+     | false ->                                                                                
+       (match xJO_red12 e s with                                                               (* the logical inductive assumption xJO_red12 e s e' converts to this, but this can just be folded in *)                                                      
+        | e' -> E_bind (e', e'')
+        | _ -> assert false (*  *))                                                            (* is not needed *)
+     | true -> assert false (*  *) )                                                           (* Technically this is needed: if e is a value and is not caught by earlier cases, it should fail (it cannot move ahead is it is not a live expression *)                                                          
   | (E_apply (E_apply (E_constant CONST_pair, v), v'), s) ->
     (match xis_value_of_expr v with
      | true ->
@@ -199,8 +199,8 @@ let rec xJO_red12 p1 p2 =
      | true ->
        E_live_expr (LM_expr (E_taggingleft (E_pair (e, (E_live_expr lm)))))
      | false ->
-       (match xJO_red12 e s with                                                            (* the logical inductive assumption xJO_red12 e s e' converts to this, but this can just be folded in *)
-        | e' ->
+       (match xJO_red12 e (s ()) with                                                           (* edited for the rewritten selectstar *)                                                            
+        | e' ->                                                                                 (* the logical inductive assumption xJO_red12 e s e' converts to this, but this can just be folded in *)
           E_apply ((E_apply ((E_constant CONST_fork), (E_live_expr (LM_expr
             e')))), (E_live_expr lm))
     (*    | _ -> assert false (*  *) *))                                                        (* is not needed *)
@@ -211,8 +211,8 @@ let rec xJO_red12 p1 p2 =
      | true ->
        E_live_expr (LM_expr (E_taggingright (E_pair ((E_live_expr lm), e))))
      | false ->
-       (match xJO_red12 e s with                                                            (* the logical inductive assumption xJO_red12 e s e' converts to this, but this can just be folded in *)
-        | e' ->
+       (match xJO_red12 e (s ()) with                                                                                                   
+        | e' ->                                                                             (* the logical inductive assumption xJO_red12 e s e' converts to this, but this can just be folded in *)
           E_apply ((E_apply ((E_constant CONST_fork), (E_live_expr lm))),
             (E_live_expr (LM_expr e')))
         | _ -> assert false (*  *))                                                         (* is not needed *)
