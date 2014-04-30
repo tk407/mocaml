@@ -47,11 +47,7 @@ redlabel, rl :: RL_ ::=
   | tau                                    ::   :: tau
   | lab                                ::   :: labelled
 
-% Live modes
-livemodes, lm :: LM_ ::=
-  | comp lab                               ::    :: comp
-  | exp expr                           ::    :: expr
-  | ( lm )                             :: S :: paren {{ ich [[lm]] }} {{ ocaml [[lm]] }}
+
 
 % Terms
 expr, e :: E_ ::=
@@ -63,7 +59,8 @@ expr, e :: E_ ::=
   | expr >>= expr'                       ::   :: bind
   | function value_name : typexpr -> expr          ::   :: function (+ bind value_name in expr +)
   | fix e                                ::   :: fix
-  | live lm                            ::   :: live_expr
+  | comp lab                               ::    :: comp
+  | live e                            ::   :: live_expr
   | { e , e' }                           ::   :: pair
   | ( expr )                             :: S :: paren {{ ich [[expr]] }} {{ ocaml [[expr]] }}
   | inl e                                ::   :: taggingleft
@@ -84,7 +81,7 @@ expr, e :: E_ ::=
 value, v :: V_ ::=
   | constant                           ::   :: constant
   | function value_name : typexpr -> expr        ::   :: function
-  | live lm                         ::   :: live_expr
+  | live e                         ::   :: live_expr
   | inl v                              ::   :: taggedleft
   | inr v                              ::   :: taggedright
   | { v , v' }                         ::   :: valuepair
@@ -232,10 +229,10 @@ G |- function x1 : t1 -> e : t1->t
 
 G |- e : t
 ---------------------------  :: live_exp
-G |- live exp e : con t
+G |- live e : con t
 
----------------------------  :: live_comp
-G |- live ( comp lab ) : con tunit
+---------------------------  :: comp
+G |- ( comp lab ) : con tunit
 
 G |- e :  t -> t 
 ------------------------ :: fix
@@ -290,37 +287,36 @@ e [ s ] --> [ rl ]  e' :: :: red :: red_ {{ tex [[e]]\, \overset{ [[rl]] }{\unde
 %--------------------------- :: die
 %live v --> dead v
 
+------------------------------- :: docomp
+ comp lab [ s ] --> [ lab ] unit 
+
 %Here should be the only path for concurrency
 
 e [ s ] --> [ rl ] e''
+{{ ~ (is_value_of_expr [[ e' ]]) }}
 --------------------------- :: forkmove1
-(:E_apply:fork (live exp e) ) (live lm) [ First ] --> [ rl ] (:E_apply:fork (live exp e'') ) (live lm)
+(:E_apply:fork (live e) ) (live e') [ First ] --> [ rl ] (:E_apply:fork (live e'') ) (live e')
 
 
 e' [ s ] --> [ rl ] e''
+{{ ~ (is_value_of_expr [[ e ]]) }}
 --------------------------- :: forkmove2
-(:E_apply:fork (live lm) ) (live exp e') [ Second ] --> [ rl ] (:E_apply:fork (live lm) ) (live exp e'') 
+(:E_apply:fork (live e) ) (live  e') [ Second ] --> [ rl ] (:E_apply:fork (live e) ) (live  e'') 
 
 --------------------------- :: forkdeath1
-(:E_apply:fork (live exp v) ) (live lm) [ First ] --> [ tau ] live exp ( inl ( ( { v , ( live lm ) } ) ) )
+(:E_apply:fork (live v) ) (live e) [ First ] --> [ tau ] live ( inl ( ( { v , ( live e ) } ) ) )
 
 --------------------------- :: forkdeath2
-(:E_apply:fork (live lm) ) (live exp v') [ Second ] --> [ tau ] live exp ( inr ( { (live lm) , v' } ) )
+(:E_apply:fork (live e) ) (live v') [ Second ] --> [ tau ] live ( inr ( { (live e) , v' } ) )
 
 % Now for the evaluation steps that have to modified to incorporate the actual OCaml code
-
---------------------------- :: forkdocomp1
-(:E_apply:fork (live ( comp lab ) ) ) (live lm) [ First ] --> [ lab ] live exp ( inl ( ( { unit , (live lm) } ) ) )
-
---------------------------- :: forkdocomp2
-(:E_apply:fork (live lm) ) (live ( comp lab )) [ Second ] --> [ lab ]  live exp ( inr ( ( { (live lm) , unit } ) ))
 
 
 
 
 
 --------------------------- :: ret
-ret v [ s ] --> [ tau ] ( live exp v ) 
+ret v [ s ] --> [ tau ] ( live v ) 
 
 e [ s ] --> [ rl ] e'
 --------------------------- :: evalbind
@@ -328,13 +324,11 @@ e >>= e'' [ s ] --> [ rl ] e' >>= e''
 
 e [ s ] --> [ rl ] e'
 --------------------------- :: movebind
-(live exp e) >>= e'' [ s ] --> [ rl ] (live exp e') >>= e'' 
+(live e) >>= e'' [ s ] --> [ rl ] (live e') >>= e'' 
 
---------------------------- :: compbind
-(live (comp lab) ) >>= e [ s ] --> [ lab ] e unit
 
 --------------------------- :: dobind
-(live exp v) >>= e [ s ] --> [ tau ] e v 
+(live v) >>= e [ s ] --> [ tau ] e v 
 
 %Context-application
 % Evaluate argument first
