@@ -23,7 +23,6 @@ Fixpoint xis_value_of_expr (e_5:expr) : bool :=
   | (E_bind expr5 expr') => false
   | (E_function value_name5 typexpr5 expr5) => true
   | (E_fix e) => false
-  | (E_comp lab) => false
   | (E_live_expr expr5) => true
   | (E_pair e e') => (if (xis_value_of_expr e) then (xis_value_of_expr e') else false)
   | (E_taggingleft e) => ((xis_value_of_expr e))
@@ -53,7 +52,7 @@ end. *)
 CoInductive selectstar : Set := Seq : select -> selectstar -> selectstar.
 
 Recursive Extraction selectstar.
-(*
+
 (* Extractable version of the reduction operation *)
 Inductive XJO_red : expr -> selectstar -> expr -> Prop :=    (* defn red *)
 (* | XJO_red_app : forall (x:value_name) (t : typexpr) (e v:expr) (s:selectstar),
@@ -167,7 +166,5 @@ Extraction selectstar.
 Extraction Relation Relaxed XJO_red [1 1 2].
 
 Recursive Extraction is_value_of_expr.
-
-*)
 
 (* Extraction Relation G_constant [1 2]. *)

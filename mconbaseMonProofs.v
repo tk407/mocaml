@@ -10,7 +10,7 @@ Lemma mon_left_id : forall (x:value_name) (t : typexpr) (a e:expr) (s s' : selec
     ((E_apply(E_constant (CONST_ret)) a) >>= (E_function x t e)) -->* (E_apply (E_function x t e) a).
 Proof.
  intros.
- apply JO_red_star_step with (e' := (E_live_expr ( a) >>= E_function x t e))(s:=s)(rl:=RL_tau).
+ apply JO_red_star_step with (e' := (E_live_expr (LM_expr a) >>= E_function x t e))(s:=s)(rl:=RL_tau).
  apply JO_red_evalbind.
  apply JO_red_ret.
  apply H.
@@ -31,7 +31,7 @@ Proof.
  apply ttau_weakbisim_incl.
  trivial.
  intros.
- apply S_star with (y:=((E_live_expr ( a) >>= E_function x t e))).
+ apply S_star with (y:=((E_live_expr (LM_expr a) >>= E_function x t e))).
  apply JO_red_evalbind_td.
  apply JO_red_ret_td.
  apply S_First.
@@ -50,13 +50,13 @@ Qed.
 
 Lemma mon_right_id : forall (a:expr) (s s' : select),
    is_value_of_expr a ->
-   E_live_expr (a) >>= E_constant CONST_ret -->* E_live_expr ( a).
+   E_live_expr (LM_expr a) >>= E_constant CONST_ret -->* E_live_expr (LM_expr a).
 Proof.
  intros.
  apply JO_red_star_step with (e' := (E_apply (E_constant CONST_ret) a))(s:= s)(rl:=RL_tau).
  apply JO_red_dobind.
  trivial.
- apply JO_red_star_step with (e' := (E_live_expr (a)))(s:=s')(rl:=RL_tau).
+ apply JO_red_star_step with (e' := (E_live_expr (LM_expr a)))(s:=s')(rl:=RL_tau).
  apply JO_red_ret.
  trivial.
  apply JO_red_star_refl.
@@ -64,10 +64,10 @@ Qed.
 
 Lemma mon_right_id_wbsm : forall (a:expr) (s s' : select),
    is_value_of_expr a ->
-   weakbisim (E_live_expr (a) >>= E_constant CONST_ret) (E_live_expr (a)).
+   weakbisim (E_live_expr (LM_expr a) >>= E_constant CONST_ret) (E_live_expr (LM_expr a)).
 Proof.
   intros.
-  cut (totalTauRed (E_live_expr (a) >>= E_constant CONST_ret) (E_live_expr (a))).
+  cut (totalTauRed (E_live_expr (LM_expr a) >>= E_constant CONST_ret) (E_live_expr (LM_expr a))).
   intros.
   apply bisimsymm.
   apply ttau_weakbisim_incl.
@@ -76,7 +76,7 @@ Proof.
   apply JO_red_dobind_td.
   trivial.
   trivial.
-  apply S_star with (y:=(E_live_expr ( a))).
+  apply S_star with (y:=(E_live_expr (LM_expr a))).
   apply JO_red_ret_td.
   trivial. trivial.
   apply star_refl.
@@ -88,7 +88,7 @@ Lemma mon_assoc : forall (v v' v'' : value_name) (t t' : typexpr) (a e e' :expr)
     v' <> v'' ->
     ((subst_expr a v'' e') = e') ->
     ((subst_expr a v'' e) = e) ->
-    exists (b :expr), (E_live_expr (a) >>= (E_function v t e) >>= (E_function v' t' e') -->* b) /\ (E_live_expr (a) >>= (E_function v'' t (E_apply (E_function v t e) (E_ident v'') >>= (E_function v' t' e'))) -->* b).
+    exists (b :expr), (E_live_expr (LM_expr a) >>= (E_function v t e) >>= (E_function v' t' e') -->* b) /\ (E_live_expr (LM_expr a) >>= (E_function v'' t (E_apply (E_function v t e) (E_ident v'') >>= (E_function v' t' e'))) -->* b).
 Proof.
  intros.
  exists (E_apply (E_function v t e) a >>= E_function v' t' e' ).
@@ -146,10 +146,10 @@ Lemma mon_assoc_wbsm : forall (v v' v'' : value_name) (t t' : typexpr) (a e e' :
     v' <> v'' ->
     ((subst_expr a v'' e') = e') ->
     ((subst_expr a v'' e) = e) ->
-    weakbisim (E_live_expr (a) >>= (E_function v t e) >>= (E_function v' t' e')) (E_live_expr (a) >>= (E_function v'' t (E_apply (E_function v t e) (E_ident v'') >>= (E_function v' t' e')))).
+    weakbisim (E_live_expr (LM_expr a) >>= (E_function v t e) >>= (E_function v' t' e')) (E_live_expr (LM_expr a) >>= (E_function v'' t (E_apply (E_function v t e) (E_ident v'') >>= (E_function v' t' e')))).
 Proof.
  intros.
- cut (exists (b :expr), (weakbisim (E_live_expr (a) >>= (E_function v t e) >>= (E_function v' t' e')) b) /\ (weakbisim (E_live_expr (a) >>= (E_function v'' t (E_apply (E_function v t e) (E_ident v'') >>= (E_function v' t' e')))) b)).
+ cut (exists (b :expr), (weakbisim (E_live_expr (LM_expr a) >>= (E_function v t e) >>= (E_function v' t' e')) b) /\ (weakbisim (E_live_expr (LM_expr a) >>= (E_function v'' t (E_apply (E_function v t e) (E_ident v'') >>= (E_function v' t' e')))) b)).
  intros.
  elim H4.
  intros.
@@ -161,7 +161,7 @@ Proof.
  exists (E_apply (E_function v t e) a >>= E_function v' t' e' ).
  split.
  Show 1.
-  cut (totalTauRed (E_live_expr (a) >>= E_function v t e >>= E_function v' t' e') (E_apply (E_function v t e) a >>= E_function v' t' e')).
+  cut (totalTauRed (E_live_expr (LM_expr a) >>= E_function v t e >>= E_function v' t' e') (E_apply (E_function v t e) a >>= E_function v' t' e')).
   intros.
   apply bisimsymm.
   apply ttau_weakbisim_incl.
@@ -177,7 +177,7 @@ Proof.
   trivial.
   apply star_refl.
  Show 1.
- cut (totalTauRed (E_live_expr (a) >>=   E_function v'' t (E_apply (E_function v t e) (E_ident v'') >>= E_function v' t' e')) (E_apply (E_function v t e) a >>= E_function v' t' e')).
+ cut (totalTauRed (E_live_expr (LM_expr a) >>=   E_function v'' t (E_apply (E_function v t e) (E_ident v'') >>= E_function v' t' e')) (E_apply (E_function v t e) a >>= E_function v' t' e')).
  intros.
  apply bisimsymm.
  apply ttau_weakbisim_incl.

@@ -12,8 +12,8 @@ Load LibTactics.
 Notation "A >>= F" := (E_bind A F) (at level 42, left associativity).
 Notation "A [ C ] --> [ D ] B" := (JO_red A C D B) (at level 54, no associativity).
 Notation " A # B " := (E_apply (E_apply (E_constant CONST_fork) ( (E_live_expr A)) ) ( (E_live_expr B))) (at level 20).
-Notation " A <# B "  := (E_live_expr((E_taggingleft(E_pair A (E_live_expr B))))) (at level 20).
-Notation " A #> B "  := (E_live_expr((E_taggingright(E_pair (E_live_expr A) B)))) (at level 20).
+Notation " A <# B "  := (E_live_expr(LM_expr(E_taggingleft(E_pair A (E_live_expr B))))) (at level 20).
+Notation " A #> B "  := (E_live_expr(LM_expr(E_taggingright(E_pair (E_live_expr A) B)))) (at level 20).
 Notation " A <|# B "  := (((E_taggingleft(E_pair A (E_live_expr B))))) (at level 20).
 Notation " A #|> B "  := (((E_taggingright(E_pair (E_live_expr B) A)))) (at level 20).
 
@@ -350,7 +350,6 @@ Proof.
  apply weaksim_id.
 Qed.
 
-(*
 Inductive livemodes_ctx : Set := 
  | LM_ctx_expr (expr5:expr_ctx)
  | LM_ctx_BASE (lm : livemodes)
@@ -386,7 +385,6 @@ with appctx_E (E5:expr_ctx) (e:expr) : expr :=
   | E_ctx_taggingright (ex) => E_taggingright (appctx_E ex e)
   | E_ctx_case (e1) (x1) (e2) (x2) (e3) => E_case (appctx_E e1 e) (x1) (appctx_E e2 e) (x2) (appctx_E e3 e)
   | E_ctx_BASE (ex) => ex end.
-*)
 
 Definition isExprRelationWeakBisimilarity (R : relation expr) : Prop :=
    forall (p q : expr), R p q -> ((forall (p' : expr) (l : label), labRed l p p' -> (exists (q' : expr), labRed l q q' /\  R p' q' )) /\(forall (q' : expr) (l : label), labRed l q q' -> (exists (p' : expr), labRed l p p' /\  R p' q' ))
