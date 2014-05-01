@@ -1,9 +1,9 @@
 metavar value_name, x ::=
   {{ isa string }} {{ coq nat }} {{ coq-equality }} {{ hol string }} {{ ocaml int }}
   {{ lex alphanum }} 
-metavar label, lab ::=
-  {{ isa string }} {{ coq nat }} {{ coq-equality }} {{ hol string }} {{ ocaml int }}
-  {{ lex alphanum }} 
+%metavar label, lab ::=
+%  {{ isa string }} {{ coq nat }} {{ coq-equality }} {{ hol string }} {{ ocaml int }}
+%  {{ lex alphanum }} 
 metavar ident ::=
   {{ isa string }} {{ coq nat }} {{ hol string }} {{ ocaml int }}
   {{ lex Alphanum }} 
@@ -38,14 +38,13 @@ constant, c :: CONST_ ::=
   | ret                                ::   :: ret
   | fork                               ::   :: fork
   | unit                                 ::   :: unit
-  | stop                                 ::   :: stop
   | pair                                 ::   :: pair
   | proj1                                ::   :: proj1
   | proj2                                ::   :: proj2
 
 redlabel, rl :: RL_ ::=
   | tau                                    ::   :: tau
-  | lab                                ::   :: labelled
+  | RE expr                                ::   :: labelled
 
 
 
@@ -59,7 +58,7 @@ expr, e :: E_ ::=
   | expr >>= expr'                       ::   :: bind
   | function value_name : typexpr -> expr          ::   :: function (+ bind value_name in expr +)
   | fix e                                ::   :: fix
-  | comp lab                               ::    :: comp
+  | comp e                               ::    :: comp
   | live e                            ::   :: live_expr
   | { e , e' }                           ::   :: pair
   | ( expr )                             :: S :: paren {{ ich [[expr]] }} {{ ocaml [[expr]] }}
@@ -192,9 +191,6 @@ G |- fork : (con t1) -> ((con t2) -> (con ((t1 * (con t2)) + ((con t1) * t2))))
 G |- unit : tunit
 
 
------------------------- :: stop
-G |- stop : t
-
 ----------------------------------------:: pair
 G |- pair : t1 -> ( t2 -> ( t1 * t2 ) )
 
@@ -231,8 +227,9 @@ G |- e : t
 ---------------------------  :: live_exp
 G |- live e : con t
 
+G |- e : t
 ---------------------------  :: comp
-G |- ( comp lab ) : con tunit
+G |- ( comp e ) : t
 
 G |- e :  t -> t 
 ------------------------ :: fix
@@ -288,7 +285,7 @@ e [ s ] --> [ rl ]  e' :: :: red :: red_ {{ tex [[e]]\, \overset{ [[rl]] }{\unde
 %live v --> dead v
 
 ------------------------------- :: docomp
- comp lab [ s ] --> [ lab ] unit 
+ comp e [ s ] --> [ RE e ] e 
 
 %Here should be the only path for concurrency
 

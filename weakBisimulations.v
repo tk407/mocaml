@@ -17,6 +17,8 @@ Notation " A #> B "  := (E_live_expr((E_taggingright(E_pair (E_live_expr A) B)))
 Notation " A <|# B "  := (((E_taggingleft(E_pair A (E_live_expr B))))) (at level 20).
 Notation " A #|> B "  := (((E_taggingright(E_pair (E_live_expr B) A)))) (at level 20).
 
+Definition label := expr.
+
 Inductive idExp : expr -> expr -> Prop :=
  | id_id: forall (e : expr ), idExp e e.
 
@@ -500,7 +502,7 @@ Lemma weakbisim_weakred : forall (R : relation expr), isExprRelationWeakBisimila
  assumption.
  inversion H1.
  substs.
- assert (exists q', labRed lab q q' /\ R p' q').
+ assert (exists q', labRed expr5 q q' /\ R p' q').
  specialize H with (p:=p)(q:=q).
  apply H in H0.
  intuition.
