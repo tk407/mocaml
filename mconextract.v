@@ -76,8 +76,8 @@ Inductive XJO_red : expr -> selectstar -> expr -> Prop :=    (* defn red *)
  | XJO_red_inpair : forall (v v':expr) (s:selectstar),
      (eq (xis_value_of_expr v) true) ->
      (eq (xis_value_of_expr v') true) ->
-     XJO_red (E_apply  (E_apply (E_constant CONST_pair) v)  v') s (E_pair v v') *)
-(* | XJO_red_docomp : forall (e:expr) (s:selectstar),
+     XJO_red (E_apply  (E_apply (E_constant CONST_pair) v)  v') s (E_pair v v') 
+ | XJO_red_docomp : forall (e:expr) (s:selectstar),
      XJO_red (E_comp e) s e
  | XJO_red_proj1 : forall (v v':expr) (s:selectstar),
      (eq (xis_value_of_expr v) true) ->
@@ -86,7 +86,7 @@ Inductive XJO_red : expr -> selectstar -> expr -> Prop :=    (* defn red *)
  | XJO_red_proj2 : forall (v v':expr) (s:selectstar),
      (eq (xis_value_of_expr v) true) ->
      (eq (xis_value_of_expr v') true) ->
-     XJO_red (E_apply (E_constant CONST_proj2) (E_pair v v')) s  v'
+     XJO_red (E_apply (E_constant CONST_proj2) (E_pair v v')) s  v' *)
  | XJO_red_forkmove1 : forall (e e':expr)  (e'':expr) (s:selectstar),
      (eq (xis_value_of_expr e) false) ->
      (eq (xis_value_of_expr e') false) ->
@@ -100,7 +100,7 @@ Inductive XJO_red : expr -> selectstar -> expr -> Prop :=    (* defn red *)
  | XJO_red_forkdeath1 : forall (v e:expr) (s : selectstar),
      (eq (xis_value_of_expr e) true) ->
      XJO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr v) )   (E_live_expr e) ) s (E_live_expr  (E_taggingleft   (E_pair v  (E_live_expr e) )  ) )
-*) | XJO_red_forkdeath2 : forall (e v':expr) (s : selectstar),
+(* | XJO_red_forkdeath2 : forall (e v':expr) (s : selectstar),
      (eq (xis_value_of_expr v') true) ->
      XJO_red (E_apply  (E_apply (E_constant CONST_fork)  (E_live_expr e) )   (E_live_expr v') ) s (E_live_expr  (E_taggingright  (E_pair  (E_live_expr e)  v') ) )
  | XJO_red_context_app1 : forall (e e' e'':expr) (s:selectstar),
@@ -139,7 +139,7 @@ Inductive XJO_red : expr -> selectstar -> expr -> Prop :=    (* defn red *)
  | XJO_red_evalcase : forall (e:expr) (x:value_name) (e'':expr) (x':value_name) (e''' e':expr) (s:selectstar),
      (eq (xis_value_of_expr e) false) ->
      XJO_red e s e' ->
-     XJO_red (E_case e x e'' x' e''') s (E_case e' x e'' x' e''').  
+     XJO_red (E_case e x e'' x' e''') s (E_case e' x e'' x' e''')*).  
 
 
 (*Extraction Relation Fixpoint is_expr_of_expr [1]. *)
@@ -163,6 +163,8 @@ Extract Inductive prod => "(*)"  [ "(,)" ].
 Extraction selectstar.
 
 Extraction Relation Relaxed XJO_red [1 1 2].
+
+Recursive Extraction 
 
 Recursive Extraction is_value_of_expr.
 
