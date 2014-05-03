@@ -1,5 +1,4 @@
 (** commons:  **)
-
 type value_name = int
 
 (** val eq_value_name : value_name -> value_name -> bool **)
@@ -22,8 +21,6 @@ let rec eq_value_name n y0 =
       y0)
     n
 
-type label = int
-
 type ident = int
 
 type typvar =
@@ -45,26 +42,27 @@ type constant =
 | CONST_ret
 | CONST_fork
 | CONST_unit
-| CONST_stop
 | CONST_pair
 | CONST_proj1
 | CONST_proj2
 
-type livemodes =
-| LM_comp of (() -> ())
-| LM_expr of expr
-and expr =
+type expr =
 | E_ident of value_name
 | E_constant of constant
 | E_apply of expr * expr
 | E_bind of expr * expr
 | E_function of value_name * typexpr * expr
 | E_fix of expr
-| E_live_expr of livemodes
+| E_comp of expr
+| E_live_expr of expr
 | E_pair of expr * expr
 | E_taggingleft of expr
 | E_taggingright of expr
 | E_case of expr * value_name * expr * value_name * expr
+
+type select =
+| S_First
+| S_Second
 
 (** val list_mem : ('a1 -> 'a1 -> bool) -> 'a1 -> 'a1 list -> bool **)
 
@@ -88,19 +86,14 @@ let rec subst_expr e_5 x_5 = function
      then expr5
      else subst_expr e_5 x_5 expr5))
 | E_fix e -> E_fix (subst_expr e_5 x_5 e)
-| E_live_expr lm -> E_live_expr (subst_livemodes e_5 x_5 lm)
+| E_comp e -> E_comp (subst_expr e_5 x_5 e)
+| E_live_expr e -> E_live_expr (subst_expr e_5 x_5 e)
 | E_pair (e, e') -> E_pair ((subst_expr e_5 x_5 e), (subst_expr e_5 x_5 e'))
 | E_taggingleft e -> E_taggingleft (subst_expr e_5 x_5 e)
 | E_taggingright e -> E_taggingright (subst_expr e_5 x_5 e)
 | E_case (e1, x1, e2, x2, e3) ->
   E_case ((subst_expr e_5 x_5 e1), x1, (subst_expr e_5 x_5 e2), x2,
     (subst_expr e_5 x_5 e3))
-
-(** val subst_livemodes : expr -> value_name -> livemodes -> livemodes **)
-
-and subst_livemodes e5 x5 = function
-| LM_comp f -> LM_comp f
-| LM_expr expr5 -> LM_expr (subst_expr e5 x5 expr5)
 
 (** val xis_value_of_expr : expr -> bool **)
 
@@ -136,11 +129,253 @@ let rec xis_value_of_expr = function
 | E_taggingright e -> xis_value_of_expr e
 | _ -> false
 
+
+(** val xJO_red12 : expr -> selectstar -> expr **)
+
+type selectstar = | Seq of select * (unit -> selectstar)  (* modified coinductive datatype to be lazy *)
+
+(** red_app -> proj2 **)
+
+let rec xJO_red12 p1 p2 =
+  match (p1, p2) with
+  | (E_apply (E_function (x, t, e), v), s) ->
+    (match xis_value_of_expr v with
+     | true -> subst_expr v x e
+     | _ -> assert false (*  *))
+  | (E_apply (E_constant CONST_ret, v), s) ->
+    (match xis_value_of_expr v with
+     | true -> E_live_expr v
+     | _ -> assert false (*  *))
+  | (E_bind (E_live_expr e, e''), s) ->
+    (match xis_value_of_expr e with
+     | false ->
+       (match xJO_red12 e s with
+        | e' -> E_bind ((E_live_expr e'), e'')
+        | _ -> assert false (*  *))
+     | true -> E_apply (e'', e)
+     | _ -> assert false (*  *))
+  | (E_bind (e, e''), s) ->
+    (match xJO_red12 e s with
+     | e' ->
+       (match xis_value_of_expr e with
+        | false -> E_bind (e', e'')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_apply (E_apply (E_constant CONST_pair, v), v'), s) ->
+    (match xis_value_of_expr v' with
+     | true ->
+       (match xis_value_of_expr v with
+        | true -> E_pair (v, v')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_comp e, s) -> e
+  | (E_apply (E_constant CONST_proj1, E_pair (v, v')), s) ->
+    (match xis_value_of_expr v' with
+     | true ->
+       (match xis_value_of_expr v with
+        | true -> v
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_apply (E_constant CONST_proj2, E_pair (v, v')), s) ->
+    (match xis_value_of_expr v' with
+     | true ->
+       (match xis_value_of_expr v with
+        | true -> v'
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | _ -> assert false (*  *)
+
+
+(** forkmove1 -> forkdeath1 **)
+
+Warning: Invalid character '.' in identifier "Top.xis_value_of_expr".
+type value_name = int
+
+type ident = int
+
+type typvar =
+  ident
+  (* singleton inductive, whose constructor was TV_ident *)
+
+type typconst =
+| TC_unit
+
+type typexpr =
+| TE_constants of typconst
+| TE_var of typvar
+| TE_arrow of typexpr * typexpr
+| TE_prod of typexpr * typexpr
+| TE_concurrent of typexpr
+| TE_sum of typexpr * typexpr
+
+type constant =
+| CONST_ret
+| CONST_fork
+| CONST_unit
+| CONST_pair
+| CONST_proj1
+| CONST_proj2
+
+type expr =
+| E_ident of value_name
+| E_constant of constant
+| E_apply of expr * expr
+| E_bind of expr * expr
+| E_function of value_name * typexpr * expr
+| E_fix of expr
+| E_comp of expr
+| E_live_expr of expr
+| E_pair of expr * expr
+| E_taggingleft of expr
+| E_taggingright of expr
+| E_case of expr * value_name * expr * value_name * expr
+
 type select =
 | S_First
 | S_Second
 
-type selectstar = | Seq of select * (unit -> selectstar)  (* modified coinductive datatype to be lazy *)
+(** val xis_value_of_expr : expr -> bool **)
+
+let rec xis_value_of_expr = function
+| E_constant constant5 -> true
+| E_apply (expr5, expr') ->
+  (match expr5 with
+   | E_constant constant5 ->
+     (match constant5 with
+      | CONST_fork -> xis_value_of_expr expr'
+      | CONST_pair -> xis_value_of_expr expr'
+      | _ ->
+        (match expr5 with
+         | E_constant constant6 ->
+           (match constant6 with
+            | CONST_fork -> xis_value_of_expr expr'
+            | CONST_pair -> xis_value_of_expr expr'
+            | _ -> false)
+         | _ -> false))
+   | _ ->
+     (match expr5 with
+      | E_constant constant5 ->
+        (match constant5 with
+         | CONST_fork -> xis_value_of_expr expr'
+         | CONST_pair -> xis_value_of_expr expr'
+         | _ -> false)
+      | _ -> false))
+| E_function (value_name5, typexpr5, expr5) -> true
+| E_live_expr expr5 -> true
+| E_pair (e, e') ->
+  if xis_value_of_expr e then xis_value_of_expr e' else false
+| E_taggingleft e -> xis_value_of_expr e
+| E_taggingright e -> xis_value_of_expr e
+| _ -> false
+
+type selectstar = __selectstar Lazy.t
+and __selectstar =
+| Seq of select * selectstar
+
+
+(** val xJO_red12 : expr -> selectstar -> expr **)
+
+let rec xJO_red12 p1 p2 =
+  match (p1, p2) with
+  | (E_apply (E_apply (E_constant CONST_fork, E_live_expr e), E_live_expr e'),
+     Seq (S_First, s)) ->
+    (match xJO_red12 e s with
+     | e'' ->
+       (match xis_value_of_expr e' with
+        | false ->
+          (match xis_value_of_expr e with
+           | false ->
+             E_apply ((E_apply ((E_constant CONST_fork), (E_live_expr e''))),
+               (E_live_expr e'))
+           | _ -> assert false (*  *))
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_apply (E_apply (E_constant CONST_fork, E_live_expr e), E_live_expr e'),
+     Seq (S_Second, s)) ->
+    (match xJO_red12 e' s with
+     | e'' ->
+       (match xis_value_of_expr e' with
+        | false ->
+          (match xis_value_of_expr e with
+           | false ->
+             E_apply ((E_apply ((E_constant CONST_fork), (E_live_expr e))),
+               (E_live_expr e''))
+           | _ -> assert false (*  *))
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_apply (E_apply (E_constant CONST_fork, E_live_expr v), E_live_expr e),
+     s) ->
+    (match xis_value_of_expr e with
+     | true -> E_live_expr (E_taggingleft (E_pair (v, (E_live_expr e))))
+     | _ -> assert false (*  *))
+  | _ -> assert false (*  *)
+
+
+(** forkdeath2 -> evalcase  **)
+
+let rec xJO_red12 p1 p2 =
+  match (p1, p2) with
+  | (E_apply (E_apply (E_constant CONST_fork, E_live_expr e), E_live_expr v'),
+     s) ->
+    (match xis_value_of_expr v' with
+     | true -> E_live_expr (E_taggingright (E_pair ((E_live_expr e), v')))
+     | _ -> assert false (*  *))
+  | (E_apply (e, e'), s) ->
+    (match xis_value_of_expr e with
+     | false ->
+       (match xJO_red12 e s with
+        | e'' -> E_apply (e'', e')
+        | _ -> assert false (*  *))
+     | true ->
+       (match xJO_red12 e' s with
+        | e'' -> E_apply (e, e'')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_fix E_function (x, t, e), s) ->
+    subst_expr (E_fix (E_function (x, t, e))) x e
+  | (E_fix e, s) ->
+    (match xJO_red12 e s with
+     | e' -> E_fix e'
+     | _ -> assert false (*  *))
+  | (E_pair (e, e''), s) ->
+    (match xis_value_of_expr e with
+     | false ->
+       (match xJO_red12 e s with
+        | e' -> E_pair (e', e'')
+        | _ -> assert false (*  *))
+     | true ->
+       (match xJO_red12 e'' s with
+        | e' -> E_pair (e, e')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_taggingleft e, s) ->
+    (match xJO_red12 e s with
+     | e' -> E_taggingleft e'
+     | _ -> assert false (*  *))
+  | (E_taggingright e, s) ->
+    (match xJO_red12 e s with
+     | e' -> E_taggingright e'
+     | _ -> assert false (*  *))
+  | (E_case (E_taggingleft v, x, e, x', e'), s) ->
+    (match xis_value_of_expr v with
+     | true -> subst_expr v x e
+     | _ -> assert false (*  *))
+  | (E_case (E_taggingright v, x, e, x', e'), s) ->
+    (match xis_value_of_expr v with
+     | true -> subst_expr v x' e'
+     | _ -> assert false (*  *))
+  | (E_case (e, x, e'', x', e'''), s) ->
+    (match xJO_red12 e s with
+     | e' ->
+       (match xis_value_of_expr e with
+        | false -> E_case (e', x, e'', x', e''')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | _ -> assert false (*  *)
+
+
+
+(* OLD STUFF *)
 
 red_app -> inpair
 

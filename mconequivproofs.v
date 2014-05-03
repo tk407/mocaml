@@ -4,7 +4,6 @@ Require Import Sumbool.
 Require Import List.
 Require Import Classical_Prop.
 
-
 Load mconextract.
 
 
@@ -73,7 +72,13 @@ Proof.
    trivial.
    simpl; trivial.
    simpl in H.
-   intuition. 
+   intuition.
+  (* fun *)
+   simpl in H; simpl; intuition.
+  (* fix *)
+  simpl in H; simpl; intuition.
+  (* comp *) 
+  simpl in H; simpl; intuition.
   (* live *)
    simpl; trivial.
   (* pair *)
@@ -114,56 +119,36 @@ Proof.
    simpl in H.
    elim H.
    simpl in H.
-   case_eq constant5.
-   intros.
-   rewrite -> H0 in H.
-   elim H.
-   intros.
-   rewrite -> H0 in H.
-   simpl.
-   apply IHe2.
-   trivial.
-   intros.
-   rewrite -> H0 in H.
-   auto.
-   intros; rewrite H0 in H; auto.
-   intros; simpl.
-   rewrite H0 in H; apply IHe2; trivial.
-   intro H0; rewrite H0 in H; auto.
-   intro H0; rewrite H0 in H; auto.
+   destruct constant5; intuition.
    simpl in H.
-   auto.
-   simpl in H.
-   auto.
-   simpl; auto.
-   simpl; auto.
-   simpl; auto.
-   simpl; auto.
-   simpl; auto.
-   simpl; auto.
-   simpl; auto.
+   intuition.
   (* bind *)
    simpl in H; contradiction.
   (* function *)
    simpl; trivial.
+  simpl in H; intuition.
   (* fix *)
   simpl in H. intuition.
+  (* comp *)
+  simpl in H; intuition.
   (* live *)
-   simpl; trivial.
-  (* pair *)
-   simpl in H.
-   decompose [and] H. 
-   simpl in IHe1.
-   simpl.
-   rewrite IHe1.
-   auto.
-   auto.
-  (* tagging left *)
-   simpl; simpl in H; auto.
-  (* tagging right *)
-   simpl; simpl in H; auto.
-  (* case *)
-   simpl; contradiction.
+   simpl in H; intuition.
+  simpl in H; intuition.
+  simpl in H; intuition.
+  simpl in H; intuition.
+  simpl in H; intuition.
+  simpl in H; intuition.
+  simpl; auto.
+  simpl in H; intuition.
+  simpl in H; intuition.
+  simpl; intuition.
+  simpl in H.
+  simpl.
+ intuition.
+ destruct (xis_value_of_expr e1); intuition.
+  simpl in H; simpl; intuition.
+  simpl in H; simpl; intuition.
+  simpl in H; intuition.
 Qed.
 
 
