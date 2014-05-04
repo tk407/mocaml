@@ -82,11 +82,23 @@ let joinDiscardRight a b = let basefork = fork a b in
                                x2 (((proj1 (id x2)) >>= (func x4 tunit (ret (id x4)))) ) ) in
                 basefork >>= b                  
 
+let split_list_at xs k = let rec split_list_at_h l n (fh, sh) =  match n with 
+                                     | 0 -> (rev fh, sh)
+                                     | n -> match sh with 
+                                            | [] -> (rev fh, sh)
+                                            | h::t -> split_list_at_h l (n-1) (h::fh, t)
+                                  in split_list_at_h xs k ([], xs)
+
 let rec joinN l = match l with 
+                  | a::b::c::[] -> join (boxe (join a b)) c
                   | a::b::[] -> join a b
                   | a::[] -> assert false
                   | [] -> assert false
-                  | h::t -> join h (boxe (joinN t))
+                  | t -> let n = length t in
+                         let f_half = n / 2 in
+                         let (j1, j2) = split_list_at l f_half in
+                         join (boxe (joinN j1)) (boxe (joinN j2))
+                         
 
 let rec joinNDiscardRight l = match l with 
                   | a::b::[] -> joinDiscardRight a b
@@ -96,10 +108,14 @@ let rec joinNDiscardRight l = match l with
 
 
 let rec forkN l = match l with 
+                  | a::b::c::[] -> fork (boxe (fork a b)) c
                   | a::b::[] -> fork a b
                   | a::[] -> assert false
                   | [] -> assert false
-                  | h::t -> fork h (boxe (forkN t))
+                  | t -> let n = length t in
+                         let f_half = n / 2 in
+                         let (j1, j2) = split_list_at l f_half in
+                         fork (boxe (forkN j1)) (boxe (forkN j2))
 
 
 let rec foreverbind e v1 v2 = fix (func v1 tunit (e >>= (func v2 tunit (id v1))))
@@ -117,6 +133,16 @@ let _ = Random.self_init()
 let rec make_random_predef_list n acc = if n == 0 then acc else make_random_predef_list (n-1) ((if Random.bool() then S_First else S_Second) ::acc)
 
 let rec makerand () = if Random.bool() then Seq(S_First, makerand) else Seq(S_Second, makerand)
+
+let rec makerandWithPrefix pr () = match pr with 
+                                   | [] -> (makerand ())
+                                   | h::t -> Seq(h, (makerandWithPrefix t))
+
+let evalrandFTT ftt e = let rec evalrandFTT_h hft hftt e' = 
+                              match hft with 
+                              | [] -> evalrandFTT_h (!hftt) hftt e'
+                              | h::t -> evalrandFTT_h (t) hftt (xJO_red12 e' (makerandWithPrefix h ()))
+                        in evalrandFTT_h !ftt ftt e
 
 let rec evalrr1 e n = (match n with 
                        | 0 -> e

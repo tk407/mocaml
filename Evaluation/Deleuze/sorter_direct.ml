@@ -61,7 +61,7 @@ let set_list ms l () =
   halt ()
 
 let print_list ms () =
-  List.iter (fun n -> Printf.printf "%i " n)
+  List.iter (fun n -> (if !print then (Printf.printf "%i " n)))
     (List.map take_mvar ms);
   flush stdout; stop ()
 

@@ -1,11 +1,11 @@
 #!/bin/bash
 for impl in "kpn_cont" "kpn_sys" "kpn_promise" "kpn_sys" "kpn_tramp" "kpn_vm" "kpn_dlcont" "kpn_mcon"
 do
- sed -n '/n=\(.*\)/ { s/n=\(.*\)/\1,/ 
+ sed - '/n=\(.*\)/ { s/n=\(.*\)\n/\1, /g 
                       x
                       p }
          /user \(.*\) sys \(.*\) real \(.*\) mem \(.*\)/ { s/user \(.*\) sys \(.*\) real \(.*\) mem \(.*\)/\1/ 
-                                                           H} ' ${impl}_data.txt > ${impl}_data_clean.txt
+                                                           H} ' ${impl}_data.txt
 done 
 
 # kpn

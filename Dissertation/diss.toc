@@ -45,26 +45,26 @@
 \contentsline {subsection}{\numberline {4.2.1}Methods}{42}
 \contentsline {subsection}{\numberline {4.2.2}Examples}{42}
 \contentsline {subsubsection}{Kahn process network}{42}
-\contentsline {subsubsection}{Eratosthene Sieve}{42}
-\contentsline {subsubsection}{Concurrent sort}{42}
-\contentsline {chapter}{\numberline {5}Conclusion}{43}
-\contentsline {chapter}{Bibliography}{45}
-\contentsline {chapter}{\numberline {A}Full semantics}{49}
-\contentsline {section}{\numberline {A.1}blah}{56}
-\contentsline {chapter}{\numberline {B}Project Proposal}{57}
-\contentsline {section}{\numberline {B.1}Introduction of work to be undertaken}{57}
-\contentsline {section}{\numberline {B.2}Description of starting point}{57}
-\contentsline {section}{\numberline {B.3}Substance and structure}{58}
-\contentsline {section}{\numberline {B.4}Criteria}{58}
-\contentsline {section}{\numberline {B.5}Timetable}{59}
-\contentsline {subsection}{\numberline {B.5.1}Week 1 and 2}{59}
-\contentsline {subsection}{\numberline {B.5.2}Week 3 and 4}{59}
-\contentsline {subsection}{\numberline {B.5.3}Week 5 and 6}{59}
-\contentsline {subsection}{\numberline {B.5.4}Week 7 and 8}{59}
-\contentsline {subsection}{\numberline {B.5.5}Week 9 and 10}{60}
-\contentsline {subsection}{\numberline {B.5.6}Week 11 and 12}{60}
-\contentsline {subsection}{\numberline {B.5.7}Week 13 and 14}{60}
-\contentsline {subsection}{\numberline {B.5.8}Week 15 and 16}{60}
-\contentsline {subsection}{\numberline {B.5.9}Week 17 and 18}{60}
-\contentsline {subsection}{\numberline {B.5.10}Week 19 and 20}{60}
-\contentsline {section}{\numberline {B.6}Resource Declaration}{60}
+\contentsline {subsubsection}{Eratosthene Sieve}{43}
+\contentsline {subsubsection}{Concurrent sort}{43}
+\contentsline {chapter}{\numberline {5}Conclusion}{45}
+\contentsline {chapter}{Bibliography}{47}
+\contentsline {chapter}{\numberline {A}Full semantics}{51}
+\contentsline {section}{\numberline {A.1}blah}{58}
+\contentsline {chapter}{\numberline {B}Project Proposal}{59}
+\contentsline {section}{\numberline {B.1}Introduction of work to be undertaken}{59}
+\contentsline {section}{\numberline {B.2}Description of starting point}{59}
+\contentsline {section}{\numberline {B.3}Substance and structure}{60}
+\contentsline {section}{\numberline {B.4}Criteria}{60}
+\contentsline {section}{\numberline {B.5}Timetable}{61}
+\contentsline {subsection}{\numberline {B.5.1}Week 1 and 2}{61}
+\contentsline {subsection}{\numberline {B.5.2}Week 3 and 4}{61}
+\contentsline {subsection}{\numberline {B.5.3}Week 5 and 6}{61}
+\contentsline {subsection}{\numberline {B.5.4}Week 7 and 8}{61}
+\contentsline {subsection}{\numberline {B.5.5}Week 9 and 10}{62}
+\contentsline {subsection}{\numberline {B.5.6}Week 11 and 12}{62}
+\contentsline {subsection}{\numberline {B.5.7}Week 13 and 14}{62}
+\contentsline {subsection}{\numberline {B.5.8}Week 15 and 16}{62}
+\contentsline {subsection}{\numberline {B.5.9}Week 17 and 18}{62}
+\contentsline {subsection}{\numberline {B.5.10}Week 19 and 20}{62}
+\contentsline {section}{\numberline {B.6}Resource Declaration}{62}

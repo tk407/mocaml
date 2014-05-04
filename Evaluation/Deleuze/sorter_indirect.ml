@@ -68,7 +68,7 @@ let print_list mvs () =
 	      loop t (v::acc) k
   in
   loop mvs [] >>= fun l -> 
-    List.iter (fun n -> Printf.printf "%i " n) (List.rev l);
+    List.iter (fun n -> (if !print then (Printf.printf "%i " n))) (List.rev l);
     halt ()
 
 let sort l =

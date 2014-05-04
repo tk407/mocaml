@@ -9,7 +9,7 @@ LIB=/usr/lib/ocaml/
 OCAMLC=ocamlc
 OCAMLOPT=ocamlopt
 
-SIEVE=sieve_tramp sieve_cont sieve_callcc sieve_dlcont sieve_sys sieve_vm sieve_promise sieve_lwt sieve_mcon
+SIEVE=sieve_tramp sieve_cont sieve_callcc sieve_dlcont sieve_sys sieve_vm sieve_promise sieve_lwt sieve_mcon sieve_mcon_ftt
 SIEVE_OPT=sieve_tramp.opt sieve_cont.opt sieve_sys.opt sieve_promise.opt sieve_lwt.opt 
 
 KPN=kpn_tramp kpn_cont kpn_callcc kpn_dlcont kpn_sys kpn_vm kpn_promise kpn_mcon
@@ -20,6 +20,10 @@ SORTER_OPT=sorter_tramp.opt sorter_cont.opt sorter_sys.opt sorter_promise.opt
 
 # make all the executables
 # need to clean up between each example application
+evaluation: all test cleandata plot copy
+
+test: 
+
 all:
 	make kpn.bc
 	make kpn.opt
@@ -258,6 +262,9 @@ sieve_cont: sieve_indirect.ml cont main.cmo
 	ocamlc -o $@ unix.cma $(S_CMO) $<
 
 sieve_mcon: sieve_mcon.ml mcon main.cmo
+	ocamlc -o $@ $(S_MCON_CMO) $<
+
+sieve_mcon_ftt: sieve_mcon_ftt.ml mcon main.cmo
 	ocamlc -o $@ $(S_MCON_CMO) $<
 
 sieve_cont.opt: sieve_indirect.ml cont main.cmx

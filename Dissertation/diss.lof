@@ -13,6 +13,10 @@
 \contentsline {figure}{\numberline {3.9}{\ignorespaces Dependencies in the Coq semantics}}{29}
 \contentsline {figure}{\numberline {3.10}{\ignorespaces Dependencies in the OCaml code}}{36}
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Kpn execution time}}{42}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Sieve of Eratosthenes execution time}}{43}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Concurrent sort execution time}}{44}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Concurrent sort memory use}}{44}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
