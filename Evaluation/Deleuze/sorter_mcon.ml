@@ -4,6 +4,14 @@ open Mvars
 open Main
 open List
 
+let make_list n fct =
+  let rec loop n acc =
+    if n=0 then acc
+    else
+      loop (n-1) (fct n ::acc)
+  in
+  loop n []
+
 let comparator i1 i2 lo hi = (boxc (( (fun _ -> map_mvar i1 (fun x -> ((E_comp (fun _ -> (map_mvar i2 (fun y -> (E_comp (fun _ ->
                   if x < y then (((boxe (put_mvar lo x)) >>= func 1 tunit (boxe (put_mvar hi y))))
                            else (((boxe (put_mvar lo y)) >>= func 1 tunit (boxe (put_mvar hi x))))
@@ -30,7 +38,7 @@ let rec make_network xs = let rec make_column l = (match l with
 
 let consort l = let n = length l in 
                 let xs = map (fun _ -> make_mvar () ) l in
-                let _ = map (fun (k, x) -> Queue.add k x.v) (combine l xs) in 
+                let _ = map (fun (k, x) ->  x.v <- Some k) (combine l xs) in 
                 let (rs, comps) = (make_network xs) in 
                 let start = match comps with 
                             | c :: [] -> (boxe c)
@@ -42,11 +50,11 @@ let comptest a b = let x0 = make_mvar () in
                    let x1 = make_mvar () in 
                    let r0 = make_mvar () in
                    let r1 = make_mvar () in
-                   let _ = Queue.add a x0.v in 
-                   let _ = Queue.add b x1.v in
+                   let _ = x0.v <- Some a in 
+                   let _ = x1.v <- Some b in
                    (x0, x1, r0, r1, (comparator x0 x1 r0 r1) >>= func 7 tunit cunit)
                 
 let sorter () = let l = make_list !last (fun _ -> Random.int 999) in
-                evalrandSafeForever (consort l);;
+                evalrandUnsafeForever (consort l);;
 
 do_start sorter

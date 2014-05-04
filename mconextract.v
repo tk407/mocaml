@@ -164,8 +164,6 @@ Extraction selectstar.
 
 Extraction Relation Relaxed XJO_red [1 1 2].
 
-Recursive Extraction 
-
 Recursive Extraction is_value_of_expr.
 
 

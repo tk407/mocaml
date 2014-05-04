@@ -1,5 +1,9 @@
 (* MVars *)
 
+open Big_int
+open Mconbase
+open Sugarcube
+
 type 'a mvar = { mutable v : 'a option }
 
 let make_mvar () = { v = None}

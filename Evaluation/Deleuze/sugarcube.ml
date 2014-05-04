@@ -1,6 +1,7 @@
 (* sugarcube *)
 
 open List
+open Mconbase
 
 let boxc f = E_live_expr (E_comp f)
 
@@ -103,11 +104,17 @@ let rec forkN l = match l with
 
 let rec foreverbind e v1 v2 = fix (func v1 tunit (e >>= (func v2 tunit (id v1))))
 
+let rec rrpredef l n k () = if k==n then rrpredef l n 0 () else Seq(nth l k, rrpredef l n (k+1))
+
+
+
 
 let rec makerr1 () = Seq(S_First, makerr2) 
 and makerr2 () = Seq(S_Second, makerr1) 
 
 let _ = Random.self_init()
+
+let rec make_random_predef_list n acc = if n == 0 then acc else make_random_predef_list (n-1) ((if Random.bool() then S_First else S_Second) ::acc)
 
 let rec makerand () = if Random.bool() then Seq(S_First, makerand) else Seq(S_Second, makerand)
 
@@ -117,6 +124,9 @@ let rec evalrr1 e n = (match n with
 and evalrr2 e n = (match n with 
                        | 0 -> e
                        | m -> evalrr1 (xJO_red12 e (makerr2 ())) (m-1))
+
+let rec evalrrUnsafeForever1 e = evalrrUnsafeForever2 (xJO_red12 e (makerr1 ()))
+and evalrrUnsafeForever2 e = evalrrUnsafeForever1 (xJO_red12 e (makerr2 ())) 
 
 let rec evalrand e n = (match n with 
                        | 0 -> e
@@ -129,6 +139,10 @@ let rec evalrandSafe e n = (match n with
 let rec evalrandSafeForever e = (if xis_value_of_expr e then e else evalrandSafeForever (xJO_red12 e (makerand ())))
 let rec evalrandUnsafeForever e = (evalrandUnsafeForever (xJO_red12 e (makerand ())))
 
+let evalsemirandUnsafeForever e l =
+                             let predeflist =  make_random_predef_list l [] in
+                             let rec evalsemirandUnsafeForever j k = if k==l then evalsemirandUnsafeForever j 0 else evalsemirandUnsafeForever (xJO_red12 j (rrpredef predeflist l k ())) (k+1)
+                             in evalsemirandUnsafeForever e 0
 
 let rec evalrandSafeDebug e n d = (match n with 
                        | 0 -> e

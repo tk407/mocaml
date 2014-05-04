@@ -21,9 +21,9 @@ let rec sift i o = E_comp (( (fun _ -> map_mvar i (fun x -> let n_channel = make
                              ((E_comp (fun _ ->  fork (boxe n_filter) (boxe (boxe (put_mvar o x) >>= (func 7 tunit (E_comp (fun _ ->  sift n_channel o))))))))))))
 
 
-let siever () = let q1 = make_mvar ()
+let sieve () = let q1 = make_mvar ()
                 and q2 = make_mvar ()
                 and integers_N = ref 1 in
-  evalrandSafeForever (forkN (map boxe [  output q2; sift q1 q2; integers integers_N q1]));;
+  evalrandUnsafeForever (forkN (map boxe [  output q2; sift q1 q2; integers integers_N q1]));;
 
 do_start sieve
