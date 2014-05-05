@@ -67,7 +67,7 @@ let print_list mvs () =
     | h::t -> take_mvar h >>= fun v -> loop t (v::acc)
   in
   loop mvs [] >>= fun l -> 
-    List.iter (fun n -> Printf.printf "%i " n) (List.rev l); stop ()
+    List.iter (fun n -> (if !print then (Printf.printf "%i " n))) (List.rev l); stop ()
 
 let sort l =
   let n = List.length l in

@@ -120,6 +120,9 @@
 \usepackage{mathpartir}
 
 \usepackage{float}
+\usepackage{cprotect}
+\usepackage{caption}
+\usepackage{subcaption}
 %\usepackage{comment}
 %\excludecomment{wc}
 %\includecomment{nwc}
@@ -244,7 +247,7 @@ extent for a comparable purpose.
 This dissertation describes a project to build a concurrency framework for OCaml. This framework is designed with correctness in mind: developing the well defined semantics, modelled in a proof assistant and finally extracted to actual code. The project aims to be a verifiable reference implementation. 
 
 \section{Motivation}
-Verification of core libraries is becoming increasingly important as we discover more and more subtle bugs that even extensive unit testing could not find. As Dijkstra said, testing shows the presence, not the absence of bugs. On the other hand verification can show the absence of bugs, at least with respect to the formal model of the system.
+Verification of core libraries is becoming increasingly important as more and more subtle bugs that even extensive unit testing could not find are discovered. As Dijkstra said, testing shows the presence, not the absence of bugs. On the other hand verification can show the absence of bugs, at least with respect to the formal model of the system.
 
 Motivation of the project is to investigate the lack of certified implementation of a concurrency framework. Verified concurrent systems have been researched for languages like C\cite{sevvcik2011relaxed}, C++ and Java\cite{lochbihler2012machine}, but not yet for OCaml. 
 
@@ -286,7 +289,7 @@ LWT, the lightweight cooperative threading library\cite{vouillon2008lwt} was des
 
 
 
-In \Cref{lst:lwtsyntax} we can see some of the syntax of LWT. Lines \ref{lst:lwtsyntaxHeadsDefStart}--\ref{lst:lwtsyntaxHeadsDefEnd} define heads, a function that sleeps for 1 second and then prints "Head", and lines \ref{lst:lwtsyntaxTailsDefStart}--\ref{lst:lwtsyntaxTailsDefEnd} define tails which sleeps for 2 seconds and then prints "Tails".  Lines \ref{lst:lwtsyntaxThreadStart}--\ref{lst:lwtsyntaxThreadEnd} create a thread that waits on heads and tails and then prints "Finished".  In LWT, semantics mostly follow the principle of continuations. We build a sequence of computations and the scheduler can pick between parallel computations at points of sequencing.
+Is \Cref{lst:lwtsyntax} an example of the syntax of LWT. Lines \ref{lst:lwtsyntaxHeadsDefStart}--\ref{lst:lwtsyntaxHeadsDefEnd} define heads, a function that sleeps for 1 second and then prints "Head", and lines \ref{lst:lwtsyntaxTailsDefStart}--\ref{lst:lwtsyntaxTailsDefEnd} define tails which sleeps for 2 seconds and then prints "Tails".  Lines \ref{lst:lwtsyntaxThreadStart}--\ref{lst:lwtsyntaxThreadEnd} create a thread that waits on heads and tails and then prints "Finished".  In LWT, semantics mostly follow the principle of continuations. We build a sequence of computations and the scheduler can pick between parallel computations at points of sequencing.
 
 An other implementation, Async is an open source concurrency library for OCaml developed by Jane Street. Unlike LWT the basic semantics are designed with promises in mind. A promise is a container that can be used in place of a value of the same type, but computations with a promise only evaluate when the actual value has been calculated. The concurrency arises naturally by interleaving the fulfilment of these containers. 
 
@@ -311,7 +314,7 @@ let () = never_returns (Scheduler.go ())
 
 
 
-In \Cref{lst:asyncsyntax} we define \verb|heads| and \verb|tails| as Deferred values of the respective code sequences. A Deferred is an implementation of a promise.
+In \Cref{lst:asyncsyntax} I defined \verb|heads| and \verb|tails| as Deferred values of the respective code sequences. A Deferred is an implementation of a promise.
 
 
 There are a number of other experimental implementations of concurrency in OCaml. For example JoCaml\cite{jocaml} implements join calculus over OCaml, Functory\cite{functory} focuses on distributed computation, OCamlNet exploits multiple cores and OCamlMPI\cite{ocamlmpi} provides bindings for the standard MPI message passing framework.
@@ -373,7 +376,7 @@ Simplicity and similarity to current implementations like LWT and Async were the
 Category theory has been a general tool used to model functional programming languages and programs. Monads are a concept originating from this connection. 
 
 
-A monad on a category $ C $ is a triple $ (T, \eta, \mu) $ where $ T $ is an endofunctor on $ C $, that is, it maps the category to itself. The last two, $ \eta $ and $ \mu $ are natural transformations such that $ \eta:\, 1_C \rightarrow T $, that is between the identity functor and $ T $, and $ \mu:\, T^2 \rightarrow T $. The first transformation, $ \eta $ describes a lift operation: essentially we can wrap the object in $ C $ and preserving its properties. The second transformation, $ \mu $ is about an operation called join. This operation unwraps a layer of wrapping if there are two. To call a triple like this a monad it has to satisfy two conditions, called coherence conditions.
+A monad on a category $ C $ is a triple $ (T, \eta, \mu) $ where $ T $ is an endofunctor on $ C $, that is, it maps the category to itself. The last two, $ \eta $ and $ \mu $ are natural transformations such that $ \eta:\, 1_C \rightarrow T $, that is between the identity functor and $ T $, and $ \mu:\, T^2 \rightarrow T $. The first transformation, $ \eta $ describes a lift operation: an object can wrapped in $ C $ and preserving its properties. The second transformation, $ \mu $ is about an operation called join. This operation unwraps a layer of wrapping if there are two. To call a triple like this a monad it has to satisfy two conditions, called coherence conditions.
 \begin{enumerate}
 
 \item{
@@ -418,7 +421,7 @@ The \lstinline|ret| takes a value of the language and gives its monadic counterp
 
 The \lstinline|bind| (often written as $ \gg= $)  takes a monadic value (that is one in the parametric type $ \textbf{con} \, \alpha $) and a function that can map the inner value to a new monadic value (that is, it has type $ \alpha \, \rightarrow \, \textbf{con} \, \beta $). Bind then returns a $ \textbf{con} \, \beta $. With types $ \gg= $ means: $ \gg= \, : \, \forall \alpha \, \beta. \; \textbf{con} \, \alpha \rightarrow (\alpha \rightarrow \textbf{con} \, \beta) \rightarrow \textbf{con} \, \beta $.
 
-To call this system a monad, we need to satisfy three axioms:
+To call this system a monad, I need to satisfy three axioms:
 
 \begin{enumerate}
 \item{\lstinline|ret| is essentially a left neutral element:
@@ -688,7 +691,7 @@ Inductive add : nat -> nat -> nat -> Prop :=
 \end{lstlisting}
 \end{minipage}
 
-However with the help of a plugin developed by David Delahaye, Catherine Dubois, Jean-Fr\'ed\'eric \'Etienne and Pierre-Nicolas Tollitte \cite{delahaye2007extracting,tollitte2012producing} by marking different modalities of the inductively generated proposition we can generate code with an input-output convention.
+However with the help of a plugin developed by David Delahaye, Catherine Dubois, Jean-Fr\'ed\'eric \'Etienne and Pierre-Nicolas Tollitte \cite{delahaye2007extracting,tollitte2012producing} by marking different modalities of the inductively generated proposition I can generate code with an input-output convention.
 
 
 
@@ -1145,7 +1148,7 @@ In \Cref{fig:semprod} I describe the precise implementation of product types def
 \end{figure}
 Recursion is very characteristic of functional programming languages. There are many ways to achieve recursive constructs in terms and even in types. A very elegant treatment surfaced from the formal study of recursive constructs in the form of fixpoint combinators. In denotational semantics for example loops and other recursions are treated as the greatest fixpoints of continuous functions. A fixpoint combinator $ y $ is defined as a term that given function $ f $ satisfies
 \[ y\,f\,\equiv\, f\,(y\,f) \] 
-This immediately poses a requirement on the type of $ y $, it should be $ (T \rightarrow T) \rightarrow T $
+This axiom poses a requirement on the type of $ y $, it should be $ (T \rightarrow T) \rightarrow T $
 In untyped $ \lambda $-calculus there are many simple terms that can achieve this, for example the Y combinator:
 \[ Y = \lambda f.(\lambda x.f\ (x\ x))\ (\lambda x.f\ (x\ x))  \]
 However in languages like the one implemented in this chapter, where arguments are always reduced before the function application can begin the Y combinator would always diverge. There are more than one option for implementation in languages like this, but I have chosen to use the one described in Pierce\cite[p.~144]{pierce2002types}. This style fits well with the tool chain I used as it does not require another partial function application and it is also very minimal.
@@ -1324,15 +1327,15 @@ However in languages like the one implemented in this chapter, where arguments a
 \end{figure}
 Up until this point I have not mentioned any language feature that implements concurrency which is the main focus of the dissertation. The third, additional operation of the concurrency monad is fork, which is the way to spawn new threads (two in this particular case). There are a number of ways to implement fork and indeed this project went through various iterations of semantics for this operation. 
 
-As a first approximation I had to decide on a signature for fork. On the argument side fork may take zero, one, two or many arguments. Zero arguments would be reminiscent of the UNIX system call \verb|fork()| where the two paths are distinguished by replacing the fork call with differing values. This approach would result in copying potentially large expressions and a more complex evaluation context, that is the terms used for the source and destination in the reduction relation. For example, Jones\cite{hoareetal2001tackling} chose an implementation with one argument, however with a similar requirement of a metalanguage of parallel terms $ e \, | \, e' $. I chose to go with two arguments as that can maintain a simple evaluation context with reductions from language expression to expression. The choice between these three argument styles is largely arbitrary as they all implicitly form the binary parallel composition $ e \, | \, e' $. Note however that several arguments can be elegantly simulated by composing binary parallel compositions.
+As a first approximation I had to decide on a signature for fork. On the argument side fork may take zero, one, two or many arguments. No arguments would be reminiscent of the UNIX system call \verb|fork()| where the two paths are distinguished by replacing the fork call with differing values. This approach would result in copying potentially large expressions and a more complex evaluation context, that is the terms used for the source and destination in the reduction relation. For example, Jones\cite{hoareetal2001tackling} chose an implementation with one argument, however with a similar requirement of a metalanguage of parallel terms $ e \, | \, e' $. I chose to go with two arguments as that can maintain a simple evaluation context with reductions from language expression to expression. The choice between these three argument styles is largely arbitrary as they all implicitly form the binary parallel composition $ e \, | \, e' $. Note however that several arguments can be elegantly simulated by composing binary parallel compositions.
 
-To stay within the monad I have chosen to have the arguments as already boxed terms, that is of type $ \textbf{con } T_1 $ and $ \textbf{con } T_2 $ for some $ T_1, T_2 $. For better expressibility, I chose to take the two argument curried that is
+To stay within the monad I have chosen to have the arguments as already boxed terms, that is of type $ \textbf{con } T_1 $ and $ \textbf{con } T_2 $ for some $ T_1, T_2 $. For better expressibility, I chose to take the two argument curried, that is \textbf{fork} is a higher-order function: given the first argument it returns a function that takes only one parameter and will then behave as the \textbf{fork}.
 
 \[ \textbf{fork} \, : \, \textbf{con } T_1 \rightarrow \, (\textbf{con } T_2\, \rightarrow\, R ) \]  
 
-where $ R $ is the yet not described return type. This allows for partial application of fork and to be passed around as a value with only one edge filled. The other option would have been to take a pair of values, however that would have limited the variety of constructions.
+where $ R $ is the yet not described return type. Currying allows partial application of \textbf{fork} and to be passed around as a value with only one edge filled. The other option would have been to take a pair of values, however that would have limited the variety of constructions.
 
-To keep within the monad, I required that $ R $ be a concurrent type, that is $ R =  \textbf{con } R' $ for some $ R' $ type. There are many choices available for the return type. Other popular concurrency primitives have varying return semantics. For example \textbf{join} would return the pair of values resulted from the two expressions giving $ R = \textbf{con }(T_1 \star T_2) $. Another primitive, \textbf{choose} would pick one and discard the other: $ R = \textbf{con }(T_1 + T_2) $. I wanted to provide a combination of this: to signal which thread has finished first, but keep the partially reduced other edge around, so the user can use it. This gives the return type as $ R = \textbf{con }((T_1\star \textbf{con } T_2) + ((\textbf{con } T_1) \star T_2)) $. At first glance, this seems to be a rather complex signature but  it is versatile enough to implement both other primitives and capture the semantics of a wide range of problems well. The return type also raises the question of interleaving semantics: as I am implementing concurrency in software I was not constrained by hardware to interleave reductions. It would be perfectly acceptable to reduce both edges of a fork at the same time if possible. Indeed this project was originally designed with not necessarily interleaving semantics in mind. However, that lead to a blow up in the number of rules, the complexity of signature ($ R = \textbf{con }((T_1\star \textbf{con } T_2) + ((\textbf{con } T_1) \star T_2) + (T_1 \star T_2))   $) and the number of potential behaviours of the system. I chose to simplify to interleaving semantics for the theoretical simplicity over potential efficiency gains.
+To keep within the monad, I required that $ R $ be a concurrent type, that is $ R =  \textbf{con } R' $ for some $ R' $ type. There are many choices available for the return type. Other popular concurrency primitives have varying return semantics. For example \textbf{join} would return the pair of values resulted from the two expressions giving $ R = \textbf{con }(T_1 \star T_2) $. Another primitive, \textbf{choose} would pick one and discard the other: $ R = \textbf{con }(T_1 + T_2) $. I wanted to provide a combination of this: to signal which thread has finished first, but keep the partially reduced other edge around, so the user can use it. From the previous constructions a return type as $ R = \textbf{con }((T_1\star \textbf{con } T_2) + ((\textbf{con } T_1) \star T_2)) $ would implement this behaviour. At first glance, this seems to be a rather complex signature but  it is versatile enough to implement both other primitives and capture the semantics of a wide range of problems well. The return type also raises the question of interleaving semantics: as I am implementing concurrency in software I was not constrained by hardware to interleave reductions. It would be perfectly acceptable to reduce both edges of a fork at the same time if possible. Indeed this project was originally designed with not necessarily interleaving semantics in mind. However, that lead to a blow up in the number of rules, the complexity of signature ($ R = \textbf{con }((T_1\star \textbf{con } T_2) + ((\textbf{con } T_1) \star T_2) + (T_1 \star T_2))   $) and the number of potential behaviours of the system. I chose to simplify to interleaving semantics for the theoretical simplicity over potential efficiency gains.
 
 Putting this all together gives the full signature of \textbf{fork} as 
 \[ \textbf{fork} \, : \, \textbf{con } T_1 \rightarrow \, (\textbf{con } T_2\, \rightarrow\, \textbf{con }((T_1\star \textbf{con } T_2) + ((\textbf{con } T_1) \star T_2)) ) \] 
@@ -1494,7 +1497,7 @@ CoInductive selectstar : Set := Seq : select -> selectstar -> selectstar.
 
 Co-inductive data structures represent potentially infinite data and featured in a number of programming languages: lazy lists, trees and streams all describe co-inductive structures. In \Cref{lst:coqselectstar} I define \verb|selectstar| where each element is pair of a selection value and a further \verb|selectstar| representing the rest of the selection values.  With an infinite sequence of selection values the program can make arbitrary many decisions and it is extractable.
 
-The second problem that surfaced was that the extraction plugin does not generate code that backtracks from a case where we invoked the reduction relation on an internal part. If an expression $ e $ does not reduce and the extracted reduction function is invoked it will fail with an \lstinline|assert false|. I chose to add a logically superfluous assumption of expression $ e $ not being a value. This assumption is superfluous as an expression that reduces cannot be a value by the \verb|red_not_value| theorem.  \Cref{lst:coqredunsafe,lst:coqxredsafe} are a good example of how this transformation happens. \vspace{4mm}
+The second problem that surfaced was that the extraction plugin does not generate code that backtracks from a case where the reduction relation is invoked on an internal part. If an expression $ e $ does not reduce and the extracted function is called it will fail with an \lstinline|assert false|. I chose to add a logically superfluous assumption of expression $ e $ not being a value. This assumption is superfluous as an expression that reduces cannot be a value by the \verb|red_not_value| theorem.  \Cref{lst:coqredunsafe,lst:coqxredsafe} are a good example of how this transformation happens. \vspace{4mm}
 
 \begin{minipage}{0.9\linewidth}
 \begin{lstlisting}[language={Coq},caption={Coq reduction clause with unsafe assumption}, label={lst:coqredunsafe}]
@@ -1678,15 +1681,34 @@ Fork in this implementation is not associative:
 % - Progress
 
 % Practical evaluation
-\section{Practical evaluation}
-Evaluation of speed and memory requirements absolutely and relative to implementations in LWT and Async.
+\section{Performance evaluation}
+To evaluate the performance of the framework I followed Deleuze\cite{deleuzelight}. He provides a library for evaluating lightweight and heavyweight threading implementations in OCaml. This evaluation library contains seven implementations of concurrency primitives.
+\begin{enumerate}
+\item{\textbf{sys}: A heavyweight implementation with system threads.}
+\item{\textbf{vm}: A lightweight concurrency implementation based on the \verb|thread| library of OCaml.}
+\item{\textbf{cont}: A continuation monad based lightweight implementation, without verification. Note, this is a much lighter implementation compared to the one in this project.}
+\item{\textbf{promise}: A promise monad based implementation of lightweight concurrency.}
+\item{\textbf{tramp}: A lightweight implementation based on the trampolined style.}
+\item{\textbf{lwt}: An LWT\cite{LWT} based implementation of lightweight concurrency.}
+\item{\textbf{equeue}: An event-based programming style lightweight concurrency implementation based on the \textbf{Equeue} library of OCamlNet. I did not use this implementation in the evaluation as I could not find the right libraries to compile this.}
+\end{enumerate}
 \subsection{Methods}
+Deleuze provides three examples to evaluate, based on the examples used in Kahn's process language paper\cite{kahn1976coroutines}. I have implemented the examples in my system and measured the runtime and memory use for various input sizes. The runtime was measured with \textit{Unix.time}
 \subsection{Examples}
 \subsubsection{Kahn process network}
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.7\linewidth]{./kpn_exec_times_bw}
-\caption{Kpn execution time}
+\begin{subfigure}[b]{0.45\linewidth}
+\includegraphics[width=\linewidth]{./kpn_exec_times_bw}
+\caption{Bytecode}
+\label{fig:kpn_exec_times_bc}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\linewidth}
+\includegraphics[width=\linewidth]{./kpn_exec_times_opt_bw}
+\caption{Native code}
+\label{fig:kpn_exec_times_nat}
+\end{subfigure}
+\cprotect\caption{\verb|kpn| execution time}
 \label{fig:kpn_exec_times}
 \end{figure}
 
@@ -1694,24 +1716,52 @@ Evaluation of speed and memory requirements absolutely and relative to implement
 \subsubsection{Eratosthene Sieve}
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.7\linewidth]{./sieve_exec_times_bw}
-\caption{Sieve of Eratosthenes execution time}
+\begin{subfigure}[b]{0.45\linewidth}
+\includegraphics[width=\linewidth]{./sieve_exec_times_bw}
+\caption{Bytecode}
+\label{fig:sieve_exec_times_bc}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\linewidth}
+\includegraphics[width=\linewidth]{./sieve_exec_times_opt_bw}
+\caption{Native code}
+\label{fig:sieve_exec_times_nat}
+\end{subfigure}
+\cprotect\caption{\verb|sieve| execution time}
 \label{fig:sieve_exec_times}
 \end{figure}
 \subsubsection{Concurrent sort}
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.7\linewidth]{./sorter_exec_times_bw}
-\caption{Concurrent sort execution time}
+\begin{subfigure}[b]{0.45\linewidth}
+\includegraphics[width=\linewidth]{./sorter_exec_times_bw}
+\caption{Bytecode}
+\label{fig:sorter_exec_times_bc}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\linewidth}
+\includegraphics[width=\linewidth]{./sorter_exec_times_opt_bw}
+\caption{Native code}
+\label{fig:sorter_exec_times_nat}
+\end{subfigure}
+\cprotect\caption{\verb|sorter| execution time}
 \label{fig:sorter_exec_times}
 \end{figure}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.7\linewidth]{./sorter_mem_bw}
-\caption{Concurrent sort memory use}
+\begin{subfigure}[b]{0.45\linewidth}
+\includegraphics[width=\linewidth]{./sorter_mem_bw}
+\caption{Bytecode}
+\label{fig:sorter_mem_bc}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\linewidth}
+\includegraphics[width=\linewidth]{./sorter_mem_opt_bw}
+\caption{Native code}
+\label{fig:sorter_mem_nat}
+\end{subfigure}
+\cprotect\caption{\verb|sorter| memory use}
 \label{fig:sorter_mem}
 \end{figure}
+
 
 \cleardoublepage
 \chapter{Conclusion}

@@ -67,6 +67,11 @@ CAR Hoareetal.
   exceptions, and foreign-language calls in haskell.
 \newblock {\em Engineering theories of software construction}, 180:47, 2001.
 
+\bibitem{kahn1976coroutines}
+Gilles Kahn, David MacQueen, et~al.
+\newblock Coroutines and networks of parallel processes.
+\newblock 1976.
+
 \bibitem{functory}
 Jean-Christophe Filli{\^a}tre~K Kalyanasundaram.
 \newblock Functory.

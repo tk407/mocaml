@@ -11,47 +11,48 @@ Warning--to sort, need author or key in OCamlLightWeb
 Warning--empty journal in deleuzelight
 Warning--empty year in deleuzelight
 Warning--can't use both volume and number fields in ganz1999trampolined
+Warning--empty journal in kahn1976coroutines
 Warning--can't use both volume and number fields in liskov1988promises
 Warning--can't use both volume and number fields in sevvcik2011relaxed
-You've used 31 entries,
+You've used 32 entries,
             2118 wiz_defined-function locations,
-            652 strings with 7894 characters,
-and the built_in function-call counts, 9106 in all, are:
-= -- 907
-> -- 307
+            656 strings with 8004 characters,
+and the built_in function-call counts, 9373 in all, are:
+= -- 931
+> -- 325
 < -- 13
-+ -- 131
-- -- 96
-* -- 481
-:= -- 1395
-add.period$ -- 94
-call.type$ -- 31
-change.case$ -- 138
++ -- 138
+- -- 102
+* -- 497
+:= -- 1445
+add.period$ -- 97
+call.type$ -- 32
+change.case$ -- 143
 chr.to.int$ -- 0
-cite$ -- 41
-duplicate$ -- 405
-empty$ -- 859
-format.name$ -- 96
-if$ -- 2040
+cite$ -- 43
+duplicate$ -- 415
+empty$ -- 876
+format.name$ -- 102
+if$ -- 2092
 int.to.chr$ -- 0
-int.to.str$ -- 31
-missing$ -- 22
-newline$ -- 150
-num.names$ -- 52
-pop$ -- 233
+int.to.str$ -- 32
+missing$ -- 23
+newline$ -- 155
+num.names$ -- 54
+pop$ -- 240
 preamble$ -- 1
-purify$ -- 110
+purify$ -- 114
 quote$ -- 0
-skip$ -- 315
+skip$ -- 323
 stack$ -- 0
-substring$ -- 472
+substring$ -- 477
 swap$ -- 113
 text.length$ -- 13
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 118
-warning$ -- 10
-while$ -- 87
-width$ -- 33
-write$ -- 312
-(There were 10 warnings)
+type$ -- 122
+warning$ -- 11
+while$ -- 89
+width$ -- 34
+write$ -- 321
+(There were 11 warnings)

@@ -1,3 +1,4 @@
+#!/bin/bash
 # Lwc: Light weight concurrency in Ocaml
 
 #LIB=/usr/local/godi/lib/ocaml/pkg-lib
@@ -10,19 +11,18 @@ OCAMLC=ocamlc
 OCAMLOPT=ocamlopt
 
 SIEVE=sieve_tramp sieve_cont sieve_callcc sieve_dlcont sieve_sys sieve_vm sieve_promise sieve_lwt sieve_mcon sieve_mcon_ftt
-SIEVE_OPT=sieve_tramp.opt sieve_cont.opt sieve_sys.opt sieve_promise.opt sieve_lwt.opt 
+SIEVE_OPT=sieve_tramp.opt sieve_cont.opt sieve_sys.opt sieve_promise.opt sieve_lwt.opt sieve_lwt.opt sieve_mcon.opt sieve_mcon_ftt.opt
 
-KPN=kpn_tramp kpn_cont kpn_callcc kpn_dlcont kpn_sys kpn_vm kpn_promise kpn_mcon
-KPN_OPT=kpn_tramp.opt kpn_cont.opt kpn_sys.opt kpn_promise.opt 
+KPN=kpn_tramp kpn_cont kpn_callcc kpn_dlcont kpn_sys kpn_vm kpn_promise kpn_mcon kpn_lwt
+KPN_OPT=kpn_tramp.opt kpn_cont.opt kpn_sys.opt kpn_promise.opt kpn_mcon.opt kpn_lwt.opt
 
-SORTER=sorter_tramp sorter_cont sorter_callcc sorter_dlcont sorter_sys sorter_vm sorter_promise sorter_mcon
-SORTER_OPT=sorter_tramp.opt sorter_cont.opt sorter_sys.opt sorter_promise.opt 
+SORTER=sorter_tramp sorter_cont sorter_callcc sorter_dlcont sorter_sys sorter_vm sorter_promise sorter_mcon sorter_lwt
+SORTER_OPT=sorter_tramp.opt sorter_cont.opt sorter_sys.opt sorter_promise.opt sorter_mcon.opt sorter_lwt.opt
+
+EPS=sorter_exec_times.eps sorter_exec_times_bw.eps sorter_mem.eps sorter_mem_bw.eps sieve_exec_times.eps sieve_exec_times_bw.eps sieve_mem.eps sieve_mem_bw.eps kpn_exec_times.eps kpn_exec_times_bw.eps kpn_mem.eps kpn_mem_bw.eps
 
 # make all the executables
 # need to clean up between each example application
-evaluation: all test cleandata plot copy
-
-test: 
 
 all:
 	make kpn.bc
@@ -42,11 +42,250 @@ kpn.opt: $(KPN_OPT)
 sorter.bc: $(SORTER)
 sorter.opt: $(SORTER_OPT)
 
+evaluate:
+	make clean
+	make evaluation.compile
+	make evaluation.bc
+	make evaluation.opt
+	make evaluation.cleandata
+	make evaluation.plot
 
+evaluation.compile:
+	make kpn.bc
+	make kpn.opt
+	make sorter.bc
+	make sorter.opt
+	make sieve.bc
+	make sieve.opt
+
+evaluation.bc:
+	make evaluation.kpn
+	make evaluation.sieve
+	make evaluation.sorter
+
+evaluation.opt:
+	make evaluation.kpn.opt
+	make evaluation.sieve.opt
+	make evaluation.sorter.opt
+
+evaluation.plot:
+	gnuplot sorter_exec_time.plot
+	gnuplot kpn_exec_time.plot
+	gnuplot sieve_exec_time.plot
+	epstopdf kpn_exec_times.eps
+	epstopdf kpn_exec_times_bw.eps
+	epstopdf sieve_exec_times.eps
+	epstopdf sieve_exec_times_bw.eps
+	epstopdf sorter_exec_times.eps
+	epstopdf sorter_exec_times_bw.eps
+	epstopdf kpn_mem.eps
+	epstopdf kpn_mem_bw.eps
+	epstopdf sieve_mem.eps
+	epstopdf sieve_mem_bw.eps
+	epstopdf sorter_mem.eps
+	epstopdf sorter_mem_bw.eps
+	epstopdf kpn_exec_times_opt.eps
+	epstopdf kpn_exec_times_opt_bw.eps
+	epstopdf sieve_exec_times_opt.eps
+	epstopdf sieve_exec_times_opt_bw.eps
+	epstopdf sorter_exec_times_opt.eps
+	epstopdf sorter_exec_times_opt_bw.eps
+	epstopdf kpn_mem_opt.eps
+	epstopdf kpn_mem_opt_bw.eps
+	epstopdf sieve_mem_opt.eps
+	epstopdf sieve_mem_opt_bw.eps
+	epstopdf sorter_mem_opt.eps
+	epstopdf sorter_mem_opt_bw.eps
+
+evaluation.clean: 
+	rm -f *.eps
+	rm -f *.pdf
+	for impl in "kpn_cont" "kpn_sys" "kpn_promise" "kpn_tramp" "kpn_vm" "kpn_mcon" "kpn_lwt" "sieve_cont" "sieve_sys" "sieve_mcon_ftt" "sieve_promise" "sieve_tramp" "sieve_vm" "sieve_mcon" "sieve_lwt" "sorter_cont" "sorter_sys" "sorter_promise" "sorter_tramp" "sorter_vm" "sorter_mcon" "sorter_lwt"; \
+	do \
+	 rm -f $${impl}_data.txt; \
+	 rm -f $${impl}_data_clean.txt; \
+	 rm -f $${impl}_data_clean_usertime.txt; \
+	 rm -f $${impl}_data_clean_realtime.txt; \
+	 rm -f $${impl}_data_clean_systime.txt; \
+	 rm -f $${impl}_data_clean_mem.txt; \
+	done
+	make evaluation.cleanopt
+
+evaluation.cleanopt: 
+	for impl in "kpn_cont" "kpn_sys" "kpn_promise" "kpn_tramp" "kpn_mcon" "kpn_vm" "kpn_lwt" "sieve_vm" "sieve_cont" "sieve_sys" "sieve_mcon_ftt" "sieve_promise" "sieve_tramp" "sieve_mcon" "sieve_lwt" "sorter_cont" "sorter_sys" "sorter_promise" "sorter_tramp" "sorter_mcon" "sorter_lwt" "sorter_vm"; \
+	do \
+	 rm -f $${impl}_opt_data.txt; \
+	 rm -f $${impl}_opt_data_clean.txt; \
+	 rm -f $${impl}_opt_data_clean_usertime.txt; \
+	 rm -f $${impl}_opt_data_clean_realtime.txt; \
+	 rm -f $${impl}_opt_data_clean_systime.txt; \
+	 rm -f $${impl}_opt_data_clean_mem.txt; \
+	done
+
+
+
+evaluation.kpn: 
+	echo 'KPN tests: bytecode'
+	for impl in "kpn_cont" "kpn_sys" "kpn_promise" "kpn_tramp" "kpn_vm" "kpn_mcon" "kpn_lwt"; \
+	do \
+	 printf "Testing: "; \
+	 echo $$impl; \
+	 for size in "1000" "10000" "100000" "1000000" "10000000" "100000000" "1000000000" "10000000000" "100000000000" "1000000000000" "10000000000000" "100000000000000" "1000000000000000" "10000000000000000" "100000000000000000" "1000000000000000000" "10000000000000000000" "100000000000000000000" "1000000000000000000000" "10000000000000000000000" "100000000000000000000000"; \
+	 do \
+	  printf "n=" >> $${impl}_data.txt; \
+	  printf $$size >> $${impl}_data.txt; \
+	  printf " " >> $${impl}_data.txt; \
+	  ./$${impl} -n $$size -q >> $${impl}_data.txt; \
+	  printf "\n" >> $${impl}_data.txt; \
+	 done; \
+	done
+
+evaluation.kpn.opt: 
+	echo 'KPN tests: native'
+	for impl in "kpn_cont" "kpn_sys" "kpn_promise" "kpn_tramp" "kpn_mcon" "kpn_lwt"; \
+	do \
+	 printf "Testing: "; \
+	 echo $$impl; \
+	 for size in "1000" "10000" "100000" "1000000" "10000000" "100000000" "1000000000" "10000000000" "100000000000" "1000000000000" "10000000000000" "100000000000000" "1000000000000000" "10000000000000000" "100000000000000000" "1000000000000000000" "10000000000000000000" "100000000000000000000" "1000000000000000000000" "10000000000000000000000" "100000000000000000000000"; \
+	 do \
+	  printf "n=" >> $${impl}_opt_data.txt; \
+	  printf $$size >> $${impl}_opt_data.txt; \
+	  printf " " >> $${impl}_opt_data.txt; \
+	  ./$${impl}.opt -n $$size -q >> $${impl}_opt_data.txt; \
+	  printf "\n" >> $${impl}_opt_data.txt; \
+	 done; \
+	done
+
+evaluation.sieve:
+	echo 'Sieve tests: bytecode'
+	# sieve
+	for impl in "sieve_cont" "sieve_sys" "sieve_promise" "sieve_tramp" "sieve_vm" "sieve_mcon" "sieve_mcon_ftt" "sieve_lwt"; \
+	do \
+	 printf "Testing: "; \
+	 echo $$impl; \
+	 for size in "3" "4" "6" "8" "10" "12" "14" "16" "18" "20" "22" "24" "26" "28" "30" "32" "34" "36" "38" "40" "44" "48" "50" "55" "60"; \
+	 do \
+	  printf "n=" >> $${impl}_data.txt; \
+	  printf $$size >> $${impl}_data.txt; \
+	  printf " " >> $${impl}_data.txt; \
+	  ./$$impl -n $$size -q >> $${impl}_data.txt; \
+	  printf "\n" >> $${impl}_data.txt; \
+	 done; \
+	done
+	for impl in "sieve_cont" "sieve_sys" "sieve_promise" "sieve_tramp" "sieve_vm" "sieve_mcon_ftt" "sieve_lwt"; \
+	do \
+	 printf "Testing: "; \
+	 echo $$impl; \
+	 for size in "70" "80" "90" "100" "120" "140" "160" "180" "200"; \
+	 do \
+	  printf "n=" >> $${impl}_data.txt; \
+	  printf $$size >> $${impl}_data.txt; \
+	  printf " " >> $${impl}_data.txt; \
+	  ./$$impl -n $$size -q >> $${impl}_data.txt; \
+	  printf "\n" >> $${impl}_data.txt; \
+	 done; \
+	done
+
+evaluation.sieve.opt:
+	echo 'Sieve tests: native'
+	# sieve
+	for impl in "sieve_cont" "sieve_sys" "sieve_promise" "sieve_tramp" "sieve_mcon" "sieve_mcon_ftt" "sieve_lwt"; \
+	do \
+	 printf "Testing: "; \
+	 echo $$impl; \
+	 for size in "3" "4" "6" "8" "10" "12" "14" "16" "18" "20" "22" "24" "26" "28" "30" "32" "34" "36" "38" "40" "44" "48" "50" "55" "60"; \
+	 do \
+	  printf "n=" >> $${impl}_opt_data.txt; \
+	  printf $$size >> $${impl}_opt_data.txt; \
+	  printf " " >> $${impl}_opt_data.txt; \
+	  ./$${impl}.opt -n $$size -q >> $${impl}_opt_data.txt; \
+	  printf "\n" >> $${impl}_opt_data.txt; \
+	 done; \
+	done
+	for impl in "sieve_cont" "sieve_sys" "sieve_promise" "sieve_tramp" "sieve_vm" "sieve_mcon_ftt" "sieve_lwt"; \
+	do \
+	 printf "Testing: "; \
+	 echo $$impl; \
+	 for size in "70" "80" "90" "100" "120" "140" "160" "180" "200"; \
+	 do \
+	  printf "n=" >> $${impl}_opt_data.txt; \
+	  printf $$size >> $${impl}_opt_data.txt; \
+	  printf " " >> $${impl}_opt_data.txt; \
+	  ./$${impl}.opt -n $$size -q >> $${impl}_opt_data.txt; \
+	  printf "\n" >> $${impl}_opt_data.txt; \
+	 done; \
+	done
+
+evaluation.sorter:
+	echo 'Concurrent sort tests: bytecode'
+	# sorter
+	for impl in "sorter_cont" "sorter_sys" "sorter_promise" "sorter_tramp" "sorter_vm" "sorter_mcon" "sorter_lwt"; \
+	do \
+	 printf "Testing: "; \
+	 echo $$impl; \
+	 for size in "3" "4" "6" "8" "10" "12" "14" "16" "18" "20" "22" "24" "26" "28" "30" "32" "34" "36" "38" "40" "44" "48" "50" "52" "54" "56" "58" "60" "62" "64" "66" "68" "70" "75" "80" "85" "90" "95" "100" "110" "120" "130" "140" "150" "160" "180" "190" "200" "210" "220" "230" "240" "250" "260" "280" "290" "300"; \
+	 do \
+	  printf "n=" >> $${impl}_data.txt; \
+	  printf $$size >> $${impl}_data.txt; \
+	  printf " " >> $${impl}_data.txt; \
+	  ./$$impl -n $$size -q >> $${impl}_data.txt; \
+	  printf "\n" >> $${impl}_data.txt; \
+	 done; \
+	done 
+	# sorter extension 
+	for impl in "sorter_cont" "sorter_promise" "sorter_tramp" "sorter_mcon" "sorter_sys" "sorter_lwt"; \
+	do \
+	 printf "Testing: "; \
+	 echo $$impl; \
+	 for size in  "320" "340" "360" "380" "400" "450" "500" "550"; \
+	 do \
+	  printf "n=" >> $${impl}_data.txt; \
+	  printf $$size >> $${impl}_data.txt; \
+	  printf " " >> $${impl}_data.txt; \
+	  ./$$impl -n $$size -q >> $${impl}_data.txt; \
+	  printf "\n" >> $${impl}_data.txt; \
+	 done; \
+	done
+
+evaluation.sorter.opt:
+	echo 'Concurrent sort tests: native'
+	for impl in "sorter_cont" "sorter_sys" "sorter_promise" "sorter_tramp" "sorter_mcon" "sorter_lwt"; \
+	do \
+	 printf "Testing: "; \
+	 echo $$impl; \
+	 for size in "3" "4" "6" "8" "10" "12" "14" "16" "18" "20" "22" "24" "26" "28" "30" "32" "34" "36" "38" "40" "44" "48" "50" "52" "54" "56" "58" "60" "62" "64" "66" "68" "70" "75" "80" "85" "90" "95" "100" "110" "120" "130" "140" "150" "160" "180" "190" "200" "210" "220" "230" "240" "250" "260" "280" "290" "300"; \
+	 do \
+	  printf "n=" >> $${impl}_opt_data.txt; \
+	  printf $$size >> $${impl}_opt_data.txt; \
+	  printf " " >> $${impl}_opt_data.txt; \
+	  ./$${impl}.opt -n $$size -q >> $${impl}_opt_data.txt; \
+	  printf "\n" >> $${impl}_opt_data.txt; \
+	 done; \
+	done 
+	# sorter extension 
+	for impl in "sorter_cont" "sorter_promise" "sorter_tramp" "sorter_mcon" "sorter_sys" "sorter_lwt"; \
+	do \
+	 printf "Testing: "; \
+	 echo $$impl; \
+	 for size in  "320" "340" "360" "380" "400" "450" "500" "550"; \
+	 do \
+	  printf "n=" >> $${impl}_opt_data.txt; \
+	  printf $$size >> $${impl}_opt_data.txt; \
+	  printf " " >> $${impl}_opt_data.txt; \
+	  ./$${impl}.opt -n $$size -q >> $${impl}_opt_data.txt; \
+	  printf "\n" >> $${impl}_opt_data.txt; \
+	 done; \
+	done
+
+evaluation.cleandata: 
+	sh cleandata.sh
+	
+	
 clean:
 	rm -f a.out *.o *.opt *.cmi *.cmo *.cmi *.cmx *~
 	rm -f *.htoc *.aux *.haux *.log *.blg *.dvi *.ps
 	rm -f lwc.ml lwc.mli
+	make evaluation.clean
 
 # also remove executables
 doclean:: clean
@@ -70,11 +309,13 @@ purge: doclean
 S_CMO=main.cmo lwc.cmo
 S_CMX=main.cmx lwc.cmx
 S_MCON_CMO=unix.cma nums.cma main.cmo mconbase.cmo sugarcube.cmo mvars.cmo
+S_MCON_CMX=unix.cmxa nums.cmxa main.cmx mconbase.cmx sugarcube.cmx mvars.cmx
 
 # objects for KPN
 K_CMO=unix.cma nums.cma kmain.cmo lwc.cmo
 K_CMX=unix.cmxa nums.cmxa kmain.cmx lwc.cmx
 K_MCON_CMO=unix.cma nums.cma kmain.cmo mconbase.cmo sugarcube.cmo mvars.cmo
+K_MCON_CMX=unix.cmxa nums.cmxa kmain.cmx mconbase.cmx sugarcube.cmx mvars.cmx
 
 # objects for KPN w/o unix (is present before on command line)
 KNU_CMO=nums.cma kmain.cmo lwc.cmo
@@ -255,8 +496,11 @@ cont:
 
 mcon: 
 	ocamlc -c mconbase.ml
+	ocamlopt -c mconbase.ml
 	ocamlc -c sugarcube.ml mconbase.cmo
+	ocamlopt -c sugarcube.ml mconbase.cmx
 	ocamlc -c mvars.ml mconbase.cmo
+	ocamlopt -c mvars.ml mconbase.cmx
 
 sieve_cont: sieve_indirect.ml cont main.cmo
 	ocamlc -o $@ unix.cma $(S_CMO) $<
@@ -264,8 +508,14 @@ sieve_cont: sieve_indirect.ml cont main.cmo
 sieve_mcon: sieve_mcon.ml mcon main.cmo
 	ocamlc -o $@ $(S_MCON_CMO) $<
 
+sieve_mcon.opt: sieve_mcon.ml mcon main.cmx
+	ocamlopt -o $@ $(S_MCON_CMX) $<
+
 sieve_mcon_ftt: sieve_mcon_ftt.ml mcon main.cmo
 	ocamlc -o $@ $(S_MCON_CMO) $<
+
+sieve_mcon_ftt.opt: sieve_mcon_ftt.ml mcon main.cmx
+	ocamlopt -o $@ $(S_MCON_CMX) $<
 
 sieve_cont.opt: sieve_indirect.ml cont main.cmx
 	ocamlopt -o $@ unix.cmxa $(S_CMX) $<
@@ -276,6 +526,9 @@ kpn_cont: kpn_indirect.ml cont kmain.cmo
 kpn_mcon: kpn_mcon.ml mcon kmain.cmo
 	ocamlc -o $@ $(K_MCON_CMO) $<
 
+kpn_mcon.opt: kpn_mcon.ml mcon kmain.cmx
+	ocamlopt -o $@ $(K_MCON_CMX) $<
+
 kpn_cont.opt: kpn_indirect.ml kmain.cmx cont
 	ocamlopt -o $@ $(K_CMX) $<
 
@@ -284,6 +537,9 @@ sorter_cont: sorter_monad.ml main.cmo cont
 
 sorter_mcon: sorter_mcon.ml mcon main.cmo
 	ocamlc -o $@ $(S_MCON_CMO) $<
+
+sorter_mcon.opt: sorter_mcon.ml mcon main.cmx
+	ocamlopt -o $@ $(S_MCON_CMX) $<
 
 sorter_cont.opt: sorter_monad.ml cont main.cmx
 	ocamlopt -o $@ unix.cmxa $(S_CMX) $<

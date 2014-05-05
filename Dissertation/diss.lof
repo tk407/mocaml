@@ -1,22 +1,22 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces High level view of the tool chain}}{9}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces High level view of the tool chain\relax }}{9}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Detailed outline of the implementation}}{18}
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Grammar dependencies}}{19}
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Syntax and semantics of arrow types}}{20}
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Syntax and semantics of sum types}}{22}
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Syntax and semantics of product types}}{23}
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Syntax and semantics of the fixpoint operator}}{24}
-\contentsline {figure}{\numberline {3.7}{\ignorespaces Syntax and semantics of the monadic primitives, ret and bind}}{27}
-\contentsline {figure}{\numberline {3.8}{\ignorespaces Syntax and semantics of the fork operator}}{28}
-\contentsline {figure}{\numberline {3.9}{\ignorespaces Dependencies in the Coq semantics}}{29}
-\contentsline {figure}{\numberline {3.10}{\ignorespaces Dependencies in the OCaml code}}{36}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Detailed outline of the implementation\relax }}{18}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Grammar dependencies\relax }}{19}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Syntax and semantics of arrow types\relax }}{20}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Syntax and semantics of sum types\relax }}{22}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Syntax and semantics of product types\relax }}{23}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Syntax and semantics of the fixpoint operator\relax }}{24}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Syntax and semantics of the monadic primitives, ret and bind\relax }}{27}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Syntax and semantics of the fork operator\relax }}{28}
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Dependencies in the Coq semantics\relax }}{29}
+\contentsline {figure}{\numberline {3.10}{\ignorespaces Dependencies in the OCaml code\relax }}{36}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Kpn execution time}}{42}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Sieve of Eratosthenes execution time}}{43}
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Concurrent sort execution time}}{44}
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Concurrent sort memory use}}{44}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces \input diss-1.cpt\relax \relax }}{43}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces \input diss-2.cpt\relax \relax }}{43}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces \input diss-3.cpt\relax \relax }}{44}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces \input diss-4.cpt\relax \relax }}{44}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
