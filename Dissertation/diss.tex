@@ -111,10 +111,7 @@
 % Tikz set up
 \usepackage{tikz}
 \usepackage{tikz-cd}
-\usetikzlibrary{arrows, shapes, positioning}
-\usetikzlibrary{trees}
-\usetikzlibrary{decorations.pathmorphing}
-\usetikzlibrary{decorations.markings}
+\usetikzlibrary{arrows, shapes, positioning, fit, trees, decorations.pathmorphing, decorations.markings}
 %\usepackage{harvard}
 
 \usepackage[final]{pdfpages}
@@ -1771,6 +1768,85 @@ The three examples provided by Deleuze are all process networks from Kahn\cite{k
 
 
 \subsubsection{Eratosthene Sieve}
+\begin{figure}
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm,
+  thick,main node/.style={circle,draw,
+  font=\sffamily\Large\bfseries,minimum size=8mm}, mvar/.style={rectangle, draw, ,minimum size=3mm}]
+  \node[main node] (I1) [label=below:{Integers}] {};
+  \node[mvar] (M11) [right=0.5 of I1, label=below:{$\text{m}_1$}] {};
+  \node[main node] (S1) [right=8 of M11, label=below:{Sift}] {};
+  \node[mvar] (MS1) [right=0.5 of S1, label=below:{$\text{m}_s$}] {};
+  \node[main node] (P1) [right=1 of MS1, label=below:{Print}] {};
+ 
+  \node[main node] (I2) [below= of I1, label=below:{Integers}] {};
+  \node[mvar] (M12) [below=2.5 of M11, label=below:{$\text{m}_1$}] {};
+  \node[main node] (F2) [right=0.5 of M12, label=below:{Filter 2}] {};
+  \node[mvar] (M22) [right=0.5 of F2, label=below:{$\text{m}_s$}] {};
+  \node[main node] (S2) [below= of S1, label=below:{Sift}] {};
+  \node[mvar] (MS2) [below=2.5 of MS1, label=below:{$\text{m}_s$}] {};
+  \node[main node] (P2) [below= of P1, label=below:{Print}] {};
+  \node[main node] (I3) [below= of I2, label=below:{Integers}] {};
+    \node[mvar] (M13) [below=2.5 of M12, label=below:{$\text{m}_1$}] {};
+    \node[main node] (F22) [right=0.5 of M13, label=below:{Filter 2}] {};
+      \node[mvar] (M23) [right=0.5 of F22, label=below:{$\text{m}_2$}] {};
+   \node[main node] (F5) [right=0.5 of M23, label=below:{Filter 3}] {};
+     \node[mvar] (M33) [right=0.5 of F5, label=below:{$\text{m}_s$}] {};
+    \node[main node] (S3) [below= of S2, label=below:{Sift}] {};
+    \node[mvar] (MS3) [below=2.5 of MS2, label=below:{$\text{m}_s$}] {};
+    \node[main node] (P3) [below= of P2, label=below:{Print}] {};
+  %\node[mvar] (F3) [below of=F2, label=below:{$\text{FIFO}_3$}] {};
+  %\node[mvar] (F5) [below of=F3, label=below:{$\text{FIFO}_5$}] {};
+  %\node[main node] (T2) [right = 1 of F2, label=below:{$\times 2$}] {};
+  %\node[main node] (T3) [right = 1 of F3,  label=below:{$\times 3$}] {};
+  %\node[main node] (T5) [right = 1 of F5, label=below:{$\times 5$}] {};
+  %\node[mvar] (M2) [right of=T2, label=below:{$\text{m}_2$}] {};
+  %\node[mvar] (M3) [right of=T3, label=below:{$\text{m}_3$}] {};
+  %\node[mvar] (M5) [right of=T5, label=below:{$\text{m}_5$}] {};
+  %\node[main node] (Merge35) [below=0.5 of M3, xshift=2cm, label=below:{$\text{merge}_{35}$}] {};
+  %\node[mvar] (M35) [right of=Merge35, label=below:{$\text{m}_{35}$}] {};
+  %\node[main node] (Merge235) [below=0.5 of M2, xshift=6cm, label=below:{$\text{merge}_{235}$}] {};
+   %\node[mvar] (M235) [right of=Merge235, label=below:{$\text{m}_{235}$}] {};
+  %\node[main node] (P) [right of=M235, label=below:{P}] {};
+%  \node[main node] (S) [right of=E] {S};
+%  \node[main node] (F) [right of=S] {F};
+%  \node[main node] (I) [right of=F] {I};
+
+  \path[every node/.style={font=\sffamily\small,
+  		fill=white,inner sep=1pt}]
+  	% Right-hand-side arrows rendered from top to bottom to
+  	% achieve proper rendering of labels over arrows.
+    (I1) edge   (M11)
+    (M11) edge   (S1)
+    (S1) edge   (MS1)
+    (MS1) edge   (P1)
+    (I2) edge   (M12)
+    (M12) edge   (F2)
+    (F2) edge   (M22)
+    (M22) edge   (S2)
+    (S2) edge   (MS2)
+         edge[dashed, bend right=40]   (F2)
+    (MS2) edge   (P2)
+    (I3) edge   (M13)
+    (M13) edge   (F22)
+    (F22) edge   (M23)
+    (M23) edge   (F5)
+    (F5) edge   (M33)
+    (M33) edge (S3)
+    (S3) edge   (MS3)
+    	edge[dashed, bend right=40]   (F5)
+    (MS3) edge   (P3);
+  %  (Merge35) edge   (M35)
+  %  (M2) edge [bend left=20]   (Merge235)
+  %  (M35) edge [bend left=40]   (Merge235)
+  %  (Merge235) edge   (M235)
+  %  (M235) edge   (P)
+  %  (P) edge [out=150, in=40] (F2)
+  %  (P) edge [out=120, in=130]  (F3)
+  %  (P) edge [out=-150, in=-40]  (F5);
+\end{tikzpicture}
+\cprotect\caption{\verb|sieve| process outline}
+\end{figure}
+
 \begin{figure}[h]
 \centering
 \begin{subfigure}[b]{0.45\linewidth}
@@ -1937,6 +2013,125 @@ However, the concurrency framework does not prescribe any evaluation strategy. I
 
 
 \subsubsection{Concurrent sort}
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[->,>=stealth',auto,
+  thick,main node/.style={circle,draw,
+  font=\sffamily\Large\bfseries,minimum size=8mm}, mvar/.style={rectangle, draw, ,minimum size=3mm}]
+  \node[main node] (I15) at (1,5) [] {};
+  \node[main node] (I14) at (1,4) [] {};
+  \node[main node] (I24) at (2,4) [] {};
+  \node[main node] (I13) at (1,3) [] {};
+  \node[main node] (I23) at (2,3) [] {};
+  \node[main node] (I33) at (3,3) [] {};
+  \node[main node] (I12) at (1,2) [] {};
+  \node[main node] (I22) at (2,2) [] {};
+  \node[main node] (I32) at (3,2) [] {};
+  \node[main node] (I42) at (4,2) [] {};
+  \node[main node] (I11) at (1,1) [] {};
+  \node[main node] (I21) at (2,1) [] {};
+  \node[main node] (I31) at (3,1) [] {};
+  \node[main node] (I41) at (4,1) [] {};
+  \node[main node] (I51) at (5,1) [] {};
+  
+  \node[] (INV1) at (1,6) [] {};
+  \node[] (INV2) at (-1,6) [] {x0};
+  \node[] (INV3) at (-1,5) [] {x1};
+  \node[] (INV4) at (-1,4) [] {x2};
+  \node[] (INV5) at (-1,3) [] {x3};
+  \node[] (INV6) at (-1,2) [] {x4};
+  \node[] (INV7) at (-1,1) [] {x5};
+  
+  \node[] (INV8) at (6,1) [] {};
+    \node[] (INV9) at (6,0) [] {r0};
+    \node[] (INV10) at (5,0) [] {r1};
+    \node[] (INV11) at (4,0) [] {r2};
+    \node[] (INV12) at (3,0) [] {r3};
+    \node[] (INV13) at (2,0) [] {r4};
+    \node[] (INV14) at (1,0) [] {r5};
+  
+  
+  %\node[mvar] (F3) [below of=F2, label=below:{$\text{FIFO}_3$}] {};
+  %\node[mvar] (F5) [below of=F3, label=below:{$\text{FIFO}_5$}] {};
+  %\node[main node] (T2) [right = 1 of F2, label=below:{$\times 2$}] {};
+  %\node[main node] (T3) [right = 1 of F3,  label=below:{$\times 3$}] {};
+  %\node[main node] (T5) [right = 1 of F5, label=below:{$\times 5$}] {};
+  %\node[mvar] (M2) [right of=T2, label=below:{$\text{m}_2$}] {};
+  %\node[mvar] (M3) [right of=T3, label=below:{$\text{m}_3$}] {};
+  %\node[mvar] (M5) [right of=T5, label=below:{$\text{m}_5$}] {};
+  %\node[main node] (Merge35) [below=0.5 of M3, xshift=2cm, label=below:{$\text{merge}_{35}$}] {};
+  %\node[mvar] (M35) [right of=Merge35, label=below:{$\text{m}_{35}$}] {};
+  %\node[main node] (Merge235) [below=0.5 of M2, xshift=6cm, label=below:{$\text{merge}_{235}$}] {};
+   %\node[mvar] (M235) [right of=Merge235, label=below:{$\text{m}_{235}$}] {};
+  %\node[main node] (P) [right of=M235, label=below:{P}] {};
+%  \node[main node] (S) [right of=E] {S};
+%  \node[main node] (F) [right of=S] {F};
+%  \node[main node] (I) [right of=F] {I};
+
+  \path[every node/.style={font=\sffamily\small,
+  		fill=white}]
+     (INV2) edge [-] (1,6)
+     (1,6) edge (I15)
+     (INV3) edge (I15)
+     (INV4) edge (I14)
+     (INV5) edge (I13)
+     (INV6) edge (I12)
+     (INV7) edge (I11)
+     (I51) edge [-] (6,1)
+     (I42) edge (I51)
+     (I42) edge (I41)
+     (I32) edge (I31)
+     (I32) edge (I42)
+     (I22) edge (I32)
+     (I12) edge (I22)
+     (I22) edge (I21)
+     (I12) edge (I11)
+     (I11) edge (I21)
+     (I21) edge (I31)
+     (I31) edge (I41)
+     (I41) edge (I51)
+     (I13) edge (I23)
+     (I23) edge (I33)
+     (I14) edge (I24)
+     (I31) edge (I41)
+     (I41) edge (I51)
+     (I33) edge (I42)
+     (I33) edge (I32)
+     (I23) edge (I22)
+     
+     (I13) edge (I12)
+     (I14) edge (I13)
+     (I24) edge (I33)
+     (I24) edge (I23)
+     (I15) edge (I24)
+     (I15) edge (I14)
+     (6,1) edge (INV9)
+     (I51) edge [-] (6,1)
+     (I51) edge (INV10)
+     (I41) edge (INV11)
+     (I31) edge (INV12)
+     (I21) edge (INV13)
+     (I11) edge (INV14);
+  	% Right-hand-side arrows rendered from top to bottom to
+  	% achieve proper rendering of labels over arrows.
+   % (I1) edge   (M11)
+    %(M11) edge   (S1)
+   % (S1) edge   (MS1)
+   % (MS1) edge   (P1);
+  %  (Merge35) edge   (M35)
+  %  (M2) edge [bend left=20]   (Merge235)
+  %  (M35) edge [bend left=40]   (Merge235)
+  %  (Merge235) edge   (M235)
+  %  (M235) edge   (P)
+  %  (P) edge [out=150, in=40] (F2)
+  %  (P) edge [out=120, in=130]  (F3)
+  %  (P) edge [out=-150, in=-40]  (F5);
+\end{tikzpicture}
+\cprotect\caption{\verb|sorter| process outline}
+\end{figure}
+
+
 \begin{figure}[h]
 \centering
 \begin{subfigure}[b]{0.45\linewidth}
