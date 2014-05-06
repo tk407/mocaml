@@ -10,14 +10,14 @@ LIB=/usr/lib/ocaml/
 OCAMLC=ocamlc
 OCAMLOPT=ocamlopt
 
-SIEVE=sieve_tramp sieve_cont sieve_callcc sieve_dlcont sieve_sys sieve_vm sieve_promise sieve_lwt sieve_mcon sieve_mcon_ftt
-SIEVE_OPT=sieve_tramp.opt sieve_cont.opt sieve_sys.opt sieve_promise.opt sieve_lwt.opt sieve_lwt.opt sieve_mcon.opt sieve_mcon_ftt.opt
+SIEVE=sieve_tramp sieve_cont sieve_callcc sieve_dlcont sieve_sys sieve_vm sieve_promise sieve_lwt sieve_mcon sieve_mcon_ftt sieve_dlcont
+SIEVE_OPT=sieve_tramp.opt sieve_cont.opt sieve_sys.opt sieve_promise.opt sieve_lwt.opt sieve_lwt.opt sieve_mcon.opt sieve_mcon_ftt.opt sieve_dlcont.opt
 
-KPN=kpn_tramp kpn_cont kpn_callcc kpn_dlcont kpn_sys kpn_vm kpn_promise kpn_mcon kpn_lwt
-KPN_OPT=kpn_tramp.opt kpn_cont.opt kpn_sys.opt kpn_promise.opt kpn_mcon.opt kpn_lwt.opt
+KPN=kpn_tramp kpn_cont kpn_callcc kpn_dlcont kpn_sys kpn_vm kpn_promise kpn_mcon kpn_lwt kpn_dlcont
+KPN_OPT=kpn_tramp.opt kpn_cont.opt kpn_sys.opt kpn_promise.opt kpn_mcon.opt kpn_lwt.opt kpn_dlcont.opt
 
-SORTER=sorter_tramp sorter_cont sorter_callcc sorter_dlcont sorter_sys sorter_vm sorter_promise sorter_mcon sorter_lwt
-SORTER_OPT=sorter_tramp.opt sorter_cont.opt sorter_sys.opt sorter_promise.opt sorter_mcon.opt sorter_lwt.opt
+SORTER=sorter_tramp sorter_cont sorter_callcc sorter_dlcont sorter_sys sorter_vm sorter_promise sorter_mcon sorter_lwt sorter_dlcont
+SORTER_OPT=sorter_tramp.opt sorter_cont.opt sorter_sys.opt sorter_promise.opt sorter_mcon.opt sorter_lwt.opt sorter_dlcont.opt
 
 EPS=sorter_exec_times.eps sorter_exec_times_bw.eps sorter_mem.eps sorter_mem_bw.eps sieve_exec_times.eps sieve_exec_times_bw.eps sieve_mem.eps sieve_mem_bw.eps kpn_exec_times.eps kpn_exec_times_bw.eps kpn_mem.eps kpn_mem_bw.eps
 
@@ -100,7 +100,7 @@ evaluation.plot:
 evaluation.clean: 
 	rm -f *.eps
 	rm -f *.pdf
-	for impl in "kpn_cont" "kpn_sys" "kpn_promise" "kpn_tramp" "kpn_vm" "kpn_mcon" "kpn_lwt" "sieve_cont" "sieve_sys" "sieve_mcon_ftt" "sieve_promise" "sieve_tramp" "sieve_vm" "sieve_mcon" "sieve_lwt" "sorter_cont" "sorter_sys" "sorter_promise" "sorter_tramp" "sorter_vm" "sorter_mcon" "sorter_lwt"; \
+	for impl in "kpn_cont" "kpn_sys" "kpn_promise" "kpn_tramp" "kpn_vm" "kpn_mcon" "kpn_lwt" "kpn_dlcont" "sieve_cont" "sieve_sys" "sieve_mcon_ftt" "sieve_promise" "sieve_tramp" "sieve_vm" "sieve_mcon" "sieve_lwt" "sieve_dlcont" "sorter_cont" "sorter_sys" "sorter_promise" "sorter_tramp" "sorter_vm" "sorter_mcon" "sorter_lwt" "sorter_dlcont"; \
 	do \
 	 rm -f $${impl}_data.txt; \
 	 rm -f $${impl}_data_clean.txt; \
@@ -112,7 +112,7 @@ evaluation.clean:
 	make evaluation.cleanopt
 
 evaluation.cleanopt: 
-	for impl in "kpn_cont" "kpn_sys" "kpn_promise" "kpn_tramp" "kpn_mcon" "kpn_vm" "kpn_lwt" "sieve_vm" "sieve_cont" "sieve_sys" "sieve_mcon_ftt" "sieve_promise" "sieve_tramp" "sieve_mcon" "sieve_lwt" "sorter_cont" "sorter_sys" "sorter_promise" "sorter_tramp" "sorter_mcon" "sorter_lwt" "sorter_vm"; \
+	for impl in "kpn_cont" "kpn_sys" "kpn_promise" "kpn_tramp" "kpn_mcon" "kpn_vm" "kpn_lwt" "kpn_dlcont" "sieve_vm" "sieve_cont" "sieve_sys" "sieve_mcon_ftt" "sieve_promise" "sieve_tramp" "sieve_mcon" "sieve_lwt" "sieve_dlcont" "sorter_cont" "sorter_sys" "sorter_promise" "sorter_tramp" "sorter_mcon" "sorter_lwt" "sorter_vm ""sorter_dlcont"; \
 	do \
 	 rm -f $${impl}_opt_data.txt; \
 	 rm -f $${impl}_opt_data_clean.txt; \
@@ -126,7 +126,7 @@ evaluation.cleanopt:
 
 evaluation.kpn: 
 	echo 'KPN tests: bytecode'
-	for impl in "kpn_cont" "kpn_sys" "kpn_promise" "kpn_tramp" "kpn_vm" "kpn_mcon" "kpn_lwt"; \
+	for impl in "kpn_cont" "kpn_sys" "kpn_promise" "kpn_tramp" "kpn_vm" "kpn_mcon" "kpn_lwt" "kpn_dlcont"; \
 	do \
 	 printf "Testing: "; \
 	 echo $$impl; \
@@ -142,7 +142,7 @@ evaluation.kpn:
 
 evaluation.kpn.opt: 
 	echo 'KPN tests: native'
-	for impl in "kpn_cont" "kpn_sys" "kpn_promise" "kpn_tramp" "kpn_mcon" "kpn_lwt"; \
+	for impl in "kpn_cont" "kpn_sys" "kpn_promise" "kpn_tramp" "kpn_mcon" "kpn_lwt" "kpn_dlcont"; \
 	do \
 	 printf "Testing: "; \
 	 echo $$impl; \
@@ -159,7 +159,7 @@ evaluation.kpn.opt:
 evaluation.sieve:
 	echo 'Sieve tests: bytecode'
 	# sieve
-	for impl in "sieve_cont" "sieve_sys" "sieve_promise" "sieve_tramp" "sieve_vm" "sieve_mcon" "sieve_mcon_ftt" "sieve_lwt"; \
+	for impl in "sieve_cont" "sieve_sys" "sieve_promise" "sieve_tramp" "sieve_vm" "sieve_mcon" "sieve_mcon_ftt" "sieve_lwt" "sieve_dlcont"; \
 	do \
 	 printf "Testing: "; \
 	 echo $$impl; \
@@ -189,7 +189,7 @@ evaluation.sieve:
 evaluation.sieve.opt:
 	echo 'Sieve tests: native'
 	# sieve
-	for impl in "sieve_cont" "sieve_sys" "sieve_promise" "sieve_tramp" "sieve_mcon" "sieve_mcon_ftt" "sieve_lwt"; \
+	for impl in "sieve_cont" "sieve_sys" "sieve_promise" "sieve_tramp" "sieve_mcon" "sieve_mcon_ftt" "sieve_lwt" "sieve_dlcont"; \
 	do \
 	 printf "Testing: "; \
 	 echo $$impl; \
@@ -233,7 +233,7 @@ evaluation.sorter:
 	 done; \
 	done 
 	# sorter extension 
-	for impl in "sorter_cont" "sorter_promise" "sorter_tramp" "sorter_mcon" "sorter_sys" "sorter_lwt"; \
+	for impl in "sorter_cont" "sorter_promise" "sorter_tramp" "sorter_mcon" "sorter_sys" "sorter_lwt" "sorter_dlcont"; \
 	do \
 	 printf "Testing: "; \
 	 echo $$impl; \
@@ -249,7 +249,7 @@ evaluation.sorter:
 
 evaluation.sorter.opt:
 	echo 'Concurrent sort tests: native'
-	for impl in "sorter_cont" "sorter_sys" "sorter_promise" "sorter_tramp" "sorter_mcon" "sorter_lwt"; \
+	for impl in "sorter_cont" "sorter_sys" "sorter_promise" "sorter_tramp" "sorter_mcon" "sorter_lwt" "sorter_dlcont"; \
 	do \
 	 printf "Testing: "; \
 	 echo $$impl; \

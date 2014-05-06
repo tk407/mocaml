@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.1.11)  5 MAY 2014 18:43
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.1.11)  6 MAY 2014 08:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -587,7 +587,38 @@ File: pgflibraryshapes.multipart.code.tex 2010/01/07 v2.10 (rcs-revision 1.2)
 \pgfnodepartsevenbox=\box56
 \pgfnodepartsixbox=\box57
 \pgfnodepartfivebox=\box58
-))) (/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pdfpages.sty
+)))
+(/usr/share/texmf/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryposit
+ioning.code.tex
+File: tikzlibrarypositioning.code.tex 2008/10/06 v2.10 (rcs-revision 1.7)
+)
+(/usr/share/texmf/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytrees
+.code.tex
+File: tikzlibrarytrees.code.tex 2008/02/24 v2.10 (rcs-revision 1.2)
+)
+(/usr/share/texmf/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarydecor
+ations.pathmorphing.code.tex
+(/usr/share/texmf/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarydecor
+ations.code.tex
+(/usr/share/texmf/tex/generic/pgf/modules/pgfmoduledecorations.code.tex
+\pgfdecoratedcompleteddistance=\dimen186
+\pgfdecoratedremainingdistance=\dimen187
+\pgfdecoratedinputsegmentcompleteddistance=\dimen188
+\pgfdecoratedinputsegmentremainingdistance=\dimen189
+\pgf@decorate@distancetomove=\dimen190
+\pgf@decorate@repeatstate=\count136
+\pgfdecorationsegmentamplitude=\dimen191
+\pgfdecorationsegmentlength=\dimen192
+)
+\tikz@lib@dec@box=\box59
+)
+(/usr/share/texmf/tex/generic/pgf/libraries/decorations/pgflibrarydecorations.p
+athmorphing.code.tex))
+(/usr/share/texmf/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarydecor
+ations.markings.code.tex
+(/usr/share/texmf/tex/generic/pgf/libraries/decorations/pgflibrarydecorations.m
+arkings.code.tex))
+(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pdfpages.sty
 Package: pdfpages 2013/05/30 v0.4u Insert pages of external PDF documents (AM)
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
@@ -606,10 +637,10 @@ Package ifpdf Info: pdfTeX in PDF mode is detected.
 (/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pppdftex.def
 File: pppdftex.def 2013/05/30 v0.4u Pdfpages driver for pdfTeX (AM)
 )
-\AM@pagebox=\box59
+\AM@pagebox=\box60
 \AM@toc@title=\toks35
-\c@AM@survey=\count136
-\AM@templatesizebox=\box60
+\c@AM@survey=\count137
+\AM@templatesizebox=\box61
 )
 (./mathpartir.sty
 Package: mathpartir 2005/12/20 version 1.2.0 Math Paragraph for Typesetting Inf
@@ -617,16 +648,16 @@ erence Rules
 \mpr@andskip=\skip53
 \mpr@lista=\toks36
 \mpr@listb=\toks37
-\mpr@hlist=\box61
-\mpr@vlist=\box62
-\mpr@right=\box63
+\mpr@hlist=\box62
+\mpr@vlist=\box63
+\mpr@right=\box64
 ) (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count137
+\c@float@type=\count138
 \float@exts=\toks38
-\float@box=\box64
+\float@box=\box65
 \@float@everytoks=\toks39
-\@floatcapt=\box65
+\@floatcapt=\box66
 )
 (/usr/share/texlive/texmf-dist/tex/latex/cprotect/cprotect.sty
 Package: cprotect 2011/01/27 v1.0e (Bruno Le Floch)
@@ -635,8 +666,8 @@ Package: cprotect 2011/01/27 v1.0e (Bruno Le Floch)
 Package: suffix 2006/07/15 1.5 Variant command support
 )
 \CPT@WriteOut=\write4
-\c@CPT@WriteCount=\count138
-\c@CPT@numB=\count139
+\c@CPT@WriteCount=\count139
+\c@CPT@numB=\count140
 \CPT@commandatend@toks=\toks40
 )
 (/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
@@ -645,22 +676,22 @@ Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
 (/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 57.
-\captionmargin=\dimen186
-\captionmargin@=\dimen187
-\captionwidth=\dimen188
-\caption@tempdima=\dimen189
-\caption@indent=\dimen190
-\caption@parindent=\dimen191
-\caption@hangindent=\dimen192
+\captionmargin=\dimen193
+\captionmargin@=\dimen194
+\captionwidth=\dimen195
+\caption@tempdima=\dimen196
+\caption@indent=\dimen197
+\caption@parindent=\dimen198
+\caption@hangindent=\dimen199
 )
-\c@ContinuedFloat=\count140
+\c@ContinuedFloat=\count141
 Package caption Info: float package is loaded.
 Package caption Info: listings package is loaded.
 )
 (/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
 Package: subcaption 2013/02/03 v1.1-62 Sub-captions (AR)
-\c@subfigure=\count141
-\c@subtable=\count142
+\c@subfigure=\count142
+\c@subtable=\count143
 ) (./diss.aux
 
 LaTeX Warning: Label `eq:forkmove1' multiply defined.
@@ -677,31 +708,31 @@ LaTeX Warning: Label `eq:forkmove2@cref' multiply defined.
 )
 \openout1 = `diss.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 135.
-LaTeX Font Info:    ... okay on input line 135.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 135.
-LaTeX Font Info:    ... okay on input line 135.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 135.
-LaTeX Font Info:    ... okay on input line 135.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 135.
-LaTeX Font Info:    ... okay on input line 135.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 135.
-LaTeX Font Info:    ... okay on input line 135.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 135.
-LaTeX Font Info:    ... okay on input line 135.
-\c@lstlisting=\count143
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 137.
+LaTeX Font Info:    ... okay on input line 137.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 137.
+LaTeX Font Info:    ... okay on input line 137.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 137.
+LaTeX Font Info:    ... okay on input line 137.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 137.
+LaTeX Font Info:    ... okay on input line 137.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 137.
+LaTeX Font Info:    ... okay on input line 137.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 137.
+LaTeX Font Info:    ... okay on input line 137.
+\c@lstlisting=\count144
  (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count144
-\scratchdimen=\dimen193
-\scratchbox=\box66
-\nofMPsegments=\count145
-\nofMParguments=\count146
+\scratchcounter=\count145
+\scratchdimen=\dimen200
+\scratchbox=\box67
+\nofMPsegments=\count146
+\nofMParguments=\count147
 \everyMPshowfont=\toks41
-\MPscratchCnt=\count147
-\MPscratchDim=\dimen194
-\MPnumerator=\count148
-\makeMPintoPDFobject=\count149
+\MPscratchCnt=\count148
+\MPscratchDim=\dimen201
+\MPnumerator=\count149
+\makeMPintoPDFobject=\count150
 \everyMPtoPDFconversion=\toks42
 ) ABD: EveryShipout initializing macros
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
@@ -748,7 +779,7 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\AtBeginShipoutBox=\box67
+\AtBeginShipoutBox=\box68
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 
@@ -757,17 +788,17 @@ Package caption Info: End \AtBeginDocument code.
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2
 
 ]
-LaTeX Font Info:    Try loading font information for U+msa on input line 172.
+LaTeX Font Info:    Try loading font information for U+msa on input line 174.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 172.
+LaTeX Font Info:    Try loading font information for U+msb on input line 174.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (10.57771pt too wide) in paragraph at lines 172--187
+Overfull \hbox (10.57771pt too wide) in paragraph at lines 174--189
 []
  []
 
@@ -781,7 +812,7 @@ Overfull \hbox (10.57771pt too wide) in paragraph at lines 172--187
 \openout5 = `diss.toc'.
 
  [4] (./diss.lof (./diss-1.cpt) (./diss-2.cpt)
-(./diss-3.cpt) (./diss-4.cpt))
+(./diss-3.cpt) (./diss-4.cpt) (./diss-5.cpt))
 \tf@lof=\write6
 \openout6 = `diss.lof'.
 
@@ -799,28 +830,28 @@ Chapter 1.
 
 
 ]
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 276.
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 278.
 
  (/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
 File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 276.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 278.
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 270--289
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 272--291
 []$[]$ 
  []
 
 [2]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 302.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 304.
 
  (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 302.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 304.
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 297--314
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 299--316
 []$[]$ 
  []
 
@@ -832,68 +863,68 @@ AML \OT1/cmr/m/n/12 3
 
 [3] [4]
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 331.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 333.
  [5]
 Chapter 2.
 [6
 
 ] [7] [8] [9]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 521--527
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 523--529
 []$[]$ 
  []
 
 [10] [11] [12]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 617--653
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 619--655
 []$[]$
  []
 
 [13]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 659--670
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 661--672
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 671--680
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 673--682
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 686--693
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 688--695
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 698--712
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 700--714
 []$[]$ 
  []
 
 [14]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 728--734
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 730--736
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 735--746
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 737--748
 []$[]$ 
  []
 
 [15]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 749--759
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 751--761
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 760--767
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 762--769
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 768--777
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 770--779
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 778--799
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 780--801
 []$[]$ 
  []
 
@@ -902,7 +933,7 @@ Chapter 3.
 <implOut.pdf, id=104, 283.0575pt x 624.3325pt>
 File: implOut.pdf Graphic file (type pdf)
  <use implOut.pdf>
-Package pdftex.def Info: implOut.pdf used on input line 808.
+Package pdftex.def Info: implOut.pdf used on input line 810.
 (pdftex.def)             Requested size: 141.5284pt x 312.16548pt.
 
 
@@ -916,30 +947,30 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 File: ./../mconbaseDep.pdf Graphic file (type pdf)
 
 <use ./../mconbaseDep.pdf>
-Package pdftex.def Info: ./../mconbaseDep.pdf used on input line 839.
+Package pdftex.def Info: ./../mconbaseDep.pdf used on input line 841.
 (pdftex.def)             Requested size: 411.93877pt x 154.1923pt.
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 923--923
+Overfull \hbox (12.0pt too wide) in paragraph at lines 925--925
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 923--923
+Overfull \hbox (12.0pt too wide) in paragraph at lines 925--925
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 923--923
+Overfull \hbox (12.0pt too wide) in paragraph at lines 925--925
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 923--923
+Overfull \hbox (12.0pt too wide) in paragraph at lines 925--925
 [][] 
  []
 
 
-Overfull \hbox (32.23323pt too wide) in paragraph at lines 850--924
+Overfull \hbox (32.23323pt too wide) in paragraph at lines 852--926
  []$[]$ 
  []
 
@@ -947,85 +978,85 @@ Overfull \hbox (32.23323pt too wide) in paragraph at lines 850--924
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [19 <./../mconbaseDep.pdf>] [20]
-Overfull \hbox (2.29704pt too wide) in paragraph at lines 1009--1009
+Overfull \hbox (2.29704pt too wide) in paragraph at lines 1011--1011
  []|\OT1/cmr/m/it/12 terms:|
  []
 
 
-Overfull \hbox (4.54706pt too wide) in paragraph at lines 1009--1009
+Overfull \hbox (4.54706pt too wide) in paragraph at lines 1011--1011
  []|\OT1/cmr/m/it/12 values:|
  []
 
 
-Overfull \hbox (5.48155pt too wide) detected at line 1009
+Overfull \hbox (5.48155pt too wide) detected at line 1011
 []
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1009--1009
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1011--1011
 [][] 
  []
 
 
-Overfull \hbox (2.29704pt too wide) in paragraph at lines 1009--1009
+Overfull \hbox (2.29704pt too wide) in paragraph at lines 1011--1011
  []|\OT1/cmr/m/it/12 terms:|
  []
 
 
-Overfull \hbox (4.54706pt too wide) in paragraph at lines 1009--1009
+Overfull \hbox (4.54706pt too wide) in paragraph at lines 1011--1011
  []|\OT1/cmr/m/it/12 values:|
  []
 
 
-Overfull \hbox (5.48155pt too wide) detected at line 1009
+Overfull \hbox (5.48155pt too wide) detected at line 1011
 []
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1009--1009
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1011--1011
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1009--1009
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1011--1011
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1009--1009
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1011--1011
 [][] 
  []
 
 
-Overfull \hbox (40.46748pt too wide) in paragraph at lines 934--1010
+Overfull \hbox (40.46748pt too wide) in paragraph at lines 936--1012
  []$[]$ 
  []
 
 
-LaTeX Warning: Float too large for page by 22.83844pt on input line 1012.
+LaTeX Warning: Float too large for page by 22.83844pt on input line 1014.
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1103--1103
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1105--1105
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1103--1103
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1105--1105
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1103--1103
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1105--1105
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1103--1103
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1105--1105
 [][] 
  []
 
 
-Overfull \hbox (32.23323pt too wide) in paragraph at lines 1018--1104
+Overfull \hbox (32.23323pt too wide) in paragraph at lines 1020--1106
  []$[]$ 
  []
 
@@ -1033,47 +1064,47 @@ Overfull \hbox (32.23323pt too wide) in paragraph at lines 1018--1104
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (1.32616pt too wide) in paragraph at lines 1145--1145
+Overfull \hbox (1.32616pt too wide) in paragraph at lines 1147--1147
  []|\OT1/cmr/m/it/12 fixpoint|
  []
 
 
-Overfull \hbox (1.32616pt too wide) in paragraph at lines 1145--1145
+Overfull \hbox (1.32616pt too wide) in paragraph at lines 1147--1147
  []|\OT1/cmr/m/it/12 fixpoint|
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1145--1145
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1147--1147
 [][] 
  []
 
 
-Overfull \hbox (1.32616pt too wide) in paragraph at lines 1145--1145
+Overfull \hbox (1.32616pt too wide) in paragraph at lines 1147--1147
  []|\OT1/cmr/m/it/12 fixpoint|
  []
 
 
-Overfull \hbox (1.32616pt too wide) in paragraph at lines 1145--1145
+Overfull \hbox (1.32616pt too wide) in paragraph at lines 1147--1147
  []|\OT1/cmr/m/it/12 fixpoint|
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1145--1145
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1147--1147
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1145--1145
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1147--1147
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1145--1145
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1147--1147
 [][] 
  []
 
 
-Overfull \hbox (32.23323pt too wide) in paragraph at lines 1111--1146
+Overfull \hbox (32.23323pt too wide) in paragraph at lines 1113--1148
  []$[]$ 
  []
 
@@ -1081,68 +1112,68 @@ Overfull \hbox (32.23323pt too wide) in paragraph at lines 1111--1146
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [21] [22] [23]
-Overfull \hbox (39.34377pt too wide) detected at line 1253
+Overfull \hbox (39.34377pt too wide) detected at line 1255
 []
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1253--1253
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1255--1255
 [][] 
  []
 
 
-Overfull \hbox (39.34377pt too wide) detected at line 1253
+Overfull \hbox (39.34377pt too wide) detected at line 1255
 []
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1253--1253
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1255--1255
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1253--1253
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1255--1255
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1253--1253
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1255--1255
 [][] 
  []
 
 
-Overfull \hbox (32.23323pt too wide) in paragraph at lines 1158--1254
+Overfull \hbox (32.23323pt too wide) in paragraph at lines 1160--1256
  []$[]$ 
  []
 
 
-LaTeX Warning: Float too large for page by 22.79353pt on input line 1256.
+LaTeX Warning: Float too large for page by 22.79353pt on input line 1258.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1324--1324
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1326--1326
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1324--1324
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1326--1326
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1324--1324
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1326--1326
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1324--1324
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1326--1326
 [][] 
  []
 
 
-Overfull \hbox (73.42963pt too wide) in paragraph at lines 1267--1325
+Overfull \hbox (73.42963pt too wide) in paragraph at lines 1269--1327
  []$[]$ 
  []
 
@@ -1153,43 +1184,43 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 File: coqBaseStruct.pdf Graphic file (type pdf)
 
 <use coqBaseStruct.pdf>
-Package pdftex.def Info: coqBaseStruct.pdf used on input line 1355.
+Package pdftex.def Info: coqBaseStruct.pdf used on input line 1357.
 (pdftex.def)             Requested size: 411.93877pt x 106.80223pt.
  [29
 
  <./coqBaseStruct.pdf>] [30] [31] [32] [33]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 1492--1497
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 1494--1499
 []$[]$ 
  []
 
 [34]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 1510--1518
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 1512--1520
 []$[]$ 
  []
 
 <ocamlBaseStruct.pdf, id=176, 124.465pt x 72.27pt>
 File: ocamlBaseStruct.pdf Graphic file (type pdf)
  <use ocamlBaseStruct.pdf>
-Package pdftex.def Info: ocamlBaseStruct.pdf used on input line 1526.
+Package pdftex.def Info: ocamlBaseStruct.pdf used on input line 1528.
 (pdftex.def)             Requested size: 411.93877pt x 239.24155pt.
 
 [35]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 1543--1550
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 1545--1552
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 1551--1556
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 1553--1558
 []$[]$ 
  []
 
 [36 <./ocamlBaseStruct.pdf>]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 1559--1567
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 1561--1569
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 1568--1593
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 1570--1595
 []$[]$
  []
 
@@ -1199,246 +1230,280 @@ Overfull \hbox (17.62482pt too wide) in paragraph at lines 1568--1593
 Chapter 4.
 [41
 
-] [42] <./kpn_exec_times_bw.pdf, id=206, 361.35pt x 252.945pt>
+] [42]
+\openout4 = `diss-1.cpt'.
+
+
+Overfull \hbox (87.21371pt too wide) in paragraph at lines 1752--1753
+[][] 
+ []
+
+(./diss-1.cpt) (./diss-1.cpt)
+<./kpn_exec_times_bw.pdf, id=206, 361.35pt x 252.945pt>
 File: ./kpn_exec_times_bw.pdf Graphic file (type pdf)
 
 <use ./kpn_exec_times_bw.pdf>
-Package pdftex.def Info: ./kpn_exec_times_bw.pdf used on input line 1702.
+Package pdftex.def Info: ./kpn_exec_times_bw.pdf used on input line 1759.
 (pdftex.def)             Requested size: 185.37119pt x 129.76059pt.
 
 <./kpn_exec_times_opt_bw.pdf, id=207, 361.35pt x 252.945pt>
 File: ./kpn_exec_times_opt_bw.pdf Graphic file (type pdf)
 
 <use ./kpn_exec_times_opt_bw.pdf>
-Package pdftex.def Info: ./kpn_exec_times_opt_bw.pdf used on input line 1707.
+Package pdftex.def Info: ./kpn_exec_times_opt_bw.pdf used on input line 1764.
 (pdftex.def)             Requested size: 185.37119pt x 129.76059pt.
-\openout4 = `diss-1.cpt'.
+\openout4 = `diss-2.cpt'.
 
- (./diss-1.cpt) (./diss-1.cpt)
+ (./diss-2.cpt) (./diss-2.cpt)
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 <./sieve_exec_times_bw.pdf, id=208, 361.35pt x 252.945pt>
 File: ./sieve_exec_times_bw.pdf Graphic file (type pdf)
 
 <use ./sieve_exec_times_bw.pdf>
-Package pdftex.def Info: ./sieve_exec_times_bw.pdf used on input line 1720.
+Package pdftex.def Info: ./sieve_exec_times_bw.pdf used on input line 1777.
 (pdftex.def)             Requested size: 185.37119pt x 129.76059pt.
 
 <./sieve_exec_times_opt_bw.pdf, id=209, 361.35pt x 252.945pt>
 File: ./sieve_exec_times_opt_bw.pdf Graphic file (type pdf)
 
 <use ./sieve_exec_times_opt_bw.pdf>
-Package pdftex.def Info: ./sieve_exec_times_opt_bw.pdf used on input line 1725.
+Package pdftex.def Info: ./sieve_exec_times_opt_bw.pdf used on input line 1782.
 
-(pdftex.def)             Requested size: 185.37119pt x 129.76059pt.
-\openout4 = `diss-2.cpt'.
-
- (./diss-2.cpt) (./diss-2.cpt)
-<./sorter_exec_times_bw.pdf, id=210, 361.35pt x 252.945pt>
-File: ./sorter_exec_times_bw.pdf Graphic file (type pdf)
-
-<use ./sorter_exec_times_bw.pdf>
-Package pdftex.def Info: ./sorter_exec_times_bw.pdf used on input line 1736.
-(pdftex.def)             Requested size: 185.37119pt x 129.76059pt.
-
-<./sorter_exec_times_opt_bw.pdf, id=211, 361.35pt x 252.945pt>
-File: ./sorter_exec_times_opt_bw.pdf Graphic file (type pdf)
-
-<use ./sorter_exec_times_opt_bw.pdf>
-Package pdftex.def Info: ./sorter_exec_times_opt_bw.pdf used on input line 1741
-.
 (pdftex.def)             Requested size: 185.37119pt x 129.76059pt.
 \openout4 = `diss-3.cpt'.
 
- (./diss-3.cpt) (./diss-3.cpt) [43 <./kpn_exec_times_bw.pdf> <./kpn_exec_times_
-opt_bw.pdf> <./sieve_exec_times_bw.pdf> <./sieve_exec_times_opt_bw.pdf>]
-<./sorter_mem_bw.pdf, id=233, 361.35pt x 252.945pt>
-File: ./sorter_mem_bw.pdf Graphic file (type pdf)
- <use ./sorter_mem_bw.pdf>
-Package pdftex.def Info: ./sorter_mem_bw.pdf used on input line 1752.
+ (./diss-3.cpt) (./diss-3.cpt)
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[43] [44]
+Overfull \hbox (4.67523pt too wide) in paragraph at lines 1858--1859
+[][] 
+ []
+
+
+Overfull \hbox (4.67523pt too wide) in paragraph at lines 1917--1918
+[][] 
+ []
+
+<./sorter_exec_times_bw.pdf, id=217, 361.35pt x 252.945pt>
+File: ./sorter_exec_times_bw.pdf Graphic file (type pdf)
+
+<use ./sorter_exec_times_bw.pdf>
+Package pdftex.def Info: ./sorter_exec_times_bw.pdf used on input line 1943.
 (pdftex.def)             Requested size: 185.37119pt x 129.76059pt.
 
-<./sorter_mem_opt_bw.pdf, id=234, 361.35pt x 252.945pt>
-File: ./sorter_mem_opt_bw.pdf Graphic file (type pdf)
+<./sorter_exec_times_opt_bw.pdf, id=218, 361.35pt x 252.945pt>
+File: ./sorter_exec_times_opt_bw.pdf Graphic file (type pdf)
 
-<use ./sorter_mem_opt_bw.pdf>
-Package pdftex.def Info: ./sorter_mem_opt_bw.pdf used on input line 1757.
+<use ./sorter_exec_times_opt_bw.pdf>
+Package pdftex.def Info: ./sorter_exec_times_opt_bw.pdf used on input line 1948
+.
 (pdftex.def)             Requested size: 185.37119pt x 129.76059pt.
 \openout4 = `diss-4.cpt'.
 
- (./diss-4.cpt) (./diss-4.cpt) [44 <./sorter_exec_times_bw.pdf> <./sorter_exec_
-times_opt_bw.pdf> <./sorter_mem_bw.pdf> <./sorter_mem_opt_bw.pdf>]
+ (./diss-4.cpt) (./diss-4.cpt)
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./sorter_mem_bw.pdf, id=219, 361.35pt x 252.945pt>
+File: ./sorter_mem_bw.pdf Graphic file (type pdf)
+ <use ./sorter_mem_bw.pdf>
+Package pdftex.def Info: ./sorter_mem_bw.pdf used on input line 1959.
+(pdftex.def)             Requested size: 185.37119pt x 129.76059pt.
+
+<./sorter_mem_opt_bw.pdf, id=220, 361.35pt x 252.945pt>
+File: ./sorter_mem_opt_bw.pdf Graphic file (type pdf)
+
+<use ./sorter_mem_opt_bw.pdf>
+Package pdftex.def Info: ./sorter_mem_opt_bw.pdf used on input line 1964.
+(pdftex.def)             Requested size: 185.37119pt x 129.76059pt.
+\openout4 = `diss-5.cpt'.
+
+ (./diss-5.cpt) (./diss-5.cpt)
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[45 <./kpn_exec_times_bw.pdf> <./kpn_exec_times_opt_bw.pdf> <./sieve_exec_times
+_bw.pdf> <./sieve_exec_times_opt_bw.pdf>] [46 <./sorter_exec_times_bw.pdf> <./s
+orter_exec_times_opt_bw.pdf>] [47 <./sorter_mem_bw.pdf> <./sorter_mem_opt_bw.pd
+f>] [48
+
+]
 Chapter 5.
-[45
+[49
 
+] [50
 
-] [46
+] (./diss.bbl [51
 
-] (./diss.bbl [47
-
-] [48]) [49] [50
+] [52]) [53] [54
 
 ]
 Appendix A.
-<../mconbase.pdf, id=273, 597.50829pt x 845.0471pt>
+<../mconbase.pdf, id=287, 597.50829pt x 845.0471pt>
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf>
-Package pdftex.def Info: ../mconbase.pdf used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf used on input line 1997.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf>
-Package pdftex.def Info: ../mconbase.pdf used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf used on input line 1997.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
- [51
+ [55
 
 ]
-<../mconbase.pdf, id=278, page=1, 597.50829pt x 845.0471pt>
+<../mconbase.pdf, id=291, page=1, 597.50829pt x 845.0471pt>
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 1>
-Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1997.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 1>
-Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 1>
-Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 1>
-Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 1>
-Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page1 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
- [52 <../mconbase.pdf>]
-<../mconbase.pdf, id=328, page=2, 597.50829pt x 845.0471pt>
+ [56 <../mconbase.pdf>]
+<../mconbase.pdf, id=342, page=2, 597.50829pt x 845.0471pt>
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 2>
-Package pdftex.def Info: ../mconbase.pdf, page2 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page2 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 2>
-Package pdftex.def Info: ../mconbase.pdf, page2 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page2 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 2>
-Package pdftex.def Info: ../mconbase.pdf, page2 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page2 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
- [53 <../mconbase.pdf>]
-<../mconbase.pdf, id=332, page=3, 597.50829pt x 845.0471pt>
+ [57 <../mconbase.pdf>]
+<../mconbase.pdf, id=347, page=3, 597.50829pt x 845.0471pt>
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 3>
-Package pdftex.def Info: ../mconbase.pdf, page3 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page3 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 3>
-Package pdftex.def Info: ../mconbase.pdf, page3 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page3 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 3>
-Package pdftex.def Info: ../mconbase.pdf, page3 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page3 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
- [54 <../mconbase.pdf>]
-<../mconbase.pdf, id=337, page=4, 597.50829pt x 845.0471pt>
+ [58 <../mconbase.pdf>]
+<../mconbase.pdf, id=351, page=4, 597.50829pt x 845.0471pt>
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 4>
-Package pdftex.def Info: ../mconbase.pdf, page4 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page4 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 4>
-Package pdftex.def Info: ../mconbase.pdf, page4 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page4 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 4>
-Package pdftex.def Info: ../mconbase.pdf, page4 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page4 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
- [55 <../mconbase.pdf>]
-<../mconbase.pdf, id=346, page=5, 597.50829pt x 845.0471pt>
+ [59 <../mconbase.pdf>]
+<../mconbase.pdf, id=360, page=5, 597.50829pt x 845.0471pt>
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 5>
-Package pdftex.def Info: ../mconbase.pdf, page5 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page5 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 5>
-Package pdftex.def Info: ../mconbase.pdf, page5 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page5 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 5>
-Package pdftex.def Info: ../mconbase.pdf, page5 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page5 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
- [56 <../mconbase.pdf>]
-<../mconbase.pdf, id=355, page=6, 597.50829pt x 845.0471pt>
+ [60 <../mconbase.pdf>]
+<../mconbase.pdf, id=369, page=6, 597.50829pt x 845.0471pt>
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 6>
-Package pdftex.def Info: ../mconbase.pdf, page6 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page6 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
  <use ../mconbase.pdf, page 6>
-Package pdftex.def Info: ../mconbase.pdf, page6 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page6 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
 File: ../mconbase.pdf Graphic file (type pdf)
 
 <use ../mconbase.pdf, page 6>
-Package pdftex.def Info: ../mconbase.pdf, page6 used on input line 1790.
+Package pdftex.def Info: ../mconbase.pdf, page6 used on input line 1997.
 (pdftex.def)             Requested size: 562.12285pt x 795.00201pt.
- [57 <../mconbase.pdf>] [58]
+ [61 <../mconbase.pdf>] [62]
 Appendix B.
-(./partIIproposal.tex [59
+(./partIIproposal.tex [63
 
 
-] [60] [61] [62]) [63] (./diss.aux)
+] [64] [65] [66]) [67] (./diss.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 20387 strings out of 493307
- 390259 string characters out of 6139905
- 861343 words of memory out of 5000000
- 23367 multiletter control sequences out of 15000+600000
- 17949 words of font info for 69 fonts, out of 8000000 for 9000
+ 21253 strings out of 493307
+ 414388 string characters out of 6139905
+ 872545 words of memory out of 5000000
+ 24198 multiletter control sequences out of 15000+600000
+ 18856 words of font info for 72 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 56i,66n,72p,1749b,1660s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 56i,66n,72p,1749b,1889s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmti8.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmtt12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/latxfont/lcircle1.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1200
-.pfb>
-Output written on diss.pdf (73 pages, 543547 bytes).
+ist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmti8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmtt12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/latx
+font/lcircle1.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1200.pfb>
+Output written on diss.pdf (77 pages, 561915 bytes).
 PDF statistics:
- 441 PDF objects out of 1000 (max. 8388607)
- 319 compressed objects within 4 object streams
+ 457 PDF objects out of 1000 (max. 8388607)
+ 330 compressed objects within 4 object streams
  0 named destinations out of 1000 (max. 500000)
  108 words of extra memory for PDF output out of 10000 (max. 10000000)
 

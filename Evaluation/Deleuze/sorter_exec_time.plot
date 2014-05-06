@@ -11,6 +11,7 @@ set size 1.,1.
 
 plot "sorter_cont_data_clean_realtime.txt" using 1:2 with lp title 'cont', \
 "sorter_mcon_data_clean_realtime.txt" using 1:2 with lp title 'mcon', \
+"sorter_dlcont_data_clean_realtime.txt" using 1:2 with lp title 'dlcont', \
 "sorter_promise_data_clean_realtime.txt" using 1:2 with lp title 'promise', \
 "sorter_sys_data_clean_realtime.txt" using 1:2 with lp title 'sys', \
 "sorter_tramp_data_clean_realtime.txt" using 1:2 with lp title 'tramp', \
@@ -41,6 +42,7 @@ set output "sorter_mem.eps"
 
 plot "sorter_cont_data_clean_mem.txt" using 1:2 with lp title 'cont', \
 "sorter_mcon_data_clean_mem.txt" using 1:2 with lp title 'mcon', \
+"sorter_dlcont_data_clean_mem.txt" using 1:2 with lp title 'dlcont', \
 "sorter_promise_data_clean_mem.txt" using 1:2 with lp title 'promise', \
 "sorter_sys_data_clean_mem.txt" using 1:2 with lp title 'sys', \
 "sorter_tramp_data_clean_mem.txt" using 1:2 with lp title 'tramp', \
@@ -57,6 +59,7 @@ set term post eps enhanced color fontfile "/usr/share/texmf/fonts/type1/public/c
 set output "sorter_ratio_mcon_cont.eps" 
 plot "< paste sorter_cont_data_clean_realtime.txt sorter_mcon_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs cont', \
 "< paste sorter_promise_data_clean_realtime.txt sorter_mcon_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs promise', \
+"< paste sorter_dlcont_data_clean_realtime.txt sorter_mcon_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs dlcont', \
 "< paste sorter_tramp_data_clean_realtime.txt sorter_mcon_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs tramp', \
 "< paste sorter_vm_data_clean_realtime.txt sorter_mcon_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs vm', \
 "< paste sorter_lwt_data_clean_realtime.txt sorter_mcon_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs lwt', \
@@ -75,6 +78,7 @@ set size 1.,1.
 
 plot "sorter_cont_opt_data_clean_realtime.txt" using 1:2 with lp title 'cont', \
 "sorter_mcon_opt_data_clean_realtime.txt" using 1:2 with lp title 'mcon', \
+"sorter_dlcont_opt_data_clean_realtime.txt" using 1:2 with lp title 'dlcont', \
 "sorter_promise_opt_data_clean_realtime.txt" using 1:2 with lp title 'promise', \
 "sorter_sys_opt_data_clean_realtime.txt" using 1:2 with lp title 'sys', \
 "sorter_tramp_opt_data_clean_realtime.txt" using 1:2 with lp title 'tramp', \
@@ -104,6 +108,7 @@ set output "sorter_mem_opt.eps"
 
 plot "sorter_cont_opt_data_clean_mem.txt" using 1:2 with lp title 'cont', \
 "sorter_mcon_opt_data_clean_mem.txt" using 1:2 with lp title 'mcon', \
+"sorter_dlcont_opt_data_clean_mem.txt" using 1:2 with lp title 'dlcont', \
 "sorter_promise_opt_data_clean_mem.txt" using 1:2 with lp title 'promise', \
 "sorter_sys_opt_data_clean_mem.txt" using 1:2 with lp title 'sys', \
 "sorter_tramp_opt_data_clean_mem.txt" using 1:2 with lp title 'tramp', \
@@ -119,6 +124,7 @@ set term post eps enhanced color fontfile "/usr/share/texmf/fonts/type1/public/c
 set output "sorter_ratio_mcon_cont_opt.eps" 
 plot "< paste sorter_cont_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs cont', \
 "< paste sorter_promise_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs promise', \
+"< paste sorter_dlcont_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs dlcont', \
 "< paste sorter_tramp_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs tramp', \
 "< paste sorter_lwt_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs lwt', \
 "< paste sorter_sys_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs sys'

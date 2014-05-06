@@ -111,8 +111,10 @@
 % Tikz set up
 \usepackage{tikz}
 \usepackage{tikz-cd}
-\usetikzlibrary{arrows, shapes}
-
+\usetikzlibrary{arrows, shapes, positioning}
+\usetikzlibrary{trees}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.markings}
 %\usepackage{harvard}
 
 \usepackage[final]{pdfpages}
@@ -1685,17 +1687,72 @@ Fork in this implementation is not associative:
 To evaluate the performance of the framework I followed Deleuze\cite{deleuzelight}. He provides a library for evaluating lightweight and heavyweight threading implementations in OCaml. This evaluation library contains seven implementations of concurrency primitives.
 \begin{enumerate}
 \item{\textbf{sys}: A heavyweight implementation with system threads.}
-\item{\textbf{vm}: A lightweight concurrency implementation based on the \verb|thread| library of OCaml.}
+\item{\textbf{vm}: A lightweight concurrency implementation based on the \verb|thread| library of OCaml. This implementation is only available in bytecode.}
 \item{\textbf{cont}: A continuation monad based lightweight implementation, without verification. Note, this is a much lighter implementation compared to the one in this project.}
 \item{\textbf{promise}: A promise monad based implementation of lightweight concurrency.}
 \item{\textbf{tramp}: A lightweight implementation based on the trampolined style.}
 \item{\textbf{lwt}: An LWT\cite{LWT} based implementation of lightweight concurrency.}
 \item{\textbf{equeue}: An event-based programming style lightweight concurrency implementation based on the \textbf{Equeue} library of OCamlNet. I did not use this implementation in the evaluation as I could not find the right libraries to compile this.}
 \end{enumerate}
-\subsection{Methods}
-Deleuze provides three examples to evaluate, based on the examples used in Kahn's process language paper\cite{kahn1976coroutines}. I have implemented the examples in my system and measured the runtime and memory use for various input sizes. The runtime was measured with \textit{Unix.time}
+\subsection{Method}
+Deleuze provides three examples to evaluate, based on the examples used in Kahn's process language paper\cite{kahn1976coroutines}. I have implemented the examples in my system. I measured the runtime and memory use of both my implementation and the library implementations for various input sizes. The runtime was measured with \textit{Unix.time} and the memory use was measured with the quick stat function of the \verb|Gc| module of OCaml which gives an interface to the garbage collector. Both bytecode and native code versions were measured. All programs were measured as both OCaml byetcode and native code. All examples were run on an Intel i7-2720QM CPU that is a 4 core hyperthreaded system. This computer had 8 GBs of memory, OCaml version 3.12.1, a linux kernel version 3.11.0-15-generic, caml-shift version of August 2013.
+
+
+My conjecture was that my system will perform with similar characteristics as lightweight systems, however with a serious overhead due to the complex pattern matching and constructor based system.
 \subsection{Examples}
+The three examples provided by Deleuze are all process networks from Kahn\cite{kahn1976coroutines}.
+\begin{enumerate}
+\item{\verb|kpn|: A process network calculating all positive integers of the form $ 2^a3^b5^c $ for all $ a,b,c $ non-negative integers}
+\item{\verb|sieve|: The well known sieve of Eratosthenes.}
+\item{\verb|sorter|: Concurrent sort of a list of integers.}
+\end{enumerate}
 \subsubsection{Kahn process network}
+\begin{figure}
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm,
+  thick,main node/.style={circle,draw,
+  font=\sffamily\Large\bfseries,minimum size=8mm}, mvar/.style={rectangle, draw, ,minimum size=3mm}]
+  \node[mvar] (F2) [label=below:{$\text{FIFO}_2$}] {};
+  \node[mvar] (F3) [below of=F2, label=below:{$\text{FIFO}_3$}] {};
+  \node[mvar] (F5) [below of=F3, label=below:{$\text{FIFO}_5$}] {};
+  \node[main node] (T2) [right = 1 of F2, label=below:{$\times 2$}] {};
+  \node[main node] (T3) [right = 1 of F3,  label=below:{$\times 3$}] {};
+  \node[main node] (T5) [right = 1 of F5, label=below:{$\times 5$}] {};
+  \node[mvar] (M2) [right of=T2, label=below:{$\text{m}_2$}] {};
+  \node[mvar] (M3) [right of=T3, label=below:{$\text{m}_3$}] {};
+  \node[mvar] (M5) [right of=T5, label=below:{$\text{m}_5$}] {};
+  \node[main node] (Merge35) [below=0.5 of M3, xshift=2cm, label=below:{$\text{merge}_{35}$}] {};
+  \node[mvar] (M35) [right of=Merge35, label=below:{$\text{m}_{35}$}] {};
+  \node[main node] (Merge235) [below=0.5 of M2, xshift=6cm, label=below:{$\text{merge}_{235}$}] {};
+   \node[mvar] (M235) [right of=Merge235, label=below:{$\text{m}_{235}$}] {};
+  \node[main node] (P) [right of=M235, label=below:{P}] {};
+%  \node[main node] (S) [right of=E] {S};
+%  \node[main node] (F) [right of=S] {F};
+%  \node[main node] (I) [right of=F] {I};
+
+  \path[every node/.style={font=\sffamily\small,
+  		fill=white,inner sep=1pt}]
+  	% Right-hand-side arrows rendered from top to bottom to
+  	% achieve proper rendering of labels over arrows.
+    (F2) edge   (T2)
+    (F3) edge   (T3)
+    (F5) edge   (T5)
+    (T2) edge   (M2)
+    (T3) edge   (M3)
+    (T5) edge   (M5)
+    (M3) edge   (Merge35)
+    (M5) edge   (Merge35)
+    (Merge35) edge   (M35)
+    (M2) edge [bend left=20]   (Merge235)
+    (M35) edge [bend left=40]   (Merge235)
+    (Merge235) edge   (M235)
+    (M235) edge   (P)
+    (P) edge [out=150, in=40] (F2)
+    (P) edge [out=120, in=130]  (F3)
+    (P) edge [out=-150, in=-40]  (F5);
+\end{tikzpicture}
+\cprotect\caption{\verb|kpn| process outline}
+\end{figure}
+
 \begin{figure}[h]
 \centering
 \begin{subfigure}[b]{0.45\linewidth}
@@ -1729,6 +1786,156 @@ Deleuze provides three examples to evaluate, based on the examples used in Kahn'
 \cprotect\caption{\verb|sieve| execution time}
 \label{fig:sieve_exec_times}
 \end{figure}
+
+Unlike the expectation, the concurrency framework with random reductions (mcon) in \Cref{fig:sieve_exec_times} exhibits an exponential behaviour. The reason for this is in the way random selection parameters relate to the \textbf{fork} tree formed by the expression.
+
+Uniform random reductions assigns equal probabilities to each edge of a fork as it can be seen in \Cref{fig:sieve_without_ftt}. In general the probability that the filter process of the $ k $th prime fires is $ \frac{1}{2^{k+1}} $. This uneven probability distribution means that for the expected number of reduction steps taken by the system before finding the $ k $th prime is bigger than $ 2^{k+1} \in O(2^{k}) $ as it has to make at least one step within each filter.
+
+However, the concurrency framework does not prescribe any evaluation strategy. It is possible to keep track of the fork tree at runtime and equalize the scheduling probabilities of all processes with every computation placeholder. This results in the scheduling probabilities shown in \Cref{fig:sieve_ftt}. These probabilities reduce the expected number of steps for the $ k $th prime to $ k(k+1) $. The speedup is easily seen on \Cref{fig:sieve_exec_times} with the series $ \text{mcon}_{\text{ftt}} $.
+
+% Define styles for the different kind of edges in a Feynman diagram
+\begin{figure}
+\centering
+\begin{subfigure}[b]{0.45\linewidth}
+\begin{tikzpicture}[
+        thick,
+        % Set the overall layout of the tree
+        level/.style={level distance=1.5cm},
+        level 2/.style={sibling distance=2.6cm},
+        level 3/.style={sibling distance=2cm}
+    ]
+    \coordinate
+        % I have to insert a dummy child to get the tree to grow
+        % correctly to the right.
+        child[grow=right, level distance=0pt] {
+        child  {
+            child {
+                node {output}
+                edge from parent
+                node [below] {$\frac{1}{4}$}
+            }
+            child {
+                node {integers}
+                edge from parent
+                node [above] {$\frac{1}{4}$}
+            }
+            edge from parent
+            node [below] {$\frac{1}{2}$}
+        }
+        child {
+            child {
+                node {filter2}
+                edge from parent
+                node [below] {$\frac{1}{4}$}
+            }
+            child {
+                child {
+                    node {filter3}
+                    edge from parent
+                    node [below] {$\frac{1}{8}$}
+                }
+                child {
+                     child {
+                         node {filter5}
+                         edge from parent
+                         node [below] {$\frac{1}{16}$}
+                         }
+                         child {
+                          node {sift}
+                          edge from parent
+                          node [above] {$\frac{1}{16}$}
+                         }
+                    edge from parent
+                    node [above] {$\frac{1}{8}$}
+                }
+                edge from parent
+                node [above] {$\frac{1}{4}$}
+            }
+            edge from parent
+            node [above] {$\frac{1}{2}$}
+        }
+    };
+\end{tikzpicture}
+\caption{Random without fork tree tracking}
+\label{fig:sieve_without_ftt}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\linewidth}
+\begin{tikzpicture}[
+        thick,
+        % Set the overall layout of the tree
+        level/.style={level distance=1.5cm},
+        level 2/.style={sibling distance=2.6cm},
+        level 3/.style={sibling distance=2cm}
+    ]
+    \coordinate
+        % I have to insert a dummy child to get the tree to grow
+        % correctly to the right.
+        child[grow=left, level distance=0pt] {
+        child  {
+            child {
+                node {output}
+                edge from parent
+                node [above] {$\frac{1}{6}$}
+            }
+            child {
+                node {integers}
+                edge from parent
+                node [below] {$\frac{1}{6}$}
+            }
+            edge from parent
+        }
+        child {
+            child {
+                node {filter2}
+                edge from parent
+                node [above] {$\frac{1}{6}$}
+            }
+            child {
+                child {
+                    node {filter3}
+                    edge from parent
+                    node [above] {$\frac{1}{6}$}
+                }
+                child {
+                     child {
+                         node {filter5}
+                         edge from parent
+                         node [above] {$\frac{1}{6}$}
+                         }
+                         child {
+                          node {sift}
+                          edge from parent
+                          node [below] {$\frac{1}{6}$}
+                         }
+                    edge from parent
+                }
+                edge from parent
+            }
+            edge from parent
+        }
+    };
+\end{tikzpicture}
+\caption{Fork tree tracking}
+\label{fig:sieve_ftt}
+\end{subfigure}
+%
+
+%\caption{Random without fork tree tacking
+%
+%
+
+%\caption{Fork tree tracking}
+%
+\caption{Sieve fork tree}
+\label{fig:sieve_fork_tree}
+\end{figure}
+
+
+
+
+
+
+
 \subsubsection{Concurrent sort}
 \begin{figure}[h]
 \centering
