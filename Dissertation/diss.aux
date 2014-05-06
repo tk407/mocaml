@@ -130,12 +130,12 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces Syntax and semantics of product types\relax }}{23}}
 \newlabel{fig:semprod}{{3.5}{23}}
 \newlabel{fig:semprod@cref}{{[figure][5][3]3.5}{23}}
-\citation{hoareetal2001tackling}
 \@writefile{lof}{\contentsline {figure}{\numberline {3.6}{\ignorespaces Syntax and semantics of the fixpoint operator\relax }}{24}}
 \newlabel{fig:semfix}{{3.6}{24}}
 \newlabel{fig:semfix@cref}{{[figure][6][3]3.6}{24}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1.5}Monadic primitives}{24}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1.6}Fork}{24}}
+\citation{hoareetal2001tackling}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1.7}Computation place holders}{26}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3.7}{\ignorespaces Syntax and semantics of the monadic primitives, ret and bind\relax }}{27}}
 \newlabel{fig:semmon}{{3.7}{27}}
@@ -244,7 +244,11 @@
 \@writefile{toc}{\contentsline {subsubsection}{Monadic laws}{41}}
 \@writefile{toc}{\contentsline {subsubsection}{Fork commutativity}{41}}
 \citation{deleuzelight}
+\citation{deleuzelight}
+\citation{deleuzelight}
+\citation{deleuzelight}
 \citation{LWT}
+\citation{deleuzelight}
 \citation{kahn1976coroutines}
 \@writefile{toc}{\contentsline {subsubsection}{Fork associativity}{42}}
 \@writefile{toc}{\contentsline {subsubsection}{Deadlock properties}{42}}
@@ -255,9 +259,10 @@
 \citation{kahn1976coroutines}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Method}{43}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Examples}{43}}
-\@writefile{toc}{\contentsline {subsubsection}{Kahn process network}{43}}
-\@writefile{toc}{\contentsline {subsubsection}{Eratosthene Sieve}{43}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces \input diss-1.cpt\relax \relax }}{44}}
+\newlabel{fig:kpn_process_outline}{{4.1}{44}}
+\newlabel{fig:kpn_process_outline@cref}{{[figure][1][4]4.1}{44}}
+\@writefile{toc}{\contentsline {subsubsection}{Kahn process network}{44}}
 \newlabel{fig:kpn_exec_times_bc}{{4.2a}{45}}
 \newlabel{fig:kpn_exec_times_bc@cref}{{[subfigure][1][4,2]4.2a}{45}}
 \newlabel{sub@fig:kpn_exec_times_bc}{{a}{45}}
@@ -269,8 +274,10 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces \input diss-2.cpt\relax \relax }}{45}}
 \newlabel{fig:kpn_exec_times}{{4.2}{45}}
 \newlabel{fig:kpn_exec_times@cref}{{[figure][2][4]4.2}{45}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces \input diss-3.cpt\relax \relax }}{45}}
-\@writefile{toc}{\contentsline {subsubsection}{Concurrent sort}{45}}
+\@writefile{toc}{\contentsline {subsubsection}{Sieve of Eratosthenes}{45}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces \input diss-3.cpt\relax \relax }}{46}}
+\newlabel{fig:sieve_process_outline}{{4.3}{46}}
+\newlabel{fig:sieve_process_outline@cref}{{[figure][3][4]4.3}{46}}
 \newlabel{fig:sieve_exec_times_bc}{{4.4a}{46}}
 \newlabel{fig:sieve_exec_times_bc@cref}{{[subfigure][1][4,4]4.4a}{46}}
 \newlabel{sub@fig:sieve_exec_times_bc}{{a}{46}}
@@ -282,41 +289,52 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces \input diss-4.cpt\relax \relax }}{46}}
 \newlabel{fig:sieve_exec_times}{{4.4}{46}}
 \newlabel{fig:sieve_exec_times@cref}{{[figure][4][4]4.4}{46}}
-\newlabel{fig:sieve_without_ftt}{{4.5a}{46}}
-\newlabel{fig:sieve_without_ftt@cref}{{[subfigure][1][4,5]4.5a}{46}}
-\newlabel{sub@fig:sieve_without_ftt}{{a}{46}}
-\newlabel{sub@fig:sieve_without_ftt@cref}{{[subfigure][1][4,5]4.5a}{46}}
-\newlabel{fig:sieve_ftt}{{4.5b}{46}}
-\newlabel{fig:sieve_ftt@cref}{{[subfigure][2][4,5]4.5b}{46}}
-\newlabel{sub@fig:sieve_ftt}{{b}{46}}
-\newlabel{sub@fig:sieve_ftt@cref}{{[subfigure][2][4,5]4.5b}{46}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Sieve fork tree\relax }}{46}}
-\newlabel{fig:sieve_fork_tree}{{4.5}{46}}
-\newlabel{fig:sieve_fork_tree@cref}{{[figure][5][4]4.5}{46}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces \input diss-5.cpt\relax \relax }}{47}}
-\newlabel{fig:sorter_exec_times_bc}{{4.7a}{47}}
-\newlabel{fig:sorter_exec_times_bc@cref}{{[subfigure][1][4,7]4.7a}{47}}
-\newlabel{sub@fig:sorter_exec_times_bc}{{a}{47}}
-\newlabel{sub@fig:sorter_exec_times_bc@cref}{{[subfigure][1][4,7]4.7a}{47}}
-\newlabel{fig:sorter_exec_times_nat}{{4.7b}{47}}
-\newlabel{fig:sorter_exec_times_nat@cref}{{[subfigure][2][4,7]4.7b}{47}}
-\newlabel{sub@fig:sorter_exec_times_nat}{{b}{47}}
-\newlabel{sub@fig:sorter_exec_times_nat@cref}{{[subfigure][2][4,7]4.7b}{47}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces \input diss-6.cpt\relax \relax }}{47}}
-\newlabel{fig:sorter_exec_times}{{4.7}{47}}
-\newlabel{fig:sorter_exec_times@cref}{{[figure][7][4]4.7}{47}}
-\newlabel{fig:sorter_mem_bc}{{4.8a}{47}}
-\newlabel{fig:sorter_mem_bc@cref}{{[subfigure][1][4,8]4.8a}{47}}
-\newlabel{sub@fig:sorter_mem_bc}{{a}{47}}
-\newlabel{sub@fig:sorter_mem_bc@cref}{{[subfigure][1][4,8]4.8a}{47}}
-\newlabel{fig:sorter_mem_nat}{{4.8b}{47}}
-\newlabel{fig:sorter_mem_nat@cref}{{[subfigure][2][4,8]4.8b}{47}}
-\newlabel{sub@fig:sorter_mem_nat}{{b}{47}}
-\newlabel{sub@fig:sorter_mem_nat@cref}{{[subfigure][2][4,8]4.8b}{47}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces \input diss-7.cpt\relax \relax }}{47}}
-\newlabel{fig:sorter_mem}{{4.8}{47}}
-\newlabel{fig:sorter_mem@cref}{{[figure][8][4]4.8}{47}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Conclusion}{49}}
+\newlabel{fig:sieve_without_ftt}{{4.5a}{47}}
+\newlabel{fig:sieve_without_ftt@cref}{{[subfigure][1][4,5]4.5a}{47}}
+\newlabel{sub@fig:sieve_without_ftt}{{a}{47}}
+\newlabel{sub@fig:sieve_without_ftt@cref}{{[subfigure][1][4,5]4.5a}{47}}
+\newlabel{fig:sieve_ftt}{{4.5b}{47}}
+\newlabel{fig:sieve_ftt@cref}{{[subfigure][2][4,5]4.5b}{47}}
+\newlabel{sub@fig:sieve_ftt}{{b}{47}}
+\newlabel{sub@fig:sieve_ftt@cref}{{[subfigure][2][4,5]4.5b}{47}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Sieve fork tree\relax }}{47}}
+\newlabel{fig:sieve_fork_tree}{{4.5}{47}}
+\newlabel{fig:sieve_fork_tree@cref}{{[figure][5][4]4.5}{47}}
+\@writefile{toc}{\contentsline {subsubsection}{Concurrent sort}{47}}
+\newlabel{fig:sorter_process_single}{{4.6a}{48}}
+\newlabel{fig:sorter_process_single@cref}{{[subfigure][1][4,6]4.6a}{48}}
+\newlabel{sub@fig:sorter_process_single}{{a}{48}}
+\newlabel{sub@fig:sorter_process_single@cref}{{[subfigure][1][4,6]4.6a}{48}}
+\newlabel{fig:sorter_process_full}{{4.6b}{48}}
+\newlabel{fig:sorter_process_full@cref}{{[subfigure][2][4,6]4.6b}{48}}
+\newlabel{sub@fig:sorter_process_full}{{b}{48}}
+\newlabel{sub@fig:sorter_process_full@cref}{{[subfigure][2][4,6]4.6b}{48}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces \input diss-5.cpt\relax \relax }}{48}}
+\newlabel{fig:sorter_process_outline}{{4.6}{48}}
+\newlabel{fig:sorter_process_outline@cref}{{[figure][6][4]4.6}{48}}
+\newlabel{fig:sorter_exec_times_bc}{{4.7a}{48}}
+\newlabel{fig:sorter_exec_times_bc@cref}{{[subfigure][1][4,7]4.7a}{48}}
+\newlabel{sub@fig:sorter_exec_times_bc}{{a}{48}}
+\newlabel{sub@fig:sorter_exec_times_bc@cref}{{[subfigure][1][4,7]4.7a}{48}}
+\newlabel{fig:sorter_exec_times_nat}{{4.7b}{48}}
+\newlabel{fig:sorter_exec_times_nat@cref}{{[subfigure][2][4,7]4.7b}{48}}
+\newlabel{sub@fig:sorter_exec_times_nat}{{b}{48}}
+\newlabel{sub@fig:sorter_exec_times_nat@cref}{{[subfigure][2][4,7]4.7b}{48}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces \input diss-6.cpt\relax \relax }}{48}}
+\newlabel{fig:sorter_exec_times}{{4.7}{48}}
+\newlabel{fig:sorter_exec_times@cref}{{[figure][7][4]4.7}{48}}
+\newlabel{fig:sorter_mem_bc}{{4.8a}{49}}
+\newlabel{fig:sorter_mem_bc@cref}{{[subfigure][1][4,8]4.8a}{49}}
+\newlabel{sub@fig:sorter_mem_bc}{{a}{49}}
+\newlabel{sub@fig:sorter_mem_bc@cref}{{[subfigure][1][4,8]4.8a}{49}}
+\newlabel{fig:sorter_mem_nat}{{4.8b}{49}}
+\newlabel{fig:sorter_mem_nat@cref}{{[subfigure][2][4,8]4.8b}{49}}
+\newlabel{sub@fig:sorter_mem_nat}{{b}{49}}
+\newlabel{sub@fig:sorter_mem_nat@cref}{{[subfigure][2][4,8]4.8b}{49}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces \input diss-7.cpt\relax \relax }}{49}}
+\newlabel{fig:sorter_mem}{{4.8}{49}}
+\newlabel{fig:sorter_mem@cref}{{[figure][8][4]4.8}{49}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Conclusion}{51}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \bibdata{refs}
@@ -333,7 +351,7 @@
 \bibcite{deleuzelight}{11}
 \bibcite{friedman1988applications}{12}
 \bibcite{ganz1999trampolined}{13}
-\@writefile{toc}{\contentsline {chapter}{Bibliography}{51}}
+\@writefile{toc}{\contentsline {chapter}{Bibliography}{53}}
 \bibcite{hoareetal2001tackling}{14}
 \bibcite{kahn1976coroutines}{15}
 \bibcite{functory}{16}
@@ -353,39 +371,39 @@
 \bibcite{Async}{30}
 \bibcite{tollitte2012producing}{31}
 \bibcite{vouillon2008lwt}{32}
-\@writefile{toc}{\contentsline {chapter}{\numberline {A}Full semantics}{55}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Full semantics}{57}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{chap:fullsemantics}{{A}{55}}
-\newlabel{chap:fullsemantics@cref}{{[appendix][1][2147483647]A}{55}}
-\@writefile{toc}{\contentsline {section}{\numberline {A.1}blah}{62}}
+\newlabel{chap:fullsemantics}{{A}{57}}
+\newlabel{chap:fullsemantics@cref}{{[appendix][1][2147483647]A}{57}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.1}blah}{64}}
 \citation{OCaml}
 \citation{LWT}
 \citation{Async}
 \citation{Lem}
 \citation{Ott}
-\@writefile{toc}{\contentsline {chapter}{\numberline {B}Project Proposal}{63}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {B}Project Proposal}{65}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {B.1}Introduction of work to be undertaken}{63}}
-\@writefile{toc}{\contentsline {section}{\numberline {B.2}Description of starting point}{63}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.1}Introduction of work to be undertaken}{65}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.2}Description of starting point}{65}}
 \citation{Claessen99functionalpearls}
 \citation{deleuzelight}
 \citation{vouillon2008lwt}
-\@writefile{toc}{\contentsline {section}{\numberline {B.3}Substance and structure}{64}}
-\@writefile{toc}{\contentsline {section}{\numberline {B.4}Criteria}{64}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.3}Substance and structure}{66}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.4}Criteria}{66}}
 \citation{Coq}
 \citation{OCamlLight}
 \citation{OCamlLightWeb}
-\@writefile{toc}{\contentsline {section}{\numberline {B.5}Timetable}{65}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.1}Week 1 and 2}{65}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.2}Week 3 and 4}{65}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.3}Week 5 and 6}{65}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.4}Week 7 and 8}{65}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.5}Week 9 and 10}{66}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.6}Week 11 and 12}{66}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.7}Week 13 and 14}{66}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.8}Week 15 and 16}{66}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.9}Week 17 and 18}{66}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.10}Week 19 and 20}{66}}
-\@writefile{toc}{\contentsline {section}{\numberline {B.6}Resource Declaration}{66}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.5}Timetable}{67}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.1}Week 1 and 2}{67}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.2}Week 3 and 4}{67}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.3}Week 5 and 6}{67}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.4}Week 7 and 8}{67}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.5}Week 9 and 10}{68}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.6}Week 11 and 12}{68}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.7}Week 13 and 14}{68}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.8}Week 15 and 16}{68}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.9}Week 17 and 18}{68}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5.10}Week 19 and 20}{68}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.6}Resource Declaration}{68}}

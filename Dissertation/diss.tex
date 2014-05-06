@@ -122,11 +122,12 @@
 \usepackage{cprotect}
 \usepackage{caption}
 \usepackage{subcaption}
-%\usepackage{comment}
-%\excludecomment{wc}
+\usepackage{comment}
+\includecomment{wc}
 %\includecomment{nwc}
 %\renewenvironment{comment}{}{}
-%\renewenvironment{lstlisting}{\begin{lstlisting}}{\end{}
+%\renewenvironment{lstlisting}{
+%\begin{lstlisting}}{\end{}
 %\renewenvironment{figure}{}{}
 %\renewenvironment{equation}{}{}
 %\renewcommand{\cite}{}
@@ -218,11 +219,13 @@ extent for a comparable purpose.
 
 \cleardoublepage
 
+
 \tableofcontents
 
 \listoffigures
 
 \lstlistoflistings
+
 
 
 \newpage
@@ -267,6 +270,7 @@ LWT, the lightweight cooperative threading library\cite{vouillon2008lwt} was des
 
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[alsolanguage={Lwt}, caption={LWT example}, label={lst:lwtsyntax}, escapeinside={@}{@}]
  open Lwt
  
@@ -284,6 +288,7 @@ LWT, the lightweight cooperative threading library\cite{vouillon2008lwt} was des
  
  let _ = Lwt_main.run (main ())
 \end{lstlisting}
+
 \end{minipage}
 
 
@@ -294,6 +299,7 @@ An other implementation, Async is an open source concurrency library for OCaml d
 
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={Async example}, label={lst:asyncsyntax},escapeinside={@}{@}]
 open Core.Std
 open Async.Std
@@ -309,6 +315,7 @@ let () = upon (head_and_tails) (fun _ -> ())
   
 let () = never_returns (Scheduler.go ())
 \end{lstlisting}
+
 \end{minipage}
 
 
@@ -442,6 +449,8 @@ Ott, a tool for transforming informal, readable semantics to both \LaTeX and for
 \item{OCaml, the target language. }
 \end{enumerate}
 
+
+
 \begin{figure}[h!]
 \centering
 
@@ -471,6 +480,7 @@ Ott, a tool for transforming informal, readable semantics to both \LaTeX and for
 \caption{High level view of the tool chain}
 \end{figure}
 
+
 In the preparation phase I got acquainted with all three of these systems, as I have not used them before for any serious work.
 \subsection{Ott}
 % Why Ott (because it is awesome)
@@ -479,13 +489,16 @@ To avoid duplication of the semantics in several formats I have to chosen to use
 For someone familiar to formal semantics Ott has an easy to use and intuitive syntax. 
 
 Metavariables used in productions are defined with their destination language equivalents and potentially (in the case of Coq) their equality operation.
+
 \begin{lstlisting}[language={Ott}, caption={Ott metavariable definition}]
 metavar termvar, x ::=   {{ com  term variable }} 
 {{ isa string}} {{ coq nat}} {{ hol string}} {{ coq-equality }}
 {{ ocaml int}} {{ lex alphanum}} {{ tex \mathit{[[termvar]]} }}
 \end{lstlisting}
 
+
 Term expression grammars and other grammars can be defined in the well known Backus-Naur form with some extensions.
+
 
 \begin{lstlisting}[language={Ott}, caption={Ott grammar example}, label={lst:ottgrammarex}]
 grammar
@@ -498,11 +511,13 @@ t :: 't_' ::=                                 {{ com term    }}
                         {{ icho (tsubst_t [[t]] [[x]] [[t']])}}
 \end{lstlisting}
 
+
 In \Cref{lst:ottgrammarex} the non-terminal t for terms is defined with 5 productions: variables, lambda abstractions, applications, parentheses grouping and variable substitution. Each of these rules have a name, for example Var and Lam. Each of these names are prefixed by the unique prefix t\_ to have non-ambiguous names. The right hand side of each line describes the translation to target languages, for example com will  generate the given description for the \LaTeX\, target. 
 
 There are meta flags S and M to describe syntactical sugar and meta productions that are not generated as data structure elements in target languages, but instead have their own instructions: for example the substitution term will be rewritten as an application of the tsubst\_t relation defined elsewhere. 
 
 In many languages one might want to define a value subgrammar, which can be used both in the reduction relation definition and in proving properties of the semantics. Ott has support for general subgrammar relation check.
+
 \begin{lstlisting}[language={Ott}, caption={Ott value subgrammar example}, label={lst:ottvaluesubgrammarexample}]
 v :: 'v_' ::=                                 {{ com value   }}
   | \ x . t      ::  :: Lam                   {{ com lambda  }}
@@ -510,6 +525,7 @@ v :: 'v_' ::=                                 {{ com value   }}
 subrules
   v <:: t
 \end{lstlisting}
+
 In \Cref{lst:ottvaluesubgrammarexample} v is a subgrammar of t. The statement v $<::$ t is exported as a target language subroutine that checks whether the value relation holds and during translation Ott checks for obvious bugs.
 
 Another common feature of semantics is substitution of values for variables, for example in function application. Substitution is so frequent that Ott provides both single and multiple variable substitutions for the target languages as subroutines in the translated code.
@@ -518,10 +534,12 @@ Another common feature of semantics is substitution of values for variables, for
 
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[language={Ott}, caption={Ott substitution example}, label={lst:ottsubstex}]
 substitutions
   single t x :: tsubst 
 \end{lstlisting}
+
 \end{minipage}
 
 
@@ -530,6 +548,7 @@ The statement \lstinline[language={Ott}]|single t x :: tsubsts| in \Cref{lst:ott
 
 
 Finally paramount to most semantics are relations like the reduction relation.
+
 \begin{lstlisting}[language={Ott}, caption={Ott reduction relation example}, label={lst:ottredex}]
 defns
 Jop :: '' ::=
@@ -549,12 +568,15 @@ Jop :: '' ::=
     -------------- :: ctx_app_arg
     v t1 --> v t1'
 \end{lstlisting}
+
 In \Cref{lst:ottredex} I define a set of mutually recursive relations named Jop with one relation in it the $-->$ or reduce relation. Each element of this relation takes the form t1 $-->$ t2, where t1 and t2 are both terms of the grammar defined above. There are three statements for function application: the actual substitution, reduction of the first term and reduction of the second term. 
+
 \begin{lstlisting}[language={Ott}, caption={Ott single reduction}]
 t1 --> t1'
 -------------- :: ctx_app_fun
 t1 t --> t1' t
 \end{lstlisting}
+
 The premise(s) appear line-by-line above the ascii-art line, while and the result below the line. Next to the line is the name of the statement which is then prefixed by the name of the relation to avoid ambiguity. 
 
 
@@ -568,17 +590,22 @@ Coq is formal proof assistant with a mathematical higher-level language called \
 
 Objects in Coq can divided into two sorts, \textit{Prop} (propositions) and \textit{Type}. A proposition like $ \forall A, B.\; A \wedge B \rightarrow B \vee B $ translates to the snippet in \Cref{lst:coqproplogex}.
 
+
 \begin{lstlisting}[language={Coq},caption={Coq Prop logic example},label={lst:coqproplogex}]
 forall A B : Prop, A /\ B -> B \/ B
 \end{lstlisting}
 
+
 Predicates like equality and other sets can be used as well.
+
 
 \begin{lstlisting}[language={Coq},caption={Coq Prop predicate example}]
 forall x y : Z, x * y = 0 -> x = 0 \/ y = 0
 \end{lstlisting}
 
+
 New predicates can be defined inductively
+
 
 \begin{lstlisting}[language={Coq},caption={Coq Prop new predicate example}]
  Inductive even : N -> Prop :=
@@ -588,7 +615,9 @@ New predicates can be defined inductively
   | odd_S n : even n -> odd (n + 1).
 \end{lstlisting}
 
+
 Data structures can also be defined both inductively and coinductively.
+
 
 \begin{lstlisting}[language={Coq},caption={Coq inductive data structure example}]
  Inductive seq : nat -> Set :=
@@ -596,12 +625,16 @@ Data structures can also be defined both inductively and coinductively.
   | consn : forall n : nat, nat -> seq n -> seq (S n).
 \end{lstlisting}
 
+
+
 \begin{lstlisting}[language={Coq},caption={Coq coinductive data structure example}]
  CoInductive stream (A:Type) : Type :=
   | Cons : A -> stream -> stream.
 \end{lstlisting}
 
+
 Functions over these data structures are defined as fixpoints and cofixpoints respectively.
+
 
 \begin{lstlisting}[language={Coq},caption={Coq fixpoint example}]
  Fixpoint length (n : nat) (s : seq n) {struct s} : nat := 
@@ -611,9 +644,11 @@ Functions over these data structures are defined as fixpoints and cofixpoints re
      end.
 \end{lstlisting}
 
+
 Finally theorems can be proven with these propositions and structures.
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[language={Coq},caption={Coq theorem example}]
 Theorem length_corr : forall (n : nat) (s : seq n), length n s = n.
   Proof.
@@ -647,6 +682,7 @@ Theorem length_corr : forall (n : nat) (s : seq n), length n s = n.
        a witness of the theorem. *)
   Qed.	  
 \end{lstlisting}
+
 \end{minipage}
 Each Lemma, Theorem, Example have a name and a statement. The statement is a proposition. This is followed by the proof in which a sequence of steps modify the assumed hypotheses and the goal proposition until it has been proven. These steps are called tactics which can be simple application of previous theorems and axioms or as complex as a SAT solver. Coq comes with a language Ltac to allow users to build their own tactics.
 
@@ -656,6 +692,7 @@ Coq also provides built in facilities for the certified extraction of code to OC
 
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={Coq to OCaml extraction of seq}]
 type nat =
 | O
@@ -665,9 +702,11 @@ type seq =
 | Niln
 | Consn of nat * nat * seq
 \end{lstlisting}
+
 \end{minipage}
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={Coq to OCaml extraction of length}]
 (** val length : nat -> seq -> nat **)
 
@@ -675,6 +714,7 @@ let rec length n = function
 | Niln -> O
 | Consn (i, n0, s') -> S (length i s')
 \end{lstlisting}
+
 \end{minipage}
 
 % Extraction plugin
@@ -683,11 +723,13 @@ Out of the box, Coq does not provide facilities for the extraction of so called 
 
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[language={Coq},caption={Coq logical inductive example}]
 Inductive add : nat -> nat -> nat -> Prop :=
 | addO : forall n , add n O n
 | addS : forall n m p, add n m p -> add n (S m) (S p).
 \end{lstlisting}
+
 \end{minipage}
 
 However with the help of a plugin developed by David Delahaye, Catherine Dubois, Jean-Fr\'ed\'eric \'Etienne and Pierre-Nicolas Tollitte \cite{delahaye2007extracting,tollitte2012producing} by marking different modalities of the inductively generated proposition I can generate code with an input-output convention.
@@ -695,6 +737,7 @@ However with the help of a plugin developed by David Delahaye, Catherine Dubois,
 
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[language={Coq},caption={Coq to OCaml extraction of a logical inductive relation}]
 (** val add12 : nat -> nat -> nat **)
 
@@ -707,6 +750,7 @@ let rec add12 p1 p2 =
      | _ -> assert false (*  *))
   | _ -> assert false (*  *)
 \end{lstlisting}
+
 \end{minipage}
 
 Most descriptions of reduction relations and indeed the output of Ott is of this kind, therefore this plugin helps with the extraction of a reduction relation directly. 
@@ -717,21 +761,26 @@ OCaml is a high level programming language. It combines functional, object-orien
 
 OCaml, like many other functional languages support a wide range of features, from simple functions, to mutually recursive functions with pattern matching.
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml simple function example: square}]
 let square x = x * x
 \end{lstlisting}
+
 \end{minipage}
 
 
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml recursive function example: factorial}]
 let rec fact x =
     if x <= 1 then 1 else x * fact (x - 1)
 \end{lstlisting}
+
 \end{minipage}
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml complex function example: insertion sort}]
 let rec sort = function
     | [] -> []
@@ -741,11 +790,13 @@ let rec sort = function
     | x :: l -> if elem < x then elem :: x :: l
                 else x :: insert elem l
 \end{lstlisting}
+
 \end{minipage}
 
 Furthermore, it was designed as a versatile, general purpose programming language. OCaml features include objects, modules, support for imperative style and higher order functions.
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml imperative function example}]
 let add_polynom p1 p2 =
     let n1 = Array.length p1
@@ -754,17 +805,21 @@ let add_polynom p1 p2 =
     for i = 0 to n1 - 1 do result.(i) <- p1.(i) done;
     for i = 0 to n2 - 1 do result.(i) <- result.(i) + p2.(i) done;
 \end{lstlisting}
+
 \end{minipage}
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml higher order functions example}]
 let rec sigma f = function
     | [] -> 0
     | x :: l -> f x + sigma f l
 \end{lstlisting}
+
 \end{minipage}
     
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml data structure example}]
 type expression =
     | Num of int
@@ -772,9 +827,11 @@ type expression =
     | Let of string * expression * expression
     | Binop of string * expression * expression
 \end{lstlisting}
+
 \end{minipage}
     
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml evaluation function example}]    
 let rec eval env = function
     | Num i -> i
@@ -794,6 +851,7 @@ let rec eval env = function
     | "/" -> v1 / v2
     | _ -> failwith ("Unknown operator: " ^ op)
 \end{lstlisting}
+
 \end{minipage}
 
 
@@ -802,6 +860,7 @@ let rec eval env = function
 \cleardoublepage
 \chapter{Implementation}
 This concurrency framework was implemented as a small language of expressions and a reduction relation. These two were then translated to OCaml as constructors and an evaluation function respectively. To use the framework the user constructs an expression of the language, including within the expression the computations he wants to evaluate. The expression is than passed the evaluation function.  This language provides tools for sequencing, running computations in parallel and to make decisions based on what computations have finished. The implementation of the language was done in 6 stages as shown in \Cref{fig:detailedimploutline}. 
+
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.5]{implOut}
@@ -809,6 +868,7 @@ This concurrency framework was implemented as a small language of expressions an
 \label{fig:detailedimploutline}
 \end{center}
 \end{figure}
+
 
 The overall semantics were defined in Ott. These semantics were then extracted to Coq by Ott in a logical inductive format. This format, as previously mentioned, is well suited for proofs, but not for extraction. Furthermore, Ott did not correctly handle values that are partial applications of primitives taking more than one argument (\textbf{fork} and \textbf{pair}). The incorrect value predicate is fixed in the Modified Coq stage appearing in \Cref{fig:detailedimploutline}. This is the only change.
 
@@ -833,6 +893,7 @@ For the dependence between different parts of the grammars, see \Cref{fig:gramma
 \item{Type judgements}
 \item{Reduction judgements}
 \end{enumerate}
+
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=\linewidth]{./../mconbaseDep}
@@ -841,9 +902,11 @@ For the dependence between different parts of the grammars, see \Cref{fig:gramma
 \end{center}
 \end{figure}
 
+
 I will detail the semantics feature-by-feature: arrow types or functions, sum types or tagged unions, product types or pairs, the fixpoint combinator, the monadic primitives and the fork operator. The presentation of semantics for each of the features were inspired by Pierce\cite{pierce2002types}. Each section will have a corresponding table of syntax, evaluation rules and typing rules.  In the syntax section I will introduce every new syntactic form used in the evaluation and typing rules, but I will not repeat previously mentioned syntax. The presentation of both the syntax and the evaluation and typing rules were slightly simplified for better readability.  
 
 \subsection{Arrow types}
+
 \begin{figure}[h!]
   \centering
   $\underbracket{\overbracket{\textrm{
@@ -926,8 +989,10 @@ I will detail the semantics feature-by-feature: arrow types or functions, sum ty
 
 
 
+
 Arrow types or functions are ubiquitous in functional programming languages. In \Cref{fig:semarrow} I detail the basic syntax and semantics of functions. The style and details are based on Pierce\cite[p.~103]{pierce2002types}. A function abstraction $ \lambda x:T. e $ encloses a yet unreduced expression $ e $ that may involve the variable $ x $ that is bound by the abstraction. I used call-by-value semantics for functions and head-first reduction. Furthermore, arguments are explicitly annotated in functions and substitution does not provide facilities for renaming. It is presumed that the user of the framework takes care of picking fresh variable names. 
 \subsection{Sum types}
+
 \begin{figure}[p]
   \centering
   $\underbracket{\overbracket{\textrm{
@@ -1009,9 +1074,11 @@ Arrow types or functions are ubiquitous in functional programming languages. In 
   \caption{Syntax and semantics of sum types}
   \label{fig:semsum}
 \end{figure}
+
 Many circumstances require the ability to describe expressions that are either one type or the other. Sum types or otherwise known as labelled unions are a simple solution to this. An expression $ e $ that has type $ T $ can be labelled as a variant in a sum type by attaching a label $ \textbf{left } e $ and $ \textbf{right } e $ will give force it to have type $ T + T' $ and $ T' + T $ for some type $ T' $. This expression can be then destructed by the expression "$ \textrm{Case $  e $ of \textbf{left} $ x_1 \Rightarrow e_2 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_3 $ } $" which will evaluate to either a substitution of $ e_2 $ or $ e_3 $ depending on what the tag said. In this project I use sum types in the signature of \textbf{fork} that will be detailed later. In \Cref{fig:semsum} I detail the implementation of sum types that is based on Pierce\cite[p.~132]{pierce2002types}. 
 \subsection{Product types}
 One very common feature of functional languages is pairs or product types. Grouping different types of data together in one logical unit often makes code more simple. For example computations with complex numbers would be rather unintuitive if we always had to handle the real and imaginary parts separately. To define products, first I introduce the syntax $ \{e, e' \} $, the pair of expressions $ e $ and $ e' $. If they had types $ T $ and $ T' $ respectively I define the type construct for this $ T\star T' $. I have introduce three primitive functions to deal with pairs: \textbf{pair} places two values in a pair, \textbf{proj1} takes the first element of a pair and \textbf{proj2} takes the second.
+
 \begin{figure}[h!]
   \centering
   $\underbracket{\overbracket{\textrm{
@@ -1103,8 +1170,10 @@ One very common feature of functional languages is pairs or product types. Group
   \caption{Syntax and semantics of product types}
   \label{fig:semprod}
 \end{figure}
+
 In \Cref{fig:semprod} I describe the precise implementation of product types defined in this language. The style and details are based on Pierce\cite[p.~126]{pierce2002types}.
 \subsection{Fixpoint combinator}
+
 \begin{figure}[h!]
   \centering
   $\underbracket{\overbracket{\textrm{
@@ -1145,6 +1214,7 @@ In \Cref{fig:semprod} I describe the precise implementation of product types def
   \caption{Syntax and semantics of the fixpoint operator}
   \label{fig:semfix}
 \end{figure}
+
 Recursion is very characteristic of functional programming languages. There are many ways to achieve recursive constructs in terms and even in types. A very elegant treatment surfaced from the formal study of recursive constructs in the form of fixpoint combinators. In denotational semantics for example loops and other recursions are treated as the greatest fixpoints of continuous functions. A fixpoint combinator $ y $ is defined as a term that given function $ f $ satisfies
 \[ y\,f\,\equiv\, f\,(y\,f) \] 
 This axiom poses a requirement on the type of $ y $, it should be $ (T \rightarrow T) \rightarrow T $
@@ -1152,6 +1222,7 @@ In untyped $ \lambda $-calculus there are many simple terms that can achieve thi
 \[ Y = \lambda f.(\lambda x.f\ (x\ x))\ (\lambda x.f\ (x\ x))  \]
 However in languages like the one implemented in this chapter, where arguments are always reduced before the function application can begin the Y combinator would always diverge. There are more than one option for implementation in languages like this, but I have chosen to use the one described in Pierce\cite[p.~144]{pierce2002types}. This style fits well with the tool chain I used as it does not require another partial function application and it is also very minimal.
 \subsection{Monadic primitives}
+
 \begin{figure}[h!]
   \centering
   $\underbracket{\overbracket{\textrm{
@@ -1253,6 +1324,7 @@ However in languages like the one implemented in this chapter, where arguments a
   \caption{Syntax and semantics of the monadic primitives, ret and bind}
   \label{fig:semmon}
 \end{figure}
+
  The concurrency monad consists of a parametric type $  \textbf{con } T  $, where $ T $ is a type parameter describing the type of computation or value enclosed and three key operations 
 \begin{itemize}
 \item{ret, also known as return. It has type $ T \rightarrow \textbf{con }T   $ and simply evaluates its parameter and boxes up the result in the parametric type}
@@ -1261,6 +1333,7 @@ However in languages like the one implemented in this chapter, where arguments a
 \end{itemize}
 
 \subsection{Fork}
+
 \begin{figure}[h!]
   \centering
   $\underbracket{\overbracket{\textrm{
@@ -1324,6 +1397,7 @@ However in languages like the one implemented in this chapter, where arguments a
   \caption{Syntax and semantics of the fork operator}
   \label{fig:semfork}
 \end{figure}
+
 Up until this point I have not mentioned any language feature that implements concurrency which is the main focus of the dissertation. The third, additional operation of the concurrency monad is fork, which is the way to spawn new threads (two in this particular case). There are a number of ways to implement fork and indeed this project went through various iterations of semantics for this operation. 
 
 As a first approximation I had to decide on a signature for fork. On the argument side fork may take zero, one, two or many arguments. No arguments would be reminiscent of the UNIX system call \verb|fork()| where the two paths are distinguished by replacing the fork call with differing values. This approach would result in copying potentially large expressions and a more complex evaluation context, that is the terms used for the source and destination in the reduction relation. For example, Jones\cite{hoareetal2001tackling} chose an implementation with one argument, however with a similar requirement of a metalanguage of parallel terms $ e \, | \, e' $. I chose to go with two arguments as that can maintain a simple evaluation context with reductions from language expression to expression. The choice between these three argument styles is largely arbitrary as they all implicitly form the binary parallel composition $ e \, | \, e' $. Note however that several arguments can be elegantly simulated by composing binary parallel compositions.
@@ -1349,15 +1423,18 @@ The decision that these always reduce to unit was one purely of scope: further w
 \section{Proof assisstant system}
 In this section I briefly outline the structure of the translated proof assistant representation and how I modified it to be extractable to OCaml. 
 \subsection{Outline of the proof assistant code}
+
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{coqBaseStruct.pdf}
 \caption{Dependencies in the Coq semantics}
 \label{fig:coqBaseStruct}
 \end{figure}
+
 In \Cref{fig:coqBaseStruct} I detail the dependencies between different parts of the Coq version of the semantics. There are four types of objects in the Coq file:
 \begin{enumerate}
 \item{Inductive sets: they are the inductive data structures. These are the expression grammar objects mentioned in \Cref{fig:grammardep} with the same structure and the types of metavariables. Inductive sets are denoted by ovals with solid outlines. As an example, type expressions are translated from the Ott version in \Cref{lst:otttypexpr} to the Coq equivalent in \Cref{lst:coqtypexpr}. Simple grammars generate a set of tagged variants. 
+
 
 
 \begin{lstlisting}[language={Ott}, caption={Ott type expressions}, label={lst:otttypexpr}]
@@ -1371,7 +1448,9 @@ typexpr, t :: TE_ ::=
   | ( typexpr )                        :: S :: paren {{ ich [[typexpr]] }} {{ ocaml [[typexpr]] }}
 \end{lstlisting}
 
+
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[language={Coq},caption={Coq type expr}, label={lst:coqtypexpr}]
 Inductive typexpr : Set := 
  | TE_constants (typconst5:typconst)
@@ -1381,9 +1460,11 @@ Inductive typexpr : Set :=
  | TE_concurrent (typexpr5:typexpr)
  | TE_sum (typexpr5:typexpr) (typexpr':typexpr).
 \end{lstlisting}
+
 \end{minipage}
 }
 \item{Fixpoints, the functions in Coq: The functions in this are all automatically generated from the Ott file. The most important ones are the expression substitution, free variable, value check fixpoints. The script also includes a few functions supporting the previous ones. Fixpoints are denoted by rectangles. The value subgrammar is translated as a fixpoint over expressions. 
+
 
 \begin{lstlisting}[language={Ott}, caption={Ott value subgrammar}, label={lst:ottvaluesub}]
 value, v :: V_ ::=
@@ -1396,7 +1477,9 @@ value, v :: V_ ::=
   | ( v )                             :: S :: paren {{ ich [[v]] }} {{ ocaml [[v]] }}
 \end{lstlisting}
 
+
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[language={Coq},caption={Coq value subgrammar}, label={lst:coqvaluesub}, escapeinside={@}{@}]
 Fixpoint is_value_of_expr (e_5:expr) : Prop :=
   match e_5 with
@@ -1414,9 +1497,11 @@ Fixpoint is_value_of_expr (e_5:expr) : Prop :=
   | (E_case e1 x1 e2 x2 e3) => False
 end.
 \end{lstlisting}
+
 \end{minipage}	
 Notice however, that I was not able to define the value property of partial applications of primitives \textbf{fork} and \textbf{pair}, therefore I manually changed the incorrect value subgrammar check. Ott offers single and multiple substitution predicates for its destination languages. These are implemented as fixpoints in Coq. As an example, see the expression substitution in \Cref{lst:coqexprsubst}.
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[language={Coq},caption={Coq expression substitution}, label={lst:coqexprsubst}]
 Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr :=
   match e__6 with
@@ -1433,9 +1518,11 @@ Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr
   | (E_case e1 x1 e2 x2 e3) => E_case (subst_expr e_5 x_5 e1) x1 (subst_expr e_5 x_5 e2) x2 (subst_expr e_5 x_5 e3)
 end
 \end{lstlisting}
+
 \end{minipage}	
 }
 \item{Logical inductive sets: As mentioned previously a logical inductive set is an inductively defined set of propositions. This is the way the reduction relation and the typing relation is represented. Logical inductive sets are represented in \Cref{fig:coqBaseStruct} by ovals with dashed outline. For example a clause in the reduction relation is translated from the simple inference rule presentation in \Cref{lst:ottcontextapp1} to proposition in the logical inductive set \verb|JO_red| in \Cref{lst:coqlogind}.
+
 
 \begin{lstlisting}[language={Ott}, caption={Ott reduction relation example}, label={lst:ottcontextapp1}]
 e [ s ] --> [ rl ] e''
@@ -1443,7 +1530,9 @@ e [ s ] --> [ rl ] e''
 e e' [ s ] --> [ rl ] e'' e'
 \end{lstlisting}
 
+
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[language={Coq},caption={Coq reduction relation example}, label={lst:coqlogind}]
 Inductive JO_red : expr -> select -> redlabel -> expr -> Prop :=    (* defn red *)
  | JO_red_context_app1 : forall (e e':expr) (s:select) (rl:redlabel) (e'':expr),
@@ -1451,17 +1540,20 @@ Inductive JO_red : expr -> select -> redlabel -> expr -> Prop :=    (* defn red 
      JO_red (E_apply e e') s rl (E_apply e'' e')
   ...
 \end{lstlisting}
+
 \end{minipage}	
 }
 \item{Lemmas: There are a few supporting lemmas about the equality of variables. These are automatically generated by Ott. Lemmas are denoted with diamonds. An easy example would be the straightforward lemma that says labels are either equal or not in \Cref{lst:coqeqlabel}.
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[language={Coq},caption={Coq label equality lemma}, label={lst:coqeqlabel}]
 Lemma eq_label: forall (x y : label), {x = y} + {x <> y}.
 Proof.
   decide equality; auto with ott_coq_equality arith.
 Defined.
 \end{lstlisting}
+
 \end{minipage}	
 
 }
@@ -1489,9 +1581,11 @@ The first issue with the extraction to a functional program was the way the sele
 The extracted program would have to somehow pick a possible value for $ s $ in $ e \overset{rl}{\underset{s}{\longrightarrow}} e' $ while it is only supplied with the value 1. Clearly always picking one or the other would not be satisfactory. As I had no way of choosing it non-deterministically, I wanted the argument to fully describe all $ s $ values the system used. I opted for a co-inductive stream of selections because there can be an arbitrary number of \textbf{fork}s nested in each other with arbitrary number of selection values to make a single step . 
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[language={Coq},caption={Coq co-inductive selection sequence}, label={lst:coqselectstar}]
 CoInductive selectstar : Set := Seq : select -> selectstar -> selectstar.
 \end{lstlisting}
+
 \end{minipage}
 
 Co-inductive data structures represent potentially infinite data and featured in a number of programming languages: lazy lists, trees and streams all describe co-inductive structures. In \Cref{lst:coqselectstar} I define \verb|selectstar| where each element is pair of a selection value and a further \verb|selectstar| representing the rest of the selection values.  With an infinite sequence of selection values the program can make arbitrary many decisions and it is extractable.
@@ -1499,20 +1593,24 @@ Co-inductive data structures represent potentially infinite data and featured in
 The second problem that surfaced was that the extraction plugin does not generate code that backtracks from a case where the reduction relation is invoked on an internal part. If an expression $ e $ does not reduce and the extracted function is called it will fail with an \lstinline|assert false|. I chose to add a logically superfluous assumption of expression $ e $ not being a value. This assumption is superfluous as an expression that reduces cannot be a value by the \verb|red_not_value| theorem.  \Cref{lst:coqredunsafe,lst:coqxredsafe} are a good example of how this transformation happens. \vspace{4mm}
 
 \begin{minipage}{0.9\linewidth}
+
 \begin{lstlisting}[language={Coq},caption={Coq reduction clause with unsafe assumption}, label={lst:coqredunsafe}]
 | JO_red_evalbind : forall (e e'':expr) (s:select) (rl:redlabel) (e':expr),
      JO_red e s rl e' ->
      JO_red (E_bind e e'') s rl (E_bind e' e'')
 \end{lstlisting}
+
 \end{minipage}
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[language={Coq},caption={Coq extractable reduction clause with safe assumption}, label={lst:coqxredsafe}]
  | XJO_red_evalbind : forall (e e'' e':expr) (s:selectstar),
     (eq (xis_value_of_expr e) false) ->
      XJO_red e s e' ->
      XJO_red (E_bind e e'') s (E_bind e' e'')
 \end{lstlisting}
+
 \end{minipage}
 
 
@@ -1520,12 +1618,14 @@ The last issue was due to the experimental nature of the plugin: the optimisatio
 
 \section{OCaml system}
 In this section I give a brief outline of the structure of the extracted OCaml, how it is modified to be runnable and a brief overview of potential syntactic sugar that can be used to aid development in the framework. 
+
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{ocamlBaseStruct.pdf}
 \caption{Dependencies in the OCaml code}
 \label{fig:ocamlBaseStruct}
 \end{figure}
+
 \subsection{Outline of the OCaml code}
 The OCaml code consists of the extracted versions of the following:
 \begin{itemize}
@@ -1540,31 +1640,38 @@ I have made a number of modifications to the OCaml code to make it runnable. Thi
 Furthermore I have changed the way \verb|selectstar| is implemented. The extraction results in the type in \Cref{lst:ocamllazystar} which involves the Lazy module of OCaml. While the extraction of co-inductive types to lazy types is sound, for simplicity I used a simple lazy stream in \Cref{lst:ocamlstreamstar}. 
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml lazy selectstar}, label={lst:ocamllazystar}]
 type selectstar = __selectstar Lazy.t
 and __selectstar =
 | Seq of select * selectstar
 \end{lstlisting}
+
 \end{minipage}
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml stream selectstar}, label={lst:ocamlstreamstar}]
 type selectstar = | Seq of select * (unit -> selectstar) 
 \end{lstlisting}
+
 \end{minipage}
 
 As the extraction plugin is experimental there were a number of inefficiencies and a few issues due to the fact that the semantics of OCaml pattern matching is sequential, while it is parallel in Coq. While Tollitte\cite{tollitte2012producing} made progress on the merging of cases when one case subsumes the other, these were not always correctly identified. For example the case \Crefrange{lst:ocamlvalexpappcaseStart}{lst:ocamlvalexpappcaseEnd} in \Cref{lst:ocamlorigapp} subsumes the case \Cref{lst:ocamlorigsub}. The plugin was unable to infer this as that would have required it to show that function term is always a value, regardless of its parameters. This is an issue as any function with a parameter that can be reduced will fail, as the case in \Cref{lst:ocamlorigsub} comes first.
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml original substitution case}, label={lst:ocamlorigsub}]
   | (E_apply (E_function (x, t, e), v), s) ->
     (match xis_value_of_expr v with
      | true -> subst_expr v x e
      | _ -> assert false (*  *))
 \end{lstlisting}
+
 \end{minipage}
 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml original application case}, label={lst:ocamlorigapp}, escapeinside={@}{@}]
   | (E_apply (e, e'), s) ->
     (match xis_value_of_expr e with
@@ -1578,20 +1685,24 @@ As the extraction plugin is experimental there were a number of inefficiencies a
  @\label{lst:ocamlvalexpappcaseEnd}@       | _ -> assert false (*  *))
  @\label{lst:ocamlunneededdefault2}@    | _ -> assert false (*  *))
 \end{lstlisting}
+
 \end{minipage}
 My solution was to insert the correct step into the failing match as in \Cref{lst:ocamlfixsub}. Note, that taking that reduction may fail, but that is the expected behaviour.
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml fixed substitution case}, label={lst:ocamlfixsub}]
   | (E_apply (E_function (x, t, e), v), s) ->
     (match xis_value_of_expr v with
      | true -> subst_expr v x e
      | false -> E_apply (E_function (x, t, e), (xJO_red12 v s)))
 \end{lstlisting}
+
 \end{minipage}
 A reoccurring inefficiency comes from the extraction plugin generating a default failing case in all situations, even if the default case may never happen. \Cref{lst:ocamlunneededdefault2} in \Cref{lst:ocamlorigapp} is an example of this: a boolean may only take the values true or false. A similar issue occurs when evaluating a function:  \Cref{lst:ocamlunneededmatchonfun} in the same listing matches by giving a name to the return value, but generates a default case as well. To this latter problem I simply removed the match and replaced the name of the return value with the function call.
 
 A further issue occurs when occasionally the plugin reorders matches on assumptions. Even though the safe assumption was inserted in the case in \Cref{lst:ocamlswapassume} it was reordered by the plugin to come after the unsafe assumption. 
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml swapped assumptions}, label={lst:ocamlswapassume}]
   | (E_bind (e, e''), s) ->
     (match xJO_red12 e s with
@@ -1601,6 +1712,7 @@ A further issue occurs when occasionally the plugin reorders matches on assumpti
         | _ -> assert false (*  *))
      | _ -> assert false (*  *))
 \end{lstlisting}
+
 \end{minipage}
 The simple solution to this is to swap the assumptions, however in some cases that leads to to the issues mentioned above.
 \subsection{Syntactic sugar}
@@ -1613,6 +1725,7 @@ Due to the multiple layers of automatic naming developing in this framework dire
 \item{Round-robin and random schedulers in \Cref{lst:ocamlrrsched} and \Cref{lst:ocamlrandsched} respectively.}
 \end{itemize}
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml round-robin scheduler}, label={lst:ocamlrrsched}]
   let rec makerr1 () = Seq(S_First, makerr2) 
   and makerr2 () = Seq(S_Second, makerr1) 
@@ -1624,8 +1737,10 @@ Due to the multiple layers of automatic naming developing in this framework dire
            | 0 -> e
            | m -> evalrr1 (xJO_red12 e (makerr2 ())) (m-1))
 \end{lstlisting}
+
 \end{minipage}
 \begin{minipage}{\linewidth}
+
 \begin{lstlisting}[caption={OCaml random scheduler}, label={lst:ocamlrandsched}]
   let rec makerand () = if Random.bool() then Seq(S_First, makerand) else Seq(S_Second, makerand)
   
@@ -1633,6 +1748,7 @@ Due to the multiple layers of automatic naming developing in this framework dire
                        | 0 -> e
                        | m -> evalrand (xJO_red12 e (makerand ())) (m-1))
 \end{lstlisting}
+
 \end{minipage}
 
 
@@ -1685,11 +1801,11 @@ To evaluate the performance of the framework I followed Deleuze\cite{deleuzeligh
 \begin{enumerate}
 \item{\textbf{sys}: A heavyweight implementation with system threads.}
 \item{\textbf{vm}: A lightweight concurrency implementation based on the \verb|thread| library of OCaml. This implementation is only available in bytecode.}
-\item{\textbf{cont}: A continuation monad based lightweight implementation, without verification. Note, this is a much lighter implementation compared to the one in this project.}
-\item{\textbf{promise}: A promise monad based implementation of lightweight concurrency.}
-\item{\textbf{tramp}: A lightweight implementation based on the trampolined style.}
+\item{\textbf{cont}: A continuation monad based lightweight implementation\cite[p.~12-13]{deleuzelight}, without verification. Note, this is a much lighter implementation compared to the one in this project.}
+\item{\textbf{promise}: A promise monad based implementation of lightweight concurrency\cite[p.~13-15]{deleuzelight}.}
+\item{\textbf{tramp}: A lightweight implementation based on the trampolined style\cite[p.~11-12]{deleuzelight}.}
 \item{\textbf{lwt}: An LWT\cite{LWT} based implementation of lightweight concurrency.}
-\item{\textbf{equeue}: An event-based programming style lightweight concurrency implementation based on the \textbf{Equeue} library of OCamlNet. I did not use this implementation in the evaluation as I could not find the right libraries to compile this.}
+\item{\textbf{equeue}: An event-based programming style lightweight concurrency implementation\cite[p.~15-18]{deleuzelight} based on the \textbf{Equeue} library of OCamlNet. I did not use this implementation in the evaluation as I could not find the right libraries to compile this.}
 \end{enumerate}
 \subsection{Method}
 Deleuze provides three examples to evaluate, based on the examples used in Kahn's process language paper\cite{kahn1976coroutines}. I have implemented the examples in my system. I measured the runtime and memory use of both my implementation and the library implementations for various input sizes. The runtime was measured with \textit{Unix.time} and the memory use was measured with the quick stat function of the \verb|Gc| module of OCaml which gives an interface to the garbage collector. Both bytecode and native code versions were measured. All programs were measured as both OCaml byetcode and native code. All examples were run on an Intel i7-2720QM CPU that is a 4 core hyperthreaded system. This computer had 8 GBs of memory, OCaml version 3.12.1, a linux kernel version 3.11.0-15-generic, caml-shift version of August 2013.
@@ -1697,14 +1813,20 @@ Deleuze provides three examples to evaluate, based on the examples used in Kahn'
 
 My conjecture was that my system will perform with similar characteristics as lightweight systems, however with a serious overhead due to the complex pattern matching and constructor based system.
 \subsection{Examples}
-The three examples provided by Deleuze are all process networks from Kahn\cite{kahn1976coroutines}.
+The three examples provided by Deleuze are all process networks from Kahn\cite{kahn1976coroutines}. A process network is a set of independent processes which communicate through message variables only. 
+
+A message variable (mvar) is a shared reference cell that blocks in two cases: if a thread tries to read an empty cell or if a thread tries to put something in a filled cell. A read from an mvar consumes the contents of the variable. The scope of this project did not include formalisation of communication procedures like message variables, however it is easy to implement within the framework. Access to a message variable is atomic as no two threads run in parallel, even though they are all concurrent. Furthermore, Deleuze used message First-in-First-out queues where putting information to the message FIFO never blocks. 
+
+In \Cref{fig:kpn_process_outline,fig:sieve_process_outline,fig:sorter_process_outline} processes are denoted with a circle and message variables and FIFOs are denoted by squares. Solid lines denote data flow and dashed lines mean process creation.
 \begin{enumerate}
 \item{\verb|kpn|: A process network calculating all positive integers of the form $ 2^a3^b5^c $ for all $ a,b,c $ non-negative integers}
 \item{\verb|sieve|: The well known sieve of Eratosthenes.}
 \item{\verb|sorter|: Concurrent sort of a list of integers.}
 \end{enumerate}
 \subsubsection{Kahn process network}
+
 \begin{figure}
+\centering
 \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm,
   thick,main node/.style={circle,draw,
   font=\sffamily\Large\bfseries,minimum size=8mm}, mvar/.style={rectangle, draw, ,minimum size=3mm}]
@@ -1748,9 +1870,22 @@ The three examples provided by Deleuze are all process networks from Kahn\cite{k
     (P) edge [out=-150, in=-40]  (F5);
 \end{tikzpicture}
 \cprotect\caption{\verb|kpn| process outline}
+\label{fig:kpn_process_outline}
 \end{figure}
 
-\begin{figure}[h]
+
+\verb|Kpn| is a process network of 6 static threads shown in \Cref{fig:kpn_process_outline}:
+\begin{itemize}
+\item{$ \times 2 $, $ \times 3 $, $ \times 5 $ multiply their input (taken from the corresponding FIFO) by 2, 3 and 5 respectively.}
+\item{$ \text{merge}_{35} $ merges the output of $ \times 3 $, $ \times 5 $ using the corresponding message variables: it outputs the lower and fetches a new element that edge.}
+\item{Similarly, $ \text{merge}_{235} $ merges the output of $ \text{merge}_{35} $ and $ \times 2 $}
+\item{P prints the numbers coming in and copies them to the three FIFOs at the beginning.}
+\end{itemize}
+This network exemplifies a common case in concurrency: a low number of static threads with simple behaviour. In line with the expectation \Cref{fig:kpn_exec_times} shows that my implementation exhibits exactly the same behaviour as other lightweight implementation, but with a serious overhead: up to 200 times slower than the fastest implementation, \textbf{tramp}.  
+
+The memory requirement of this system is uninteresting in all implementations: as the process structure is static, so is the memory use.
+
+\begin{figure}
 \centering
 \begin{subfigure}[b]{0.45\linewidth}
 \includegraphics[width=\linewidth]{./kpn_exec_times_bw}
@@ -1767,7 +1902,27 @@ The three examples provided by Deleuze are all process networks from Kahn\cite{k
 \end{figure}
 
 
-\subsubsection{Eratosthene Sieve}
+
+\subsubsection{Sieve of Eratosthenes}
+The sieve of Eratosthenes is one of the simplest algorithms to find primes:
+\begin{enumerate}
+\item{Start with number 2 and have all numbers greater or equal to 2 not crossed out.}
+\item{Take the lowest not crossed out number: it is a prime.}
+\item{Cross out all numbers divisible by the prime just found.}
+\item{Repeat from step 2.}
+\end{enumerate}
+
+This algorithm is implemented using a dynamic process network. Initially the network is made up of four types of processes:
+\begin{enumerate}
+\item{Integers: generates the infinite sequence of integers starting from 2}
+\item{Sift: If a number $ p $ is read Sift puts $ p $ forward to the printer process and it creates a new process, Filter $ p $ and inserts it between the input of Sift and Sift itself in the flow of numbers as shown in \Cref{fig:sieve_process_outline}. }
+\item{Filter $ p $ discards all numbers divisible by $ p $ and passes everything else on.}
+\item{Print just prints all numbers consumed.}
+\end{enumerate}
+
+This problem is a good example of dynamic thread creation that most general purpose concurrency frameworks should support.
+
+
 \begin{figure}
 \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm,
   thick,main node/.style={circle,draw,
@@ -1845,7 +2000,10 @@ The three examples provided by Deleuze are all process networks from Kahn\cite{k
   %  (P) edge [out=-150, in=-40]  (F5);
 \end{tikzpicture}
 \cprotect\caption{\verb|sieve| process outline}
+\label{fig:sieve_process_outline}
 \end{figure}
+
+
 
 \begin{figure}[h]
 \centering
@@ -1863,6 +2021,7 @@ The three examples provided by Deleuze are all process networks from Kahn\cite{k
 \label{fig:sieve_exec_times}
 \end{figure}
 
+
 Unlike the expectation, the concurrency framework with random reductions (mcon) in \Cref{fig:sieve_exec_times} exhibits an exponential behaviour. The reason for this is in the way random selection parameters relate to the \textbf{fork} tree formed by the expression.
 
 Uniform random reductions assigns equal probabilities to each edge of a fork as it can be seen in \Cref{fig:sieve_without_ftt}. In general the probability that the filter process of the $ k $th prime fires is $ \frac{1}{2^{k+1}} $. This uneven probability distribution means that for the expected number of reduction steps taken by the system before finding the $ k $th prime is bigger than $ 2^{k+1} \in O(2^{k}) $ as it has to make at least one step within each filter.
@@ -1870,6 +2029,7 @@ Uniform random reductions assigns equal probabilities to each edge of a fork as 
 However, the concurrency framework does not prescribe any evaluation strategy. It is possible to keep track of the fork tree at runtime and equalize the scheduling probabilities of all processes with every computation placeholder. This results in the scheduling probabilities shown in \Cref{fig:sieve_ftt}. These probabilities reduce the expected number of steps for the $ k $th prime to $ k(k+1) $. The speedup is easily seen on \Cref{fig:sieve_exec_times} with the series $ \text{mcon}_{\text{ftt}} $.
 
 % Define styles for the different kind of edges in a Feynman diagram
+
 \begin{figure}
 \centering
 \begin{subfigure}[b]{0.45\linewidth}
@@ -2012,10 +2172,50 @@ However, the concurrency framework does not prescribe any evaluation strategy. I
 
 
 
+
 \subsubsection{Concurrent sort}
+The last example is concurrent sort. Sorting of a list of integers can be done by single comparator units as shown in \Cref{fig:sorter_process_single} which takes in two values and outputs the lower on one edge and the higher on the other. To sort an entire list we can arrange these elements in a network shown in \Cref{fig:sorter_process_full}. This network takes in the $ n $ element list $ x_0, x_1, \dots, x_n $ and outputs the result $ r_0, r_1, \dots, r_n $. For an $ n $ element list the network has $ \frac{n(n-1)}{2} $ nodes. Notice that bubble sort and insertion sort are two scheduling of this network. For simplicity I did not show the message variables in \Cref{fig:sorter_process_outline} but they are used on each arrow. This problem is a good example of a task best suited for lightweight concurrency: a very large number of simple threads statically allocated. For a list size of 500, there are 124750 threads. 
 
 \begin{figure}
 \centering
+
+\begin{subfigure}[b]{0.45\linewidth}
+\begin{tikzpicture}[->,>=stealth',auto,
+  thick,main node/.style={circle,draw,
+  font=\sffamily\Large\bfseries,minimum size=8mm}, mvar/.style={rectangle, draw, ,minimum size=3mm}]
+  \node[main node] (I15) at (1,1) [] {};
+  
+  \node[] (INV1) at (-1,1) [] {x0};
+  \node[] (INV2) at (1,3) [] {x1};
+  \node[] (INV3) at (1,-1) [] {lo};
+  \node[] (INV4) at (3,1) [] {hi};
+
+
+  \path[every node/.style={font=\sffamily\small,
+  		fill=white}]
+     (INV1) edge (I15)
+     (INV2) edge (I15)
+     (I15) edge (INV3)
+     (I15) edge (INV4);
+  	% Right-hand-side arrows rendered from top to bottom to
+  	% achieve proper rendering of labels over arrows.
+   % (I1) edge   (M11)
+    %(M11) edge   (S1)
+   % (S1) edge   (MS1)
+   % (MS1) edge   (P1);
+  %  (Merge35) edge   (M35)
+  %  (M2) edge [bend left=20]   (Merge235)
+  %  (M35) edge [bend left=40]   (Merge235)
+  %  (Merge235) edge   (M235)
+  %  (M235) edge   (P)
+  %  (P) edge [out=150, in=40] (F2)
+  %  (P) edge [out=120, in=130]  (F3)
+  %  (P) edge [out=-150, in=-40]  (F5);
+\end{tikzpicture}
+\caption{Single comparator}
+\label{fig:sorter_process_single}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\linewidth}
 \begin{tikzpicture}[->,>=stealth',auto,
   thick,main node/.style={circle,draw,
   font=\sffamily\Large\bfseries,minimum size=8mm}, mvar/.style={rectangle, draw, ,minimum size=3mm}]
@@ -2044,12 +2244,12 @@ However, the concurrency framework does not prescribe any evaluation strategy. I
   \node[] (INV7) at (-1,1) [] {x5};
   
   \node[] (INV8) at (6,1) [] {};
-    \node[] (INV9) at (6,0) [] {r0};
-    \node[] (INV10) at (5,0) [] {r1};
-    \node[] (INV11) at (4,0) [] {r2};
-    \node[] (INV12) at (3,0) [] {r3};
-    \node[] (INV13) at (2,0) [] {r4};
-    \node[] (INV14) at (1,0) [] {r5};
+    \node[] (INV9) at (6,0) [] {r5};
+    \node[] (INV10) at (5,0) [] {r4};
+    \node[] (INV11) at (4,0) [] {r3};
+    \node[] (INV12) at (3,0) [] {r2};
+    \node[] (INV13) at (2,0) [] {r1};
+    \node[] (INV14) at (1,0) [] {r0};
   
   
   %\node[mvar] (F3) [below of=F2, label=below:{$\text{FIFO}_3$}] {};
@@ -2128,8 +2328,14 @@ However, the concurrency framework does not prescribe any evaluation strategy. I
   %  (P) edge [out=120, in=130]  (F3)
   %  (P) edge [out=-150, in=-40]  (F5);
 \end{tikzpicture}
+\caption{Full sorting network}
+\label{fig:sorter_process_full}
+\end{subfigure}
 \cprotect\caption{\verb|sorter| process outline}
+\label{fig:sorter_process_outline}
 \end{figure}
+
+As expected, my system performed with the same characteristics as other lightweight concurrency solutions, but with a high overhead. Interestingly, the \textbf{vm} lightweight implementation shows very bad behaviour, however the heavyweight \textbf{sys} implementation performs better with lists longer than 250 elements. The memory use of my system is much higher than the other implementations as shown in \Cref{fig:sorter_mem}.
 
 
 \begin{figure}[h]
@@ -2148,6 +2354,8 @@ However, the concurrency framework does not prescribe any evaluation strategy. I
 \label{fig:sorter_exec_times}
 \end{figure}
 
+
+
 \begin{figure}[h]
 \centering
 \begin{subfigure}[b]{0.45\linewidth}
@@ -2163,6 +2371,7 @@ However, the concurrency framework does not prescribe any evaluation strategy. I
 \cprotect\caption{\verb|sorter| memory use}
 \label{fig:sorter_mem}
 \end{figure}
+
 
 
 \cleardoublepage
@@ -2216,5 +2425,6 @@ been helpful and saved you time.
 \chapter{Project Proposal}
 
 \input{partIIproposal}
+
 
 \end{document}
