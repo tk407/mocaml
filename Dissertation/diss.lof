@@ -1,26 +1,26 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces High level view of the tool chain\relax }}{9}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces High level view of the tool chain\relax }}{10}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Detailed outline of the implementation\relax }}{18}
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Grammar dependencies\relax }}{19}
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Syntax and semantics of arrow types\relax }}{20}
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Syntax and semantics of sum types\relax }}{22}
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Syntax and semantics of product types\relax }}{23}
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Syntax and semantics of the fixpoint operator\relax }}{24}
-\contentsline {figure}{\numberline {3.7}{\ignorespaces Syntax and semantics of the monadic primitives, ret and bind\relax }}{27}
-\contentsline {figure}{\numberline {3.8}{\ignorespaces Syntax and semantics of the fork operator\relax }}{28}
-\contentsline {figure}{\numberline {3.9}{\ignorespaces Dependencies in the Coq semantics\relax }}{29}
-\contentsline {figure}{\numberline {3.10}{\ignorespaces Dependencies in the OCaml code\relax }}{36}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Detailed outline of the implementation\relax }}{22}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Grammar dependencies\relax }}{23}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Syntax and semantics of arrow types\relax }}{24}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Syntax and semantics of sum types\relax }}{26}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Syntax and semantics of product types\relax }}{27}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Syntax and semantics of the fixpoint operator\relax }}{28}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Syntax and semantics of the monadic primitives, ret and bind\relax }}{31}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Syntax and semantics of the fork operator\relax }}{32}
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Dependencies in the Coq semantics\relax }}{33}
+\contentsline {figure}{\numberline {3.10}{\ignorespaces Dependencies in the OCaml code\relax }}{39}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces \input diss-1.cpt\relax \relax }}{44}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces \input diss-2.cpt\relax \relax }}{45}
-\contentsline {figure}{\numberline {4.3}{\ignorespaces \input diss-3.cpt\relax \relax }}{46}
-\contentsline {figure}{\numberline {4.4}{\ignorespaces \input diss-4.cpt\relax \relax }}{46}
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Sieve fork tree\relax }}{47}
-\contentsline {figure}{\numberline {4.6}{\ignorespaces \input diss-5.cpt\relax \relax }}{48}
-\contentsline {figure}{\numberline {4.7}{\ignorespaces \input diss-6.cpt\relax \relax }}{48}
-\contentsline {figure}{\numberline {4.8}{\ignorespaces \input diss-7.cpt\relax \relax }}{49}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces \input diss-1.cpt\relax \relax }}{48}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces \input diss-2.cpt\relax \relax }}{49}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces \input diss-3.cpt\relax \relax }}{50}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces \input diss-4.cpt\relax \relax }}{51}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Sieve fork tree\relax }}{52}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces \input diss-5.cpt\relax \relax }}{52}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces \input diss-6.cpt\relax \relax }}{53}
+\contentsline {figure}{\numberline {4.8}{\ignorespaces \input diss-7.cpt\relax \relax }}{53}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

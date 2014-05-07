@@ -12,13 +12,16 @@ Lwt, lightweight threading library.
 Ocaml.
 \newblock \url{http://ocaml.org/}.
 
-\bibitem{Coq}
-Ott, a tool for writing definitions of programming languages and calculi.
-\newblock \url{http://coq.inria.fr/}.
-
 \bibitem{OCamlLightWeb}
 Ott, a tool for writing definitions of programming languages and calculi.
 \newblock \url{http://www.cl.cam.ac.uk/~so294/ocaml/}, 2008.
+
+\bibitem{Coq}
+Bruno Barras, Samuel Boutin, Cristina Cornes, Judica{\"e}l Courant,
+  Jean-Christophe Filliatre, Eduardo Gimenez, Hugo Herbelin, Gerard Huet, Cesar
+  Munoz, Chetan Murthy, et~al.
+\newblock The coq proof assistant.
+\newblock \url{http://coq.inria.fr/}.
 
 \bibitem{benton2008mechanized}
 Nick Benton and Vasileios Koutavas.
@@ -83,6 +86,16 @@ Oleg Kiselyov.
   description.
 \newblock In {\em Functional and Logic Programming}, pages 304--320. Springer,
   2010.
+
+\bibitem{kiselyov2012delimited}
+Oleg Kiselyov.
+\newblock Delimited control in ocaml, abstractly and concretely.
+\newblock {\em Theoretical Computer Science}, 435:56--76, 2012.
+
+\bibitem{leroyocaml}
+Xavier Leroy.
+\newblock Ocaml-callcc: call/cc for ocaml (2005).
+\newblock \url{http://pauillac.inria.fr/~xleroy/software.html#callcc}.
 
 \bibitem{ocamlmpi}
 Xavier Leroy.
