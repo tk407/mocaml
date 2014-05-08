@@ -4,9 +4,6 @@ metavar value_name, x ::=
 %metavar label, lab ::=
 %  {{ isa string }} {{ coq nat }} {{ coq-equality }} {{ hol string }} {{ ocaml int }}
 %  {{ lex alphanum }} 
-metavar ident ::=
-  {{ isa string }} {{ coq nat }} {{ hol string }} {{ ocaml int }}
-  {{ lex Alphanum }} 
 indexvar index, i, j, n, m ::=
   {{ isa nat }} {{ coq nat }}  {{ hol num }} {{ ocaml int }}
   {{ lex numeral }}
@@ -14,33 +11,17 @@ indexvar index, i, j, n, m ::=
 % should be supported
 
 grammar
-% Type variables
-typvar, tv :: TV_ ::= {{ coq-equality decide equality. apply eq_value_name. }}
-  | ' ident                            ::   :: ident
 
-
-% Type constants
-typconst, tc :: TC_ ::=
-  | tunit                               ::   :: unit
 
 % Type terms
 typexpr, t :: TE_ ::=
-  | typconst                           ::   :: constants
-  | typvar                             ::   :: var
+  | tunit                           ::   :: unit
   | typexpr -> typexpr'                ::   :: arrow
   | typexpr '*' typexpr'               ::   :: prod
   | con typexpr                        ::   :: concurrent
   | typexpr '+' typexpr'               ::   :: sum
   | ( typexpr )                        :: S :: paren {{ ich [[typexpr]] }} {{ ocaml [[typexpr]] }}
 
-% Constants
-constant, c :: CONST_ ::=
-  | ret                                ::   :: ret
-  | fork                               ::   :: fork
-  | unit                                 ::   :: unit
-  | pair                                 ::   :: pair
-  | proj1                                ::   :: proj1
-  | proj2                                ::   :: proj2
 
 redlabel, rl :: RL_ ::=
   | tau                                    ::   :: tau
@@ -51,16 +32,19 @@ redlabel, rl :: RL_ ::=
 % Terms
 expr, e :: E_ ::=
   | value_name                           ::   :: ident
-  | constant                             ::   :: constant
-%  |  {{ coq (E_apply (E_constant CONST_fork) [[expr]]) }}
-%  | fork expr                            :: S ::  fork_curry  {{ coq (E_apply (E_constant CONST_fork) [[expr]]) }}
+  | unit                             ::   :: unit
   | expr expr'                           ::   :: apply 
   | expr >>= expr'                       ::   :: bind
   | function value_name : typexpr -> expr          ::   :: function (+ bind value_name in expr +)
   | fix e                                ::   :: fix
   | comp e                               ::    :: comp
-  | live e                            ::   :: live_expr
+  | live e                               ::   :: live_expr
   | { e , e' }                           ::   :: pair
+  | pair e e'                            ::   :: inpair
+  | proj1 e                              ::   :: proj1
+  | proj2 e                              ::   :: proj2
+  | fork e e'                            ::   :: fork
+  | ret e                                ::   :: ret 
   | ( expr )                             :: S :: paren {{ ich [[expr]] }} {{ ocaml [[expr]] }}
   | inl e                                ::   :: taggingleft
   | inr e                                ::   :: taggingright
@@ -78,7 +62,7 @@ expr, e :: E_ ::=
 
 %Values
 value, v :: V_ ::=
-  | constant                           ::   :: constant
+  | unit                           ::   :: unit
   | function value_name : typexpr -> expr        ::   :: function
   | live e                         ::   :: live_expr
   | inl v                              ::   :: taggedleft
@@ -143,10 +127,8 @@ subrules
 
 substitutions
   single   expr value_name :: subst  
-  multiple typexpr typvar  :: tsubst 
 
 freevars
-  typexpr typvar :: ftv
   expr value_name :: fv
 
 embed
@@ -174,31 +156,6 @@ not(value_name = value_name')
 value_name : typexpr in G, value_name':typexpr'
 
 
-% base typing rules
-defn
-G |- constant : t :: :: G_constant :: constant_ by
-
-% Primitive functions
-
------------------------- :: ret
-G |- ret : t -> con t
-
------------------------- :: fork
-G |- fork : (con t1) -> ((con t2) -> (con ((t1 * (con t2)) + ((con t1) * t2))))
-
-
------------------------- :: unit
-G |- unit : tunit
-
-
-----------------------------------------:: pair
-G |- pair : t1 -> ( t2 -> ( t1 * t2 ) )
-
--------------------------------:: proj1
-G |- proj1 : ( t1 * t2 ) -> t1
-
--------------------------------:: proj2
-G |- proj2 : ( t1 * t2 ) -> t2
 
 
 
@@ -206,13 +163,37 @@ G |- proj2 : ( t1 * t2 ) -> t2
 defn 
 G |- e : t :: :: Get :: Get_ by
 
+% Primitive functions
+
+G |- e : t 
+------------------------ :: ret
+G |- ret e : con t
+
+G |- e : (con t1) 
+G |- e' : (con t2) 
+------------------------ :: fork
+G |- fork e e' : (con ((t1 * (con t2)) + ((con t1) * t2)))
+
+------------------------ :: unit
+G |- unit : tunit
+
+G |- e : t1 
+G |- e' : t2 
+----------------------------------------:: inpair
+G |- pair e e' :  ( t1 * t2 ) 
+
+G |- e : (t1 * t2)
+-------------------------------:: proj1
+G |- proj1 e : ( t1 * t2 ) -> t1
+
+G |- e : (t1 * t2) 
+-------------------------------:: proj2
+G |- proj2 e : ( t1 * t2 ) -> t2
+
+
 x:t in G   
 ---------------- :: value_name
 G |- x:t
-
-:G_constant: G |- constant : t
------------------------------- :: constant
-G |- constant : t
 
 G |- e : t1->t2
 G |- e' : t1 
@@ -273,47 +254,46 @@ e [ s ] --> [ rl ]  e' :: :: red :: red_ {{ tex [[e]]\, \overset{ [[rl]] }{\unde
 
 %Concurrent constructs
 
-%Live exressions are not allowed to move directly
-
-%e --> e'
-%--------------------------- :: live
-%live e -->  live e'
-
-%and finish
-
-%--------------------------- :: die
-%live v --> dead v
 
 ------------------------------- :: docomp
  comp e [ s ] --> [ RE e ] e 
+
+e [ s ] --> [ rl ] e''
+--------------------------- :: forkeval1
+ fork e e' [ s ] --> [ rl ] fork e'' e'
+
+e' [ s ] --> [ rl ] e''
+--------------------------- :: forkeval2
+fork v e' [ s ] --> [ rl ] fork v e''
 
 %Here should be the only path for concurrency
 
 e [ s ] --> [ rl ] e''
 {{ ~ (is_value_of_expr [[ e' ]]) }}
 --------------------------- :: forkmove1
-(:E_apply:fork (live e) ) (live e') [ First ] --> [ rl ] (:E_apply:fork (live e'') ) (live e')
-
+ fork (live e)  (live e') [ First ] --> [ rl ] fork (live e'') (live e')
 
 e' [ s ] --> [ rl ] e''
 {{ ~ (is_value_of_expr [[ e ]]) }}
 --------------------------- :: forkmove2
-(:E_apply:fork (live e) ) (live  e') [ Second ] --> [ rl ] (:E_apply:fork (live e) ) (live  e'') 
+fork (live e)  (live  e') [ Second ] --> [ rl ] fork (live e) (live  e'') 
 
 --------------------------- :: forkdeath1
-(:E_apply:fork (live v) ) (live e) [ First ] --> [ tau ] live ( inl ( ( { v , ( live e ) } ) ) )
+fork (live v)  (live e) [ First ] --> [ tau ] live ( inl ( ( { v , ( live e ) } ) ) )
 
 --------------------------- :: forkdeath2
-(:E_apply:fork (live e) ) (live v') [ Second ] --> [ tau ] live ( inr ( { (live e) , v' } ) )
+fork (live e)  (live v') [ Second ] --> [ tau ] live ( inr ( { (live e) , v' } ) )
 
 % Now for the evaluation steps that have to modified to incorporate the actual OCaml code
 
 
 
-
-
 --------------------------- :: ret
 ret v [ s ] --> [ tau ] ( live v ) 
+
+e [ s ] --> [ rl ] e'
+--------------------------- :: evalret
+ret e [ s ] --> [ rl ] ret e'
 
 e [ s ] --> [ rl ] e'
 --------------------------- :: evalbind
@@ -363,13 +343,30 @@ e [ s ] --> [ rl ] e'
 
 
 ------------------------------------------ :: inpair
-( pair v ) v' [ s ] --> [ tau ] { v , v' }
+ pair v  v' [ s ] --> [ tau ] { v , v' }
+
+e [ s ] --> [ rl ] e''
+------------------------------------------ :: inpair_eval1
+pair e  e' [ s ] --> [ rl ] pair e''  e' 
+
+e' [ s ] --> [ rl ] e''
+------------------------------------------ :: inpair_eval2
+pair v  e' [ s ] --> [ rl ] pair v  e'' 
 
 -------------------------------------------:: proj1
 proj1 { v , v' } [ s ] --> [ tau ] v
 
 -------------------------------------------:: proj2
 proj2 { v , v' } [ s ] --> [ tau ] v'
+
+e [ s ] --> [ rl ] e'
+-------------------------------------------:: proj1_eval
+proj1 e [ s ] --> [ rl ] proj1 e'
+
+e [ s ] --> [ rl ] e'
+-------------------------------------------:: proj2_eval
+proj2 e [ s ] --> [ rl ] proj2 e'
+
 
 
 %Sum types

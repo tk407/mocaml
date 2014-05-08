@@ -1,3 +1,265 @@
+
+
+(* red_app -> proj2_eval *)
+
+let rec xJO_red12 p1 p2 =
+  match (p1, p2) with
+  | (E_apply (E_function (x, t, e), v), s) ->
+    (match xis_value_of_expr v with
+     | true -> subst_expr v x e
+     | false -> E_apply (E_function (x, t, e), (xJO_red12 v s)))
+  | (E_ret v, s) ->
+    (match xis_value_of_expr v with
+     | true -> E_live_expr v
+     | false ->
+       (match xJO_red12 v s with
+        | v' -> E_ret v'
+        | _ -> assert false (*  *))
+    (* | _ -> assert false (*  *) *))
+  | (E_bind (E_live_expr e, e''), s) ->
+    (match xis_value_of_expr e with
+     | false ->
+       (match xJO_red12 e s with
+        | e' -> E_bind ((E_live_expr e'), e'')
+        | _ -> assert false (*  *))
+     | true -> E_apply (e'', e)
+     | _ -> assert false (*  *))
+  | (E_bind (e, e''), s) ->
+    (match xis_value_of_expr e with
+     | false ->
+       (match xJO_red12 e s with
+        | e' -> E_bind (e', e'')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_inpair (v, v'), s) ->
+    (match xis_value_of_expr v with
+     | true ->
+       (match xis_value_of_expr v' with
+        | true -> E_pair (v, v')
+        | false ->
+          (match xJO_red12 v' s with
+           | v'' -> E_inpair (v, v'')
+           | _ -> assert false (*  *))
+        | _ -> assert false (*  *))
+     | false ->
+       (match xJO_red12 v s with
+        | v'' -> E_inpair (v'', v')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_comp e, s) -> e
+  | (E_proj1 E_pair (v, v'), s) ->
+    (match xis_value_of_expr v' with
+     | true ->
+       (match xis_value_of_expr v with
+        | true -> v
+        | _ -> assert false (*  *))
+     | false -> E_proj1 (xJO_red12 (E_pair (v, v')) s))            (* combine the reduce and do *)
+  | (E_proj2 E_pair (v, v'), s) ->
+    (match xis_value_of_expr v' with
+     | true ->
+       (match xis_value_of_expr v with
+        | true -> v'
+        | _ -> assert false (*  *))
+     | false -> E_proj2 (xJO_red12 (E_pair (v, v')) s))             (* combine the reduce and do *)
+ | (E_fork (E_live_expr e, E_live_expr e'), Seq (S_First, s)) ->
+    (match xJO_red12 e s with
+     | e'' ->
+       (match xis_value_of_expr e' with
+        | false ->
+          (match xis_value_of_expr e with
+           | false -> E_fork ((E_live_expr e''), (E_live_expr e'))
+           | _ -> assert false (*  *))
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_fork (E_live_expr e, E_live_expr e'), Seq (S_Second, s)) ->
+    (match xJO_red12 e' s with
+     | e'' ->
+       (match xis_value_of_expr e' with
+        | false ->
+          (match xis_value_of_expr e with
+           | false -> E_fork ((E_live_expr e), (E_live_expr e''))
+           | _ -> assert false (*  *))
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_fork (E_live_expr v, E_live_expr e), s) ->
+    (match xis_value_of_expr e with
+     | true -> E_live_expr (E_taggingleft (E_pair (v, (E_live_expr e))))
+     | _ -> assert false (*  *))
+  | (E_fork (e, e'), s) ->
+    (match xis_value_of_expr e with
+     | false ->
+       (match xJO_red12 e s with
+        | e'' -> E_fork (e'', e')
+        | _ -> assert false (*  *))
+     | true ->
+       (match xJO_red12 e' s with
+        | e'' ->
+          (match xis_value_of_expr e' with
+           | false -> E_fork (e, e'')
+           | _ -> assert false (*  *))
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+   | (E_fork (E_live_expr e, E_live_expr v'), s) ->
+    (match xis_value_of_expr v' with
+     | true -> E_live_expr (E_taggingright (E_pair ((E_live_expr e), v')))
+     | _ -> assert false (*  *))
+  | (E_apply (e, e'), s) ->
+    (match xis_value_of_expr e with
+     | false ->
+       (match xJO_red12 e s with
+        | e'' -> E_apply (e'', e')
+        | _ -> assert false (*  *))
+     | true ->
+       (match xJO_red12 e' s with
+        | e'' -> E_apply (e, e'')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_fix E_function (x, t, e), s) ->
+    subst_expr (E_fix (E_function (x, t, e))) x e
+  | (E_fix e, s) ->
+    (match xJO_red12 e s with
+     | e' -> E_fix e'
+     | _ -> assert false (*  *))
+  | (E_pair (e, e''), s) ->
+    (match xis_value_of_expr e with
+     | false ->
+       (match xJO_red12 e s with
+        | e' -> E_pair (e', e'')
+        | _ -> assert false (*  *))
+     | true ->
+       (match xJO_red12 e'' s with
+        | e' -> E_pair (e, e')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_taggingleft e, s) ->
+    (match xJO_red12 e s with
+     | e' -> E_taggingleft e'
+     | _ -> assert false (*  *))
+  | (E_taggingright e, s) ->
+    (match xJO_red12 e s with
+     | e' -> E_taggingright e'
+     | _ -> assert false (*  *))
+  | (E_case (E_taggingleft v, x, e, x', e'), s) ->
+    (match xis_value_of_expr v with
+     | true -> subst_expr v x e
+     | _ -> assert false (*  *))
+  | (E_case (E_taggingright v, x, e, x', e'), s) ->
+    (match xis_value_of_expr v with
+     | true -> subst_expr v x' e'
+     | _ -> assert false (*  *))
+  | (E_case (e, x, e'', x', e'''), s) ->
+    (match xJO_red12 e s with
+     | e' ->
+       (match xis_value_of_expr e with
+        | false -> E_case (e', x, e'', x', e''')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | _ -> assert false (*   *))
+
+(*  forkeval1 -> forkdeath1 *)
+
+| (E_fork (E_live_expr e, E_live_expr e'), Seq (S_First, s)) ->
+    (match xJO_red12 e s with
+     | e'' ->
+       (match xis_value_of_expr e' with
+        | false ->
+          (match xis_value_of_expr e with
+           | false -> E_fork ((E_live_expr e''), (E_live_expr e'))
+           | _ -> assert false (*  *))
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_fork (E_live_expr e, E_live_expr e'), Seq (S_Second, s)) ->
+    (match xJO_red12 e' s with
+     | e'' ->
+       (match xis_value_of_expr e' with
+        | false ->
+          (match xis_value_of_expr e with
+           | false -> E_fork ((E_live_expr e), (E_live_expr e''))
+           | _ -> assert false (*  *))
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_fork (E_live_expr v, E_live_expr e), s) ->
+    (match xis_value_of_expr e with
+     | true -> E_live_expr (E_taggingleft (E_pair (v, (E_live_expr e))))
+     | _ -> assert false (*  *))
+  | (E_fork (e, e'), s) ->
+    (match xis_value_of_expr e with
+     | false ->
+       (match xJO_red12 e s with
+        | e'' -> E_fork (e'', e')
+        | _ -> assert false (*  *))
+     | true ->
+       (match xJO_red12 e' s with
+        | e'' ->
+          (match xis_value_of_expr e' with
+           | false -> E_fork (e, e'')
+           | _ -> assert false (*  *))
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+
+
+
+(* forkdeath2 -> evalcase *)
+
+| (E_fork (E_live_expr e, E_live_expr v'), s) ->
+    (match xis_value_of_expr v' with
+     | true -> E_live_expr (E_taggingright (E_pair ((E_live_expr e), v')))
+     | _ -> assert false (*  *))
+  | (E_apply (e, e'), s) ->
+    (match xis_value_of_expr e with
+     | false ->
+       (match xJO_red12 e s with
+        | e'' -> E_apply (e'', e')
+        | _ -> assert false (*  *))
+     | true ->
+       (match xJO_red12 e' s with
+        | e'' -> E_apply (e, e'')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_fix E_function (x, t, e), s) ->
+    subst_expr (E_fix (E_function (x, t, e))) x e
+  | (E_fix e, s) ->
+    (match xJO_red12 e s with
+     | e' -> E_fix e'
+     | _ -> assert false (*  *))
+  | (E_pair (e, e''), s) ->
+    (match xis_value_of_expr e with
+     | false ->
+       (match xJO_red12 e s with
+        | e' -> E_pair (e', e'')
+        | _ -> assert false (*  *))
+     | true ->
+       (match xJO_red12 e'' s with
+        | e' -> E_pair (e, e')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+  | (E_taggingleft e, s) ->
+    (match xJO_red12 e s with
+     | e' -> E_taggingleft e'
+     | _ -> assert false (*  *))
+  | (E_taggingright e, s) ->
+    (match xJO_red12 e s with
+     | e' -> E_taggingright e'
+     | _ -> assert false (*  *))
+  | (E_case (E_taggingleft v, x, e, x', e'), s) ->
+    (match xis_value_of_expr v with
+     | true -> subst_expr v x e
+     | _ -> assert false (*  *))
+  | (E_case (E_taggingright v, x, e, x', e'), s) ->
+    (match xis_value_of_expr v with
+     | true -> subst_expr v x' e'
+     | _ -> assert false (*  *))
+  | (E_case (e, x, e'', x', e'''), s) ->
+    (match xJO_red12 e s with
+     | e' ->
+       (match xis_value_of_expr e with
+        | false -> E_case (e', x, e'', x', e''')
+        | _ -> assert false (*  *))
+     | _ -> assert false (*  *))
+
+
+(*
+
 (** commons:  **)
 type value_name = int
 
@@ -663,3 +925,5 @@ let rec xis_value_of_expr = function
 | E_taggingleft e -> xis_value_of_expr e
 | E_taggingright e -> xis_value_of_expr e
 | _ -> false
+
+*)

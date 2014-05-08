@@ -5,19 +5,62 @@ Add LoadPath "WeakUpTo".
 Require Import WeakUpTo.Relations.
 Require Import WeakUpTo.Reductions.
 
-Load mconbase2.
+Load mconbase.
 
 Load LibTactics.
 
 Notation "A >>= F" := (E_bind A F) (at level 42, left associativity).
 Notation "A [ C ] --> [ D ] B" := (JO_red A C D B) (at level 54, no associativity).
-Notation " A # B " := (E_apply (E_apply (E_constant CONST_fork) ( (E_live_expr A)) ) ( (E_live_expr B))) (at level 20).
+Notation " A # B " := (E_fork (E_live_expr A) (E_live_expr B)) (at level 20).
 Notation " A <# B "  := (E_live_expr((E_taggingleft(E_pair A (E_live_expr B))))) (at level 20).
 Notation " A #> B "  := (E_live_expr((E_taggingright(E_pair (E_live_expr A) B)))) (at level 20).
 Notation " A <|# B "  := (((E_taggingleft(E_pair A (E_live_expr B))))) (at level 20).
 Notation " A #|> B "  := (((E_taggingright(E_pair (E_live_expr B) A)))) (at level 20).
 
 Definition label := expr.
+
+
+Lemma star_rev_ind : forall (X :Type) (R: relation X) (P : X -> X -> Prop),
+      (forall x : X, P x x) ->
+       (forall y x z : X, star R x y -> R y z -> P x y -> P x z) ->
+       forall x x0 : X, star R x x0 -> P x x0.
+Proof.
+ intros.
+ assert (star ( trans R ) x0 x).
+ assert ((trans ( star R) ) x0 x).
+ unfold trans.
+ assumption.
+ assert (eeq (trans (star R)) (star (trans R))).
+ apply inv_star.
+ intuition.
+ unfold eeq in H3.
+ intuition.
+ assert (H3:=H2).
+ induction H2.
+ apply H.
+ substs.
+ apply H0 with (y:=y).
+ assert ((trans ( star R) ) y z).
+ assert (eeq (trans (star R)) (star (trans R))).
+ apply inv_star.
+ intuition.
+ unfold eeq in H5.
+ intuition.
+ unfold trans in H5.
+ assumption.
+ unfold trans in H2.
+ assumption.
+ apply IHstar.
+ assert ((trans ( star R) ) y z).
+ assert (eeq (trans (star R)) (star (trans R))).
+ apply inv_star.
+ intuition.
+ unfold eeq in H5.
+ intuition.
+ unfold trans in H5.
+ assumption.
+ assumption.
+Qed.
 
 Inductive idExp : expr -> expr -> Prop :=
  | id_id: forall (e : expr ), idExp e e.
@@ -84,11 +127,95 @@ Qed.
 
 Inductive labRed : label -> relation expr :=
  | lab_r : forall (e0 e1 e2 e3 : expr) (s : select) (l : label), tauRed e0 e1 /\ JO_red e1 s (RL_labelled(l)) e2 /\ tauRed e2 e3 -> labRed l e0 e3.
-Hint Resolve labRed.
+Hint Constructors labRed.
+
+Lemma labred_tau_extension1: forall (e e' e'' : expr) (l : label), tauRed e e' -> labRed l e' e'' -> labRed l e e''.
+Proof.
+ intros.
+ inversion H0.
+ substs.
+ intuition.
+ apply lab_r with (e1:=e1)(e2:=e2)(s:=s).
+ intuition.
+ apply star_trans with (y:=e'); intuition.
+Qed.
+
+Hint Resolve labred_tau_extension1.
+
+Lemma labred_tau_extension2: forall (e e' e'' : expr) (l : label), tauRed e' e'' -> labRed l e e' -> labRed l e e''.
+Proof.
+ intros.
+ inversion H0.
+ substs.
+ intuition.
+ apply lab_r with (e1:=e1)(e2:=e2)(s:=s).
+ intuition.
+ apply star_trans with (y:=e'); intuition.
+Qed.
+
+Hint Resolve labred_tau_extension2.
 
 Inductive weakred : redlabel -> relation expr :=
  | weakred_T : forall ( e e' : expr ), tauRed e e' -> weakred RL_tau e e'
  | weakred_L : forall ( e e' : expr) (l : label), labRed l e e' -> weakred (RL_labelled l) e e'.
+
+Hint Constructors weakred.
+
+Lemma simpl_weakred: forall (e e' : expr) (s : select) (rl : redlabel), e [ s ] --> [ rl ] e' -> weakred rl e e'.
+Proof.
+ intros.
+ induction rl.
+ apply weakred_T.
+ apply star1.
+ apply tStep with (s:=s).
+ assumption.
+ apply weakred_L.
+ apply lab_r with (e1:=e)(e2:=e')(s:=s).
+ splits.
+ apply star_refl.
+ assumption.
+ apply star_refl.
+Qed.
+
+Hint Resolve simpl_weakred.
+
+Lemma weakred_tau_prefix : forall (e e' e'' : expr) (rl : redlabel), weakred RL_tau e e' -> weakred rl e' e'' -> weakred rl e e''.
+Proof.
+ intros.
+ inversion H.
+ substs.
+ induction rl.
+ inversion H0.
+ apply weakred_T.
+ apply star_trans with (y:=e'); intuition.
+ apply weakred_L.
+ inversion H0.
+ inversion H3.
+ apply lab_r with (e1:=e2)(e2:=e3)(s:=s).
+ intuition.
+ apply star_trans with (y:=e'); intuition.
+Qed.
+
+Hint Resolve weakred_tau_prefix.
+
+Lemma weakred_tau_postfix : forall (e e' e'' : expr) (rl : redlabel), weakred rl e e' -> weakred RL_tau e' e'' -> weakred rl e e''.
+Proof.
+ intros.
+ inversion H0.
+ substs.
+ induction rl.
+ inversion H.
+ apply weakred_T.
+ apply star_trans with (y:=e'); intuition.
+ apply weakred_L.
+ inversion H.
+ inversion H3.
+ apply lab_r with (e1:=e2)(e2:=e3)(s:=s).
+ intuition.
+ apply star_trans with (y:=e'); intuition.
+Qed.
+
+Hint Resolve weakred_tau_postfix.
 
 Inductive weaksim : relation expr := 
  | weaksim_id : forall (e : expr), weaksim e e
@@ -113,6 +240,7 @@ Lemma weaksim_trans : forall (e e' e'' : expr), weaksim e e' /\ weaksim e' e'' -
 Proof.
  apply weaksim_tr.
 Qed.
+
 
 Inductive weakbisim : relation expr :=
  | weakbi : forall (e e' : expr), weaksim e e' /\ weaksim e' e -> weakbisim e e'.
@@ -395,6 +523,253 @@ Definition isExprRelationWeakBisimilarity (R : relation expr) : Prop :=
                /\ (forall (p' : expr), tauRed p p' -> (exists (q' : expr), tauRed q q' /\  R p' q' )) /\(forall (q' : expr), tauRed q q' -> (exists (p' : expr), tauRed p p' /\  R p' q' ))
  ).
 
+Definition isExprRelationStepWeakBisimilarity (R : relation expr) : Prop :=
+   forall (p q : expr), R p q -> ((forall (p' : expr) (rl : redlabel) (s: select), p [ s ] --> [ rl ] p' -> (exists (q' : expr), weakred rl q q' /\  R p' q' )) /\(forall (q' : expr) (rl : redlabel) (s : select), q [ s ] --> [ rl ] q' -> (exists (p' : expr), weakred rl p p' /\  R p' q' ))
+               
+ ).
+
+(*
+Lemma isExprRelationStepWeakBisimilarity_comp : forall (R S : relation expr), isExprRelationStepWeakBisimilarity R -> isExprRelationStepWeakBisimilarity S -> isExprRelationStepWeakBisimilarity (comp R S).
+Proof.
+ intros.
+ unfold comp.
+ unfold isExprRelationStepWeakBisimilarity.
+ split.
+ intros.
+ destruct H1.
+ unfold isExprRelationStepWeakBisimilarity in H.
+ unfold isExprRelationStepWeakBisimilarity in H0.
+ apply H in H1.
+ apply H0 in H3.
+ intuition.
+ apply H4 in H2.
+ destruct H2.
+ intuition.
+ simpl.
+*)
+
+
+Lemma isExprRelationWeakBisimilarity_equiv_isExprRelationStepWeakBisimilarity : forall (R : relation expr), isExprRelationWeakBisimilarity R <-> isExprRelationStepWeakBisimilarity R.
+Proof.
+ intros.
+ split.
+ intros.
+ unfold isExprRelationStepWeakBisimilarity.
+ intros.
+ intuition.
+ induction rl.
+ unfold isExprRelationWeakBisimilarity in H.
+ apply H in H0.
+ intuition.
+ apply tStep in H1.
+ assert (tauRed p p').
+ apply star1.
+ assumption.
+ apply H3 in H4.
+ Hint Constructors weakred.
+ destruct H4.
+ exists x.
+ intuition.
+ assert (labRed expr5 p p').
+ apply lab_r with (e1:=p)(e2:=p')(s:=s).
+ intuition.
+ apply star_refl.
+ apply star_refl.
+ unfold isExprRelationWeakBisimilarity in H.
+ apply H in H0.
+ intuition.
+ apply H3 in H2.
+ destruct H2.
+ exists x.
+ intuition.
+ induction rl.
+ unfold isExprRelationWeakBisimilarity in H.
+ apply H in H0.
+ intuition.
+ apply tStep in H1.
+ assert (tauRed q q').
+ apply star1.
+ assumption.
+ apply H5 in H4.
+ destruct H4.
+ exists x.
+ intuition.
+ assert (labRed expr5 q q').
+ apply lab_r with (e1:=q)(e2:=q')(s:=s).
+ intuition.
+ apply star_refl.
+ apply star_refl.
+ unfold isExprRelationWeakBisimilarity in H.
+ apply H in H0.
+ intuition.
+ apply H0 in H2.
+ destruct H2.
+ exists x.
+ intuition.
+ intros.
+ unfold isExprRelationWeakBisimilarity.
+ intros.
+ unfold isExprRelationStepWeakBisimilarity in H.
+ assert (L:=H0).
+ apply H in H0.
+ destruct H0.
+ Check star_rev_ind.
+ assert ((forall p p' : expr, tauRed p p' -> (forall (q : expr), (R p q -> (exists q', tauRed q q' /\ R p' q'))))).
+ Check star_rev_ind.
+ specialize star_rev_ind with (R:=tauStep) (P:=
+ fun x x0 => (
+  forall (q : expr), R x q -> exists q', tauRed q q' /\ R x0 q'
+ )
+ ).
+ intros.
+ assert ((forall x q : expr, R x q -> exists q', tauRed q q' /\ R x q')).
+ intros.
+ exists q1.
+ intuition.
+ apply star_refl.
+ assert ((forall y x z : expr,
+      star tauStep x y ->
+      tauStep y z ->
+      (forall q : expr, R x q -> exists q', tauRed q q' /\ R y q') ->
+      forall q : expr, R x q -> exists q', tauRed q q' /\ R z q') ->
+     forall x x0 : expr,
+     star tauStep x x0 ->
+     forall q : expr, R x q -> exists q', tauRed q q' /\ R x0 q').
+ apply H2.
+ assumption.
+ assert (forall x x0 : expr,
+     star tauStep x x0 ->
+     forall q : expr, R x q -> exists q', tauRed q q' /\ R x0 q').
+
+ apply H6.
+ intros.
+ apply H9 in H10.
+ destruct H10.
+ destruct H10.
+ inversion H8.
+ substs.
+ apply H in H11.
+ destruct H11.
+ apply H11 in H12.
+ destruct H12.
+ destruct H12.
+ exists x1.
+ intuition.
+ inversion H12.
+ substs.
+ apply star_trans with (y:=x0); intuition.
+ specialize H7 with (x:=p0)(x0:=p').
+ apply H7.
+ assumption.
+ assumption.
+ 
+ assert ((forall q q' : expr, tauRed q q' -> (forall (p : expr), R p q -> (exists p', tauRed p p' /\ R p' q')))).
+ Check star_rev_ind.
+ specialize star_rev_ind with (R:=tauStep) (P:=
+ fun x x0 => (
+  forall (p : expr), R p x -> exists p', tauRed p p' /\ R p' x0
+ )
+ ).
+ intros.
+ assert ((forall x p : expr, R p x -> exists p', tauRed p p' /\ R p' x)).
+ intros.
+ exists p1.
+ intuition.
+ apply star_refl.
+ assert ((forall y x z : expr,
+      star tauStep x y ->
+      tauStep y z ->
+      (forall p : expr, R p x -> exists p', tauRed p p' /\ R p' y) ->
+      forall p : expr, R p x -> exists p', tauRed p p' /\ R p' z) ->
+     forall x x0 : expr,
+     star tauStep x x0 ->
+     forall p : expr, R p x -> exists p', tauRed p p' /\ R p' x0).
+ apply H3.
+ assumption.
+ assert (forall x x0 : expr,
+     star tauStep x x0 ->
+     forall p : expr, R p x -> exists p', tauRed p p' /\ R p' x0).
+ apply H7.
+ intros.
+ apply H10 in H11.
+ destruct H11.
+ destruct H11.
+ inversion H9.
+ substs.
+ apply H in H12.
+ destruct H12.
+ apply H14 in H13.
+ destruct H13.
+ destruct H13.
+ exists x1.
+ intuition.
+ inversion H13.
+ substs.
+ apply star_trans with (y:=x0); intuition.
+ specialize H8 with (x:=q0)(x0:=q').
+ apply H8.
+ assumption.
+ assumption.
+ intuition.
+ inversion H4.
+ substs.
+ intuition.
+ apply H2 with (q:=q) in H6.
+ destruct H6.
+ destruct H6.
+ apply H in H7.
+ intuition.
+ apply H9 in H5.
+ destruct H5.
+ intuition.
+ apply H2 with (q:=x0) in H8.
+ destruct H8.
+ exists x1.
+ intuition.
+ inversion H7.
+ substs.
+ inversion H13.
+ substs.
+ apply lab_r with (e1:=e3)(e2:=e4)(s:=s0).
+ Hint Resolve star_trans.
+ intuition.
+ apply star_trans with (y:=x); intuition.
+ apply star_trans with (y:=x0); intuition.
+ assumption.
+ assumption.
+ eauto.
+
+ inversion H4.
+ substs.
+ intuition.
+ apply H3 with (p:=p) in H6.
+ destruct H6.
+ destruct H6.
+ apply H in H7.
+ intuition.
+ apply H10 in H5.
+ destruct H5.
+ intuition.
+ apply H3 with (p:=x0) in H8.
+ destruct H8.
+ exists x1.
+ intuition.
+ inversion H7.
+ substs.
+ inversion H13.
+ substs.
+ apply lab_r with (e1:=e3)(e2:=e4)(s:=s0).
+ Hint Resolve star_trans.
+ intuition.
+ apply star_trans with (y:=x); intuition.
+ apply star_trans with (y:=x0); intuition.
+ assumption.
+ assumption.
+ apply H2 with (q:=q) in H4; intuition.
+ apply H3 with (p:=p) in H4; intuition.
+Qed.
+
+
 Definition isExprRelationValueEqualWeakBisimilarity (R : relation expr) : Prop :=
    isExprRelationWeakBisimilarity R /\ (forall (vp vq : expr), is_value_of_expr vp -> is_value_of_expr vq -> R vp vq -> vp=vq).
 
@@ -498,8 +873,6 @@ Lemma weakbisim_weakred : forall (R : relation expr), isExprRelationWeakBisimila
  destruct H3.
  exists x.
  intuition.
- apply weakred_T.
- assumption.
  inversion H1.
  substs.
  assert (exists q', labRed expr5 q q' /\ R p' q').
@@ -509,8 +882,7 @@ Lemma weakbisim_weakred : forall (R : relation expr), isExprRelationWeakBisimila
  destruct H2.
  exists x.
  intuition.
- apply weakred_L.
- assumption.
+ induction r.
  inversion H1.
  substs.
  assert (exists p', tauRed p p' /\ R p' q').
@@ -520,20 +892,15 @@ Lemma weakbisim_weakred : forall (R : relation expr), isExprRelationWeakBisimila
  destruct H3.
  exists x.
  intuition.
- apply weakred_T.
- assumption.
- substs.
  inversion H1.
  substs.
- assert (exists p', labRed l p p' /\ R p' q').
+ assert (exists p', labRed expr5 p p' /\ R p' q').
  specialize H with (p:=p)(q:=q).
  apply H in H0.
  intuition.
- destruct H3.
+ destruct H2.
  exists x.
  intuition.
- apply weakred_L.
- assumption.
  intros.
  unfold isExprRelationWeakBisimilarity.
  intros.
@@ -663,7 +1030,34 @@ Proof.
  unfold trans.
  assumption.
 Qed.
- 
+
+
+Lemma weakbisim_rel_id : isExprRelationValueEqualWeakBisimilarity (fun (x:expr) (y:expr) => (x=y)).
+Proof.
+ unfold isExprRelationValueEqualWeakBisimilarity.
+ split.
+ unfold isExprRelationWeakBisimilarity.
+ intuition.
+ substs.
+ exists p'; intuition.
+ substs.
+ exists q'; intuition.
+ substs.
+ exists p'; intuition.
+ substs.
+ exists q'; intuition.
+ intros.
+ assumption.
+Qed.
+
+Lemma weakbisim_id : forall (e : expr), isExprValueEqualWeaklyBisimilar e e.
+ intro e.
+ apply isexprvalueequalweaklybisimilar.
+ exists (fun (x:expr) (y:expr) => (x=y)).
+ split.
+ apply weakbisim_rel_id.
+ reflexivity.
+Qed.
 
 (*
 Theorem weakredind : forall (X : Type) (R : relation X) (P : X -> X -> Prop),

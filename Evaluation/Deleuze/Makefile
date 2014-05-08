@@ -10,14 +10,14 @@ LIB=/usr/lib/ocaml/
 OCAMLC=ocamlc
 OCAMLOPT=ocamlopt
 
-SIEVE=sieve_tramp sieve_cont sieve_callcc sieve_dlcont sieve_sys sieve_vm sieve_promise sieve_lwt sieve_mcon sieve_mcon_ftt sieve_dlcont
-SIEVE_OPT=sieve_tramp.opt sieve_cont.opt sieve_sys.opt sieve_promise.opt sieve_lwt.opt sieve_lwt.opt sieve_mcon.opt sieve_mcon_ftt.opt sieve_dlcont.opt
+SIEVE=sieve_tramp sieve_cont sieve_callcc sieve_dlcont sieve_sys sieve_vm sieve_promise sieve_lwt sieve_mcon sieve_mcon_ftt 
+SIEVE_OPT=sieve_tramp.opt sieve_cont.opt sieve_sys.opt sieve_promise.opt sieve_lwt.opt sieve_lwt.opt sieve_mcon.opt sieve_mcon_ftt.opt 
 
-KPN=kpn_tramp kpn_cont kpn_callcc kpn_dlcont kpn_sys kpn_vm kpn_promise kpn_mcon kpn_lwt kpn_dlcont
-KPN_OPT=kpn_tramp.opt kpn_cont.opt kpn_sys.opt kpn_promise.opt kpn_mcon.opt kpn_lwt.opt kpn_dlcont.opt
+KPN=kpn_tramp kpn_cont kpn_callcc kpn_dlcont kpn_sys kpn_vm kpn_promise kpn_mcon kpn_lwt 
+KPN_OPT=kpn_tramp.opt kpn_cont.opt kpn_sys.opt kpn_promise.opt kpn_mcon.opt kpn_lwt.opt 
 
-SORTER=sorter_tramp sorter_cont sorter_callcc sorter_dlcont sorter_sys sorter_vm sorter_promise sorter_mcon sorter_lwt sorter_dlcont
-SORTER_OPT=sorter_tramp.opt sorter_cont.opt sorter_sys.opt sorter_promise.opt sorter_mcon.opt sorter_lwt.opt sorter_dlcont.opt
+SORTER=sorter_tramp sorter_cont sorter_callcc sorter_dlcont sorter_sys sorter_vm sorter_promise sorter_mcon sorter_lwt 
+SORTER_OPT=sorter_tramp.opt sorter_cont.opt sorter_sys.opt sorter_promise.opt sorter_mcon.opt sorter_lwt.opt
 
 EPS=sorter_exec_times.eps sorter_exec_times_bw.eps sorter_mem.eps sorter_mem_bw.eps sieve_exec_times.eps sieve_exec_times_bw.eps sieve_mem.eps sieve_mem_bw.eps kpn_exec_times.eps kpn_exec_times_bw.eps kpn_mem.eps kpn_mem_bw.eps
 

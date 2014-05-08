@@ -11,7 +11,7 @@ let ( >>= ) a b = E_bind (a, b)
 
 let app a b = E_apply (a, b)
 
-let fork a b = app ( app (E_constant CONST_fork) a ) b
+let fork a b = E_fork (a, b)
 
 let func v t e = E_function (v, t, e)
 
@@ -19,16 +19,16 @@ let case e1 x1 e2 x2 e3 = E_case (e1, x1, e2, x2, e3)
 
 let fix e = E_fix e
 
-let pair a b = (app (app (E_constant CONST_pair) a) b)
+let pair a b = E_inpair (a, b)
 
-let ret a = app (E_constant CONST_ret) a
+let ret a = E_ret a
 
-let proj1 a = app (E_constant CONST_proj1) a
-let proj2 a = app (E_constant CONST_proj2) a
+let proj1 a = E_proj1 a
+let proj2 a = E_proj2 a
 
 let rec v_expr = function
 | E_ident value_name5 -> value_name5::[]
-| E_constant constant5 -> []
+| E_unit -> []
 | E_apply (expr5, expr') -> append (v_expr expr5) (v_expr expr')
 | E_bind (expr5, expr') -> append (v_expr expr5) (v_expr expr')
 | E_function (value_name5, typexpr5, expr5) -> append (v_expr expr5) (value_name5::[])
@@ -36,14 +36,21 @@ let rec v_expr = function
 | E_comp e -> []
 | E_live_expr e -> v_expr e
 | E_pair (e, e') -> append (v_expr e) (v_expr e')
+| E_inpair (e, e') -> append (v_expr e) (v_expr e')
+| E_proj1 e -> v_expr e
+| E_proj2 e -> v_expr e
+| E_fork (e, e') -> append (v_expr e) (v_expr e')
+| E_ret e -> (v_expr e)
 | E_taggingleft e -> v_expr e
 | E_taggingright e -> v_expr e
 | E_case (e1, x1, e2, x2, e3) ->
   append (v_expr e1) (append (v_expr e2) (v_expr e3))
 
-let cunit = E_constant CONST_unit
 
-let tunit = TE_constants TC_unit
+
+let cunit = E_unit
+
+let tunit = TE_unit
 
 let tfun a b = TE_arrow(a,b)
 

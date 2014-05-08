@@ -65,6 +65,10 @@ plot "< paste sorter_cont_data_clean_realtime.txt sorter_mcon_data_clean_realtim
 "< paste sorter_lwt_data_clean_realtime.txt sorter_mcon_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs lwt', \
 "< paste sorter_sys_data_clean_realtime.txt sorter_mcon_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs sys'
 
+set term post eps enhanced mono fontfile "/usr/share/texmf/fonts/type1/public/cm-super/sfss1200.pfb" "SFSS1200, 20"
+set output "sorter_ratio_mcon_cont_bw.eps" 
+replot
+
 unset title
 set key bottom right
 set xlabel 'List size'
@@ -122,11 +126,13 @@ replot
 unset logscale xy
 set term post eps enhanced color fontfile "/usr/share/texmf/fonts/type1/public/cm-super/sfss1200.pfb" "SFSS1200, 20"
 set output "sorter_ratio_mcon_cont_opt.eps" 
-plot "< paste sorter_cont_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs cont', \
-"< paste sorter_promise_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs promise', \
-"< paste sorter_dlcont_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs dlcont', \
-"< paste sorter_tramp_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs tramp', \
-"< paste sorter_lwt_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs lwt', \
-"< paste sorter_sys_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs sys'
+plot "< paste sorter_cont_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using 1:($4/$2) with lp title 'mcon vs cont', \
+"< paste sorter_promise_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using 1:($4/$2) with lp title 'mcon vs promise', \
+"< paste sorter_dlcont_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using 1:($4/$2) with lp title 'mcon vs dlcont', \
+"< paste sorter_tramp_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using 1:($4/$2) with lp title 'mcon vs tramp', \
+"< paste sorter_lwt_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using 1:($4/$2) with lp title 'mcon vs lwt', \
+"< paste sorter_sys_opt_data_clean_realtime.txt sorter_mcon_opt_data_clean_realtime.txt" using 1:($4/$2) with lp title 'mcon vs sys'
 
-
+set term post eps enhanced mono fontfile "/usr/share/texmf/fonts/type1/public/cm-super/sfss1200.pfb" "SFSS1200, 20"
+set output "sorter_ratio_mcon_cont_opt_bw.eps" 
+replot

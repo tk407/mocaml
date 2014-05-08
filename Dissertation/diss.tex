@@ -1803,7 +1803,9 @@ Due to the multiple layers of automatic naming developing in this framework dire
 \section{Theoretical evaluation}
 There are a number of properties that are expected from this system: monadic laws, process calculus axioms and potentially properties of the fixpoint operator, predicates for pairs, type preservation and progress. These requirements are all phrased as equivalences as mentioned in \Cref{sec:first_mention_of_equiv}. 
 
-First the semantics of the equivalence $ \equiv $ had to be examined. If two expressions are equivalent they should behave the same: for an outside observer there has to be no difference which exact expression is evaluated in a black box computation. One way to capture this is by keeping track of potential effects and side-effects. Effects are the return values of an expression, side-effects are the computation placeholders invoked by the system. This is the reason why I phrased the operational semantics with labelled transitions: the labels are descriptions of the side-effects.
+First the semantics of the equivalence $ \equiv $ had to be examined. If two expressions are equivalent they should behave the same: for an outside observer there has to be no difference which exact expression is evaluated in a black box computation. One way to capture this is by keeping track of potential effects and side-effects. Effects are the return values of an expression, side-effects are the computation placeholders invoked by the system. That is why I phrased the operational semantics with labelled transitions: the labels are descriptions of the side-effects.
+
+Labelled transition systems like the operational semantics I have defined is a common way to 
 
 \subsection{Methods}
 

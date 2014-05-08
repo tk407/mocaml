@@ -50,9 +50,67 @@ Proof.
 Qed.
 
 Inductive deadlock_left_rel : relation expr :=
- | deadlock_live : forall (d e : expr), totalDetTauStep d d -> deadlock_left_rel ((LM_expr d) # (LM_expr e)) e
- | deadlock_dead : forall (d e : expr), totalDetTauStep d d -> is_value_of_expr e -> deadlock_left_rel ((LM_expr d) #> (e)) e.
+ | deadlock_live : forall (d e : expr), totalDetTauStep d d -> deadlock_left_rel (( d) # ( e)) e
+ | deadlock_dead : forall (d e : expr), totalDetTauStep d d -> is_value_of_expr e -> deadlock_left_rel (( d) #> (e)) e.
 
+Lemma deadlock_rel_wbsm : isExprRelationStepWeakBisimilarity deadlock_left_rel.
+Proof.
+ unfold isExprRelationStepWeakBisimilarity.
+ intros.
+ inversion H.
+ substs.
+ split.
+ intros.
+ inversion H1.
+ apply red_not_value in H7; simpl in H7; intuition.
+ apply red_not_value in H8; simpl in H8; intuition.
+ substs.
+ inversion H0.
+ substs.
+ induction rl.
+ intuition.
+ apply tStep in H4.
+ apply H6 in H4.
+ substs.
+ exists q.
+ Hint Constructors deadlock_left_rel.
+ intuition.
+ apply weakred_T.
+ apply star_refl.
+ intuition.
+ apply H2 in H4.
+ contradiction.
+ substs.
+ exists e''.
+ intuition.
+ apply simpl_weakred with (s:=s0); assumption.
+ substs.
+ inversion H0; intuition.
+ inversion H5.
+ apply red_not_value in H6; contradiction.
+ substs.
+ exists q.
+ intuition.
+ apply weakred_T.
+ apply star_refl.
+ intros.
+ exists (d # q').
+ intuition.
+ apply simpl_weakred with (s:=S_Second).
+ apply JO_red_forkmove2 with (s:=s).
+ assumption.
+ inversion H0; intuition.
+ inversion H6.
+ apply red_not_value in H7; contradiction.
+ substs.
+ split.
+ intros.
+ apply red_not_value in H2; simpl in H2; intuition.
+ intros.
+ apply red_not_value in H2; simpl in H2; intuition.
+Qed.
+
+(*
 Lemma deadlock_rel_wbsm_h : forall (p q : expr), deadlock_left_rel p q -> 
         ((forall (p' : expr) (r : redlabel), weakred r p p' -> (exists (q' : expr), weakred r q q' /\  deadlock_left_rel p' q' )) /\(forall (q' : expr) (r : redlabel), weakred r q q' -> (exists (p' : expr), weakred r p p' /\  deadlock_left_rel p' q' ))
  ).
@@ -263,7 +321,7 @@ Proof.
  apply deadlock_rel_wbsm.
 Qed.
 *)
-
+*)
 Inductive deadlock_bind_left_rel : relation expr :=
  | deadlock_bind : forall (d e : expr), totalDetTauStep d d -> deadlock_bind_left_rel ((E_live_expr (LM_expr d)) >>= e) d.
 

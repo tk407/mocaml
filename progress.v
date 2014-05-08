@@ -1,11 +1,6 @@
 Require Import Classical_Prop.
 Load weakBisimulations.
 
-Example valuepair : is_value_of_expr (E_pair (E_constant(CONST_ret)) (E_constant(CONST_fork))).
-Proof.
- simpl.
- auto.
-Qed.
 
 Ltac caseEq f :=
   generalize (refl_equal f); pattern f at -1; case f. 
@@ -41,68 +36,58 @@ Proof.
  intro e.
  induction e.
  intros.
- inversion H.
- intros.
- inversion H.
- intros.
- inversion H.
- simpl.
- congruence.
- simpl.
- congruence.
- simpl.
- congruence.
- simpl.
- congruence.
- simpl.
- congruence.
- simpl.
- congruence.
- simpl.
- destruct e1; intuition.
- destruct constant5; intuition.
- substs.
- apply IHe2 with (e':=e'')(s:=s)(rl:=rl); intuition.
- substs.
- apply IHe2 with (e':=e'')(s:=s)(rl:=rl); intuition.
- substs.
- simpl.
- destruct e1; intuition.
- destruct constant5; intuition.
- apply IHe1 with (e':=e'')(s:=s)(rl:=rl); intuition.
- simpl; auto.
- apply IHe1 with (e':=e'')(s:=s)(rl:=rl); intuition.
- simpl; auto.
- substs.
- simpl.
- intuition.
- simpl; intuition.
- simpl; intuition.
- intros.
  simpl; auto.
  intros.
  inversion H.
  intros.
- simpl; auto.
- intros.
- simpl; auto.
+ inversion H.
+ simpl.
+ congruence.
+ simpl.
+ congruence.
+ simpl.
+ congruence.
+ simpl.
+ congruence.
+ simpl.
  intros.
  inversion H.
+ intros.
+ simpl; auto.
+ intros; simpl; auto.
  intros; inversion H.
- substs.
- simpl.
- apply IHe1 in H5; intuition.
- simpl.
- substs; apply IHe2 in H6; intuition.
  intros.
  inversion H.
  simpl.
- apply IHe in H1; intuition.
- intros.
- simpl; inversion H.
- apply IHe in H1; intuition.
+ substs; intuition.
+ apply IHe1 in H5.
+ assumption.
+ apply IHe1 in H5.
+ assumption.
+ assumption.
+ substs.
+ apply IHe2 in H6.
  simpl; intuition.
+ intros; simpl; auto.
+ intros; simpl; auto.
+ intros; simpl; auto.
+ intros; simpl; auto.
+ intros; simpl; auto.
+ intros.
+ inversion H.
+ substs.
+ simpl.
+ apply IHe in H1.
+ assumption.
+ intros.
+ inversion H.
+ substs.
+ simpl.
+ apply IHe in H1.
+ assumption.
+ intros; simpl; auto.
 Qed.
+
 
 Lemma is_value_of_expr_dec : forall (e : expr), ((is_value_of_expr e) \/ (~(is_value_of_expr e))).
  Proof.
@@ -124,7 +109,10 @@ Proof.
 Qed.
 
 (*
+
 Lemma subst_type_preservation : forall (e v : expr) (x : value_name) (t t' : typexpr), Get (G_vn G_em x t) e t' -> Get G_em v t -> Get G_em (subst_expr v x e) t'.
+Proof.
+ Hint Constructors Get.
 intros e v x.
  induction e.
  simpl.
@@ -148,6 +136,29 @@ intros e v x.
  intros.
  inversion H.
  substs.
+ auto.
+ simpl.
+ intros.
+ inversion H.
+ substs.
+ apply IHe1 in H4.
+ apply IHe2 in H6.
+ apply Get_apply with (t1:=t1); intuition.
+ auto.
+ auto.
+ intros.
+ simpl.
+ inversion H.
+ substs.
+ apply IHe1 in H4; intuition;
+ apply IHe2 in H6; intuition;
+ apply Get_bind with (t:=t0); intuition.
+ simpl.
+ intros.
+ destruct (eq_value_name value_name5 x).
+ substs.
+ apply IHe in H.
+ intuition.
  inversion H3.
  substs.
  Hint Constructors G_constant.

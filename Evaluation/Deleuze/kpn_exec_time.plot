@@ -54,6 +54,10 @@ plot "< paste kpn_cont_data_clean_realtime.txt kpn_mcon_data_clean_realtime.txt"
 "< paste kpn_lwt_data_clean_realtime.txt kpn_mcon_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs lwt', \
 "< paste kpn_sys_data_clean_realtime.txt kpn_mcon_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs sys'
 
+set term post eps enhanced mono fontfile "/usr/share/texmf/fonts/type1/public/cm-super/sfss1200.pfb" "SFSS1200, 20"
+set output "kpn_ratio_mcon_cont_bw.eps" 
+replot
+
 unset title
 set key bottom right
 set xlabel 'Last number < 10^x'
@@ -106,3 +110,7 @@ plot "< paste kpn_cont_opt_data_clean_realtime.txt kpn_mcon_opt_data_clean_realt
 "< paste kpn_tramp_opt_data_clean_realtime.txt kpn_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs tramp', \
 "< paste kpn_lwt_opt_data_clean_realtime.txt kpn_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs lwt', \
 "< paste kpn_sys_opt_data_clean_realtime.txt kpn_mcon_opt_data_clean_realtime.txt" using log10(1):($4/$2) with lp title 'mcon vs sys'
+
+set term post eps enhanced mono fontfile "/usr/share/texmf/fonts/type1/public/cm-super/sfss1200.pfb" "SFSS1200, 20"
+set output "kpn_ratio_mcon_cont_opt_bw.eps" 
+replot
