@@ -35,7 +35,7 @@ expr, e :: E_ ::=
   | unit                             ::   :: unit
   | expr expr'                           ::   :: apply 
   | expr >>= expr'                       ::   :: bind
-  | function value_name : typexpr -> expr          ::   :: function (+ bind value_name in expr +)
+  | function value_name : t -> e          ::   :: function (+ bind value_name in e +)
   | fix e                                ::   :: fix
   | comp e                               ::    :: comp
   | live e                               ::   :: live_expr
@@ -57,6 +57,7 @@ expr, e :: E_ ::=
     {{ isa subst_expr (E_fix  (E_function [[x]] [[t]] [[e]]) ) [[x']] [[e]] }}
     {{ ch (subst_expr (E_fix  (E_function [[x]] [[t]] [[e]]) ) [[x']] [[e]]) }}
     {{ ocaml (subst_expr (E_fix  (E_function [[x]] [[t]] [[e]]) ) [[x']] [[e]]) }}
+    {{ tex \{ [[fix]] ([[function]] [[x]] [[:]] [[t]] [[->]] [[e]]) / [[x']] \} [[e]] }}
 
 
 
@@ -106,6 +107,9 @@ terminals :: terminals_ ::=
   | exp                                ::   :: expression {{ tex exp }}
   | live                               ::   :: conlive    {{ tex Live }}
   | fix                                ::   :: fix        {{ tex \textbf{fix} }}
+  | pair                                ::   :: inpair        {{ tex \textbf{pair} }}
+  | proj1                                ::   :: proj1        {{ tex \mathrm{ \textbf{proj}_1 } }}
+  | proj2                                ::   :: proj2        {{ tex \mathrm{ \textbf{proj}_2 } }}
   | tau                                ::   :: tau        {{ tex \tau }}
   | >>=                                ::   :: bind {{ tex >>= }}
   | '*'                                ::   :: product_t    {{ tex * }}

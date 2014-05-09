@@ -31,3 +31,47 @@ let e3 = (fun x -> (print_string "Third!\n"; () ));;
 
 let r2 = E_apply (E_apply (E_constant CONST_fork, E_bind (E_live_expr (Comp e1), (E_function (O, TE_constants(TC_unit), E_ident(O)))) ), E_live_expr (Comp e2));;
 let r3 = E_apply (E_apply (E_constant CONST_fork, E_bind (E_live_expr (Comp e1), (E_function (O, TE_constants(TC_unit), E_live_expr (Comp e3)))) ), E_live_expr (Comp e2));;
+let y =
+(E_function (O,
+             TE_constants(TC_unit),
+             E_apply(
+                     (E_function (S(O),
+                                  TE_constants(TC_unit),
+                                  E_apply(E_ident(O), 
+                                          (E_apply(E_ident(S(O)),
+                                                   E_ident(S(O))
+                                                  )
+                                          )
+                                         )
+                                 )
+                     ), 
+                     (E_function (S(S(O)),
+                                  TE_constants(TC_unit),
+                                  E_apply(E_ident(O), 
+                                          (E_apply(E_ident(S(S(O))),
+                                                   E_ident(S(S(O)))
+                                                  )
+                                          )
+                                         )
+                                 )
+                     )
+                    )
+             )
+);;
+
+let rec evalRR e = 
+
+
+# let r = ref 1;;
+val r : int ref = {contents = 1}
+# let f () = () ;;
+val f : unit -> unit = <fun>
+# let n = ref 10;;
+val n : int ref = {contents = 10}
+# let f () = if !n = 0 then () else (r := !r * !n ; n := !n - 1 ; () );;
+
+
+let fib1 =  E_function (S(S(S(O))),
+                TE_constants(TC_unit),
+                 E_bind( E_ident(S(S(S(O)))),
+                         E_function 

@@ -528,26 +528,6 @@ Definition isExprRelationStepWeakBisimilarity (R : relation expr) : Prop :=
                
  ).
 
-(*
-Lemma isExprRelationStepWeakBisimilarity_comp : forall (R S : relation expr), isExprRelationStepWeakBisimilarity R -> isExprRelationStepWeakBisimilarity S -> isExprRelationStepWeakBisimilarity (comp R S).
-Proof.
- intros.
- unfold comp.
- unfold isExprRelationStepWeakBisimilarity.
- split.
- intros.
- destruct H1.
- unfold isExprRelationStepWeakBisimilarity in H.
- unfold isExprRelationStepWeakBisimilarity in H0.
- apply H in H1.
- apply H0 in H3.
- intuition.
- apply H4 in H2.
- destruct H2.
- intuition.
- simpl.
-*)
-
 
 Lemma isExprRelationWeakBisimilarity_equiv_isExprRelationStepWeakBisimilarity : forall (R : relation expr), isExprRelationWeakBisimilarity R <-> isExprRelationStepWeakBisimilarity R.
 Proof.
@@ -768,6 +748,143 @@ Proof.
  apply H2 with (q:=q) in H4; intuition.
  apply H3 with (p:=p) in H4; intuition.
 Qed.
+
+
+Lemma isExprRelationStepWeakBisimilarity_comp : forall (R S : relation expr), isExprRelationStepWeakBisimilarity R -> isExprRelationStepWeakBisimilarity S -> isExprRelationStepWeakBisimilarity (comp R S).
+Proof.
+ intros.
+ unfold comp.
+ unfold isExprRelationStepWeakBisimilarity.
+ split.
+ intros.
+ destruct H1.
+ assert (L:=H).
+ assert (K:=H0).
+ unfold isExprRelationStepWeakBisimilarity in H.
+ unfold isExprRelationStepWeakBisimilarity in H0.
+ assert (E:=H1).
+ assert (F:=H3).
+ apply H in H1.
+ apply H0 in H3.
+ intuition.
+ apply H4 in H2.
+ destruct H2.
+ intuition.
+ simpl.
+ apply isExprRelationWeakBisimilarity_equiv_isExprRelationStepWeakBisimilarity in L.
+ apply isExprRelationWeakBisimilarity_equiv_isExprRelationStepWeakBisimilarity in K.
+ unfold isExprRelationWeakBisimilarity in L.
+ apply L in E.
+ unfold isExprRelationWeakBisimilarity in K.
+ apply K in F.
+ induction rl.
+ inversion H3.
+ substs.
+ intuition.
+ apply H13 in H2.
+ destruct H2.
+ intuition.
+ exists x1.
+ intuition.
+ exists x0; intuition.
+ inversion H3.
+ substs.
+ intuition.
+ assert (H8c:=H8).
+ apply H10 in H8.
+ apply H12 in H8c.
+ destruct H8.
+ exists x1.
+ intuition.
+ exists x0; intuition.
+ destruct H1.
+ assert (L:=H).
+ assert (K:=H0).
+ unfold isExprRelationStepWeakBisimilarity in H.
+ unfold isExprRelationStepWeakBisimilarity in H0.
+ assert (E:=H1).
+ assert (F:=H2).
+ apply H in H1.
+ apply H0 in H2.
+ intuition.
+ apply H5 in H2.
+ destruct H2.
+ intuition.
+ simpl.
+ apply isExprRelationWeakBisimilarity_equiv_isExprRelationStepWeakBisimilarity in L.
+ apply isExprRelationWeakBisimilarity_equiv_isExprRelationStepWeakBisimilarity in K.
+ unfold isExprRelationWeakBisimilarity in L.
+ apply L in E.
+ unfold isExprRelationWeakBisimilarity in K.
+ apply K in F.
+ induction rl.
+ inversion H6.
+ substs.
+ intuition.
+ apply H15 in H2.
+ destruct H2.
+ intuition.
+ exists x1.
+ intuition.
+ exists x0; intuition.
+ inversion H6.
+ substs.
+ intuition.
+ assert (H8c:=H8).
+ apply H10 in H8.
+ apply H12 in H8c.
+ destruct H8c.
+ exists x1.
+ intuition.
+ exists x0; intuition.
+Qed.
+ 
+Lemma isExprRelationStepWeakBisimilarity_eeq : forall (R S : relation expr), eeq R S -> isExprRelationStepWeakBisimilarity R -> isExprRelationStepWeakBisimilarity S.
+Proof.
+ intros.
+ unfold isExprRelationStepWeakBisimilarity.
+ unfold isExprRelationStepWeakBisimilarity in H0.
+ unfold eeq in H.
+ unfold Relations.incl in H.
+ intros.
+ destruct H.
+ apply H2 in H1. 
+ apply H0 in H1.
+ destruct H1.
+ intuition.
+ apply H1 in H4; intuition.
+ destruct H4.
+ destruct H4.
+ apply H in H5.
+ exists x; intuition.
+ apply H3 in H4; intuition.
+ destruct H4.
+ destruct H4.
+ apply H in H5.
+ exists x; intuition.
+Qed.
+
+Lemma isExprRelationStepWeakBisimilarity_trans : forall (R : relation expr), isExprRelationStepWeakBisimilarity R -> isExprRelationStepWeakBisimilarity (trans R).
+Proof.
+ intros.
+ unfold isExprRelationStepWeakBisimilarity.
+ unfold isExprRelationStepWeakBisimilarity in H.
+ unfold trans.
+ intuition.
+ apply H in H0.
+ destruct H0.
+ apply H2 in H1.
+ apply H1.
+ apply H in H0.
+ destruct H0.
+ apply H0 in H1.
+ apply H1.
+Qed.
+
+Lemma  isExprRelationStepWeakBisimilarity_star :forall (R : relation expr), isExprRelationStepWeakBisimilarity R -> isExprRelationStepWeakBisimilarity (star R).
+ 
+ 
+
 
 
 Definition isExprRelationValueEqualWeakBisimilarity (R : relation expr) : Prop :=

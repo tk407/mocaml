@@ -110,6 +110,35 @@ Proof.
  apply red_not_value in H2; simpl in H2; intuition.
 Qed.
 
+Inductive deadlock_right_rel : relation expr :=
+ | deadlock_right_live : forall (d e : expr), totalDetTauStep d d -> deadlock_right_rel (( e) # ( d)) e
+ | deadlock_right_dead : forall (d e : expr), totalDetTauStep d d -> is_value_of_expr e -> deadlock_right_rel (( e) <# (d)) e.
+
+Lemma deadlock_right_rel_wbsm : isExprRelationStepWeakBisimilarity deadlock_right_rel.
+Proof.
+ assert (eeq (deadlock_right_rel) (comp fork_comm_rel deadlock_left_rel)).
+ unfold eeq.
+ unfold Relations.incl.
+ unfold comp.
+ split.
+ intros.
+ inversion H.
+ substs.
+ exists (d # y); intuition.
+ substs.
+ exists (d #> y); intuition.
+ intros.
+ destruct H.
+ inversion H0.
+ substs.
+ inversion H.
+ substs.
+ Hint Constructors deadlock_right_rel.
+ intuition.
+ substs.
+ inversion H.
+ substs; intuition.
+
 (*
 Lemma deadlock_rel_wbsm_h : forall (p q : expr), deadlock_left_rel p q -> 
         ((forall (p' : expr) (r : redlabel), weakred r p p' -> (exists (q' : expr), weakred r q q' /\  deadlock_left_rel p' q' )) /\(forall (q' : expr) (r : redlabel), weakred r q q' -> (exists (p' : expr), weakred r p p' /\  deadlock_left_rel p' q' ))
