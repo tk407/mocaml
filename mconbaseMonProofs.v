@@ -106,16 +106,16 @@ Proof.
  intuition.
  apply weakred_T.
  apply S_star with (y:=((E_live_expr e)) >>= E_function x t e0).
- apply tStep with (s:=S_First).
+ apply tStep with (s:=sstar1).
  apply JO_red_evalbind.
  apply JO_red_ret.
  assumption.
  apply S_star with (y:=(E_apply (E_function x t e0) e)).
- apply tStep with (s:=S_First).
+ apply tStep with (s:=sstar1).
  apply JO_red_dobind.
  assumption.
  apply star1.
- apply tStep with (s:=S_First).
+ apply tStep with (s:=sstar1).
  apply JO_red_app.
  assumption.
  substs.
@@ -144,11 +144,11 @@ Proof.
  intuition.
  apply weakred_T.
  apply S_star with (y:=(E_apply (E_function x t e0) e)).
- apply tStep with (s:=S_First).
+ apply tStep with (s:=sstar1).
  apply JO_red_dobind.
  assumption.
  apply star1.
- apply tStep with (s:=S_First).
+ apply tStep with (s:=sstar1).
  apply JO_red_app.
  assumption.
  substs.
@@ -181,6 +181,15 @@ Proof.
  apply star_refl.
  assumption.
  apply star_refl.
+Qed.
+
+Theorem mon_left_id_rel_vewbsm : isExprRelationValueEqualWeakBisimilarity mon_left_id_rel.
+Proof.
+ unfold isExprRelationValueEqualWeakBisimilarity.
+ intuition.
+ apply isExprRelationWeakBisimilarity_equiv_isExprRelationStepWeakBisimilarity.
+ apply mon_left_id_wbsm.
+ inversion H1; substs; simpl in H; simpl in H0; intuition.
 Qed.
  
 Inductive mon_right_id_rel : relation expr :=
@@ -247,6 +256,85 @@ Proof.
  apply red_not_value in H0; simpl in H0; intuition.
  intros.
  apply red_not_value in H0; simpl in H0; intuition.
+Qed.
+
+Theorem mon_right_id_rel_vewbsm : isExprRelationValueEqualWeakBisimilarity mon_right_id_rel.
+Proof.
+ unfold isExprRelationValueEqualWeakBisimilarity.
+ intuition.
+ apply isExprRelationWeakBisimilarity_equiv_isExprRelationStepWeakBisimilarity.
+ apply mon_right_id_wbsm.
+ inversion H1; substs; simpl in H; simpl in H0; intuition.
+Qed.
+
+Inductive mon_right_id_ext_rel : relation expr :=
+| mon_right_id_ext_bound : forall (a : expr) (x : value_name) (t : typexpr), mon_right_id_ext_rel (E_live_expr (a) >>= (E_function x t (E_ret (E_ident x))))  (E_ret ( a))
+| mon_right_id_ext_orig : forall (a b : expr) (x : value_name) (t : typexpr), mon_right_id_rel a b -> mon_right_id_ext_rel a b.
+
+
+Theorem mon_right_id_ext_wbsm : isExprRelationStepWeakBisimilarity mon_right_id_ext_rel.
+Proof.
+ assert (L:=mon_right_id_wbsm).
+ unfold isExprRelationStepWeakBisimilarity in L.
+ unfold isExprRelationStepWeakBisimilarity.
+ intros.
+ inversion H.
+ substs.
+ splits.
+ intros.
+ inversion H0.
+ apply red_not_value in H6; simpl in H6; intuition.
+ substs.
+ exists ((E_ret e')).
+ intuition.
+ apply simpl_weakred with (s:=s).
+ apply JO_red_evalret.
+ assumption.
+ apply  mon_right_id_ext_bound.
+ substs.
+ exists (E_live_expr a).
+ intuition.
+ apply simpl_weakred with (s:=sstar1).
+ apply JO_red_ret.
+ assumption.
+ apply mon_right_id_ext_orig; intuition.
+ intros.
+ inversion H0. 
+ substs.
+ exists (E_live_expr a >>= E_function x t (E_ret (E_ident x))).
+ splits.
+ apply weakred_T.
+ apply star_refl.
+ apply mon_right_id_ext_orig; intuition.
+ substs.
+ exists (E_live_expr e' >>= E_function x t (E_ret (E_ident x))).
+ splits.
+ apply simpl_weakred with (s:=s).
+ apply JO_red_movebind.
+ assumption.
+ apply mon_right_id_ext_bound.
+ substs.
+ apply L in H0.
+ intuition.
+ apply H1 in H0.
+ destruct H0.
+ exists x0.
+ Hint Constructors mon_right_id_ext_rel.
+ intuition.
+ apply H2 in H0.
+ destruct H0.
+ exists x0.
+ intuition.
+Qed.
+
+Theorem mon_right_id_ext_rel_vewbsm : isExprRelationValueEqualWeakBisimilarity mon_right_id_ext_rel.
+Proof.
+ unfold isExprRelationValueEqualWeakBisimilarity.
+ intuition.
+ apply isExprRelationWeakBisimilarity_equiv_isExprRelationStepWeakBisimilarity.
+ apply mon_right_id_ext_wbsm.
+ inversion H1; substs; simpl in H; simpl in H0; intuition.
+ inversion H2; substs; simpl in H; simpl in H0; intuition.
 Qed.
 
 Definition exprClosedOnVariable : expr -> value_name -> Prop := fun e v => 
@@ -376,7 +464,7 @@ Proof.
  exists (e'0 >>= E_function v' t' e'').
  intuition.
  apply weakred_tau_prefix with (e':=(subst_expr e v e' >>= E_function v' t' e'')).
- apply simpl_weakred with (s:=S_First).
+ apply simpl_weakred with (s:=sstar1).
  apply JO_red_evalbind.
  apply JO_red_app.
  assumption.
@@ -387,7 +475,7 @@ Proof.
  exists (E_live_expr e'0 >>= E_function v' t' e'').
  intuition.
  apply weakred_tau_prefix with (e':=(subst_expr e v e' >>= E_function v' t' e'')).
- apply simpl_weakred with (s:=S_First).
+ apply simpl_weakred with (s:=sstar1).
  apply JO_red_evalbind.
  apply JO_red_app.
  assumption.
@@ -399,12 +487,12 @@ Proof.
  exists (E_apply (E_function v' t' e'') v0).
  intuition.
  apply weakred_tau_prefix with (e':=(subst_expr e v e' >>= E_function v' t' e'')).
- apply simpl_weakred with (s:=S_First).
+ apply simpl_weakred with (s:=sstar1).
  apply JO_red_evalbind.
  apply JO_red_app.
  assumption.
  rewrite <- H6.
- apply simpl_weakred with (s:=S_First).
+ apply simpl_weakred with (s:=sstar1).
  apply JO_red_dobind.
  assumption.
  intros.
@@ -434,4 +522,13 @@ Proof.
  intros.
  exists q'.
  split; [eauto | auto ].
+Qed.
+
+Theorem mon_assoc_vewbsm : isExprRelationValueEqualWeakBisimilarity mon_assoc_rel.
+Proof.
+ unfold isExprRelationValueEqualWeakBisimilarity.
+ intuition.
+ apply isExprRelationWeakBisimilarity_equiv_isExprRelationStepWeakBisimilarity.
+ apply mon_assoc_wbsm.
+ inversion H1; substs; simpl in H; simpl in H0; intuition.
 Qed.

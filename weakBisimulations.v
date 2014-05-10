@@ -882,10 +882,106 @@ Proof.
 Qed.
 
 Lemma  isExprRelationStepWeakBisimilarity_star :forall (R : relation expr), isExprRelationStepWeakBisimilarity R -> isExprRelationStepWeakBisimilarity (star R).
- 
- 
+Proof.
+ intros.
+ assert (L:=H).
+ apply isExprRelationWeakBisimilarity_equiv_isExprRelationStepWeakBisimilarity in L.
+ apply isExprRelationWeakBisimilarity_equiv_isExprRelationStepWeakBisimilarity.
+ unfold isExprRelationWeakBisimilarity.
+ apply star_ind.
+ intros.
+ splits.
+ intros.
+ exists p'.
+ intuition.
+ intros.
+ exists q'; intuition.
+ intros.
+ exists p'; intuition.
+ intros; exists q'; intuition.
+ intros.
+ splits.
+ intros.
+ apply L in H0.
+ intuition.
+ apply H4 in H3.
+ destruct H3.
+ destruct H3.
+ apply H0 in H3.
+ destruct H3.
+ exists x1.
+ intuition.
+ apply S_star with (y:=x0); intuition.
+ apply L in H0.
+ intuition.
+ apply H4 in H7.
+ destruct H7.
+ destruct H7.
+ apply H2 in H7.
+ destruct H7.
+ exists x1.
+ intuition.
+ apply S_star with (y:=x0); intuition.
+ intros.
+ apply L in H0.
+ intuition.
+ apply H6 in H3.
+ destruct H3.
+ destruct H3.
+ apply H7 in H3.
+ destruct H3.
+ exists x1.
+ intuition.
+ apply S_star with (y:=x0); intuition.
+ intros.
+ apply L in H0.
+ intuition.
+ apply H10 in H3.
+ destruct H3.
+ destruct H3.
+ apply H9 in H3.
+ destruct H3.
+ exists x1.
+ intuition.
+ apply S_star with (y:=x0); intuition.
+Qed.
 
+Lemma isExprRelationStepWeakBisimilarity_union2 : forall (R S : relation expr), isExprRelationStepWeakBisimilarity R -> isExprRelationStepWeakBisimilarity S -> isExprRelationStepWeakBisimilarity (union2 R S).
+Proof.
+ intros.
+ unfold isExprRelationStepWeakBisimilarity.
+ unfold union2.
+ unfold isExprRelationStepWeakBisimilarity in H.
+ unfold isExprRelationStepWeakBisimilarity in H0.
+ intros.
+ intuition.
+ apply H in H2.
+ intuition.
+ apply H3 in H1.
+ destruct H1.
+ exists x.
+ intuition.
+ apply H in H2.
+ intuition.
+ apply H4 in H1.
+ destruct H1.
+ exists x.
+ intuition.
+ apply H0 in H2.
+ intuition.
+ apply H3 in H1.
+ destruct H1.
+ exists x.
+ intuition.
+ apply H0 in H2.
+ intuition.
+ apply H4 in H1.
+ destruct H1.
+ exists x.
+ intuition.
+Qed.
 
+Definition exprid : relation expr := fun x y => (x=y).
 
 Definition isExprRelationValueEqualWeakBisimilarity (R : relation expr) : Prop :=
    isExprRelationWeakBisimilarity R /\ (forall (vp vq : expr), is_value_of_expr vp -> is_value_of_expr vq -> R vp vq -> vp=vq).
@@ -1217,3 +1313,5 @@ Theorem weakredind : forall (X : Type) (R : relation X) (P : X -> X -> Prop),
       exists x1; auto; exists x2; assumption.
     Qed.
 *)
+
+CoFixpoint sstar1 : select := S_Seq SO_First sstar1.

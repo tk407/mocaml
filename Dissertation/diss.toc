@@ -34,45 +34,51 @@
 \contentsline {section}{\numberline {3.2}Proof assisstant system}{38}
 \contentsline {subsection}{\numberline {3.2.1}Outline of the proof assistant code}{38}
 \contentsline {subsection}{\numberline {3.2.2}Extractable reduction relation}{41}
-\contentsline {section}{\numberline {3.3}OCaml system}{43}
+\contentsline {section}{\numberline {3.3}OCaml system}{42}
 \contentsline {subsection}{\numberline {3.3.1}Outline of the OCaml code}{43}
 \contentsline {subsection}{\numberline {3.3.2}Hand modifications and justifications}{43}
 \contentsline {subsection}{\numberline {3.3.3}Syntactic sugar}{45}
 \contentsline {chapter}{\numberline {4}Evaluation}{47}
 \contentsline {section}{\numberline {4.1}Theoretical evaluation}{47}
-\contentsline {subsection}{\numberline {4.1.1}Methods}{47}
-\contentsline {subsubsection}{Weak bisimilarity}{47}
-\contentsline {subsection}{\numberline {4.1.2}Properties}{48}
-\contentsline {subsubsection}{Monadic laws}{48}
-\contentsline {subsubsection}{Fork commutativity}{48}
-\contentsline {subsubsection}{Fork associativity}{48}
-\contentsline {subsubsection}{Deadlock properties}{48}
-\contentsline {subsubsection}{Remarks on congruence}{48}
-\contentsline {subsubsection}{Type preservation?}{48}
-\contentsline {subsubsection}{Progress?}{48}
-\contentsline {section}{\numberline {4.2}Performance}{48}
-\contentsline {subsection}{\numberline {4.2.1}Method}{49}
-\contentsline {subsection}{\numberline {4.2.2}Examples}{49}
-\contentsline {subsubsection}{Kahn process network}{50}
-\contentsline {subsubsection}{Sieve of Eratosthenes}{52}
-\contentsline {subsubsection}{Concurrent sort}{53}
-\contentsline {chapter}{\numberline {5}Conclusion}{57}
-\contentsline {chapter}{Bibliography}{59}
-\contentsline {chapter}{\numberline {A}Full semantics}{63}
-\contentsline {chapter}{\numberline {B}Project Proposal}{71}
-\contentsline {section}{\numberline {B.1}Introduction of work to be undertaken}{71}
-\contentsline {section}{\numberline {B.2}Description of starting point}{71}
-\contentsline {section}{\numberline {B.3}Substance and structure}{72}
-\contentsline {section}{\numberline {B.4}Criteria}{72}
-\contentsline {section}{\numberline {B.5}Timetable}{73}
-\contentsline {subsection}{\numberline {B.5.1}Week 1 and 2}{73}
-\contentsline {subsection}{\numberline {B.5.2}Week 3 and 4}{73}
-\contentsline {subsection}{\numberline {B.5.3}Week 5 and 6}{73}
-\contentsline {subsection}{\numberline {B.5.4}Week 7 and 8}{73}
-\contentsline {subsection}{\numberline {B.5.5}Week 9 and 10}{74}
-\contentsline {subsection}{\numberline {B.5.6}Week 11 and 12}{74}
-\contentsline {subsection}{\numberline {B.5.7}Week 13 and 14}{74}
-\contentsline {subsection}{\numberline {B.5.8}Week 15 and 16}{74}
-\contentsline {subsection}{\numberline {B.5.9}Week 17 and 18}{74}
-\contentsline {subsection}{\numberline {B.5.10}Week 19 and 20}{74}
-\contentsline {section}{\numberline {B.6}Resource Declaration}{74}
+\contentsline {subsection}{\numberline {4.1.1}Weak bisimilarity}{48}
+\contentsline {subsection}{\numberline {4.1.2}Properties of the logical model}{49}
+\contentsline {subsubsection}{Monadic laws}{50}
+\contentsline {subsubsection}{Fork commutativity}{51}
+\contentsline {subsubsection}{Fork associativity}{52}
+\contentsline {subsubsection}{Deadlock properties}{53}
+\contentsline {subsubsection}{Remarks on congruence}{54}
+\contentsline {subsection}{\numberline {4.1.3}Equivalence of the logical model and the extractable model}{54}
+\contentsline {subsubsection}{Label erasure}{55}
+\contentsline {subsubsection}{Equivalence}{55}
+\contentsline {section}{\numberline {4.2}Performance}{55}
+\contentsline {subsection}{\numberline {4.2.1}Method}{56}
+\contentsline {subsection}{\numberline {4.2.2}Examples}{57}
+\contentsline {subsubsection}{Kahn process network}{57}
+\contentsline {subsubsection}{Sieve of Eratosthenes}{59}
+\contentsline {subsubsection}{Concurrent sort}{61}
+\contentsline {chapter}{\numberline {5}Conclusion}{65}
+\contentsline {chapter}{Bibliography}{67}
+\contentsline {chapter}{\numberline {A}Full semantics}{71}
+\contentsline {chapter}{\numberline {B}Coq definitions and theorem statements}{79}
+\contentsline {section}{\numberline {B.1}Weak bisimilarity definitions and theorems}{80}
+\contentsline {section}{\numberline {B.2}Monadic laws}{82}
+\contentsline {section}{\numberline {B.3}Fork and join}{82}
+\contentsline {section}{\numberline {B.4}Deadlock properties}{82}
+\contentsline {section}{\numberline {B.5}Equivalence}{82}
+\contentsline {chapter}{\numberline {C}Project Proposal}{83}
+\contentsline {section}{\numberline {C.1}Introduction of work to be undertaken}{83}
+\contentsline {section}{\numberline {C.2}Description of starting point}{83}
+\contentsline {section}{\numberline {C.3}Substance and structure}{84}
+\contentsline {section}{\numberline {C.4}Criteria}{84}
+\contentsline {section}{\numberline {C.5}Timetable}{85}
+\contentsline {subsection}{\numberline {C.5.1}Week 1 and 2}{85}
+\contentsline {subsection}{\numberline {C.5.2}Week 3 and 4}{85}
+\contentsline {subsection}{\numberline {C.5.3}Week 5 and 6}{85}
+\contentsline {subsection}{\numberline {C.5.4}Week 7 and 8}{85}
+\contentsline {subsection}{\numberline {C.5.5}Week 9 and 10}{86}
+\contentsline {subsection}{\numberline {C.5.6}Week 11 and 12}{86}
+\contentsline {subsection}{\numberline {C.5.7}Week 13 and 14}{86}
+\contentsline {subsection}{\numberline {C.5.8}Week 15 and 16}{86}
+\contentsline {subsection}{\numberline {C.5.9}Week 17 and 18}{86}
+\contentsline {subsection}{\numberline {C.5.10}Week 19 and 20}{86}
+\contentsline {section}{\numberline {C.6}Resource Declaration}{86}

@@ -28,6 +28,22 @@ Nick Benton and Vasileios Koutavas.
 \newblock A mechanized bisimulation for the nu-calculus.
 \newblock {\em Higher-Order and Symbolic Computation (to appear, 2013)}, 2008.
 
+\bibitem{bergstra1984process}
+Jan~A Bergstra and Jan~Willem Klop.
+\newblock Process algebra for synchronous communication.
+\newblock {\em Information and control}, 60(1):109--137, 1984.
+
+\bibitem{bergstra1985algebra}
+Jan~A. Bergstra and Jan~Willem Klop.
+\newblock Algebra of communicating processes with abstraction.
+\newblock {\em Theoretical computer science}, 37:77--121, 1985.
+
+\bibitem{bergstra1986algebra}
+Jan~A Bergstra and Jan~Willem Klop.
+\newblock Algebra of communicating processes.
+\newblock {\em Mathematics and Computer Science, CWI Monograph}, 1:89--138,
+  1986.
+
 \bibitem{blazy2006formal}
 Sandrine Blazy, Zaynah Dargaye, and Xavier Leroy.
 \newblock Formal verification of a c compiler front-end.
@@ -37,6 +53,11 @@ Sandrine Blazy, Zaynah Dargaye, and Xavier Leroy.
 Sandrine Blazy and Xavier Leroy.
 \newblock Mechanized semantics for the clight subset of the c language.
 \newblock {\em Journal of Automated Reasoning}, 43(3):263--288, 2009.
+
+\bibitem{brookes1983behavioural}
+Stephen Brookes and William Rounds.
+\newblock Behavioural equivalence relations induced by programming logics.
+\newblock {\em Automata, Languages and Programming}, pages 97--108, 1983.
 
 \bibitem{Claessen99functionalpearls}
 Koen Claessen.
@@ -69,6 +90,12 @@ CAR Hoareetal.
 \newblock Tackling the awkward squad: monadic input/output, concurrency,
   exceptions, and foreign-language calls in haskell.
 \newblock {\em Engineering theories of software construction}, 180:47, 2001.
+
+\bibitem{howe1996proving}
+Douglas~J Howe.
+\newblock Proving congruence of bisimulation in functional programming
+  languages.
+\newblock {\em Information and Computation}, 124(2):103--112, 1996.
 
 \bibitem{kahn1976coroutines}
 Gilles Kahn, David MacQueen, et~al.
@@ -129,6 +156,11 @@ Louis Mandel and Luc Maranget.
 \newblock The {JoCaml} system.
 \newblock \url{http://jocaml.inria.fr/}, 2007.
 
+\bibitem{milner1982calculus}
+Robin Milner.
+\newblock {\em A calculus of communicating systems}.
+\newblock Springer-Verlag New York, Inc., 1982.
+
 \bibitem{OCamlLight}
 Scott Owens.
 \newblock A sound semantics for ocaml light.
@@ -139,6 +171,22 @@ Scott Owens.
 Benjamin~C Pierce.
 \newblock {\em Types and programming languages}.
 \newblock MIT press, 2002.
+
+\bibitem{pierce2000behavioral}
+Benjamin~C Pierce and Davide Sangiorgi.
+\newblock Behavioral equivalence in the polymorphic pi-calculus.
+\newblock {\em Journal of the ACM (JACM)}, 47(3):531--584, 2000.
+
+\bibitem{pitts2011howe}
+AM~Pitts.
+\newblock Howe’s method for higher-order languages.
+\newblock {\em Advanced Topics in Bisimulation and Coinduction}, 52:197--232,
+  2011.
+
+\bibitem{sangiorgi1992problem}
+Davide Sangiorgi and Robin Milner.
+\newblock The problem of “weak bisimulation up to”.
+\newblock In {\em CONCUR'92}, pages 32--46. Springer, 1992.
 
 \bibitem{sevvcik2011relaxed}
 Jaroslav {\^S}ev{\v{c}}ik, Viktor Vafeiadis, Francesco Zappa~Nardelli, Suresh

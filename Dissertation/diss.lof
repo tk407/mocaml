@@ -18,14 +18,15 @@
 \contentsline {figure}{\numberline {3.14}{\ignorespaces Operational semantics of the monadic primitives, ret and bind\relax }}{36}
 \contentsline {figure}{\numberline {3.15}{\ignorespaces Operational semantics of the fork operator\relax }}{37}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces \input diss-1.cpt\relax \relax }}{51}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces \input diss-2.cpt\relax \relax }}{51}
-\contentsline {figure}{\numberline {4.3}{\ignorespaces \input diss-3.cpt\relax \relax }}{53}
-\contentsline {figure}{\numberline {4.4}{\ignorespaces \input diss-4.cpt\relax \relax }}{53}
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Sieve fork tree\relax }}{54}
-\contentsline {figure}{\numberline {4.6}{\ignorespaces \input diss-5.cpt\relax \relax }}{55}
-\contentsline {figure}{\numberline {4.7}{\ignorespaces \input diss-6.cpt\relax \relax }}{55}
-\contentsline {figure}{\numberline {4.8}{\ignorespaces \input diss-7.cpt\relax \relax }}{55}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces \input diss-1.cpt\relax \relax }}{58}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces \input diss-2.cpt\relax \relax }}{59}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces \input diss-3.cpt\relax \relax }}{60}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces \input diss-4.cpt\relax \relax }}{60}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Sieve fork tree\relax }}{61}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces \input diss-5.cpt\relax \relax }}{62}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces \input diss-6.cpt\relax \relax }}{62}
+\contentsline {figure}{\numberline {4.8}{\ignorespaces \input diss-7.cpt\relax \relax }}{63}
+\addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

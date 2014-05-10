@@ -25,7 +25,7 @@ Inductive expr : Set :=
  | E_unit : expr
  | E_apply (expr5:expr) (expr':expr)
  | E_bind (expr5:expr) (expr':expr)
- | E_function (value_name5:value_name) (typexpr5:typexpr) (expr5:expr)
+ | E_function (value_name5:value_name) (t:typexpr) (e:expr)
  | E_fix (e:expr)
  | E_comp (e:expr)
  | E_live_expr (e:expr)
@@ -39,13 +39,16 @@ Inductive expr : Set :=
  | E_taggingright (e:expr)
  | E_case (e1:expr) (x1:value_name) (e2:expr) (x2:value_name) (e3:expr).
 
+Inductive selectopt : Set := 
+ | SO_First : selectopt
+ | SO_Second : selectopt.
+
 Inductive redlabel : Set := 
  | RL_tau : redlabel
  | RL_labelled (expr5:expr).
 
-Inductive select : Set := 
- | S_First : select
- | S_Second : select.
+CoInductive select : Set := 
+ | S_Seq (o:selectopt) (s:select).
 
 Inductive G : Set := 
  | G_em : G
@@ -58,7 +61,7 @@ Fixpoint is_value_of_expr (e_5:expr) : Prop :=
   | E_unit => (True)
   | (E_apply expr5 expr') => False
   | (E_bind expr5 expr') => False
-  | (E_function value_name5 typexpr5 expr5) => (True)
+  | (E_function value_name5 t e) => (True)
   | (E_fix e) => False
   | (E_comp e) => False
   | (E_live_expr e) => (True)
@@ -89,7 +92,7 @@ Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr
   | E_unit => E_unit 
   | (E_apply expr5 expr') => E_apply (subst_expr e_5 x_5 expr5) (subst_expr e_5 x_5 expr')
   | (E_bind expr5 expr') => E_bind (subst_expr e_5 x_5 expr5) (subst_expr e_5 x_5 expr')
-  | (E_function value_name5 typexpr5 expr5) => E_function value_name5 typexpr5 (if list_mem eq_value_name x_5 (cons value_name5 nil) then expr5 else (subst_expr e_5 x_5 expr5))
+  | (E_function value_name5 t e) => E_function value_name5 t (if list_mem eq_value_name x_5 (cons value_name5 nil) then e else (subst_expr e_5 x_5 e))
   | (E_fix e) => E_fix (subst_expr e_5 x_5 e)
   | (E_comp e) => E_comp (subst_expr e_5 x_5 e)
   | (E_live_expr e) => E_live_expr (subst_expr e_5 x_5 e)
@@ -126,7 +129,7 @@ Fixpoint fv_expr (e_5:expr) : list value_name :=
   | E_unit => nil
   | (E_apply expr5 expr') => (app (fv_expr expr5) (fv_expr expr'))
   | (E_bind expr5 expr') => (app (fv_expr expr5) (fv_expr expr'))
-  | (E_function value_name5 typexpr5 expr5) => ((list_minus eq_value_name (fv_expr expr5) (cons value_name5 nil)))
+  | (E_function value_name5 t e) => ((list_minus eq_value_name (fv_expr e) (cons value_name5 nil)))
   | (E_fix e) => ((fv_expr e))
   | (E_comp e) => ((fv_expr e))
   | (E_live_expr e) => ((fv_expr e))
@@ -231,20 +234,20 @@ Inductive JO_red : expr -> select -> redlabel -> expr -> Prop :=    (* defn red 
      is_value_of_expr v ->
      JO_red e' s rl e'' ->
      JO_red (E_fork v e') s rl (E_fork v e'')
- | JO_red_forkmove1 : forall (e e':expr) (rl:redlabel) (e'':expr) (s:select),
+ | JO_red_forkmove1 : forall (e e':expr) (s:select) (rl:redlabel) (e'':expr),
      JO_red e s rl e'' ->
      ~ (is_value_of_expr e')  ->
-     JO_red (E_fork  (E_live_expr e)   (E_live_expr e') ) S_First rl (E_fork  (E_live_expr e'')   (E_live_expr e') )
- | JO_red_forkmove2 : forall (e e':expr) (rl:redlabel) (e'':expr) (s:select),
+     JO_red (E_fork  (E_live_expr e)   (E_live_expr e') ) (S_Seq SO_First s) rl (E_fork  (E_live_expr e'')   (E_live_expr e') )
+ | JO_red_forkmove2 : forall (e e':expr) (s:select) (rl:redlabel) (e'':expr),
      JO_red e' s rl e'' ->
      ~ (is_value_of_expr e)  ->
-     JO_red (E_fork  (E_live_expr e)   (E_live_expr e') ) S_Second rl (E_fork  (E_live_expr e)   (E_live_expr e'') )
- | JO_red_forkdeath1 : forall (v e:expr),
+     JO_red (E_fork  (E_live_expr e)   (E_live_expr e') ) (S_Seq SO_Second s) rl (E_fork  (E_live_expr e)   (E_live_expr e'') )
+ | JO_red_forkdeath1 : forall (v e:expr) (s:select),
      is_value_of_expr v ->
-     JO_red (E_fork  (E_live_expr v)   (E_live_expr e) ) S_First RL_tau (E_live_expr  (E_taggingleft   (E_pair v  (E_live_expr e) )  ) )
- | JO_red_forkdeath2 : forall (e v':expr),
+     JO_red (E_fork  (E_live_expr v)   (E_live_expr e) ) s RL_tau (E_live_expr  (E_taggingleft   (E_pair v  (E_live_expr e) )  ) )
+ | JO_red_forkdeath2 : forall (e v':expr) (s:select),
      is_value_of_expr v' ->
-     JO_red (E_fork  (E_live_expr e)   (E_live_expr v') ) S_Second RL_tau (E_live_expr  (E_taggingright  (E_pair  (E_live_expr e)  v') ) )
+     JO_red (E_fork  (E_live_expr e)   (E_live_expr v') ) s RL_tau (E_live_expr  (E_taggingright  (E_pair  (E_live_expr e)  v') ) )
  | JO_red_ret : forall (v:expr) (s:select),
      is_value_of_expr v ->
      JO_red (E_ret v) s RL_tau  (E_live_expr v) 

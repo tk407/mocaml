@@ -72,9 +72,12 @@ value, v :: V_ ::=
   | ( v )                             :: S :: paren {{ ich [[v]] }} {{ ocaml [[v]] }}
 
 %Selects
-select, s :: S_ ::=
+selectopt, o :: SO_ ::=
   | First                              ::   :: First {{ tex 1 }}
   | Second                             ::   :: Second {{ tex 2 }}
+
+select, s :: S_ ::=
+  | o s                               ::   :: Seq
 
 %Type environment
 G {{ tex \Gamma }} :: G_ ::=
@@ -275,18 +278,18 @@ fork v e' [ s ] --> [ rl ] fork v e''
 e [ s ] --> [ rl ] e''
 {{ ~ (is_value_of_expr [[ e' ]]) }}
 --------------------------- :: forkmove1
- fork (live e)  (live e') [ First ] --> [ rl ] fork (live e'') (live e')
+ fork (live e)  (live e') [ First s ] --> [ rl ] fork (live e'') (live e')
 
 e' [ s ] --> [ rl ] e''
 {{ ~ (is_value_of_expr [[ e ]]) }}
 --------------------------- :: forkmove2
-fork (live e)  (live  e') [ Second ] --> [ rl ] fork (live e) (live  e'') 
+fork (live e)  (live  e') [ Second s ] --> [ rl ] fork (live e) (live  e'') 
 
 --------------------------- :: forkdeath1
-fork (live v)  (live e) [ First ] --> [ tau ] live ( inl ( ( { v , ( live e ) } ) ) )
+fork (live v)  (live e) [ s ] --> [ tau ] live ( inl ( ( { v , ( live e ) } ) ) )
 
 --------------------------- :: forkdeath2
-fork (live e)  (live v') [ Second ] --> [ tau ] live ( inr ( { (live e) , v' } ) )
+fork (live e)  (live v') [ s ] --> [ tau ] live ( inr ( { (live e) , v' } ) )
 
 % Now for the evaluation steps that have to modified to incorporate the actual OCaml code
 

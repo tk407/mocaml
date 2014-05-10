@@ -96,7 +96,7 @@ Proof.
  intros.
  exists (d # q').
  intuition.
- apply simpl_weakred with (s:=S_Second).
+ apply simpl_weakred with (s:=S_Seq SO_Second s).
  apply JO_red_forkmove2 with (s:=s).
  assumption.
  inversion H0; intuition.
@@ -109,6 +109,210 @@ Proof.
  intros.
  apply red_not_value in H2; simpl in H2; intuition.
 Qed.
+
+Definition takeright : expr :=
+    E_function (0) TE_unit 
+      (E_case (E_ident (0)) 
+           (1) (E_proj2  (E_ident (1))) 
+           (2) (E_ret (E_proj2  (E_ident (2))))).
+
+Lemma takeright_right : forall (v v' : expr), 
+           is_value_of_expr v ->
+           is_value_of_expr v' ->
+           totalTauRed ( E_apply (takeright) (E_taggingright (( E_pair v v' )) ) ) (E_live_expr v').
+Proof.
+ intros.
+ apply S_star with (y:=((E_case ((E_taggingright (E_pair v v'))) 
+           (1) (E_proj2  (E_ident (1))) 
+           (2) (E_ret (E_proj2  (E_ident (2))))))).
+ apply JO_red_app_td.
+ simpl.
+ auto.
+ apply S_star with (y:=(E_ret (E_proj2  ((E_pair v v'))))).
+ apply JO_red_evalcaseinr_td.
+ simpl; auto.
+ apply S_star with (y:=E_ret v').
+ simpl.
+ apply JO_red_evalret_td.
+ apply JO_red_proj2_td.
+ trivial.
+ trivial.
+ apply star1.
+ apply JO_red_ret_td.
+ apply sstar1.
+ simpl;auto.
+Qed.
+
+Lemma takeright_right_b : forall (v v' : expr), 
+           is_value_of_expr v ->
+           is_value_of_expr v' ->
+           totalTauRed ( (E_live_expr (  (E_taggingright (( E_pair v v' )))) ) >>= (takeright)) (E_live_expr v').
+Proof.
+ intros.
+ apply S_star  with (y:=(E_apply (takeright) (E_taggingright (( E_pair v v' )) ))).
+ apply JO_red_dobind_td.
+ apply sstar1.
+ simpl; auto.
+ apply takeright_right.
+ assumption.
+ assumption.
+Qed.
+
+Lemma takeright_left : forall (v v' : expr), 
+           is_value_of_expr v ->
+           is_value_of_expr v' ->
+           totalTauRed ( E_apply (takeright) (E_taggingleft ( ( E_pair v v' )) ) ) v'.
+Proof.
+ intros.
+ apply S_star with (y:=((E_case ((E_taggingleft (E_pair v v'))) 
+           (1) (E_proj2  (E_ident (1))) 
+           (2) (E_ret (E_proj2  (E_ident (2))))))).
+ apply JO_red_app_td.
+ simpl.
+ auto.
+ apply S_star with (y:=((E_proj2  ((E_pair v v'))))).
+ apply JO_red_evalcaseinl_td.
+ simpl; auto.
+ apply star1.
+ apply JO_red_proj2_td.
+ trivial.
+ trivial.
+Qed.
+
+Lemma takeright_left_b : forall (v v' : expr), 
+           is_value_of_expr v ->
+           is_value_of_expr v' ->
+           totalTauRed (  (E_live_expr((E_taggingleft ( ( E_pair v v' )) ))) >>= (takeright)) v'.
+Proof.
+ intros.
+ apply S_star  with (y:=(E_apply (takeright) ((E_taggingleft ( (E_pair v v')) )))).
+ apply JO_red_dobind_td.
+ apply sstar1.
+ simpl; auto.
+ apply takeright_left.
+ assumption.
+ assumption.
+Qed.
+
+Inductive deadlock_left_ext_rel : relation expr :=
+ | deadlock_ext_live : forall (d e : expr), totalDetTauStep d d -> deadlock_left_ext_rel ((( d) # ( e)) >>= takeright) (E_ret e)
+ | deadlock_ext_dead : forall (d e f : expr), totalDetTauStep d d -> is_value_of_expr e -> totalTauRed ((( d) #> (e))>>= takeright) f -> deadlock_left_ext_rel f (E_live_expr e).
+
+Lemma deadlock_ext_rel_wbsm : isExprRelationStepWeakBisimilarity deadlock_left_ext_rel.
+Proof.
+ unfold isExprRelationStepWeakBisimilarity.
+ intros.
+ inversion H.
+ substs.
+ split.
+ intros.
+ inversion H1.
+ apply red_not_value in H7; simpl in H7; intuition.
+ substs.
+ inversion H1.
+ substs.
+ inversion H6.
+ apply red_not_value in H9; simpl in H9; intuition.
+ apply red_not_value in H10; simpl in H10; intuition.
+ substs.
+ inversion H0.
+ substs.
+ induction rl.
+ intuition.
+ apply tStep in H4.
+ apply H8 in H4.
+ substs.
+ exists (E_ret e).
+ Hint Constructors deadlock_left_ext_rel.
+ intuition.
+ apply weakred_T.
+ apply star_refl.
+ intuition.
+ apply H2 in H4.
+ contradiction.
+ substs.
+ exists (E_ret e'').
+ intuition.
+ apply simpl_weakred with (s:=s0). apply JO_red_evalret. assumption.
+ substs.
+ inversion H0; intuition.
+ inversion H5.
+ apply red_not_value in H8; contradiction.
+ substs.
+ exists (E_live_expr e).
+ intuition.
+ apply simpl_weakred with (s:=sstar1).
+ apply JO_red_ret.
+ assumption.
+ apply deadlock_ext_dead with (d:=d)(e:=e)(f:=(d #> e >>= takeright)); intuition.
+ apply star_refl.
+ intros.
+ inversion H1.
+ substs.
+ exists (d #> e >>= takeright).
+ intuition.
+ apply weakred_T; apply star1; apply tStep with (s:=sstar1); apply JO_red_evalbind; apply JO_red_forkdeath2.
+ assumption.
+ apply deadlock_ext_dead with (d:=d)(e:=e)(f:=(d #> e >>= takeright)); intuition.
+ apply star_refl.
+ intros.
+ substs.
+ exists (d # e' >>= takeright).
+ intuition.
+ apply simpl_weakred with (s:=S_Seq SO_Second s).
+ apply JO_red_evalbind.
+ apply JO_red_forkmove2; intuition.
+ inversion H0; intuition.
+ substs.
+ inversion H7.
+ apply red_not_value in H5; contradiction.
+ substs.
+ specialize takeright_right_b with (v:=E_live_expr d)(v':=e).
+ intros.
+ simpl in H3.
+ assert (L:=H1).
+ apply H3 in H1; intuition.
+ apply ttau_midpoint with (e':=p) in H1; intuition.
+ apply tau_incl_totalTau in H5; apply taured_val_id in H5; simpl; auto; substs.
+ apply red_not_value in H4; simpl in H4; intuition.
+ exists (E_live_expr e).
+ inversion H5.
+ substs.
+ apply red_not_value in H4; simpl in H4; intuition.
+ substs.
+ induction rl.
+ inversion H1; substs; intuition.
+ apply weakred_T; apply star_refl.
+ apply tStep in H4; apply H10 in H4; substs.
+ apply deadlock_ext_dead with (d:=d)(e:=e); intuition.
+ apply star_S with (y:=p); intuition.
+ inversion H1; intuition.
+ apply H7 in H4; intuition.
+ apply H7 in H4; intuition.
+ apply red_not_value in H4; simpl in H4; intuition.
+Qed.
+
+Theorem deadlock_ext_rel_vewbsm : isExprRelationValueEqualWeakBisimilarity deadlock_left_ext_rel.
+Proof.
+ unfold isExprRelationValueEqualWeakBisimilarity.
+ intuition.
+ apply isExprRelationWeakBisimilarity_equiv_isExprRelationStepWeakBisimilarity.
+ apply deadlock_ext_rel_wbsm.
+ inversion H1; substs; simpl in H; simpl in H0; intuition.
+ inversion H2; substs; simpl in H; simpl in H0; intuition.
+ specialize takeright_right_b with (v:=E_live_expr d)(v':=e).
+ intros.
+ simpl in H7.
+ assert (L:=H3).
+ apply H7 in H3; intuition.
+ apply ttau_midpoint with (e':=vp) in H3; intuition.
+ apply tau_incl_totalTau in H9; apply taured_val_id in H9; simpl; auto; substs.
+ apply tau_incl_totalTau in H9; apply taured_val_id in H9.
+ assumption.
+ assumption.
+Qed.
+
+
 
 Inductive deadlock_right_rel : relation expr :=
  | deadlock_right_live : forall (d e : expr), totalDetTauStep d d -> deadlock_right_rel (( e) # ( d)) e
@@ -138,6 +342,13 @@ Proof.
  substs.
  inversion H.
  substs; intuition.
+ apply eeq_sym in H.
+ apply isExprRelationStepWeakBisimilarity_eeq in H.
+ assumption.
+ apply isExprRelationStepWeakBisimilarity_comp.
+ apply fork_comm_wbsm.
+ apply deadlock_rel_wbsm.
+Qed.
 
 (*
 Lemma deadlock_rel_wbsm_h : forall (p q : expr), deadlock_left_rel p q -> 
@@ -352,8 +563,66 @@ Qed.
 *)
 *)
 Inductive deadlock_bind_left_rel : relation expr :=
- | deadlock_bind : forall (d e : expr), totalDetTauStep d d -> deadlock_bind_left_rel ((E_live_expr (LM_expr d)) >>= e) d.
+ | deadlock_bind : forall (d e : expr), totalDetTauStep d d -> deadlock_bind_left_rel (d >>= e) d.
 
+Lemma deadlock_bind_rel_wbsm : isExprRelationStepWeakBisimilarity deadlock_bind_left_rel.
+Proof.
+ unfold isExprRelationStepWeakBisimilarity.
+ intros.
+ inversion H.
+ substs.
+ split.
+ intros.
+ inversion H1.
+ substs.
+ inversion H0.
+ substs.
+ intuition.
+ induction rl.
+ apply tStep in H7.
+ apply H5 in H7.
+ substs.
+ exists e'.
+ Hint Constructors deadlock_bind_left_rel.
+ intuition.
+ apply weakred_T; apply star_refl.
+ apply H2 in H7.
+ intuition.
+ substs.
+ inversion H0.
+ substs.
+ intuition.
+ inversion H3.
+ apply red_not_value in H4; simpl in H4; intuition.
+ substs.
+ inversion H0.
+ substs.
+ intuition.
+ inversion H3.
+ apply red_not_value in H4; simpl in H4; intuition.
+ substs.
+ intros.
+ assert (q=q' /\ rl=RL_tau).
+ inversion H0.
+ substs.
+ induction rl.
+ intuition.
+
+ apply tStep in H1.
+ apply H5 in H1.
+ assumption.
+ apply H2 in H1;intuition.
+ substs.
+ exists (q' >>= e).
+ intuition.
+ substs.
+ apply weakred_T; intuition.
+ apply star_refl.
+ substs.
+ auto.
+Qed.
+
+(*
 Lemma deadlock_bind_rel_wbsm_h : forall (p q : expr), deadlock_bind_left_rel p q -> 
         ((forall (p' : expr) (r : redlabel), weakred r p p' -> (exists (q' : expr), weakred r q q' /\  deadlock_bind_left_rel p' q' )) /\(forall (q' : expr) (r : redlabel), weakred r q q' -> (exists (p' : expr), weakred r p p' /\  deadlock_bind_left_rel p' q' ))
  ).
@@ -466,4 +735,5 @@ Proof.
  assumption.
  reflexivity.
 Qed.
+*)
  

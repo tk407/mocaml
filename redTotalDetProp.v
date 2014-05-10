@@ -312,7 +312,7 @@ Proof.
  apply bind_tau_behave_front_boxed with (e':=x3) in H1.
  assumption.
  apply S_star with (y:=(E_apply x3 x4)).
- apply tStep with (s:=S_First).
+ apply tStep with (s:=s).
  apply JO_red_dobind.
  assumption.
  assumption.
@@ -580,7 +580,7 @@ Proof.
   intros.
   apply ttStep.
   split.
-  apply tStep with (s:= S_First).
+  apply tStep with (s:=sstar1).
   apply JO_red_ret.
   trivial.
   split.
@@ -595,7 +595,26 @@ Proof.
 Qed.
 
 
-
+Lemma JO_red_evalret_td : forall (e e':expr),
+      totalDetTauStep e e' -> totalDetTauStep (E_ret e) (E_ret e').
+Proof. 
+  intros.
+  apply ttStep.
+  inversion H.
+  intuition.
+  inversion H3.
+  apply tStep with (s:=s).
+  apply JO_red_evalret.
+  trivial.
+  inversion H4.
+  apply H0 in H7; intuition.
+  inversion H4.
+  inversion H6.
+  substs.
+  apply tts_not_val in H; contradiction.
+  substs.
+  apply tStep in H10; apply H5 in H10; substs; reflexivity.
+Qed.
 
 
 
@@ -607,7 +626,7 @@ Proof.
  intros.
  apply ttStep.
  split.
- apply tStep with (s:=S_First).
+ apply tStep with (s:=sstar1).
  apply H0.
  split.
  inversion H.
@@ -659,7 +678,7 @@ Proof.
   intros.
   apply ttStep.
   split.
-  apply tStep with (s:= S_First).
+  apply tStep with (s:=sstar1).
   apply JO_red_dobind.
   trivial.
   split.
@@ -686,7 +705,7 @@ Proof.
  intros.
  apply ttStep.
  split.
- apply tStep with (s:=S_First).
+ apply tStep with (s:=sstar1).
  apply JO_red_app.
  trivial.
  split.
@@ -756,7 +775,7 @@ Proof.
  intros.
  apply ttStep.
  split.
- apply tStep with (s:=S_First).
+ apply tStep with (s:=sstar1).
  apply JO_red_evalcaseinl.
  trivial.
  split.
@@ -779,7 +798,7 @@ Proof.
  intros.
  apply ttStep.
  split.
- apply tStep with (s:=S_First).
+ apply tStep with (s:=sstar1).
  apply JO_red_evalcaseinr.
  trivial.
  split.
@@ -795,6 +814,72 @@ Proof.
  apply red_not_value in H14; contradiction.
 Qed.
 
+Lemma  JO_red_inpair_eval1_td : forall (e e':expr) (e'':expr),
+     totalDetTauStep e e'' ->
+     totalDetTauStep (E_inpair e e') (E_inpair e'' e').
+Proof.
+intros.
+ assert (L:=H).
+ apply ttStep.
+ intuition.
+ inversion H.
+ intuition.
+ substs.
+ inversion H3.
+ substs.
+ apply tStep with (s:=s).
+ apply JO_red_inpair_eval1.
+ assumption.
+ inversion H0.
+ substs.
+ apply tts_not_val in H; simpl in H; intuition.
+ substs.
+ inversion L.
+ intuition.
+ apply H1 in H6; intuition.
+ inversion H.
+ intuition.
+ apply tts_not_val in H; simpl in H; intuition.
+ substs.
+ inversion H0.
+ substs.
+ inversion H1.
+ substs.
+ apply tts_not_val in H; simpl in H; intuition. 
+ substs.
+ apply tts_not_val in H; simpl in H; intuition. 
+ substs.
+ inversion L; intuition.
+ apply tStep in H7.
+ apply H8 in H7; substs; reflexivity.
+ apply tts_not_val in H; simpl in H; intuition. 
+Qed.
+
+Lemma  JO_red_inpair_eval2_td : forall (e e':expr) (e'':expr),
+     (is_value_of_expr e) ->
+     totalDetTauStep e' e'' ->
+     totalDetTauStep (E_inpair e e') (E_inpair e e'').
+Proof.
+intros.
+ apply ttStep.
+ assert (L:=H0).
+ apply tts_not_val in L.
+ inversion H0.
+ substs.
+ intuition.
+ inverts H2.
+ apply tStep with (s:=s).
+ apply JO_red_inpair_eval2; intuition.
+ inversion H3; substs; intuition.
+ apply red_not_value in H10; intuition.
+ apply H1 in H11; apply H11.
+ inverts H3.
+ inverts H5; intuition.
+ apply red_not_value in H10; intuition.
+ apply tStep in H11; apply H4 in H11; substs; reflexivity.
+Qed.
+ 
+
 
 Lemma JO_red_inpair_td : forall (v v':expr),
      is_value_of_expr v ->
@@ -804,7 +889,7 @@ Proof.
  intros.
  apply ttStep.
  split.
- apply tStep with (s:=S_First).
+ apply tStep with (s:=sstar1).
  apply JO_red_inpair.
  trivial.
  trivial.
@@ -834,7 +919,7 @@ Proof.
  intros.
  apply ttStep.
  split.
- apply tStep with (s:=S_First).
+ apply tStep with (s:=sstar1).
  apply JO_red_proj1.
  trivial.
  trivial.
@@ -865,7 +950,7 @@ Proof.
  intros.
  apply ttStep.
  split.
- apply tStep with (s:=S_First).
+ apply tStep with (s:=sstar1).
  apply JO_red_proj2.
  trivial.
  trivial.
@@ -1049,6 +1134,74 @@ intros.
  reflexivity.
  substs.
  apply red_not_value in H12; contradiction.
+Qed.
+
+Lemma isExprRelationStepWeakBisimilarity_tdtstep : isExprRelationStepWeakBisimilarity (union2 totalDetTauStep exprid).
+Proof.
+ unfold isExprRelationStepWeakBisimilarity.
+ intros.
+ inversion H.
+ inversion H0.
+ substs.
+ intuition.
+ induction rl.
+ apply tStep in H3.
+ apply H4 in H3.
+ substs.
+ exists p'.
+ unfold union2.
+ intuition.
+ apply weakred_T; apply star_refl.
+ apply H1 in H3.
+ intuition.
+ exists q'.
+ unfold union2.
+ intuition.
+ apply weakred_tau_prefix with (e':=q).
+ apply weakred_T.
+ apply star1.
+ assumption.
+ apply simpl_weakred with (s:=s).
+ assumption.
+ inversion H0.
+ substs.
+ intuition.
+ exists p'.
+ unfold  union2 .
+ intuition.
+ apply simpl_weakred with (s:=s).
+ assumption.
+ exists q'.
+ unfold  union2 .
+ intuition.
+ apply simpl_weakred with (s:=s).
+ assumption.
+Qed.
+ 
+Lemma isExprRelationStepWeakBisimilarity_tdtred : isExprRelationStepWeakBisimilarity totalTauRed.
+Proof. 
+ assert (eeq ((star(union2 totalDetTauStep exprid)))  totalTauRed).
+ unfold totalTauRed.
+ unfold eeq.
+ unfold Relations.incl.
+ unfold union2.
+ split.
+ apply star_ind.
+ intros; apply star_refl.
+ intros.
+ intuition.
+ apply S_star with (y:=y); intuition.
+ inversion H2.
+ substs.
+ assumption.
+ apply star_ind.
+ intros; apply star_refl.
+ intros.
+ apply S_star with (y:=y); intuition.
+ apply isExprRelationStepWeakBisimilarity_eeq in H.
+ assumption.
+ apply isExprRelationStepWeakBisimilarity_star.
+ apply isExprRelationStepWeakBisimilarity_tdtstep.
 Qed.
 
 (*

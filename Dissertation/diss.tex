@@ -10,7 +10,26 @@
 \usepackage{mathtools}% http://ctan.org/pkg/mathtools
 \usepackage{etoolbox}
 \usepackage{tabularx}
+\usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+
+\makeatletter
+%\newcommand{\xleftrightarrow}[2][]{\ext@arrow 3359\leftrightarrowfill@{#1}{#2}}
+\newcommand{\xdashrightarrow}[2][]{\ext@arrow 0359\rightarrowfill@@{#1}{#2}}
+\newcommand{\xdashleftarrow}[2][]{\ext@arrow 3095\leftarrowfill@@{#1}{#2}}
+\newcommand{\xdashleftrightarrow}[2][]{\ext@arrow 3359\leftrightarrowfill@@{#1}{#2}}
+\def\rightarrowfill@@{\arrowfill@@\relax\relbar\rightarrow}
+\def\leftarrowfill@@{\arrowfill@@\leftarrow\relbar\relax}
+\def\leftrightarrowfill@@{\arrowfill@@\leftarrow\relbar\rightarrow}
+\def\arrowfill@@#1#2#3#4{%
+  $\m@th\thickmuskip1mu\medmuskip\thickmuskip\thinmuskip\thickmuskip
+   \relax#4#1
+   \xleaders\hbox{$#4#2$}\hfill
+   #3$%
+}
+\makeatother
 
 
 % \overfence definition
@@ -109,6 +128,22 @@
   title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
 }
 
+% Setting up theorem environments
+\theoremstyle{plain}% default
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem*{cor}{Corollary}
+\newtheorem*{KL}{Klein's Lemma}
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+\newtheorem{conj}{Conjecture}[section]
+\newtheorem{exmp}{Example}[section]
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+\newtheorem*{note}{Note}
+\newtheorem{case}{Case}
+
 % Tikz set up
 \usepackage{tikz}
 \usepackage{tikz-cd}
@@ -132,6 +167,13 @@
 %\renewenvironment{figure}{}{}
 %\renewenvironment{equation}{}{}
 %\renewcommand{\cite}{}
+
+
+\usepackage{supertabular}
+%\usepackage{geometry}
+\usepackage{ifthen}
+\usepackage{alltt}%hack
+\input{../mconbase.tex}
 
 \begin{document}
 
@@ -923,7 +965,7 @@ let run () = let n = ref 1 in
 
 The implementation of MOCaml was done in 5 stages as shown in \Cref{fig:detailedimploutline}. 
 
-\begin{figure}
+\begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.5]{implOut}
 \caption{Detailed outline of the implementation}
@@ -934,9 +976,9 @@ The implementation of MOCaml was done in 5 stages as shown in \Cref{fig:detailed
 
 The overall semantics were defined in Ott. These semantics were then extracted to Coq by Ott in a logical inductive format. This format, as previously mentioned, is well suited for proofs, but not for extraction. 
 
-I modified the logical inductive format of the semantics in the Extractable Coq stage to have a well formed input for the extraction plugin. This plugin will be detailed in \Cref{sec:extractable_plugin_descr}. After the extraction the generated OCaml is not yet runnable: it contains a number of placeholders necessary the logic model of the language, but not usable for computation. I replace these placeholders with the actual computations and provide some syntactic sugar.
-\section{The semantics}
-In this section I will describe the implemented semantics. These semantics were written in Ott.  Much of the inspiration for the semantics of basic features comes from Benjamin C. Pierce: \textit{Types and Programming Languages}\cite{pierce2002types}. The Ott code was based on the simply typed $ \lambda $-calculus. For a \LaTeX\, version of the full semantics as produced by Ott see \cref{chap:fullsemantics}.
+I modified the logical inductive format of the semantics in the Extractable Coq stage to have a well formed input for the extraction plugin. This plugin will be detailed in \Cref{sec:extractable_plugin_descr}. After the extraction the generated OCaml is not yet runnable: it contains a number of placeholders necessary for logic model of the language, but not usable for computation. I replace these placeholders with the actual computations and provide some syntactic sugar.
+\section{The semantics}\label{sec:the-semanticssec:the-semantics}
+In this section I describe the implemented semantics. These semantics were written in Ott.  Much of the inspiration for the semantics of basic features comes from Benjamin C. Pierce: \textit{Types and Programming Languages}\cite{pierce2002types}. The Ott code was based on the simply typed $ \lambda $-calculus. For a \LaTeX\, version of the full semantics as produced by Ott see \cref{chap:fullsemantics}.
 
  
 The semantics splits into three main parts
@@ -1009,7 +1051,7 @@ I detail the semantics in two groups of features: basic features that form a sta
 
 
 
-Arrow types or functions are ubiquitous in functional programming languages. In \Cref{fig:syntyparrow} I detail the basic syntax and typing of functions in a simply typed setting, while \Cref{fig:evalarrow} shows the operation semantics. The style and details are based on Pierce\cite[p.~103]{pierce2002types}. A function abstraction $ \lambda x:T. e $ encloses a yet unreduced expression $ e $ that may involve the variable $ x $ that is bound by the abstraction. 
+Arrow types or functions are ubiquitous in functional programming languages. In \Cref{fig:syntyparrow} I detail the basic syntax and typing of functions in a simply typed setting, while \Cref{fig:evalarrow} shows the operational semantics. The style and details are based on Pierce\cite[p.~103]{pierce2002types}. A function abstraction $ \lambda x:T. e $ encloses a yet unreduced expression $ e $ that may involve the variable $ x $ that is bound by the abstraction. 
 
 
 \subsubsection{Sum types}
@@ -1173,7 +1215,7 @@ The assumption of \Cref{eq:t_all} is always true because of \Cref{eq:t_fun} in \
 
 \subsubsection{Operational semantics of the basic MOCaml features}
 
-The reduction semantics of MOCaml is given as small step labelled transitions. Small step semantics means that the reduction relation between two expressions $ e, \, e' $ means that $ e $ can directly and atomically transition to $ e' $. Labelled transitions further extend this idea. In this project I used a 4-tuple $ (e, s, rl, e') $ of the starting expression, a selection operator that will be supplied by a scheduler to pick between potential reductions, a reduction label that describes the observable action and the ending expression of the transition. This 4-tuple means that given the selection operator, which may be 1 or 2, a starting expression $ e $  can move to $ e' $ with a side-effect $ rl $. I use the notation $ e \overset{rl}{\underset{s}{\longrightarrow}} e' $. The $ rl $ label may be $ \tau $ which is a silent action or an atomic action $ e $ that can be observed. A silent action $tau$ is considered unobservable from outside MOCaml. The atomic action $e$ is in fact considered an expression within the model.  This choice was based on the behaviour of placeholders in \Cref{sec:comp_place_syn}.
+The reduction semantics of MOCaml is given as small step labelled transitions. Small step semantics means that the reduction relation between two expressions $ e, \, e' $ means that $ e $ can directly and atomically transition to $ e' $. Labelled transitions further extend this idea. In this project I used a 4-tuple $ (e, s, rl, e') $ of the starting expression, a selection operator that will be supplied by a scheduler to pick between potential reductions, a reduction label that describes the observable action and the ending expression of the transition. This 4-tuple means that given the selection operator, which may be 1 or 2, a starting expression $ e $  can move to $ e' $ with a side-effect $ rl $. I use the notation $ e \overset{rl}{\underset{s}{\longrightarrow}} e' $. The $ rl $ label may be $ \tau $ which is a silent action or an atomic action $ e $ that can be observed. A silent action $tau$ is considered unobservable from outside MOCaml. The atomic action $e$ is in fact considered an expression within the model.  This choice was based on the behaviour of placeholders in \Cref{sec:comp_place_syn}. The inspiration to use a labelled transition system to model side-effects comes from Milner's ``A calculus of communicating systems" book\cite{milner1982calculus}.
 
 
 
@@ -1224,7 +1266,7 @@ The reduction semantics of MOCaml is given as small step labelled transitions. S
 \end{figure}
 
 
-\Cref{fig:evalarrow} shows the transition rules for functions and applications. I used call-by-value semantics for functions and left-first reduction. Furthermore, arguments are explicitly annotated in functions and substitution does not provide facilities for renaming. The lack of renaming is a trade-off between logical simplicity and ease of use and I chose to keep the logical model as simple as possible. It is presumed that the user of the framework takes care of picking fresh variable names, but I provided facilities with the syntactic sugar to pick fresh variables.
+\Cref{fig:evalarrow} shows the transition rules for functions and applications. I used call-by-value semantics for functions and left-first reduction. Furthermore, arguments are explicitly annotated in functions and substitution does not provide facilities for renaming. The lack of renaming is a trade-off between logical simplicity and ease of use and I chose to keep the logical model as simple as possible. It is presumed that the user of the framework takes care of picking fresh variable names, but I provided facilities with the syntactic sugar to pick fresh variables. \label{sec:subst_caveat}
 
 % Sum opsem
 \begin{figure}[H]
@@ -1520,9 +1562,9 @@ In previous subsections there were no constructs that accept external computatio
 
 Up until this point I have not mentioned any language feature that implements concurrency which is the main focus of the dissertation. The third, additional operation of the concurrency monad is fork, which is the way to spawn new threads (two in this particular case). There are a number of ways to implement fork and indeed this project went through various iterations of semantics for this operation. 
 
-As a first approximation I had to decide on a signature for fork. On the argument side fork may take zero, one, two or many arguments. No arguments would be reminiscent of the UNIX system call \verb|fork()| where the two paths are distinguished by replacing the fork call with differing values. This approach would result in copying potentially large expressions and a more complex evaluation context, that is the terms used for the source and destination in the reduction relation. For example, Jones\cite{hoareetal2001tackling} chose an implementation with one argument, however with a similar requirement of a metalanguage of parallel terms $ e \, | \, e' $. I chose to go with two arguments as that can maintain a simple evaluation context with reductions from language expression to expression. The choice between these three argument styles is largely arbitrary as they all implicitly form the binary parallel composition $ e \, | \, e' $. Note however that several arguments can be elegantly simulated by composing binary parallel compositions.
+As a first approximation I had to decide on the signature of fork. On the argument side fork may take zero, one, two or many arguments. No arguments would be reminiscent of the UNIX system call \verb|fork()| where the two paths are distinguished by replacing the fork call with differing values. This approach would result in copying potentially large expressions and a more complex evaluation context, that is the terms used for the source and destination in the reduction relation. For example, Jones\cite{hoareetal2001tackling} chose an implementation with one argument, however with a similar requirement of a metalanguage of parallel terms $ e \, | \, e' $. I chose to go with two arguments as that can maintain a simple evaluation context with reductions from language expression to expression. The choice between these three argument styles is largely arbitrary as they all implicitly form the binary parallel composition $ e \, | \, e' $. Note however that several arguments can be elegantly simulated by composing binary parallel compositions.
 
-To stay within the monad I have chosen to have the arguments as already boxed terms, that is of type $ \textbf{con } T_1 $ and $ \textbf{con } T_2 $ for some $ T_1, T_2 $. For better expressibility, I chose not to take the two argument curried. As seen previously currying is possible by two function abstraction therefore for simplicity I will describe  \textbf{fork} as a higher-order function: given the first argument it returns a function that takes only one parameter and will then behave as the parallel composition. This gives the following signature:
+To stay within the monad I decided to have the arguments as already boxed terms, that is of type $ \textbf{con } T_1 $ and $ \textbf{con } T_2 $ for some $ T_1, T_2 $. For better expressibility, I chose not to take the two arguments curried. As seen previously currying is possible by two function abstractions, therefore for simplicity, I describe  \textbf{fork} as a higher-order function: given the first argument it returns a function that takes only one parameter and will then behave as the parallel composition. This gives the following signature:
 
 \[ \textbf{fork} \, : \, \textbf{con } T_1 \rightarrow \, (\textbf{con } T_2\, \rightarrow\, R ) \tag{T-Fork1} \]  
 
@@ -1599,10 +1641,9 @@ I chose to always reduce a place holder to an expression within the framework to
 \end{figure}
 
 \Cref{fig:evalmon} shows the semantics of the concurrent type constructor \textbf{ret} and the operation \textbf{bind}. The \textbf{ret} operation first reduces its argument to a value and then boxes it up as a concurrent value. 
-and simply evaluates its parameter and boxes up the result in the parametric type
 
 
-Bind evaluates left to right: it evalutes the expression on the left to a concurrent box, reduces the internal expression of the box and then passes it to the expression on the right. This fits well with the idea of sequencing to operations: any side effect $ e' $ might have happens after the side effects of $ e $.
+Bind evaluates left to right: it evalutes the expression on the left to a concurrent box, reduces the internal expression of the box and then passes it to the expression on the right. This fits well with the idea of sequencing operations: any side effect $ e' $ might have happens after the side effects of $ e $.
 % Fork opsem
 
 \begin{figure}
@@ -1645,9 +1686,7 @@ In this section I briefly outline the structure of the translated proof assistan
 
 There are four types of objects in the Coq semantics:
 \begin{enumerate}
-\item{Inductive sets: they are the inductive data structures. These are the expression grammar objects. As an example, type expressions are translated from the Ott version in \Cref{lst:otttypexpr} to the Coq equivalent in \Cref{lst:coqtypexpr}. Simple grammars generate a set of tagged variants. 
-
-
+\item{Inductive sets: they are the inductive data structures. These were translated from expression grammar objects. As an example, type expressions were translated from the Ott version in \Cref{lst:otttypexpr} to the Coq equivalent in \Cref{lst:coqtypexpr}. Simple grammars generate a set of tagged variants. 
 
 \begin{lstlisting}[language={Ott}, caption={Ott type expressions}, label={lst:otttypexpr}]
 typexpr, t :: TE_ ::=
@@ -1664,7 +1703,7 @@ typexpr, t :: TE_ ::=
 
 \begin{lstlisting}[language={Coq},caption={Coq type expr}, label={lst:coqtypexpr}]
 Inductive typexpr : Set := 
- | TE_unit
+ | TE_unit : typexpr
  | TE_arrow (typexpr5:typexpr) (typexpr':typexpr)
  | TE_prod (typexpr5:typexpr) (typexpr':typexpr)
  | TE_concurrent (typexpr5:typexpr)
@@ -1673,35 +1712,40 @@ Inductive typexpr : Set :=
 
 \end{minipage}
 }
-\item{Fixpoints, the functions in Coq: The functions in this are all automatically generated from the Ott file. The most important ones are the expression substitution, free variable, value check fixpoints. The script also includes a few functions supporting the previous ones. Fixpoints are denoted by rectangles. The value subgrammar shown in \Cref{lst:ottvaluesub} is translated to the fixpoint in \Cref{lst:coqvaluesub}. 
+\item{Fixpoints, the functions in Coq: The functions in this are all automatically generated from the Ott file. The most important ones are the expression substitution, free variable, value check fixpoints. The script also includes a few functions supporting the previous ones. The value subgrammar shown in \Cref{lst:ottvaluesub} was translated to the fixpoint in \Cref{lst:coqvaluesub}. 
 
-
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[language={Ott}, caption={Ott value subgrammar}, label={lst:ottvaluesub}]
 value, v :: V_ ::=
-  | constant                           ::   :: constant
+  | unit                           ::   :: unit
   | function value_name : typexpr -> expr        ::   :: function
-  | live lm                         ::   :: live_expr
+  | live e                         ::   :: live_expr
   | inl v                              ::   :: taggedleft
   | inr v                              ::   :: taggedright
   | { v , v' }                         ::   :: valuepair
   | ( v )                             :: S :: paren {{ ich [[v]] }} {{ ocaml [[v]] }}
 \end{lstlisting}
+\end{minipage}
 
 
 \begin{minipage}{\linewidth}
-
 \begin{lstlisting}[language={Coq},caption={Coq value subgrammar}, label={lst:coqvaluesub}, escapeinside={@}{@}]
 Fixpoint is_value_of_expr (e_5:expr) : Prop :=
   match e_5 with
   | (E_ident value_name5) => False
-  | (E_constant constant5) => (True)
-(* Manual change *)
-@\label{lst:coqhandmod}@  | (E_apply expr5 expr') => match expr5 with | E_constant (CONST_fork) => is_value_of_expr (expr') | E_constant (CONST_pair) => is_value_of_expr (expr') | _ => False end  
+  | E_unit => (True)
+  | (E_apply expr5 expr') => False
   | (E_bind expr5 expr') => False
-  | (E_function value_name5 typexpr5 expr5) => (True)
+  | (E_function value_name5 t e) => (True)
   | (E_fix e) => False
-  | (E_live_expr lm) => (True)
+  | (E_comp e) => False
+  | (E_live_expr e) => (True)
   | (E_pair e e') => ((is_value_of_expr e) /\ (is_value_of_expr e'))
+  | (E_inpair e e') => False
+  | (E_proj1 e) => False
+  | (E_proj2 e) => False
+  | (E_fork e e') => False
+  | (E_ret e) => False
   | (E_taggingleft e) => ((is_value_of_expr e))
   | (E_taggingright e) => ((is_value_of_expr e))
   | (E_case e1 x1 e2 x2 e3) => False
@@ -1709,14 +1753,14 @@ end.
 \end{lstlisting}
 
 \end{minipage}	
-Notice however, that I was not able to define the value property of partial applications of primitives \textbf{fork} and \textbf{pair}, therefore I manually changed the incorrect value subgrammar check. Ott offers single and multiple substitution predicates for its destination languages. These are implemented as fixpoints in Coq. As an example, see the expression substitution in \Cref{lst:coqexprsubst}.
+Ott offers single and multiple substitution predicates for its destination languages. These are implemented as fixpoints in Coq. As an example, see the expression substitution in \Cref{lst:coqexprsubst}.
 \begin{minipage}{\linewidth}
 
 \begin{lstlisting}[language={Coq},caption={Coq expression substitution}, label={lst:coqexprsubst}]
 Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr :=
   match e__6 with
   | (E_ident value_name5) => (if eq_value_name value_name5 x_5 then e_5 else (E_ident value_name5))
-  | (E_constant constant5) => E_constant constant5
+  | E_unit => E_unit 
   | (E_apply expr5 expr') => E_apply (subst_expr e_5 x_5 expr5) (subst_expr e_5 x_5 expr')
   ...
 end
@@ -1724,7 +1768,7 @@ end
 
 \end{minipage}	
 }
-\item{Logical inductive sets: As mentioned previously a logical inductive set is an inductively defined set of propositions. This is the way the reduction relation and the typing relation is represented. Logical inductive sets are represented in \Cref{fig:coqBaseStruct} by ovals with dashed outline. For example a clause in the reduction relation is translated from the simple inference rule presentation in \Cref{lst:ottcontextapp1} to proposition in the logical inductive set \verb|JO_red| in \Cref{lst:coqlogind}.
+\item{Logical inductive sets: As mentioned previously a logical inductive set is an inductively defined set of propositions. The reduction relation and the typing relation were represented with a logical inductive set. For example a clause in the reduction relation was translated from the simple inference rule presentation in \Cref{lst:ottcontextapp1} to a proposition in the logical inductive set \verb|JO_red| in \Cref{lst:coqlogind}.
 
 
 \begin{lstlisting}[language={Ott}, caption={Ott reduction relation example}, label={lst:ottcontextapp1}]
@@ -1746,12 +1790,11 @@ Inductive JO_red : expr -> select -> redlabel -> expr -> Prop :=    (* defn red 
 
 \end{minipage}	
 }
-\item{Lemmas: There are a few supporting lemmas about the equality of variables. These are automatically generated by Ott. Lemmas are denoted with diamonds. An simple example would be the straightforward lemma that says labels are either equal or not in \Cref{lst:coqeqlabel}.
-
+\item{Lemmas: There is a supporting lemma about the equality of variables. This was automatically generated by Ott as shown in \Cref{lst:coqeqlabel}.
 \begin{minipage}{\linewidth}
 
-\begin{lstlisting}[language={Coq},caption={Coq label equality lemma}, label={lst:coqeqlabel}]
-Lemma eq_label: forall (x y : label), {x = y} + {x <> y}.
+\begin{lstlisting}[language={Coq},caption={Coq variable equality lemma}, label={lst:coqeqlabel}]
+Lemma eq_value_name: forall (x y : value_name), {x = y} + {x <> y}.
 Proof.
   decide equality; auto with ott_coq_equality arith.
 Defined.
@@ -1761,26 +1804,27 @@ Defined.
 
 }
 \end{enumerate} 
-The automatically generated Coq representation had a slight issue in that I could not easily define partial application of curried primitive functions as values. Instead, I hand modified the fixpoint in the translated Coq the particular case on \Cref{lst:coqhandmod} in \Cref{lst:coqvaluesub}.
 \subsection{Extractable reduction relation}
 As I mentioned in \Cref{sec:first_mention_logind}, Coq provides extraction facilities to OCaml and Haskell, but not from inductive sets and fixpoints that involve propositions, more specifically the \textit{Prop} sort. 
 
-Logical inductive types are often used for description of various concepts in semantics, especially reduction relations. Ott generates a logical inductive relation as seen in \Cref{lst:coqlogind}. For simple relations, like the value relation in \Cref{lst:coqvaluesub} it is simple to rewrite in a set inductive manner. However, for complex non-terminating relations, like the reduction relation in this project, rewriting is not feasible.  Delahaye et al.\cite{delahaye2007extracting,tollitte2012producing} proposed a method of extracting such relations to OCaml by annotating the input/output modes of the elements of the relation. \label{sec:extractable_plugin_descr}
+Logical inductive types are often used as descriptions of various concepts in semantics, especially reduction relations. Ott generates a logical inductive relation as seen in \Cref{lst:coqlogind}. For simple relations, like the value relation in \Cref{lst:coqvaluesub} it is simple to rewrite in a set inductive manner. However, for complex non-terminating relations, like the reduction relation in this project, rewriting is not feasible.  Delahaye et al.\cite{delahaye2007extracting,tollitte2012producing} proposed a method of extracting such relations to OCaml by annotating the input/output modes of the elements of the relation. \label{sec:extractable_plugin_descr}
 
 I rewrote the value check logical fixpoint to an extractable version by simply replacing the True and False propositions by their boolean counterpart and successfully extracted it by the built-in Coq extraction. However, not even the Coq plugin based on element modes could extract the reduction relation generated by Ott. 
 
-The first issue with the extraction to a functional program was the way the selection argument was supplied. Originally, the reduction relation only required a single selection value. In the case of fork reduction rules this would not be enough to generate a certified program.
+The first issue with the extraction to a functional program was the way the selection argument was supplied. Originally, the reduction relation only required a single selection value. In the case of fork reduction rules in \Cref{eq:forkmove1ex,eq:forkmove2ex} this would not be enough to generate a certified program.
+
 \begin{equation}
-                                         \inferrule
-                                           {e \overset{rl}{\underset{s}{\longrightarrow}} e'}
-                                           { \textbf{fork } (\textit{Live expr } e) (\textit{Live } lm)  \overset{rl}{\underset{1}{\longrightarrow}}\\\\ \textbf{fork } (\textit{Live expr } e') (\textit{Live } lm)  } \tag{R-Forkmove1} \label{eq:forkmove1}
-                                         \end{equation}
-                                            \begin{equation}
-                                          \inferrule
-                                            {e \overset{rl}{\underset{s}{\longrightarrow}} e'}
-                                            { \textbf{fork } (\textit{Live } lm) (\textit{Live expr } e) \overset{rl}{\underset{2}{\longrightarrow}}\\\\ \textbf{fork }  (\textit{Live } lm) (\textit{Live expr } e')  } \tag{R-Forkmove2} \label{eq:forkmove2}
+\inferrule
+{e \overset{rl}{\underset{s}{\longrightarrow}} e'' \\ e' \notin \text{Values} }
+{ \textbf{fork } (\textit{Live } e) (\textit{Live } e')  \overset{rl}{\underset{1}{\longrightarrow}} \textbf{fork } (\textit{Live } e'') (\textit{Live } e')  } \tag{R-Forkmove1} \label{eq:forkmove1ex}
+\end{equation}
+\begin{equation}
+\inferrule
+{e' \overset{rl}{\underset{s}{\longrightarrow}} e'' \\ e \notin \text{Values} }
+ { \textbf{fork } (\textit{Live } e) (\textit{Live } e') \overset{rl}{\underset{2}{\longrightarrow}} \textbf{fork }  (\textit{Live } e) (\textit{Live } e'')  } \tag{R-Forkmove2} \label{eq:forkmove2ex}
                                            \end{equation}
-The extracted program would have to somehow pick a possible value for $ s $ in $ e \overset{rl}{\underset{s}{\longrightarrow}} e' $ while it is only supplied with the value 1. Always picking one or the other would not be satisfactory. As I had no way of choosing it non-deterministically, I wanted the argument to fully describe all $ s $ values the system used. I opted for a co-inductive stream of selections because there can be an arbitrary number of \textbf{fork}s nested in each other with arbitrary number of selection values to make a single step . 
+
+The extracted program would have to somehow pick a possible value for $ s $ in $ e \overset{rl}{\underset{s}{\longrightarrow}} e' $ while it is only supplied with the value 1. Always picking one or the other would not be satisfactory. As I had no way of choosing it non-deterministically, I wanted the argument to fully describe all $ s $ values the system used. I opted for a co-inductive stream of selections because there can be an arbitrary number of \textbf{fork}s nested in each other with arbitrary number of selection values necessary to make a single step. \vspace{5mm}
 
 \begin{minipage}{\linewidth}
 
@@ -1816,7 +1860,7 @@ The second problem that surfaced was that the extraction plugin does not generat
 \end{minipage}
 
 
-The last issue was due to the experimental nature of the plugin: the optimisations and inference algorithm ran out of stack space when invoked with all 26 rules. Therefore I extracted in three parts and recombined them by hand.
+The last issue was due to the experimental nature of the plugin: the optimisations and inference algorithm ran out of stack space when invoked with all 31 rules. Therefore I extracted in three parts and recombined them by hand.
 
 \section{OCaml system}
 In this section I give a brief outline of the structure of the extracted OCaml, how it is modified to be runnable and a brief overview of potential syntactic sugar that can be used to aid development in the framework. 
@@ -1824,12 +1868,12 @@ In this section I give a brief outline of the structure of the extracted OCaml, 
 \subsection{Outline of the OCaml code}
 The OCaml code consists of the extracted versions of the following:
 \begin{itemize}
-\item{Inductive sets like expressions, constants and type expressions as tagged variants.}
-\item{Functions like the expression substitution or XJO\_red12, the reduction function.}
-\item{The metavariables \verb|value_name, label, ident| are all of OCaml type \lstinline|int| instead of constructor based extractions of Coq \lstinline[language={Coq}]|nat|. This has the caveat that \lstinline|int| may overflow or represent negative numbers, while the Coq \lstinline[language={Coq}]|nat| cannot. Realistically, no program would have this problem.}
+\item{Inductive sets like expressions, constants and type expressions as tagged variants or type constructors.}
+\item{Functions like the expression substitution or xJO\_red12, the single step reduction function.}
+\item{The metavariables \verb|value_name ident| are both OCaml \lstinline|int|s instead of constructor based extractions of Coq \lstinline[language={Coq}]|nat|. This has the caveat that \lstinline|int| may overflow or represent negative numbers, while the Coq \lstinline[language={Coq}]|nat| cannot. Realistically, no program would have this problem.}
 \end{itemize}
 \subsection{Hand modifications and justifications}
-I have made a number of modifications to the OCaml code to make it runnable. This includes changing the type of labels from int to $ \textbf{unit}\rightarrow\textbf{unit} $ and inserting terms in the relevant cases to run these computations. 
+I have made a number of modifications to the OCaml code to make it runnable. This includes changing the type of labels from int to $ (\textbf{unit}\rightarrow\text{expr}) $ and inserting terms in the relevant cases to run these computations. 
 
 Furthermore I have changed the way \verb|selectstar| is implemented. The extraction results in the type in \Cref{lst:ocamllazystar} which involves the Lazy module of OCaml. While the extraction of co-inductive types to lazy types is sound, for simplicity I used a simple lazy stream in \Cref{lst:ocamlstreamstar}. 
 
@@ -1853,7 +1897,7 @@ type selectstar = | Seq of select * (unit -> selectstar)
 
 \end{minipage}
 
-As the extraction plugin is experimental there were a number of inefficiencies and a few issues due to the fact that the semantics of OCaml pattern matching is sequential, while it is parallel in Coq. While Tollitte\cite{tollitte2012producing} made progress on the merging of cases when one case subsumes the other, these were not always correctly identified. For example the case \Crefrange{lst:ocamlvalexpappcaseStart}{lst:ocamlvalexpappcaseEnd} in \Cref{lst:ocamlorigapp} subsumes the case \Cref{lst:ocamlorigsub}. The plugin was unable to infer this as that would have required it to show that function term is always a value, regardless of its parameters. This is an issue as any function with a parameter that can be reduced will fail, as the case in \Cref{lst:ocamlorigsub} comes first.
+As the extraction plugin is experimental there were a number of inefficiencies and a few issues due to the fact that the semantics of OCaml pattern matching is sequential, while it is parallel in Coq. While Tollitte\cite{tollitte2012producing} made progress on the merging of cases when one case subsumes the other, these were not always correctly identified. For example the case in \Crefrange{lst:ocamlvalexpappcaseStart}{lst:ocamlvalexpappcaseEnd} in \Cref{lst:ocamlorigapp} subsumes the case in \Cref{lst:ocamlorigsub}. The plugin was unable to infer this as that would have required it to show that function term is always a value, regardless of its parameters. This is an issue as any function with a parameter that can be reduced will fail, as the case in \Cref{lst:ocamlorigsub} comes first.
 
 
 \vspace{3mm}
@@ -1900,11 +1944,11 @@ My solution was to insert the correct step into the failing match as in \Cref{ls
 \end{lstlisting}
 
 \end{minipage}
-A reoccurring inefficiency comes from the extraction plugin generating a default failing case in all situations, even if the default case may never happen. \Cref{lst:ocamlunneededdefault2} in \Cref{lst:ocamlorigapp} is an example of this: a boolean may only take the values true or false. A similar issue occurs when evaluating a function:  \Cref{lst:ocamlunneededmatchonfun} in the same listing matches by giving a name to the return value, but generates a default case as well. To this latter problem I simply removed the match and replaced the name of the return value with the function call.
+A reoccurring inefficiency comes from the extraction plugin generating a default failing case in all situations, even if the default case may never happen. \Cref{lst:ocamlunneededdefault2} in \Cref{lst:ocamlorigapp} is an example of this: a boolean may only take the values true or false. A similar issue occurs when evaluating a function:  \Cref{lst:ocamlunneededmatchonfun} in the same listing matches by giving a name to the return value, but generates a default case as well. I simply removed the superfluous match and replaced the name of the return value with the function call.
 
-A further issue occurs when occasionally the plugin reorders matches on assumptions. Even though the safe assumption was inserted in the case in \Cref{lst:ocamlswapassume} it was reordered by the plugin to come after the unsafe assumption. 
+A further issue occurs when occasionally the plugin reorders matches on assumptions. Even though the safe assumption was inserted in the case in \Cref{lst:ocamlswapassume} it was reordered by the plugin to come after the unsafe assumption.\vspace{2mm}
+
 \begin{minipage}{\linewidth}
-
 \begin{lstlisting}[caption={OCaml swapped assumptions}, label={lst:ocamlswapassume}]
   | (E_bind (e, e''), s) ->
     (match xJO_red12 e s with
@@ -1920,10 +1964,10 @@ The simple solution to this is to swap the assumptions, however in some cases th
 \subsection{Syntactic sugar}
 Due to the multiple layers of automatic naming developing in this framework directly could be cumbersome. I have defined a few OCaml functions to serve as syntactic sugar. The two broad categories of sugar are syntax to build expressions and schedulers. 
 \begin{itemize}
-\item{Boxing expressions and computations: \lstinline|let boxe e = E_live_expr (LM_expr e)|, \lstinline|let boxc f = E_live_expr (LM_comp f)|}
+\item{Boxing expressions and computations: \lstinline|let boxe e = E_live_expr e|, \lstinline|let boxc f = E_live_expr (E_comp f)|}
 \item{An infix bind operator: \lstinline|let ( >>= ) a b = E_bind (a, b)|}
 \item{Application: \lstinline|let app a b = E_apply (a, b)|}
-\item{Fork: \lstinline|let fork a b = app ( app (E_constant CONST_fork) a ) b|}
+\item{Fork: \lstinline|let fork a b = E_fork (a, b)|}
 \item{Round-robin and random schedulers in \Cref{lst:ocamlrrsched} and \Cref{lst:ocamlrandsched} respectively.}
 \end{itemize}
 \begin{minipage}{\linewidth}
@@ -1956,6 +2000,8 @@ Due to the multiple layers of automatic naming developing in this framework dire
 
 \cleardoublepage
 \chapter{Evaluation}
+In this chapter I evaluate the implementation from two perspectives: theoretical and performance. The theoretical evaluation examines the implementation 
+
 
 \section{Theoretical evaluation}
 \label{sec:behave_equiv}
@@ -1963,39 +2009,237 @@ There are a number of properties that are expected from this system: monadic law
 
 First the semantics of the equivalence $ \equiv $ had to be examined. If two expressions are equivalent they should behave the same: for an outside observer there has to be no difference which exact expression is evaluated in a black box computation. One way to capture this is by keeping track of potential effects and side-effects. Effects are the return values of an expression, side-effects are the computation placeholders invoked by the system. That is why I phrased the operational semantics with labelled transitions: the labels are descriptions of the side-effects.
 
-Labelled transition systems like the operational semantics I have defined is a common way to 
+Labelled transition systems, like the operational semantics I have defined, is a common way to describe systems with side-effects. As the selection operator is external and not determined by the system I consider it and therefore the transition system non-deterministic. Brookes\cite{brookes1983behavioural} surveys various equivalence relations over non-deterministic labelled transitions systems. I chose to follow Milner\cite{milner1982calculus} and use weak bisimilarity with a slight modification.
 
-\subsection{Methods}
+\subsection{Weak bisimilarity}
+Bisimilarity is a standard method for establishing behavioural equivalence of a non-deterministic language used by Milner for CCS\cite{milner1982calculus}, Pierce and Sangiorgi for $ \pi $-calculus\cite{pierce2000behavioral} and Bergstra for the Algebra of Communicating Processes\cite{bergstra1986algebra,bergstra1985algebra} among others. 
 
+In the following definitions I use $ p,\, q,\, e $ as expressions, $ \alpha $ as an atomic action, $ \tau $ as a silent action, $ \delta $ as an action that may be either silent or atomic and $ p \overset{\delta}{\rightarrow} p' $ as the statement that for some selection value $ p $ may transition in a single step to $ p' $ with a side-effect $ \delta $.
 
+\begin{defn}
+Two expressions $ p $ and $ q $ are \textit{bisimilar} if and only if
+\begin{itemize}
+\item{For all $ q' $ such that $ q \overset{\delta}{\rightarrow} q' $ there is a $ p' $ such that $ p \overset{\delta}{\rightarrow} p' $ and $ p' $ and $ q' $ are bisimilar. }
+\item{For all $ p' $ such that $ p \overset{\delta}{\rightarrow} p' $ there is a $ q' $ such that $ q \overset{\delta}{\rightarrow} q' $ and $ p' $ and $ q' $ are bisimilar. }
+\end{itemize}
+\end{defn}
 
-\subsubsection{Weak bisimilarity}
-Intro to weak bisimilarity.
+Weak bisimilarity is an extension to bisimilarity by noting that in some cases not all reductions need to be observable: Milner\cite{milner1982calculus} introduces $ \tau $ or silent reductions that do not have observable effects. In this setting it would be unnecessarily restrictive to require that two expression simulate the unobservable behaviour of each other. 
 
+\begin{defn}
+$ p $ \textit{silently reduces} to $ p' $ or $ p \overset{\tau}{\Rightarrow} p' $ if and only if $ (p, p') \in \left(\overset{\tau}{\rightarrow}\right)^* $, that is, the two expressions are in the transitive, reflexive closure of $ \overset{\tau}{\rightarrow} $. More simply if $ p $ can reduce to $ p' $ with zero or more $ \tau $ steps.
+\end{defn}
 
-What form does a general weak bisimilarity proof take.
+\begin{defn}
+$ p $ \textit{weakly reduces} to $ p' $ with side-effect $ \delta $ or $ p \overset{\delta}{\Rightarrow} p' $ if and only if 
+\begin{itemize}
+\item{in the case $ \delta = \tau $, $ p \overset{\tau}{\Rightarrow} p' $}
+\item{in the case $ \delta = \alpha $, there exist $ p_1, p_2 $ expressions such that $ p \overset{\tau}{\Rightarrow} p_1 $, $ p_1 \overset{\alpha}{\rightarrow} p_2 $, $ p_2 \overset{\tau}{\Rightarrow} p' $}
+\end{itemize}
+\end{defn}
 
+A simplified version of Milner's definition for weak bisimilarity states:
+\begin{defn}[Milner]
+A relation $ \mathcal{R} $ between expressions is a \textit{weak bisimulation} if and only if for all expressions $ p $ and $ q $ such that $ (p,q)\in \mathcal{R} $ or $ p\, \mathcal{R}\, q $:
+\begin{itemize}
+\item{For all $ q' $ such that $ q \overset{\delta}{\Rightarrow} q' $ there is a $ p' $ such that $ p \overset{\delta}{\Rightarrow} p' $. and $ (p', q') \in \mathcal{R}$. }
+\item{For all $ p' $ such that $ p \overset{\delta}{\Rightarrow} p' $ there is a $ q' $ such that $ q \overset{\delta}{\Rightarrow} q' $. and $ (p', q') \in \mathcal{R}$. }
+\end{itemize}
+\end{defn}
 
-How does it appear here.
-\subsection{Properties}
+Sangiorgi\cite{sangiorgi1992problem} remarks that there is an equivalent definition that is much easier to show:
+\begin{defn}[Sangiorgi]
+A relation $ \mathcal{R} $ between expressions is a \textit{weak bisimulation} if and only if for all expressions $ p $ and $ q $ such that $ (p,q)\in \mathcal{R} $ or $ p\, \mathcal{R}\, q $:
+\begin{itemize}
+\item{For all $ q' $ such that $ q \overset{\delta}{\rightarrow} q' $ there is a $ p' $ such that $ p \overset{\delta}{\Rightarrow} p' $. and $ (p', q') \in \mathcal{R}$. }
+\item{For all $ p' $ such that $ p \overset{\delta}{\rightarrow} p' $ there is a $ q' $ such that $ q \overset{\delta}{\Rightarrow} q' $. and $ (p', q') \in \mathcal{R}$. }
+\end{itemize}
+\end{defn}
+
+I proved this equivalence for the transition system of MOCaml. This second definition is much easier to show in Coq as Coq generates an inversion lemma for a single step however not for a weak reduction. Weak bisimulation has a number of useful properties: if $ \mathcal{R} $ and $ \mathcal{S} $ are weak bisimulations then $ \mathcal{R}^{-1}, \mathcal{R}^*, \mathcal{R}^+, \mathcal{R}\cup\mathcal{S}$  and $\mathcal{R} \circ \mathcal{S} $ are all weak bisimulations.
+\begin{defn}
+\label{defn:weak_bisimilarity}
+Two expressions $ p $ and $ q $ are \textit{weakly bisimilar} or $ p\approx q $ if there is a weak bisimulation $ \mathcal{R} $ such that $ (p,q) \in \mathcal{R} $.
+\end{defn}
+
+\Cref{defn:weak_bisimilarity} is equivalent to saying that weak bisimilarity $ \approx  $ is the union of all weak bisimulations. Weak bisimilarity is an equivalence relation: it is reflexive, symmetric and transitive.
+
+While weak bisimilarity perfectly captures side-effect behaviour it does not capture equality of return values: all values are weakly bisimilar as values do not reduce. Therefore in many cases I will use a restriction of weak bisimilarity:
+
+\begin{defn}
+\label{defn:ve_weak_bisim}
+A weak bisimulation $ \mathcal{R} $ is \textit{value equal} if for all $ v, v' $ values if $ v\,\mathcal{R}\,v' $ then $ v = v' $
+\end{defn}
+
+\begin{defn}
+\label{defn:ve_weak_bisimilarity}
+Two expressions $ p $ and $ q $ are \textit{value equal weakly bisimilar} or $ p\approx_v q $ if there is a value equal weak bisimulation $ \mathcal{R} $ such that $ p\, \mathcal{R} \, q $.
+\end{defn}
+
+These definitions also enjoy the same properties as their non-restricted counterparts. All of these definitions and some supporting lemmas can be found in \verb|weakBisimulations.v|.
+\subsection{Properties of the logical model}
+
+In this section I introduce a number of properties that I required from the implementation and the way they apply. I give a slightly informal statement for each of these properties and a sketch of the major points in the proofs. \Cref{cha:full_proof_statements} gives the precise Coq statements of the theorems along with some supporting lemmas and structures. 
+
+First, I describe the three monadic laws mentioned in \Cref{sec:monad_first_mention}. Then I attempt to show some of the basic process algebra axioms used by Bergstra for his Algebra of Communicating Processes\cite{bergstra1986algebra,bergstra1984process}. These properties can be summarized as follows:
+\begin{align}
+x + y &= y + x \label{eq:fork_comm}\\
+(x + y) + z &= x + (y + z) \label{eq:fork_assoc}\\
+x + x &= x \label{eq:choice_id}\\
+(x + y)\cdot z &= (x \cdot z) + (y \cdot z) \label{eq:fork_bind_distribute}\\
+(x \cdot y)\cdot z &= x \cdot (y \cdot z) \label{eq:bind_assoc}\\
+\delta + x &= x \label{eq:fork_deadlock} \\
+\delta \cdot x &= \delta \label{eq:bind_deadlock}
+\end{align}
+
+In the above axioms $ + $ denotes ``alternative composition" which resembles the \textbf{choose} operator. Sequential composition is denoted by $ \cdot $ and a process that cannot move forward, that is it is deadlocked is written as $ \delta $. 
+
+By understanding $ + $ as the \textbf{fork} primitive of MOCaml only \Cref{eq:fork_comm,eq:fork_assoc,eq:fork_deadlock} may be true: because of the semantics of \textbf{fork} \Cref{eq:choice_id,eq:fork_bind_distribute} cannot be true as they may duplicate side-effects. Sequential composition or bind is denoted by $ \cdot $.
+
 \subsubsection{Monadic laws}
+The formal proofs of the following theorems about the monadic laws governing \textbf{ret} and bind $ \gg= $ can be found in \verb|mconbaseMonProofs.v|.
 
-\[ \textbf{ret } e\,\gg=\, e'\quad \simeq \quad e'\,e \]
-\[  \textit{Live expr }v\,\gg=\, \textbf{ret}\quad \simeq \quad \textit{Live expr }v \]
+\begin{thm}[Return is left neutral to bind]
+For all expressions $ e, f $, if $ f $ is a value then
+\[ \textbf{ret } e\,\gg=\, f\quad \approx_v \quad f\,e \]
+\end{thm}
 
-\[ (\textit{Live expr }v\, \gg=\, f) \, \gg=\, g \quad \simeq \quad \textit{Live expr }v\, \gg=\, (\lambda x. (f\, v) \, \gg=\, g ) \]
+The left neutrality has a caveat: it is only true if the function is a value. If this was not the case then the left hand side of the weak bisimilarity would first reduce $ f $ and then $ e $ which was a conscious decision: it felt unintuitive to reduce the later part of a sequencing first. 
+
+\begin{thm}[Return is right neutral to bind]
+For any value $ v$
+\[  \textit{Live }v\,\gg=\, \textbf{ret}\quad \approx_v \quad \textit{Live }v \]
+\end{thm}
+
+\begin{thm}[Return is right neutral to bind, extended]
+For any expression $ e$
+\[  \textit{Live }e\,\gg=\, \textbf{ret}\quad \approx_v \quad \textbf{ret } e \]
+\end{thm}
+
+While the general statement of the right neutrality is 
+\[  e\,\gg=\, \textbf{ret}\quad \approx_v \quad e \]
+This is not true in general: if $ e $ reduces to a live expression that has an unreduced expression boxed the right hand side does not generate the side-effects of the boxed up computation. However, it is possible to show that in general if $ e $ always reduces to a boxed up value it will hold.
+
+\begin{thm}[Bind is associative]
+For any expression $ e $, values $ f, g $ and variable $ x $, if $ x $ appears neither in $ f $ nor in $ g $ either bound or free
+\[ (e\, \gg=\, f) \, \gg=\, g \quad \approx_v \quad e\, \gg=\, (\lambda x. (f\, x) \, \gg=\, g ) \]
+\end{thm}
+
+This corresponds to \Cref{eq:bind_assoc} in Bergstra's axioms. The caveat mentioned about non-capture avoiding substitution in \Cref{sec:subst_caveat} appears in the associativity statement as well: $ x $ needs to be a fresh variable to avoid substitution to unintended variables.
 
 \subsubsection{Fork commutativity}
-Outline of fork commutativity
-\[ a\,|\,b\quad\simeq\quad b \, | \, a \]
+The proofs of \textbf{fork} commutativity and associativity may be found in \verb|forkProofs.v|.
+
+\begin{thm}[Fork commutative weak bisimilarity]
+For all expressions $ e, e'$
+\[  \textbf{fork}\,(\textit{Live }e)\,(\textit{Live }e')\quad \approx \quad \textbf{fork}\,(\textit{Live }e')\,(\textit{Live }e) \]
+\end{thm}
+
+Showing the weak bisimilarity of \textbf{fork} and the commuted version using Sangiorgi's definition of weak bisimilarity is very simple: for every step there is a corresponding single step of the respective expression in the commuted version. However the return values of the simply commuted \textbf{fork} are not equivalent to those of the original. I solved this by sequencing a function that ``swaps" the result:
+
+\begin{thm}[Fork commutative value equal weak bisimilarity]
+For all expressions $ e, e'$
+\[  \textbf{fork}\,(\textit{Live }e)\,(\textit{Live }e')\quad \approx_v \quad (\textbf{fork}\,(\textit{Live }e')\,(\textit{Live }e))\gg=\text{swapf} \]
+\end{thm}
+
+\begin{lstlisting}[language={Coq}, caption={Swapf operator}, label={lst:swapf_op}]
+Definition swapbodyl : expr :=
+         E_ret (E_taggingright
+            (E_inpair 
+              (E_proj2  (E_ident (1))) 
+              (E_proj1  (E_ident (1)))  
+            )
+     ).
+
+Definition swapbodyr : expr :=
+          E_ret (E_taggingleft  
+            (E_inpair 
+               (E_proj2  (E_ident (2))) 
+               (E_proj1  (E_ident (2)))  
+            )).
+
+Definition swapbody : expr := E_case (E_ident (0)) 
+           (1)  swapbodyl
+           (2)  swapbodyr.
+
+Definition swapf : expr :=
+    E_function (0) TE_unit swapbody.
+\end{lstlisting}
+\Cref{lst:swapf_op} shows the definition of the swapf operator. It just swaps the output of the commuted fork to the correct return value. Notice that it does not obey the typing rule: to define swapf with correct type there has to be a family of swapf operators for each possible return type. By binding swapf onto the commuted \textbf{fork} we get a value equal weak bisimilarity as swapf is always silent.
+
 \subsubsection{Fork associativity}
 Fork in this implementation is not associative:
+
+\begin{thm}[Fork is not associative]
+There are expressions $a, b, c$
+\[  \textbf{fork}\,(\textit{Live }(\textbf{fork}\,(\textit{Live }a)\,(\textit{Live }b)))\,(\textit{Live }c)\quad \not\approx \quad \textbf{fork}\,(\textit{Live }a)\,(\textit{Live }(\textbf{fork}\,(\textit{Live }b)\,(\textit{Live }c)) \]
+\end{thm}
+
+The example is:
+\[ \textbf{fork } (\textit{Live }\textbf{fork }(\textit{Live }\textbf{unit})  (\textit{Live }\textbf{unit}))  (\textit{Live }\textit{comp } e) \tag{R-Assoc} \label{eq:fork_assoc_counter_r} \]
+versus
+\[ \textbf{fork } (\textit{Live }\textbf{unit})\,\,(\textit{Live }  \textbf{fork } ((\textit{Live }\textbf{unit})  (\textit{Live }\textit{comp } e))) \tag{L-Assoc} \label{eq:fork_assoc_counter_l} \]
+
+While \ref{eq:fork_assoc_counter_r} may run the computation on the right, \ref{eq:fork_assoc_counter_l} can only return immediately as the left edge is a value. In the proof for this I used a computation that returns \textbf{unit}.
+%\subsubsection{Join associativity}
+%\begin{thm}[Join is associative]
+%For all expressions $a, b, c$
+%\[  \textbf{join}\,(\textit{Live }(\textbf{join}\,(\textit{Live }a)\,(\textit{Live }b)))\,(\textit{Live }c)\quad \approx \quad \textbf{join}\,(\textit{Live }a)\,(\textit{Live }(\textbf{join}\,(\textit{Live }b)\,(\textit{Live }c)) \]
+%\end{thm}
+
 \subsubsection{Deadlock properties}
-\[ \delta \, |\, x \quad \simeq \quad x \]
-\[ \delta \, \gg=\, e\quad \simeq \quad \delta \]
+The properties involving deadlock may be found in the file \verb|forkDeadlock.v|.
+
+\begin{defn}
+An expression $ \delta $ is \textit{deadlocked} if it can weakly reduce and any weak reduction it may make is silent and finishes in another \textit{deadlocked} expression. 
+\end{defn}
+
+This definition is closer to the common understanding of livelock, however as Bergstra\cite{bergstra1984process} explains: the ``action" taken by $ \delta $ is virtual, just acknowledging stagnation. This can occur by the incorrect use of the fixpoint combinator for example. In the proofs for the theorems below I used a stricter definition by only allowing deadlocked expressions that deterministically $ \tau $-step to themselves. In particular the example used to show that all types are occupied is a family of these expressions.
+\begin{thm}[Fork deadlock]
+For all expressions $ e, \delta$ if $ \delta $ is a deadlocked expression
+\[  \textbf{fork}\,(\textit{Live }\delta)\,(\textit{Live }e)\quad \approx \quad e \]
+\end{thm}
+
+While the \textbf{fork} with a deadlocked edge is weakly bisimilar to the other edge, it has to be slightly modified to give value equality:
+
+\begin{thm}[Fork deadlock value equivalence]
+For all expressions $ e, \delta$ if $ \delta $ is a deadlocked expression
+\[  (\textbf{fork}\,(\textit{Live }\delta)\,(\textit{Live }e))\gg=\text{takeright}\quad \approx_v \quad \textbf{ret }e \]
+\end{thm}
+
+\begin{lstlisting}[language={Coq}, caption={takeright operator}, label={lst:takeright_op}]
+Definition takeright : expr :=
+    E_function (0) TE_unit 
+      (E_case (E_ident (0)) 
+           (1) (E_proj2  (E_ident (1))) 
+           (2) (E_ret (E_proj2  (E_ident (2))))).
+\end{lstlisting}
+
+As with swapf, this also violates typing, however for each type there is a takeright that is correct.
+
+\begin{thm}[Bind deadlock]
+For all expressions $ e, \delta$ if $ \delta $ is a deadlocked expression
+\[  \delta \gg= e\quad \approx_v \quad \delta \]
+\end{thm}
+
+Note however the value equality comes for free: $ \delta $ may never be a value.
+
 \subsubsection{Remarks on congruence}
-\subsubsection{Type preservation?}
-\subsubsection{Progress?} 
+
+These equivalences give meaningful insight into the behaviour of the mentioned expressions in of themselves. However, it falls short of the original aim of provide an equality that implies the ability to replace these expressions when composed with others. 
+
+This notion of equality is called a \textit{congruence}. Intuitively an equivalence $ \equiv $ between expressions is a congruence if it is compatible with the syntax and semantics of the language. That is to say that given an occurrence of an expression $ e $ in some context $ C $, written as $ C[e] $, and $ e \equiv e' $, then $ e $ can be freely substituted: $e \equiv e'\, \Rightarrow\, C[e]\equiv C[e'] $. This means that it is compositional.
+
+It is easy to see that the previously defined value equal weak bisimilarity is not a congruence: functions are only  value equal weak bisimilar to themselves (they are values), however may contain expressions that could be substituted:
+\[ \lambda x : T. \delta \gg= x\quad \not\approx_v \quad \lambda x : T.\delta \]
+
+However, weak bisimilarity also does not suffice: all values are weakly bisimilar, but clearly when substituted into a context they will not behave the same. 
+Construction of a congruence relation over MOCaml is desireable, however not at all trivial. I decided to exclude proofs about congruences from the scope of this project. A method to establish a congruence is to use Howe's method\cite{howe1996proving} as described by Pitts\cite{pitts2011howe}. Howe's method is based on finding a pre-congruence candidate relation $ \lesssim $. In simple languages it would follow that $ \lesssim \cap \lesssim^{\text{op}} = \simeq $ is a congruence. However, the semantics of MOCaml are not deterministic and Pitts notes that in this case the congruence $  \simeq \neq \lesssim \cap \lesssim^{\text{op}} $ and suggests a method to overcome this. 
+
+
+
+%\subsubsection{Type preservation?}
+%\subsubsection{Progress?} 
 %Theoretical evaluation
 % - Monadic laws
 % - Fork commutativity
@@ -2003,6 +2247,35 @@ Fork in this implementation is not associative:
 % - Liveness ?
 % - Type preservation ?
 % - Progress
+\subsection{Equivalence of the logical model and the extractable model}
+In this section I will prove the equivalence of the original logical model of the reduction relation generated by Ott and the relation extracted to OCaml.
+\subsubsection{Label erasure}
+As labels are only used to show properties of the system I decided not to include them in the extractable semantics: they would be completely ignored by the framework, but potentially make the overhead worse.
+
+To show that erasing labels is safe it suffices to show that there exists a deterministic partial function $ (e,s,e') \rightarrow rl $. First, I proved that for any given start expression, selection operator and destination expression triple if a label exists it is unique:
+\begin{thm}[Unique labels]
+\label{thm:unique_label}
+For all expressions $ e,\, e'$, selection value $ s $ and reduction labels $ rl, rl' $:
+ if $ e \overset{rl}{\underset{s}{\longrightarrow}}e' $ and $ e \overset{rl'}{\underset{s}{\longrightarrow}}e' $ then $ rl = rl' $. 
+\end{thm}
+\subsubsection{Equivalence}
+As usual I denote the logical model reduction as $ e\, \underset{s}{\overset{rl}{\longrightarrow}}\, e' $, while I denote the extractable reduction as $ e\, \underset{s}{\dashrightarrow}\, e' $.
+
+\begin{thm}[Model reduction implies extractable reduction]
+\label{thm:jo_to_xjo}
+For all expressions $ e,\,e' $, selection $ s $ and reduction label $ rl $ if $ e\, \underset{s}{\overset{rl}{\longrightarrow}}\, e' $ then $  e\, \underset{s}{\dashrightarrow}\, e' $.
+\[  e\, \underset{s}{\overset{rl}{\longrightarrow}}\, e' \,\,\,\Rightarrow \,\,\, e\, \underset{s}{\dashrightarrow}\, e' \]
+\end{thm}
+
+\Cref{thm:jo_to_xjo} means that if we denote the set of reduction triples $ (e,s,e') $ for the logical and extractable relations by $ S_L $ and $ S_X $ respectively, then $ S_L \subseteq S_X $.
+
+\begin{thm}[Extractable reduction implies model reduction]
+\label{thm:xjo_to_jo}
+For all expressions $ e,\,e' $ and selection $ s $ if $ e\, \underset{s}{\dashrightarrow}\, e' $ then there is a reduction label $ rl $ such that $ e\, \underset{s}{\overset{rl}{\longrightarrow}}\, e' $.
+\[ e\, \underset{s}{\dashrightarrow}\, e' \,\,\,\Rightarrow \,\,\,  e\, \underset{s}{\overset{rl}{\longrightarrow}}\, e' \]
+\end{thm}
+
+\Cref{thm:xjo_to_jo} means that $ S_X \subseteq S_L $, therefore $ S_X \equiv S_L \equiv S $ and furthermore by \Cref{thm:unique_label} it follows that there is a total function $ L\,:\, S \rightarrow RL $ where $ RL $ is the set of reduction labels. As the reduction label is determined by the triple.
 
 % Practical evaluation
 \section{Performance}
@@ -2607,8 +2880,8 @@ been helpful and saved you time.
 \appendix
 
 \chapter{Full semantics}
+\ottall
 \label{chap:fullsemantics}
-\includepdf[pages=-]{../mconbase.pdf}
 
 %\section{proposal.tex}
 %{\scriptsize\verbatiminput{proposal.tex}}
@@ -2628,7 +2901,103 @@ been helpful and saved you time.
 %\section{refs.bib}
 %{\scriptsize\verbatiminput{refs.bib}}
 
+\chapter{Coq definitions and theorem statements}
+\label{cha:full_proof_statements}
+\section{Weak bisimilarity definitions and theorems}
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq}, caption={Definitions of reduction relations}]
+Inductive tauStep : relation expr :=
+ | tStep :  forall (e e' : expr) (s : select), JO_red e s RL_tau e' -> tauStep e e'.
 
+Definition tauRed : relation expr := (star tauStep).
+
+Inductive totalDetTauStep : relation expr :=
+ | ttStep : forall (e e' : expr),
+   ( (tauStep e e') /\ 
+   (forall (e'' : expr) (s : select) (l : label), JO_red e s (RL_labelled(l)) e'' -> False) /\ 
+   (forall (e''' : expr), tauStep e e''' -> e' = e''')) -> totalDetTauStep e e'.
+ 
+Definition totalTauRed : relation expr := (star totalDetTauStep).
+
+Inductive labRed : label -> relation expr :=
+ | lab_r : forall (e0 e1 e2 e3 : expr) (s : select) (l : label),
+   tauRed e0 e1 /\
+   JO_red e1 s (RL_labelled(l)) e2 /\
+   tauRed e2 e3 -> labRed l e0 e3.
+   
+Inductive weakred : redlabel -> relation expr :=
+ | weakred_T : forall ( e e' : expr ), tauRed e e' -> 
+               weakred RL_tau e e'
+ | weakred_L : forall ( e e' : expr) (l : label), labRed l e e' -> 
+               weakred (RL_labelled l) e e'.               
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq}, caption={Definitions of weak bisimilarity}]
+(* Milner *)
+Definition isExprRelationWeakBisimilarity (R : relation expr) : Prop :=
+   forall (p q : expr), R p q -> 
+   ((forall (p' : expr) (l : label), 
+     labRed l p p' ->
+      (exists (q' : expr), labRed l q q' /\  R p' q' )) /\
+    (forall (q' : expr) (l : label),
+     labRed l q q' ->
+      (exists (p' : expr), labRed l p p' /\  R p' q' )) /\ 
+    (forall (p' : expr),
+     tauRed p p' -> 
+     (exists (q' : expr), tauRed q q' /\  R p' q' )) /\
+    (forall (q' : expr), 
+     tauRed q q' ->
+      (exists (p' : expr), tauRed p p' /\  R p' q' ))
+ ).
+
+(* Sangiorgi *)
+Definition isExprRelationStepWeakBisimilarity (R : relation expr) : Prop :=
+   forall (p q : expr),
+    R p q -> 
+     ((forall (p' : expr) (rl : redlabel) (s: select),
+        p [ s ] --> [ rl ] p' -> 
+        (exists (q' : expr), weakred rl q q' /\  R p' q' )) /\
+     (forall (q' : expr) (rl : redlabel) (s : select),
+        q [ s ] --> [ rl ] q' ->
+        (exists (p' : expr), weakred rl p p' /\  R p' q' ))).            
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq}, caption={Weak bisimilarity properties}]
+Definition WBSM : relation expr -> Prop := isExprRelationStepWeakBisimilarity
+
+Lemma isExprRelationWeakBisimilarity_equiv_WBSM : 
+  forall (R : relation expr), 
+   isExprRelationWeakBisimilarity R <-> WBSM R.
+
+Lemma WBSM_comp : forall (R S : relation expr), WBSM R -> WBSM S -> WBSM (comp R S).
+
+Lemma WBSM_eeq : forall (R S : relation expr), eeq R S -> WBSM R -> WBSM S.
+
+Lemma WBSM_trans : forall (R : relation expr), WBSM R -> WBSM (trans R).
+
+Lemma WBSM_star :forall (R : relation expr), WBSM R -> WBSM (star R).
+
+Lemma WBSM_union2 : forall (R S : relation expr), WBSM R -> WBSM S -> WBSM (union2 R S).
+\end{lstlisting}
+\end{minipage}
+\section{Monadic laws}
+\section{Fork and join}
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq}, caption={Fork commutativity}]
+Inductive fork_comm_rel :  relation expr := 
+ | forkee_start : forall (e e' : expr), fork_comm_rel (e # e') (e' # e)
+ | forkee_endl : forall (e e' : expr), is_value_of_expr e -> fork_comm_rel (e <# e') (e' #> e)
+ | forkee_endr : forall (e e' : expr), is_value_of_expr e' -> fork_comm_rel (e #> e') (e' <# e).
+ 
+Theorem fork_comm_wbsm: WBSM fork_comm_rel.
+\end{lstlisting}
+\end{minipage}
+\section{Deadlock properties}
+\section{Equivalence}
 \cleardoublepage
 
 \chapter{Project Proposal}
