@@ -59,6 +59,11 @@ Stephen Brookes and William Rounds.
 \newblock Behavioural equivalence relations induced by programming logics.
 \newblock {\em Automata, Languages and Programming}, pages 97--108, 1983.
 
+\bibitem{church1940formulation}
+Alonzo Church.
+\newblock A formulation of the simple theory of types.
+\newblock {\em The journal of symbolic logic}, 5(2):56--68, 1940.
+
 \bibitem{Claessen99functionalpearls}
 Koen Claessen.
 \newblock Functional pearls: A poor man's concurrency monad, 1999.

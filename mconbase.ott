@@ -27,8 +27,6 @@ redlabel, rl :: RL_ ::=
   | tau                                    ::   :: tau
   | RE expr                                ::   :: labelled
 
-
-
 % Terms
 expr, e :: E_ ::=
   | value_name                           ::   :: ident
@@ -40,7 +38,6 @@ expr, e :: E_ ::=
   | comp e                               ::    :: comp
   | live e                               ::   :: live_expr
   | { e , e' }                           ::   :: pair
-  | pair e e'                            ::   :: inpair
   | proj1 e                              ::   :: proj1
   | proj2 e                              ::   :: proj2
   | fork e e'                            ::   :: fork
@@ -71,14 +68,6 @@ value, v :: V_ ::=
   | { v , v' }                         ::   :: valuepair
   | ( v )                             :: S :: paren {{ ich [[v]] }} {{ ocaml [[v]] }}
 
-%Selects
-selectopt, o :: SO_ ::=
-  | First                              ::   :: First {{ tex 1 }}
-  | Second                             ::   :: Second {{ tex 2 }}
-
-select, s :: S_ ::=
-  | o s                               ::   :: Seq
-
 %Type environment
 G {{ tex \Gamma }} :: G_ ::=
   | empty                              ::   :: em
@@ -88,11 +77,16 @@ formula :: formula_ ::=
   | judgement                          ::   :: judgement
   | not ( formula )                    ::   :: not  
         {{ isa Not([[formula]]) }}
-        {{ coq not([[formula]]) }}
+        {{ coq ~([[formula]]) }}
         {{ hol ~([[formula]]) }}
         {{ ocaml TODO }}
   | value_name = value_name'           ::   :: eqv 
         {{ ich [[value_name]]=[[value_name']] }} {{ ocaml TODO }}
+  | is_value e                         ::   :: value_check
+        {{ coq is_value_of_expr ( [[e]] ) }}
+  | not_a_value e                         ::   :: not_value_check
+        {{ coq ~(is_value_of_expr([[e]])) }}
+        {{ tex [[e]] \notin \textit{Values} }}
 
 
 %Terminals
@@ -110,7 +104,6 @@ terminals :: terminals_ ::=
   | exp                                ::   :: expression {{ tex exp }}
   | live                               ::   :: conlive    {{ tex Live }}
   | fix                                ::   :: fix        {{ tex \textbf{fix} }}
-  | pair                                ::   :: inpair        {{ tex \textbf{pair} }}
   | proj1                                ::   :: proj1        {{ tex \mathrm{ \textbf{proj}_1 } }}
   | proj2                                ::   :: proj2        {{ tex \mathrm{ \textbf{proj}_2 } }}
   | tau                                ::   :: tau        {{ tex \tau }}
@@ -138,6 +131,12 @@ substitutions
 freevars
   expr value_name :: fv
 
+grammar
+%Selects
+selectopt, o :: SO_ ::=
+  | First                              ::   :: First {{ tex 1 }}
+  | Second                             ::   :: Second {{ tex 2 }}
+
 embed
 
   {{ hol
@@ -146,6 +145,14 @@ val _ = Define `
   (remove_duplicates (x::xs) = if (MEM x xs) then remove_duplicates xs 
                                else x::(remove_duplicates xs))
 `; }}
+
+  {{ coq
+CoInductive select_h : Set := 
+| S_Seq (o:selectopt) (s:select_h). }}
+
+grammar
+select, s :: S_ ::=                   {{ coq select_h }}             
+  | o s                               ::   :: Seq
 
 
 defns 
@@ -183,11 +190,6 @@ G |- fork e e' : (con ((t1 * (con t2)) + ((con t1) * t2)))
 
 ------------------------ :: unit
 G |- unit : tunit
-
-G |- e : t1 
-G |- e' : t2 
-----------------------------------------:: inpair
-G |- pair e e' :  ( t1 * t2 ) 
 
 G |- e : (t1 * t2)
 -------------------------------:: proj1
@@ -276,12 +278,12 @@ fork v e' [ s ] --> [ rl ] fork v e''
 %Here should be the only path for concurrency
 
 e [ s ] --> [ rl ] e''
-{{ ~ (is_value_of_expr [[ e' ]]) }}
+not_a_value e'
 --------------------------- :: forkmove1
  fork (live e)  (live e') [ First s ] --> [ rl ] fork (live e'') (live e')
 
 e' [ s ] --> [ rl ] e''
-{{ ~ (is_value_of_expr [[ e ]]) }}
+not_a_value e 
 --------------------------- :: forkmove2
 fork (live e)  (live  e') [ Second s ] --> [ rl ] fork (live e) (live  e'') 
 
@@ -348,17 +350,6 @@ e [ s ] --> [ rl ] e'
 ----------------------- :: pair_2
 { v , e } [ s ] --> [ rl ] { v, e' }
 
-
------------------------------------------- :: inpair
- pair v  v' [ s ] --> [ tau ] { v , v' }
-
-e [ s ] --> [ rl ] e''
------------------------------------------- :: inpair_eval1
-pair e  e' [ s ] --> [ rl ] pair e''  e' 
-
-e' [ s ] --> [ rl ] e''
------------------------------------------- :: inpair_eval2
-pair v  e' [ s ] --> [ rl ] pair v  e'' 
 
 -------------------------------------------:: proj1
 proj1 { v , v' } [ s ] --> [ tau ] v

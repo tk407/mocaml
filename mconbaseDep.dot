@@ -1,10 +1,13 @@
 digraph G {
- G;
-select;
+ select;
+selectopt;
+G;
 expr;
 redlabel;
 typexpr;
 
+select -> select;
+select -> selectopt;
 G -> value_name;
 G -> G;
 G -> typexpr;

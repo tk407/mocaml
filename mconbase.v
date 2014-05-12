@@ -30,7 +30,6 @@ Inductive expr : Set :=
  | E_comp (e:expr)
  | E_live_expr (e:expr)
  | E_pair (e:expr) (e':expr)
- | E_inpair (e:expr) (e':expr)
  | E_proj1 (e:expr)
  | E_proj2 (e:expr)
  | E_fork (e:expr) (e':expr)
@@ -39,16 +38,9 @@ Inductive expr : Set :=
  | E_taggingright (e:expr)
  | E_case (e1:expr) (x1:value_name) (e2:expr) (x2:value_name) (e3:expr).
 
-Inductive selectopt : Set := 
- | SO_First : selectopt
- | SO_Second : selectopt.
-
 Inductive redlabel : Set := 
  | RL_tau : redlabel
  | RL_labelled (expr5:expr).
-
-CoInductive select : Set := 
- | S_Seq (o:selectopt) (s:select).
 
 Inductive G : Set := 
  | G_em : G
@@ -66,7 +58,6 @@ Fixpoint is_value_of_expr (e_5:expr) : Prop :=
   | (E_comp e) => False
   | (E_live_expr e) => (True)
   | (E_pair e e') => ((is_value_of_expr e) /\ (is_value_of_expr e'))
-  | (E_inpair e e') => False
   | (E_proj1 e) => False
   | (E_proj2 e) => False
   | (E_fork e e') => False
@@ -97,7 +88,6 @@ Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr
   | (E_comp e) => E_comp (subst_expr e_5 x_5 e)
   | (E_live_expr e) => E_live_expr (subst_expr e_5 x_5 e)
   | (E_pair e e') => E_pair (subst_expr e_5 x_5 e) (subst_expr e_5 x_5 e')
-  | (E_inpair e e') => E_inpair (subst_expr e_5 x_5 e) (subst_expr e_5 x_5 e')
   | (E_proj1 e) => E_proj1 (subst_expr e_5 x_5 e)
   | (E_proj2 e) => E_proj2 (subst_expr e_5 x_5 e)
   | (E_fork e e') => E_fork (subst_expr e_5 x_5 e) (subst_expr e_5 x_5 e')
@@ -134,7 +124,6 @@ Fixpoint fv_expr (e_5:expr) : list value_name :=
   | (E_comp e) => ((fv_expr e))
   | (E_live_expr e) => ((fv_expr e))
   | (E_pair e e') => (app (fv_expr e) (fv_expr e'))
-  | (E_inpair e e') => (app (fv_expr e) (fv_expr e'))
   | (E_proj1 e) => ((fv_expr e))
   | (E_proj2 e) => ((fv_expr e))
   | (E_fork e e') => (app (fv_expr e) (fv_expr e'))
@@ -150,6 +139,14 @@ Definition fv_redlabel (rl5:redlabel) : list value_name :=
   | (RL_labelled expr5) => ((fv_expr expr5))
 end.
 
+
+Inductive selectopt : Set := 
+ | SO_First : selectopt
+ | SO_Second : selectopt.
+CoInductive select_h : Set := 
+| S_Seq (o:selectopt) (s:select_h). 
+
+Definition select : Set := select_h.
 (** definitions *)
 
 (* defns Jtype *)
@@ -158,7 +155,7 @@ Inductive VTSin : value_name -> typexpr -> G -> Prop :=    (* defn VTSin *)
      VTSin value_name5 typexpr5 (G_vn G5 value_name5 typexpr5)
  | VTSin_vn2 : forall (value_name5:value_name) (typexpr5:typexpr) (G5:G) (value_name':value_name) (typexpr':typexpr),
      VTSin value_name5 typexpr5 G5 ->
-      not(  value_name5 = value_name'  )  ->
+      ~(  value_name5 = value_name'  )  ->
      VTSin value_name5 typexpr5 (G_vn G5 value_name' typexpr')
 with Get : G -> expr -> typexpr -> Prop :=    (* defn Get *)
  | Get_ret : forall (G5:G) (e:expr) (t:typexpr),
@@ -170,10 +167,6 @@ with Get : G -> expr -> typexpr -> Prop :=    (* defn Get *)
      Get G5 (E_fork e e')  (TE_concurrent  (TE_sum  (TE_prod t1  (TE_concurrent t2) )   (TE_prod  (TE_concurrent t1)  t2) ) ) 
  | Get_unit : forall (G5:G),
      Get G5 E_unit TE_unit
- | Get_inpair : forall (G5:G) (e e':expr) (t1 t2:typexpr),
-     Get G5 e t1 ->
-     Get G5 e' t2 ->
-     Get G5 (E_inpair e e')  (TE_prod t1 t2) 
  | Get_proj1 : forall (G5:G) (e:expr) (t1 t2:typexpr),
      Get G5 e  (TE_prod t1 t2)  ->
      Get G5 (E_proj1 e) (TE_arrow  (TE_prod t1 t2)  t1)
@@ -236,11 +229,11 @@ Inductive JO_red : expr -> select -> redlabel -> expr -> Prop :=    (* defn red 
      JO_red (E_fork v e') s rl (E_fork v e'')
  | JO_red_forkmove1 : forall (e e':expr) (s:select) (rl:redlabel) (e'':expr),
      JO_red e s rl e'' ->
-     ~ (is_value_of_expr e')  ->
+      ~(is_value_of_expr( e' ))  ->
      JO_red (E_fork  (E_live_expr e)   (E_live_expr e') ) (S_Seq SO_First s) rl (E_fork  (E_live_expr e'')   (E_live_expr e') )
  | JO_red_forkmove2 : forall (e e':expr) (s:select) (rl:redlabel) (e'':expr),
      JO_red e' s rl e'' ->
-     ~ (is_value_of_expr e)  ->
+      ~(is_value_of_expr( e ))  ->
      JO_red (E_fork  (E_live_expr e)   (E_live_expr e') ) (S_Seq SO_Second s) rl (E_fork  (E_live_expr e)   (E_live_expr e'') )
  | JO_red_forkdeath1 : forall (v e:expr) (s:select),
      is_value_of_expr v ->
@@ -282,17 +275,6 @@ Inductive JO_red : expr -> select -> redlabel -> expr -> Prop :=    (* defn red 
      is_value_of_expr v ->
      JO_red e s rl e' ->
      JO_red (E_pair v e) s rl (E_pair v e')
- | JO_red_inpair : forall (v v':expr) (s:select),
-     is_value_of_expr v ->
-     is_value_of_expr v' ->
-     JO_red (E_inpair v v') s RL_tau (E_pair v v')
- | JO_red_inpair_eval1 : forall (e e':expr) (s:select) (rl:redlabel) (e'':expr),
-     JO_red e s rl e'' ->
-     JO_red (E_inpair e e') s rl (E_inpair e'' e')
- | JO_red_inpair_eval2 : forall (v e':expr) (s:select) (rl:redlabel) (e'':expr),
-     is_value_of_expr v ->
-     JO_red e' s rl e'' ->
-     JO_red (E_inpair v e') s rl (E_inpair v e'')
  | JO_red_proj1 : forall (v v':expr) (s:select),
      is_value_of_expr v ->
      is_value_of_expr v' ->

@@ -24,7 +24,6 @@ Fixpoint xis_value_of_expr (e_5:expr) : bool :=
   | (E_comp e) => false
   | (E_live_expr e) => (true)
   | (E_pair e e') => (if (xis_value_of_expr e) then (xis_value_of_expr e') else false)
-  | (E_inpair e e') => false
   | (E_proj1 e) => false
   | (E_proj2 e) => false
   | (E_fork e e') => false
@@ -42,46 +41,18 @@ Proof.
  Check JO_red_ind.
  intros.
  Hint Resolve red_not_value.
- induction H; substs; inversion H0; substs; intuition; eauto.
- apply red_not_value in H7; contradiction.
- apply red_not_value in H5; simpl in H5; intuition.
- (* FORK *)
- apply red_not_value in H; contradiction.
- apply red_not_value in H; simpl in H; intuition.
- apply red_not_value in H; simpl in H; intuition.
- apply red_not_value in H6; contradiction.
- apply red_not_value in H1; simpl in H1; intuition.
- apply red_not_value in H1; simpl in H1; intuition.
- apply red_not_value in H6; simpl in H6; intuition.
- apply red_not_value in H9; simpl in H9; intuition.
-
- (* FORK *)
-
-
- apply red_not_value in H6; simpl in H6; intuition.
- apply red_not_value in H8; simpl in H8; intuition.
- (* FORK *)
- apply red_not_value in H; simpl in H; intuition.
- apply red_not_value in H5; simpl in H5; intuition.
- (* SUBST ! *)
- apply red_not_value in H1; contradiction.
- apply red_not_value in H6; contradiction.
- apply red_not_value in H; simpl in H; intuition.
- apply red_not_value in H; contradiction.
- apply red_not_value in H; simpl in H; intuition.
- apply red_not_value in H4; simpl in H4; intuition.
- apply red_not_value in H; contradiction.
- apply red_not_value in H6; contradiction.
- apply red_not_value in H; contradiction.
- apply red_not_value in H6; contradiction.
- inversion H8.
- apply red_not_value in H2; contradiction.
- inversion H8.
- apply red_not_value in H2; contradiction.
- inversion H.
- apply red_not_value in H2; contradiction.
- inversion H.
- apply red_not_value in H2; contradiction.
+ induction H; substs; inversion H0; substs; intuition; eauto; try solve [
+ apply red_not_value in H7; contradiction |
+ apply red_not_value in H5; simpl in H5; intuition |
+ apply red_not_value in H; contradiction |
+ apply red_not_value in H; simpl in H; intuition |
+ apply red_not_value in H6; contradiction |
+ apply red_not_value in H1; simpl in H1; intuition |
+ apply red_not_value in H6; simpl in H6; intuition |
+ apply red_not_value in H9; simpl in H9; intuition |
+ apply red_not_value in H8; simpl in H8; intuition |
+ apply red_not_value in H4; simpl in H4; intuition
+].
 Qed.
 
 
@@ -113,19 +84,6 @@ Inductive XJO_red : expr -> select -> expr -> Prop :=    (* defn red *)
  | XJO_red_dobind : forall (v e:expr) (s:select),
      (eq (xis_value_of_expr v) true) ->
      XJO_red (E_bind  (E_live_expr ( (v)))  e) s (E_apply e v)  
- | XJO_red_inpair : forall (v v':expr) (s:select),
-     (eq (xis_value_of_expr v) true) ->
-     (eq (xis_value_of_expr v') true) ->
-     XJO_red (E_inpair v  v') s (E_pair v v')
- | XJO_red_inpair_eval2 : forall (v v' v'' :expr) (s:select),
-     (eq (xis_value_of_expr v) true) ->
-     (eq (xis_value_of_expr v') false) ->
-     XJO_red v' s v'' ->
-     XJO_red (E_inpair v  v') s (E_inpair v v'')  
- | XJO_red_inpair_eval1 : forall (v v' v'' :expr) (s:select),
-     (eq (xis_value_of_expr v) false) ->
-     XJO_red v s v'' ->
-     XJO_red (E_inpair v  v') s (E_inpair v'' v') 
  | XJO_red_docomp : forall (e:expr) (s:select),
      XJO_red (E_comp e) s e
  | XJO_red_proj1 : forall (v v':expr) (s:select),
@@ -263,69 +221,13 @@ Proof.
  Hint Constructors JO_red.
  Hint Constructors XJO_red.
  intros.
- induction H; intuition. 
- apply is_xis_val_equiv in H; apply XJO_red_app; intuition.
- apply XJO_red_forkeval1; intuition; apply red_not_value in H; apply is_xis_val_equiv_neg in H; assumption.
- apply XJO_red_forkeval2; intuition.
- apply is_xis_val_equiv in H.
- assumption.
- apply red_not_value in H0.
- apply is_xis_val_equiv_neg in H0.
- assumption.
- apply XJO_red_forkmove1.
- Hint Resolve red_not_value.
- apply red_not_value in H.
- apply is_xis_val_equiv_neg in H.
- assumption.
- apply is_xis_val_equiv_neg in H0; assumption.
- assumption.
- apply XJO_red_forkmove2.
- Hint Resolve red_not_value.
- apply red_not_value in H.
- apply is_xis_val_equiv_neg in H.
- apply is_xis_val_equiv_neg in H0; assumption.
- apply red_not_value in H.
- apply is_xis_val_equiv_neg in H; assumption.
- assumption.
- apply XJO_red_forkdeath1.
- Hint Rewrite is_xis_val_equiv.
- apply is_xis_val_equiv.
- assumption.
- apply XJO_red_forkdeath2.
- Hint Rewrite is_xis_val_equiv.
- apply is_xis_val_equiv.
- assumption.
- apply XJO_red_ret.
- apply is_xis_val_equiv.
- assumption.
- apply red_not_value in H.
- apply is_xis_val_equiv_neg in H.
- apply XJO_red_evalret; intuition.
- apply red_not_value in H.
- apply is_xis_val_equiv_neg in H.
- apply XJO_red_evalbind; intuition.
- apply red_not_value in H.
- apply is_xis_val_equiv_neg in H.
- apply XJO_red_movebind; intuition.
- apply is_xis_val_equiv in H.
- apply XJO_red_dobind; intuition.
- apply red_not_value in H0; apply is_xis_val_equiv_neg in H0; apply XJO_red_context_app2; intuition.
- apply is_xis_val_equiv in H; assumption.
- apply red_not_value in H; apply is_xis_val_equiv_neg in H; apply XJO_red_context_app1; intuition.
-  apply red_not_value in H; apply is_xis_val_equiv_neg in H; apply XJO_red_pair_1; intuition.
- apply red_not_value in H0; apply is_xis_val_equiv_neg in H0; apply XJO_red_pair_2; intuition.
- apply is_xis_val_equiv in H; assumption.
- apply is_xis_val_equiv in H0; apply XJO_red_inpair; intuition; apply is_xis_val_equiv in H; assumption.
- apply red_not_value in H; apply is_xis_val_equiv_neg in H; apply XJO_red_inpair_eval1; intuition.
- apply red_not_value in H0; apply is_xis_val_equiv_neg in H0; apply XJO_red_inpair_eval2; intuition;
- apply is_xis_val_equiv in H; assumption.
- apply is_xis_val_equiv in H0; apply XJO_red_proj1; intuition; apply is_xis_val_equiv in H; assumption.
- apply is_xis_val_equiv in H0; apply XJO_red_proj2; intuition; apply is_xis_val_equiv in H; assumption.
- apply red_not_value in H; apply is_xis_val_equiv_neg in H; apply XJO_red_proj1_eval; intuition.
- apply red_not_value in H; apply is_xis_val_equiv_neg in H; apply XJO_red_proj2_eval; intuition.
- apply is_xis_val_equiv in H; apply XJO_red_evalcaseinl; intuition.
- apply is_xis_val_equiv in H; apply XJO_red_evalcaseinr; intuition.
- apply red_not_value in H; apply is_xis_val_equiv_neg in H; apply XJO_red_evalcase; intuition.
+ induction H; intuition; try solve [
+    apply is_xis_val_equiv in H; intuition | 
+    apply red_not_value in H; apply is_xis_val_equiv_neg in H; intuition |
+    apply is_xis_val_equiv in H; apply red_not_value in H0; apply is_xis_val_equiv_neg in H0; intuition |
+    apply red_not_value in H; apply is_xis_val_equiv_neg in H; apply is_xis_val_equiv_neg in H0; intuition |
+    apply red_not_value in H0; apply is_xis_val_equiv_neg in H0; intuition |
+    apply is_xis_val_equiv in H0; apply is_xis_val_equiv in H; intuition].
 Qed.
 
 Lemma xJO_then_JO : forall (e e' : expr) (s : select),XJO_red e s e' -> (exists (rl : redlabel), e [ s ] --> [ rl ] e').

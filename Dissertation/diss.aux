@@ -72,6 +72,9 @@
 \citation{Ott}
 \@writefile{toc}{\contentsline {section}{\numberline {2.4}Tools}{9}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces High level view of the tool chain\relax }}{10}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:simpl_toolchain}{{2.1}{10}}
+\newlabel{fig:simpl_toolchain@cref}{{[figure][1][2]2.1}{10}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}Ott}{10}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {2.1}Ott metavariable definition}{10}}
 \newlabel{lst:ottgrammarex}{{2.2}{10}}
@@ -125,7 +128,7 @@
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \citation{pierce2002types}
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\citation{church1940formulation}
 \newlabel{lst:mocamlexample}{{3.1}{22}}
 \newlabel{lst:mocamlexample@cref}{{[listing][1][3]3.1}{22}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {3.1}A simple example in MOCaml}{22}}
@@ -133,250 +136,340 @@
 \newlabel{lst:mocamlexample_boxc@cref}{{[line][2][]2}{22}}
 \newlabel{lst:mocamlexample_forkbuilder}{{4}{22}}
 \newlabel{lst:mocamlexample_forkbuilder@cref}{{[line][4][]4}{22}}
-\newlabel{lst:mocamlexample_randsched_start}{{11}{22}}
-\newlabel{lst:mocamlexample_randsched_start@cref}{{[line][11][]11}{22}}
-\newlabel{lst:mocamlexample_randsched_end}{{14}{22}}
-\newlabel{lst:mocamlexample_randsched_end@cref}{{[line][14][]14}{22}}
-\newlabel{lst:mocamlexample_passtosched}{{21}{22}}
-\newlabel{lst:mocamlexample_passtosched@cref}{{[line][21][]21}{22}}
+\newlabel{lst:mocamlexample_randsched_start}{{12}{22}}
+\newlabel{lst:mocamlexample_randsched_start@cref}{{[line][12][]12}{22}}
+\newlabel{lst:mocamlexample_randsched_end}{{15}{22}}
+\newlabel{lst:mocamlexample_randsched_end@cref}{{[line][15][]15}{22}}
+\newlabel{lst:mocamlexample_passtosched}{{23}{22}}
+\newlabel{lst:mocamlexample_passtosched@cref}{{[line][23][]23}{22}}
+\newlabel{sec:detailed_impl}{{3}{22}}
+\newlabel{sec:detailed_impl@cref}{{[chapter][3][]3}{22}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.1}The semantics}{22}}
 \newlabel{sec:the-semanticssec:the-semantics}{{3.1}{22}}
 \newlabel{sec:the-semanticssec:the-semantics@cref}{{[section][1][3]3.1}{22}}
-\citation{pierce2002types}
 \@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Detailed outline of the implementation\relax }}{23}}
 \newlabel{fig:detailedimploutline}{{3.1}{23}}
 \newlabel{fig:detailedimploutline@cref}{{[figure][1][3]3.1}{23}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Sequential features: arrow, sum and product types, fixpoint}{24}}
+\@writefile{toc}{\contentsline {subsubsection}{The type judgement relation}{24}}
+\newlabel{eq:t-var}{{{T-Var}}{24}}
+\newlabel{eq:t-var@cref}{{[equation][2147483647][]{T-Var}}{24}}
+\newlabel{eq:t-unit}{{{T-Unit}}{24}}
+\newlabel{eq:t-unit@cref}{{[equation][2147483647][]{T-Unit}}{24}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces \input diss-1.cpt\relax \relax }}{24}}
+\newlabel{fig:typing_semantics}{{3.2}{24}}
+\newlabel{fig:typing_semantics@cref}{{[figure][2][3]3.2}{24}}
 \citation{pierce2002types}
 \citation{pierce2002types}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Basic features: arrow, sum and product types, fixpoint}{24}}
-\@writefile{toc}{\contentsline {subsubsection}{Arrow types}{24}}
-\newlabel{eq:t_fun}{{{T-Fun}}{24}}
-\newlabel{eq:t_fun@cref}{{[equation][2147483647][]{T-Fun}}{24}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Syntax and typing of arrow types\relax }}{24}}
-\newlabel{fig:syntyparrow}{{3.2}{24}}
-\newlabel{fig:syntyparrow@cref}{{[figure][2][3]3.2}{24}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Syntax and typing of sum types\relax }}{25}}
-\newlabel{fig:semsyntype}{{3.3}{25}}
-\newlabel{fig:semsyntype@cref}{{[figure][3][3]3.3}{25}}
+\@writefile{toc}{\contentsline {subsubsection}{Arrow types}{25}}
+\newlabel{eq:t_fun}{{{T-Abs}}{25}}
+\newlabel{eq:t_fun@cref}{{[equation][2147483647][]{T-Abs}}{25}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Syntax and typing of arrow types\relax }}{25}}
+\newlabel{fig:syntyparrow}{{3.3}{25}}
+\newlabel{fig:syntyparrow@cref}{{[figure][3][3]3.3}{25}}
 \@writefile{toc}{\contentsline {subsubsection}{Sum types}{25}}
-\@writefile{toc}{\contentsline {subsubsection}{Product types}{25}}
 \citation{pierce2002types}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Syntax and typing of product types\relax }}{26}}
-\newlabel{fig:syntypprod}{{3.4}{26}}
-\newlabel{fig:syntypprod@cref}{{[figure][4][3]3.4}{26}}
-\@writefile{toc}{\contentsline {subsubsection}{Fixpoint combinator}{26}}
-\newlabel{eq:t_fix}{{{T-Fix}}{26}}
-\newlabel{eq:t_fix@cref}{{[equation][2147483647][]{T-Fix}}{26}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces Syntax and typing of the fixpoint operator\relax }}{26}}
-\newlabel{fig:semfix}{{3.5}{26}}
-\newlabel{fig:semfix@cref}{{[figure][5][3]3.5}{26}}
-\citation{milner1982calculus}
+\newlabel{eq:t-left}{{{T-Left}}{26}}
+\newlabel{eq:t-left@cref}{{[equation][2147483647][]{T-Left}}{26}}
+\newlabel{eq:t-right}{{{T-Right}}{26}}
+\newlabel{eq:t-right@cref}{{[equation][2147483647][]{T-Right}}{26}}
+\newlabel{eq:t-case}{{{T-Case}}{26}}
+\newlabel{eq:t-case@cref}{{[equation][2147483647][]{T-Case}}{26}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Syntax and typing of sum types\relax }}{26}}
+\newlabel{fig:semsyntype}{{3.4}{26}}
+\newlabel{fig:semsyntype@cref}{{[figure][4][3]3.4}{26}}
+\@writefile{toc}{\contentsline {subsubsection}{Product types}{26}}
+\newlabel{eq:t-pair}{{{T-Pair}}{27}}
+\newlabel{eq:t-pair@cref}{{[equation][2147483647][]{T-Pair}}{27}}
+\newlabel{eq:t-proj1}{{{T-Proj1}}{27}}
+\newlabel{eq:t-proj1@cref}{{[equation][2147483647][]{T-Proj1}}{27}}
+\newlabel{eq:t-proj2}{{{T-Proj2}}{27}}
+\newlabel{eq:t-proj2@cref}{{[equation][2147483647][]{T-Proj2}}{27}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces Syntax and typing of product types\relax }}{27}}
+\newlabel{fig:syntypprod}{{3.5}{27}}
+\newlabel{fig:syntypprod@cref}{{[figure][5][3]3.5}{27}}
+\@writefile{toc}{\contentsline {subsubsection}{Fixpoint combinator}{27}}
+\newlabel{eq:t_fix}{{{T-Fix}}{27}}
+\newlabel{eq:t_fix@cref}{{[equation][2147483647][]{T-Fix}}{27}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.6}{\ignorespaces Syntax and typing of the fixpoint operator\relax }}{27}}
+\newlabel{fig:semfix}{{3.6}{27}}
+\newlabel{fig:semfix@cref}{{[figure][6][3]3.6}{27}}
 \newlabel{eq:t_all}{{{T-All}}{27}}
 \newlabel{eq:t_all@cref}{{[equation][2147483647][]{T-All}}{27}}
-\@writefile{toc}{\contentsline {subsubsection}{Operational semantics of the basic MOCaml features}{27}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.6}{\ignorespaces Syntax of the reduction relation and operational semantics of arrow types\relax }}{28}}
-\newlabel{fig:evalarrow}{{3.6}{28}}
-\newlabel{fig:evalarrow@cref}{{[figure][6][3]3.6}{28}}
-\newlabel{sec:subst_caveat}{{3.1.1}{28}}
-\newlabel{sec:subst_caveat@cref}{{[subsection][1][3,1]3.1.1}{28}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.7}{\ignorespaces Operational semantics of sum types\relax }}{29}}
-\newlabel{fig:semeval}{{3.7}{29}}
-\newlabel{fig:semeval@cref}{{[figure][7][3]3.7}{29}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.8}{\ignorespaces Operational semantics of product types\relax }}{30}}
-\newlabel{fig:evalprod}{{3.8}{30}}
-\newlabel{fig:evalprod@cref}{{[figure][8][3]3.8}{30}}
+\citation{milner1982calculus}
+\@writefile{toc}{\contentsline {subsubsection}{The reduction relation of MOCaml}{28}}
+\newlabel{eq:red}{{{Red}}{28}}
+\newlabel{eq:red@cref}{{[equation][2147483647][]{Red}}{28}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.7}{\ignorespaces Syntax and semantics of the reduction relations\relax }}{28}}
+\newlabel{fig:reductiom_semantics}{{3.7}{28}}
+\newlabel{fig:reductiom_semantics@cref}{{[figure][7][3]3.7}{28}}
+\newlabel{lst:coqselectstar}{{3.2}{28}}
+\newlabel{lst:coqselectstar@cref}{{[listing][2][3]3.2}{28}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.2}Coq co-inductive decision sequence}{28}}
+\@writefile{toc}{\contentsline {subsubsection}{Operational semantics of the sequential MOCaml features}{29}}
+\newlabel{eq:r-subst}{{{R-Subst}}{29}}
+\newlabel{eq:r-subst@cref}{{[equation][2147483647][]{R-Subst}}{29}}
+\newlabel{eq:r-app1}{{{R-App1}}{29}}
+\newlabel{eq:r-app1@cref}{{[equation][2147483647][]{R-App1}}{29}}
+\newlabel{eq:r-app2}{{{R-App2}}{29}}
+\newlabel{eq:r-app2@cref}{{[equation][2147483647][]{R-App2}}{29}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.8}{\ignorespaces Syntax of the reduction relation and operational semantics of arrow types\relax }}{29}}
+\newlabel{fig:evalarrow}{{3.8}{29}}
+\newlabel{fig:evalarrow@cref}{{[figure][8][3]3.8}{29}}
+\newlabel{sec:subst_caveat}{{3.1.1}{30}}
+\newlabel{sec:subst_caveat@cref}{{[subsection][1][3,1]3.1.1}{30}}
+\newlabel{eq:r-left}{{{R-Left}}{30}}
+\newlabel{eq:r-left@cref}{{[equation][2147483647][]{R-Left}}{30}}
+\newlabel{eq:r-right}{{{R-Right}}{30}}
+\newlabel{eq:r-right@cref}{{[equation][2147483647][]{R-Right}}{30}}
+\newlabel{eq:r-case}{{{R-Case}}{30}}
+\newlabel{eq:r-case@cref}{{[equation][2147483647][]{R-Case}}{30}}
+\newlabel{eq:r-casel}{{{R-CaseL}}{30}}
+\newlabel{eq:r-casel@cref}{{[equation][2147483647][]{R-CaseL}}{30}}
+\newlabel{eq:r-caser}{{{R-CaseR}}{30}}
+\newlabel{eq:r-caser@cref}{{[equation][2147483647][]{R-CaseR}}{30}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.9}{\ignorespaces Operational semantics of sum types\relax }}{30}}
+\newlabel{fig:semeval}{{3.9}{30}}
+\newlabel{fig:semeval@cref}{{[figure][9][3]3.9}{30}}
+\newlabel{eq:r-pair1}{{{R-Pair1}}{31}}
+\newlabel{eq:r-pair1@cref}{{[equation][2147483647][]{R-Pair1}}{31}}
+\newlabel{eq:r-pair2}{{{R-Pair2}}{31}}
+\newlabel{eq:r-pair2@cref}{{[equation][2147483647][]{R-Pair2}}{31}}
+\newlabel{eq:r-proj1}{{{R-Proj1}}{31}}
+\newlabel{eq:r-proj1@cref}{{[equation][2147483647][]{R-Proj1}}{31}}
+\newlabel{eq:r-evalproj1}{{{R-Proj1-Eval}}{31}}
+\newlabel{eq:r-evalproj1@cref}{{[equation][2147483647][]{R-Proj1-Eval}}{31}}
+\newlabel{eq:r-evalproj2}{{{R-Proj2-Eval}}{31}}
+\newlabel{eq:r-evalproj2@cref}{{[equation][2147483647][]{R-Proj2-Eval}}{31}}
+\newlabel{eq:r-proj2}{{{R-Proj2}}{31}}
+\newlabel{eq:r-proj2@cref}{{[equation][2147483647][]{R-Proj2}}{31}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.10}{\ignorespaces Operational semantics of product types\relax }}{31}}
+\newlabel{fig:evalprod}{{3.10}{31}}
+\newlabel{fig:evalprod@cref}{{[figure][10][3]3.10}{31}}
 \citation{pierce2002types}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.9}{\ignorespaces Operational semantics of the fixpoint operator\relax }}{31}}
-\newlabel{fig:evalfix}{{3.9}{31}}
-\newlabel{fig:evalfix@cref}{{[figure][9][3]3.9}{31}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}Extensions: computation place holders, monadic primitives and fork}{32}}
-\@writefile{toc}{\contentsline {subsubsection}{Computation place holders}{32}}
-\newlabel{sec:comp_place_syn}{{3.1.2}{32}}
-\newlabel{sec:comp_place_syn@cref}{{[subsection][2][3,1]3.1.2}{32}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.10}{\ignorespaces Syntax and typing of the computation place holder\relax }}{32}}
-\newlabel{fig:syntypcomp}{{3.10}{32}}
-\newlabel{fig:syntypcomp@cref}{{[figure][10][3]3.10}{32}}
-\@writefile{toc}{\contentsline {subsubsection}{Monadic primitives}{32}}
+\newlabel{eq:r-fix}{{{R-Fix}}{32}}
+\newlabel{eq:r-fix@cref}{{[equation][2147483647][]{R-Fix}}{32}}
+\newlabel{eq:r-evalfix}{{{R-Fix-Eval}}{32}}
+\newlabel{eq:r-evalfix@cref}{{[equation][2147483647][]{R-Fix-Eval}}{32}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.11}{\ignorespaces Operational semantics of the fixpoint operator\relax }}{32}}
+\newlabel{fig:evalfix}{{3.11}{32}}
+\newlabel{fig:evalfix@cref}{{[figure][11][3]3.11}{32}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}Concurrency features: computation place holders, monadic primitives and fork}{33}}
+\@writefile{toc}{\contentsline {subsubsection}{Computation place holders}{33}}
+\newlabel{sec:comp_place_syn}{{3.1.2}{33}}
+\newlabel{sec:comp_place_syn@cref}{{[subsection][2][3,1]3.1.2}{33}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.12}{\ignorespaces Syntax and typing of the computation place holder\relax }}{33}}
+\newlabel{fig:syntypcomp}{{3.12}{33}}
+\newlabel{fig:syntypcomp@cref}{{[figure][12][3]3.12}{33}}
+\@writefile{toc}{\contentsline {subsubsection}{Monadic primitives}{33}}
 \citation{hoareetal2001tackling}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.11}{\ignorespaces Syntax and typing of the monadic primitives, ret and bind\relax }}{33}}
-\newlabel{fig:syntypmon}{{3.11}{33}}
-\newlabel{fig:syntypmon@cref}{{[figure][11][3]3.11}{33}}
-\@writefile{toc}{\contentsline {subsubsection}{Fork}{33}}
-\newlabel{sec:fork_sem}{{3.1.2}{33}}
-\newlabel{sec:fork_sem@cref}{{[subsection][2][3,1]3.1.2}{33}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.12}{\ignorespaces Syntax and typing of the fork operator\relax }}{34}}
-\newlabel{fig:semfork}{{3.12}{34}}
-\newlabel{fig:semfork@cref}{{[figure][12][3]3.12}{34}}
-\@writefile{toc}{\contentsline {subsubsection}{The operational semantics of the MOCaml concurrency features}{35}}
-\newlabel{sec:comp_place_sem}{{3.1.2}{35}}
-\newlabel{sec:comp_place_sem@cref}{{[subsection][2][3,1]3.1.2}{35}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.13}{\ignorespaces Operational semantics of the computation placeholder\relax }}{35}}
-\newlabel{fig:evalcomp}{{3.13}{35}}
-\newlabel{fig:evalcomp@cref}{{[figure][13][3]3.13}{35}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.14}{\ignorespaces Operational semantics of the monadic primitives, ret and bind\relax }}{36}}
-\newlabel{fig:evalmon}{{3.14}{36}}
-\newlabel{fig:evalmon@cref}{{[figure][14][3]3.14}{36}}
-\newlabel{eq:forkmove1}{{{R-Forkmove1}}{37}}
-\newlabel{eq:forkmove1@cref}{{[equation][2147483647][]{R-Forkmove1}}{37}}
-\newlabel{eq:forkmove2}{{{R-Forkmove2}}{37}}
-\newlabel{eq:forkmove2@cref}{{[equation][2147483647][]{R-Forkmove2}}{37}}
-\newlabel{eq:forkeval1}{{{R-Forkeval1}}{37}}
-\newlabel{eq:forkeval1@cref}{{[equation][2147483647][]{R-Forkeval1}}{37}}
-\newlabel{eq:forkeval2}{{{R-Forkeval2}}{37}}
-\newlabel{eq:forkeval2@cref}{{[equation][2147483647][]{R-Forkeval2}}{37}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.15}{\ignorespaces Operational semantics of the fork operator\relax }}{37}}
-\newlabel{fig:evalfork}{{3.15}{37}}
-\newlabel{fig:evalfork@cref}{{[figure][15][3]3.15}{37}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.2}Proof assisstant system}{38}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Outline of the proof assistant code}{38}}
-\newlabel{lst:otttypexpr}{{3.2}{38}}
-\newlabel{lst:otttypexpr@cref}{{[listing][2][3]3.2}{38}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.2}Ott type expressions}{38}}
-\newlabel{lst:coqtypexpr}{{3.3}{38}}
-\newlabel{lst:coqtypexpr@cref}{{[listing][3][3]3.3}{38}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.3}Coq type expr}{38}}
-\newlabel{lst:ottvaluesub}{{3.4}{39}}
-\newlabel{lst:ottvaluesub@cref}{{[listing][4][3]3.4}{39}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.4}Ott value subgrammar}{39}}
-\newlabel{lst:coqvaluesub}{{3.5}{39}}
-\newlabel{lst:coqvaluesub@cref}{{[listing][5][3]3.5}{39}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.5}Coq value subgrammar}{39}}
-\newlabel{lst:coqexprsubst}{{3.6}{40}}
-\newlabel{lst:coqexprsubst@cref}{{[listing][6][3]3.6}{40}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.6}Coq expression substitution}{40}}
-\newlabel{lst:ottcontextapp1}{{3.7}{40}}
-\newlabel{lst:ottcontextapp1@cref}{{[listing][7][3]3.7}{40}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.7}Ott reduction relation example}{40}}
-\newlabel{lst:coqlogind}{{3.8}{40}}
-\newlabel{lst:coqlogind@cref}{{[listing][8][3]3.8}{40}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.8}Coq reduction relation example}{40}}
-\newlabel{lst:coqeqlabel}{{3.9}{40}}
-\newlabel{lst:coqeqlabel@cref}{{[listing][9][3]3.9}{40}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.9}Coq variable equality lemma}{40}}
+\newlabel{eq:t-live}{{{T-LiveExpr}}{34}}
+\newlabel{eq:t-live@cref}{{[equation][2147483647][]{T-LiveExpr}}{34}}
+\newlabel{eq:t-ret}{{{T-Ret}}{34}}
+\newlabel{eq:t-ret@cref}{{[equation][2147483647][]{T-Ret}}{34}}
+\newlabel{eq:t-bind}{{{T-Bind}}{34}}
+\newlabel{eq:t-bind@cref}{{[equation][2147483647][]{T-Bind}}{34}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.13}{\ignorespaces Syntax and typing of the monadic primitives, ret and bind\relax }}{34}}
+\newlabel{fig:syntypmon}{{3.13}{34}}
+\newlabel{fig:syntypmon@cref}{{[figure][13][3]3.13}{34}}
+\@writefile{toc}{\contentsline {subsubsection}{Fork}{34}}
+\newlabel{sec:fork_sem}{{3.1.2}{34}}
+\newlabel{sec:fork_sem@cref}{{[subsection][2][3,1]3.1.2}{34}}
+\newlabel{eq:t-fork}{{{T-Fork}}{34}}
+\newlabel{eq:t-fork@cref}{{[equation][2147483647][]{T-Fork}}{34}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.14}{\ignorespaces Syntax and typing of the fork operator\relax }}{34}}
+\newlabel{fig:semfork}{{3.14}{34}}
+\newlabel{fig:semfork@cref}{{[figure][14][3]3.14}{34}}
+\newlabel{eq:fork_full_sig}{{{Fork-Full-Signature}}{36}}
+\newlabel{eq:fork_full_sig@cref}{{[equation][2147483647][]{Fork-Full-Signature}}{36}}
+\@writefile{toc}{\contentsline {subsubsection}{The operational semantics of the MOCaml concurrency features}{36}}
+\newlabel{sec:comp_place_sem}{{3.1.2}{36}}
+\newlabel{sec:comp_place_sem@cref}{{[subsection][2][3,1]3.1.2}{36}}
+\newlabel{eq:r-evalcomp}{{{R-DoComp}}{36}}
+\newlabel{eq:r-evalcomp@cref}{{[equation][2147483647][]{R-DoComp}}{36}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.15}{\ignorespaces Operational semantics of the computation placeholder\relax }}{36}}
+\newlabel{fig:evalcomp}{{3.15}{36}}
+\newlabel{fig:evalcomp@cref}{{[figure][15][3]3.15}{36}}
+\newlabel{lst:ocaml_comp_place}{{3.3}{36}}
+\newlabel{lst:ocaml_comp_place@cref}{{[listing][3][3]3.3}{36}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.3}OCaml computation placeholder example}{36}}
+\newlabel{lst:ocaml_red_comp}{{3.4}{36}}
+\newlabel{lst:ocaml_red_comp@cref}{{[listing][4][3]3.4}{36}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.4}Reduction case for computation placeholders in the runnable OCaml}{36}}
+\newlabel{eq:r-ret}{{{R-Return}}{37}}
+\newlabel{eq:r-ret@cref}{{[equation][2147483647][]{R-Return}}{37}}
+\newlabel{eq:r-evalret}{{{R-Evalret}}{37}}
+\newlabel{eq:r-evalret@cref}{{[equation][2147483647][]{R-Evalret}}{37}}
+\newlabel{eq:r-dobind}{{{R-Dobind}}{37}}
+\newlabel{eq:r-dobind@cref}{{[equation][2147483647][]{R-Dobind}}{37}}
+\newlabel{eq:r-movebind}{{{R-Movebind}}{37}}
+\newlabel{eq:r-movebind@cref}{{[equation][2147483647][]{R-Movebind}}{37}}
+\newlabel{eq:r-evalbind}{{{R-Evalbind}}{37}}
+\newlabel{eq:r-evalbind@cref}{{[equation][2147483647][]{R-Evalbind}}{37}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.16}{\ignorespaces Operational semantics of the monadic primitives, ret and bind\relax }}{37}}
+\newlabel{fig:evalmon}{{3.16}{37}}
+\newlabel{fig:evalmon@cref}{{[figure][16][3]3.16}{37}}
+\newlabel{eq:forkmove1}{{{R-Forkmove1}}{38}}
+\newlabel{eq:forkmove1@cref}{{[equation][2147483647][]{R-Forkmove1}}{38}}
+\newlabel{eq:forkmove2}{{{R-Forkmove2}}{38}}
+\newlabel{eq:forkmove2@cref}{{[equation][2147483647][]{R-Forkmove2}}{38}}
+\newlabel{eq:r-forkdeath1}{{{R-Forkdeath1}}{38}}
+\newlabel{eq:r-forkdeath1@cref}{{[equation][2147483647][]{R-Forkdeath1}}{38}}
+\newlabel{eq:r-forkdeath2}{{{R-Forkdeath2}}{38}}
+\newlabel{eq:r-forkdeath2@cref}{{[equation][2147483647][]{R-Forkdeath2}}{38}}
+\newlabel{eq:forkeval1}{{{R-Forkeval1}}{38}}
+\newlabel{eq:forkeval1@cref}{{[equation][2147483647][]{R-Forkeval1}}{38}}
+\newlabel{eq:forkeval2}{{{R-Forkeval2}}{38}}
+\newlabel{eq:forkeval2@cref}{{[equation][2147483647][]{R-Forkeval2}}{38}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.17}{\ignorespaces Operational semantics of the fork operator\relax }}{38}}
+\newlabel{fig:evalfork}{{3.17}{38}}
+\newlabel{fig:evalfork@cref}{{[figure][17][3]3.17}{38}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Proof assisstant system}{40}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Outline of the proof assistant code}{40}}
+\newlabel{lst:otttypexpr}{{3.5}{40}}
+\newlabel{lst:otttypexpr@cref}{{[listing][5][3]3.5}{40}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.5}Ott type expressions}{40}}
+\newlabel{lst:coqtypexpr}{{3.6}{40}}
+\newlabel{lst:coqtypexpr@cref}{{[listing][6][3]3.6}{40}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.6}Coq type expr}{40}}
+\newlabel{lst:ottvaluesub}{{3.7}{41}}
+\newlabel{lst:ottvaluesub@cref}{{[listing][7][3]3.7}{41}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.7}Ott value subgrammar}{41}}
+\newlabel{lst:coqvaluesub}{{3.8}{41}}
+\newlabel{lst:coqvaluesub@cref}{{[listing][8][3]3.8}{41}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.8}Coq value subgrammar}{41}}
+\newlabel{lst:coqexprsubst}{{3.9}{42}}
+\newlabel{lst:coqexprsubst@cref}{{[listing][9][3]3.9}{42}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.9}Coq expression substitution}{42}}
+\newlabel{lst:ottcontextapp1}{{3.10}{42}}
+\newlabel{lst:ottcontextapp1@cref}{{[listing][10][3]3.10}{42}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.10}Ott reduction relation example}{42}}
+\newlabel{lst:coqlogind}{{3.11}{42}}
+\newlabel{lst:coqlogind@cref}{{[listing][11][3]3.11}{42}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.11}Coq reduction relation example}{42}}
+\newlabel{lst:coqeqlabel}{{3.12}{42}}
+\newlabel{lst:coqeqlabel@cref}{{[listing][12][3]3.12}{42}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.12}Coq variable equality lemma}{42}}
 \citation{delahaye2007extracting}
 \citation{tollitte2012producing}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Extractable reduction relation}{41}}
-\newlabel{sec:extractable_plugin_descr}{{3.2.2}{41}}
-\newlabel{sec:extractable_plugin_descr@cref}{{[subsection][2][3,2]3.2.2}{41}}
-\newlabel{eq:forkmove1ex}{{{R-Forkmove1}}{41}}
-\newlabel{eq:forkmove1ex@cref}{{[equation][2147483647][]{R-Forkmove1}}{41}}
-\newlabel{eq:forkmove2ex}{{{R-Forkmove2}}{41}}
-\newlabel{eq:forkmove2ex@cref}{{[equation][2147483647][]{R-Forkmove2}}{41}}
-\newlabel{lst:coqselectstar}{{3.10}{42}}
-\newlabel{lst:coqselectstar@cref}{{[listing][10][3]3.10}{42}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.10}Coq co-inductive selection sequence}{42}}
-\newlabel{lst:coqredunsafe}{{3.11}{42}}
-\newlabel{lst:coqredunsafe@cref}{{[listing][11][3]3.11}{42}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.11}Coq reduction clause with unsafe assumption}{42}}
-\newlabel{lst:coqxredsafe}{{3.12}{42}}
-\newlabel{lst:coqxredsafe@cref}{{[listing][12][3]3.12}{42}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.12}Coq extractable reduction clause with safe assumption}{42}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}OCaml system}{42}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Extractable reduction relation}{43}}
+\newlabel{sec:extractable_plugin_descr}{{3.2.2}{43}}
+\newlabel{sec:extractable_plugin_descr@cref}{{[subsection][2][3,2]3.2.2}{43}}
+\newlabel{lst:coqredunsafe}{{3.13}{43}}
+\newlabel{lst:coqredunsafe@cref}{{[listing][13][3]3.13}{43}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.13}Coq reduction clause with unsafe assumption}{43}}
+\newlabel{lst:coqxredsafe}{{3.14}{43}}
+\newlabel{lst:coqxredsafe@cref}{{[listing][14][3]3.14}{43}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.14}Coq extractable reduction clause with safe assumption}{43}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}OCaml system}{44}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Outline of the OCaml code}{44}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Hand modifications and justifications}{44}}
+\newlabel{lst:ocaml_comp_place2}{{3.15}{44}}
+\newlabel{lst:ocaml_comp_place2@cref}{{[listing][15][3]3.15}{44}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.15}OCaml computation placeholder example}{44}}
 \citation{tollitte2012producing}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Outline of the OCaml code}{43}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Hand modifications and justifications}{43}}
-\newlabel{lst:ocamllazystar}{{3.13}{43}}
-\newlabel{lst:ocamllazystar@cref}{{[listing][13][3]3.13}{43}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.13}OCaml lazy selectstar}{43}}
-\newlabel{lst:ocamlstreamstar}{{3.14}{43}}
-\newlabel{lst:ocamlstreamstar@cref}{{[listing][14][3]3.14}{43}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.14}OCaml stream selectstar}{43}}
-\newlabel{lst:ocamlorigsub}{{3.15}{44}}
-\newlabel{lst:ocamlorigsub@cref}{{[listing][15][3]3.15}{44}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.15}OCaml original substitution case}{44}}
-\newlabel{lst:ocamlorigapp}{{3.16}{44}}
-\newlabel{lst:ocamlorigapp@cref}{{[listing][16][3]3.16}{44}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.16}OCaml original application case}{44}}
-\newlabel{lst:ocamlunneededmatchonfun}{{4}{44}}
-\newlabel{lst:ocamlunneededmatchonfun@cref}{{[line][4][]4}{44}}
-\newlabel{lst:ocamlvalexpappcaseStart}{{7}{44}}
-\newlabel{lst:ocamlvalexpappcaseStart@cref}{{[line][7][]7}{44}}
-\newlabel{lst:ocamlvalexpappcaseEnd}{{10}{44}}
-\newlabel{lst:ocamlvalexpappcaseEnd@cref}{{[line][10][]10}{44}}
-\newlabel{lst:ocamlunneededdefault2}{{11}{44}}
-\newlabel{lst:ocamlunneededdefault2@cref}{{[line][11][]11}{44}}
-\newlabel{lst:ocamlfixsub}{{3.17}{44}}
-\newlabel{lst:ocamlfixsub@cref}{{[listing][17][3]3.17}{44}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.17}OCaml fixed substitution case}{44}}
-\newlabel{lst:ocamlswapassume}{{3.18}{45}}
-\newlabel{lst:ocamlswapassume@cref}{{[listing][18][3]3.18}{45}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.18}OCaml swapped assumptions}{45}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Syntactic sugar}{45}}
-\newlabel{lst:ocamlrrsched}{{3.19}{46}}
-\newlabel{lst:ocamlrrsched@cref}{{[listing][19][3]3.19}{46}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.19}OCaml round-robin scheduler}{46}}
-\newlabel{lst:ocamlrandsched}{{3.20}{46}}
-\newlabel{lst:ocamlrandsched@cref}{{[listing][20][3]3.20}{46}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.20}OCaml random scheduler}{46}}
+\newlabel{lst:ocamllazystar}{{3.16}{45}}
+\newlabel{lst:ocamllazystar@cref}{{[listing][16][3]3.16}{45}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.16}OCaml lazy select}{45}}
+\newlabel{lst:ocamlstreamstar}{{3.17}{45}}
+\newlabel{lst:ocamlstreamstar@cref}{{[listing][17][3]3.17}{45}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.17}OCaml stream select}{45}}
+\newlabel{lst:ocamlorigsub}{{3.18}{45}}
+\newlabel{lst:ocamlorigsub@cref}{{[listing][18][3]3.18}{45}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.18}OCaml original substitution case}{45}}
+\newlabel{lst:ocamlorigapp}{{3.19}{45}}
+\newlabel{lst:ocamlorigapp@cref}{{[listing][19][3]3.19}{45}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.19}OCaml original application case}{45}}
+\newlabel{lst:ocamlunneededmatchonfun}{{4}{45}}
+\newlabel{lst:ocamlunneededmatchonfun@cref}{{[line][4][]4}{45}}
+\newlabel{lst:ocamlvalexpappcaseStart}{{7}{45}}
+\newlabel{lst:ocamlvalexpappcaseStart@cref}{{[line][7][]7}{45}}
+\newlabel{lst:ocamlvalexpappcaseEnd}{{10}{45}}
+\newlabel{lst:ocamlvalexpappcaseEnd@cref}{{[line][10][]10}{45}}
+\newlabel{lst:ocamlunneededdefault2}{{11}{45}}
+\newlabel{lst:ocamlunneededdefault2@cref}{{[line][11][]11}{45}}
+\newlabel{lst:ocamlfixsub}{{3.20}{46}}
+\newlabel{lst:ocamlfixsub@cref}{{[listing][20][3]3.20}{46}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.20}OCaml fixed substitution case}{46}}
+\newlabel{lst:ocamlswapassume}{{3.21}{46}}
+\newlabel{lst:ocamlswapassume@cref}{{[listing][21][3]3.21}{46}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.21}OCaml swapped assumptions}{46}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Syntactic sugar}{46}}
+\newlabel{lst:ocamlrrsched}{{3.22}{47}}
+\newlabel{lst:ocamlrrsched@cref}{{[listing][22][3]3.22}{47}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.22}OCaml round-robin scheduler}{47}}
+\newlabel{lst:ocamlrandsched}{{3.23}{47}}
+\newlabel{lst:ocamlrandsched@cref}{{[listing][23][3]3.23}{47}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.23}OCaml random scheduler}{47}}
 \citation{brookes1983behavioural}
 \citation{milner1982calculus}
 \citation{milner1982calculus}
 \citation{pierce2000behavioral}
 \citation{bergstra1986algebra}
 \citation{bergstra1985algebra}
-\@writefile{toc}{\contentsline {chapter}{\numberline {4}Evaluation}{47}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Evaluation}{49}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}Theoretical evaluation}{47}}
-\newlabel{sec:behave_equiv}{{4.1}{47}}
-\newlabel{sec:behave_equiv@cref}{{[section][1][4]4.1}{47}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Theoretical evaluation}{49}}
+\newlabel{sec:behave_equiv}{{4.1}{49}}
+\newlabel{sec:behave_equiv@cref}{{[section][1][4]4.1}{49}}
 \citation{milner1982calculus}
 \citation{sangiorgi1992problem}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Weak bisimilarity}{48}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Weak bisimilarity}{50}}
 \citation{bergstra1986algebra}
 \citation{bergstra1984process}
-\newlabel{defn:weak_bisimilarity}{{4.1.6}{49}}
-\newlabel{defn:weak_bisimilarity@cref}{{[defn][6][4,1]4.1.6}{49}}
-\newlabel{defn:ve_weak_bisim}{{4.1.7}{49}}
-\newlabel{defn:ve_weak_bisim@cref}{{[defn][7][4,1]4.1.7}{49}}
-\newlabel{defn:ve_weak_bisimilarity}{{4.1.8}{49}}
-\newlabel{defn:ve_weak_bisimilarity@cref}{{[defn][8][4,1]4.1.8}{49}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Properties of the logical model}{49}}
-\newlabel{eq:fork_comm}{{4.1}{50}}
-\newlabel{eq:fork_comm@cref}{{[equation][1][4]4.1}{50}}
-\newlabel{eq:fork_assoc}{{4.2}{50}}
-\newlabel{eq:fork_assoc@cref}{{[equation][2][4]4.2}{50}}
-\newlabel{eq:choice_id}{{4.3}{50}}
-\newlabel{eq:choice_id@cref}{{[equation][3][4]4.3}{50}}
-\newlabel{eq:fork_bind_distribute}{{4.4}{50}}
-\newlabel{eq:fork_bind_distribute@cref}{{[equation][4][4]4.4}{50}}
-\newlabel{eq:bind_assoc}{{4.5}{50}}
-\newlabel{eq:bind_assoc@cref}{{[equation][5][4]4.5}{50}}
-\newlabel{eq:fork_deadlock}{{4.6}{50}}
-\newlabel{eq:fork_deadlock@cref}{{[equation][6][4]4.6}{50}}
-\newlabel{eq:bind_deadlock}{{4.7}{50}}
-\newlabel{eq:bind_deadlock@cref}{{[equation][7][4]4.7}{50}}
-\@writefile{toc}{\contentsline {subsubsection}{Monadic laws}{50}}
-\@writefile{toc}{\contentsline {subsubsection}{Fork commutativity}{51}}
-\newlabel{lst:swapf_op}{{4.1}{52}}
-\newlabel{lst:swapf_op@cref}{{[listing][1][4]4.1}{52}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.1}Swapf operator}{52}}
-\@writefile{toc}{\contentsline {subsubsection}{Fork associativity}{52}}
-\newlabel{eq:fork_assoc_counter_r}{{{R-Assoc}}{52}}
-\newlabel{eq:fork_assoc_counter_r@cref}{{[equation][2147483647][]{R-Assoc}}{52}}
-\newlabel{eq:fork_assoc_counter_l}{{{L-Assoc}}{52}}
-\newlabel{eq:fork_assoc_counter_l@cref}{{[equation][2147483647][]{L-Assoc}}{52}}
+\newlabel{defn:weak_bisimilarity}{{4.1.6}{51}}
+\newlabel{defn:weak_bisimilarity@cref}{{[defn][6][4,1]4.1.6}{51}}
+\newlabel{defn:ve_weak_bisim}{{4.1.7}{51}}
+\newlabel{defn:ve_weak_bisim@cref}{{[defn][7][4,1]4.1.7}{51}}
+\newlabel{defn:ve_weak_bisimilarity}{{4.1.8}{51}}
+\newlabel{defn:ve_weak_bisimilarity@cref}{{[defn][8][4,1]4.1.8}{51}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Properties of the logical model}{51}}
+\newlabel{eq:fork_comm}{{4.1}{52}}
+\newlabel{eq:fork_comm@cref}{{[equation][1][4]4.1}{52}}
+\newlabel{eq:fork_assoc}{{4.2}{52}}
+\newlabel{eq:fork_assoc@cref}{{[equation][2][4]4.2}{52}}
+\newlabel{eq:choice_id}{{4.3}{52}}
+\newlabel{eq:choice_id@cref}{{[equation][3][4]4.3}{52}}
+\newlabel{eq:fork_bind_distribute}{{4.4}{52}}
+\newlabel{eq:fork_bind_distribute@cref}{{[equation][4][4]4.4}{52}}
+\newlabel{eq:bind_assoc}{{4.5}{52}}
+\newlabel{eq:bind_assoc@cref}{{[equation][5][4]4.5}{52}}
+\newlabel{eq:fork_deadlock}{{4.6}{52}}
+\newlabel{eq:fork_deadlock@cref}{{[equation][6][4]4.6}{52}}
+\newlabel{eq:bind_deadlock}{{4.7}{52}}
+\newlabel{eq:bind_deadlock@cref}{{[equation][7][4]4.7}{52}}
+\@writefile{toc}{\contentsline {subsubsection}{Monadic laws}{52}}
+\@writefile{toc}{\contentsline {subsubsection}{Fork commutativity}{53}}
+\newlabel{lst:swapf_op}{{4.1}{54}}
+\newlabel{lst:swapf_op@cref}{{[listing][1][4]4.1}{54}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.1}Swapf operator}{54}}
+\@writefile{toc}{\contentsline {subsubsection}{Fork associativity}{54}}
+\newlabel{eq:fork_assoc_counter_r}{{{R-Assoc}}{54}}
+\newlabel{eq:fork_assoc_counter_r@cref}{{[equation][2147483647][]{R-Assoc}}{54}}
+\newlabel{eq:fork_assoc_counter_l}{{{L-Assoc}}{54}}
+\newlabel{eq:fork_assoc_counter_l@cref}{{[equation][2147483647][]{L-Assoc}}{54}}
 \citation{bergstra1984process}
-\@writefile{toc}{\contentsline {subsubsection}{Deadlock properties}{53}}
-\newlabel{lst:takeright_op}{{4.2}{53}}
-\newlabel{lst:takeright_op@cref}{{[listing][2][4]4.2}{53}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.2}takeright operator}{53}}
+\@writefile{toc}{\contentsline {subsubsection}{Deadlock properties}{55}}
+\newlabel{lst:takeright_op}{{4.2}{55}}
+\newlabel{lst:takeright_op@cref}{{[listing][2][4]4.2}{55}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.2}takeright operator}{55}}
 \citation{howe1996proving}
 \citation{pitts2011howe}
-\@writefile{toc}{\contentsline {subsubsection}{Remarks on congruence}{54}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.3}Equivalence of the logical model and the extractable model}{54}}
+\@writefile{toc}{\contentsline {subsubsection}{Remarks on congruence}{56}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.3}Equivalence of the logical model and the extractable model}{56}}
 \citation{deleuzelight}
-\@writefile{toc}{\contentsline {subsubsection}{Label erasure}{55}}
-\newlabel{thm:unique_label}{{4.1.11}{55}}
-\newlabel{thm:unique_label@cref}{{[thm][11][4,1]4.1.11}{55}}
-\@writefile{toc}{\contentsline {subsubsection}{Equivalence}{55}}
-\newlabel{thm:jo_to_xjo}{{4.1.12}{55}}
-\newlabel{thm:jo_to_xjo@cref}{{[thm][12][4,1]4.1.12}{55}}
-\newlabel{thm:xjo_to_jo}{{4.1.13}{55}}
-\newlabel{thm:xjo_to_jo@cref}{{[thm][13][4,1]4.1.13}{55}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}Performance}{55}}
-\newlabel{sec:performance_eval}{{4.2}{55}}
-\newlabel{sec:performance_eval@cref}{{[section][2][4]4.2}{55}}
+\@writefile{toc}{\contentsline {subsubsection}{Label erasure}{57}}
+\newlabel{thm:unique_label}{{4.1.11}{57}}
+\newlabel{thm:unique_label@cref}{{[thm][11][4,1]4.1.11}{57}}
+\@writefile{toc}{\contentsline {subsubsection}{Equivalence}{57}}
+\newlabel{thm:jo_to_xjo}{{4.1.12}{57}}
+\newlabel{thm:jo_to_xjo@cref}{{[thm][12][4,1]4.1.12}{57}}
+\newlabel{thm:xjo_to_jo}{{4.1.13}{57}}
+\newlabel{thm:xjo_to_jo@cref}{{[thm][13][4,1]4.1.13}{57}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Performance}{57}}
+\newlabel{sec:performance_eval}{{4.2}{57}}
+\newlabel{sec:performance_eval@cref}{{[section][2][4]4.2}{57}}
 \citation{deleuzelight}
 \citation{deleuzelight}
 \citation{deleuzelight}
@@ -384,84 +477,84 @@
 \citation{deleuzelight}
 \citation{kahn1976coroutines}
 \citation{kahn1976coroutines}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Method}{56}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Examples}{57}}
-\@writefile{toc}{\contentsline {subsubsection}{Kahn process network}{57}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces \input diss-1.cpt\relax \relax }}{58}}
-\newlabel{fig:kpn_process_outline}{{4.1}{58}}
-\newlabel{fig:kpn_process_outline@cref}{{[figure][1][4]4.1}{58}}
-\newlabel{fig:kpn_exec_times_bc}{{4.2a}{59}}
-\newlabel{fig:kpn_exec_times_bc@cref}{{[subfigure][1][4,2]4.2a}{59}}
-\newlabel{sub@fig:kpn_exec_times_bc}{{a}{59}}
-\newlabel{sub@fig:kpn_exec_times_bc@cref}{{[subfigure][1][4,2]4.2a}{59}}
-\newlabel{fig:kpn_exec_times_nat}{{4.2b}{59}}
-\newlabel{fig:kpn_exec_times_nat@cref}{{[subfigure][2][4,2]4.2b}{59}}
-\newlabel{sub@fig:kpn_exec_times_nat}{{b}{59}}
-\newlabel{sub@fig:kpn_exec_times_nat@cref}{{[subfigure][2][4,2]4.2b}{59}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces \input diss-2.cpt\relax \relax }}{59}}
-\newlabel{fig:kpn_exec_times}{{4.2}{59}}
-\newlabel{fig:kpn_exec_times@cref}{{[figure][2][4]4.2}{59}}
-\@writefile{toc}{\contentsline {subsubsection}{Sieve of Eratosthenes}{59}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces \input diss-3.cpt\relax \relax }}{60}}
-\newlabel{fig:sieve_process_outline}{{4.3}{60}}
-\newlabel{fig:sieve_process_outline@cref}{{[figure][3][4]4.3}{60}}
-\newlabel{fig:sieve_exec_times_bc}{{4.4a}{60}}
-\newlabel{fig:sieve_exec_times_bc@cref}{{[subfigure][1][4,4]4.4a}{60}}
-\newlabel{sub@fig:sieve_exec_times_bc}{{a}{60}}
-\newlabel{sub@fig:sieve_exec_times_bc@cref}{{[subfigure][1][4,4]4.4a}{60}}
-\newlabel{fig:sieve_exec_times_nat}{{4.4b}{60}}
-\newlabel{fig:sieve_exec_times_nat@cref}{{[subfigure][2][4,4]4.4b}{60}}
-\newlabel{sub@fig:sieve_exec_times_nat}{{b}{60}}
-\newlabel{sub@fig:sieve_exec_times_nat@cref}{{[subfigure][2][4,4]4.4b}{60}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces \input diss-4.cpt\relax \relax }}{60}}
-\newlabel{fig:sieve_exec_times}{{4.4}{60}}
-\newlabel{fig:sieve_exec_times@cref}{{[figure][4][4]4.4}{60}}
-\newlabel{fig:sieve_without_ftt}{{4.5a}{61}}
-\newlabel{fig:sieve_without_ftt@cref}{{[subfigure][1][4,5]4.5a}{61}}
-\newlabel{sub@fig:sieve_without_ftt}{{a}{61}}
-\newlabel{sub@fig:sieve_without_ftt@cref}{{[subfigure][1][4,5]4.5a}{61}}
-\newlabel{fig:sieve_ftt}{{4.5b}{61}}
-\newlabel{fig:sieve_ftt@cref}{{[subfigure][2][4,5]4.5b}{61}}
-\newlabel{sub@fig:sieve_ftt}{{b}{61}}
-\newlabel{sub@fig:sieve_ftt@cref}{{[subfigure][2][4,5]4.5b}{61}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Sieve fork tree\relax }}{61}}
-\newlabel{fig:sieve_fork_tree}{{4.5}{61}}
-\newlabel{fig:sieve_fork_tree@cref}{{[figure][5][4]4.5}{61}}
-\@writefile{toc}{\contentsline {subsubsection}{Concurrent sort}{61}}
-\newlabel{fig:sorter_process_single}{{4.6a}{62}}
-\newlabel{fig:sorter_process_single@cref}{{[subfigure][1][4,6]4.6a}{62}}
-\newlabel{sub@fig:sorter_process_single}{{a}{62}}
-\newlabel{sub@fig:sorter_process_single@cref}{{[subfigure][1][4,6]4.6a}{62}}
-\newlabel{fig:sorter_process_full}{{4.6b}{62}}
-\newlabel{fig:sorter_process_full@cref}{{[subfigure][2][4,6]4.6b}{62}}
-\newlabel{sub@fig:sorter_process_full}{{b}{62}}
-\newlabel{sub@fig:sorter_process_full@cref}{{[subfigure][2][4,6]4.6b}{62}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces \input diss-5.cpt\relax \relax }}{62}}
-\newlabel{fig:sorter_process_outline}{{4.6}{62}}
-\newlabel{fig:sorter_process_outline@cref}{{[figure][6][4]4.6}{62}}
-\newlabel{fig:sorter_exec_times_bc}{{4.7a}{62}}
-\newlabel{fig:sorter_exec_times_bc@cref}{{[subfigure][1][4,7]4.7a}{62}}
-\newlabel{sub@fig:sorter_exec_times_bc}{{a}{62}}
-\newlabel{sub@fig:sorter_exec_times_bc@cref}{{[subfigure][1][4,7]4.7a}{62}}
-\newlabel{fig:sorter_exec_times_nat}{{4.7b}{62}}
-\newlabel{fig:sorter_exec_times_nat@cref}{{[subfigure][2][4,7]4.7b}{62}}
-\newlabel{sub@fig:sorter_exec_times_nat}{{b}{62}}
-\newlabel{sub@fig:sorter_exec_times_nat@cref}{{[subfigure][2][4,7]4.7b}{62}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces \input diss-6.cpt\relax \relax }}{62}}
-\newlabel{fig:sorter_exec_times}{{4.7}{62}}
-\newlabel{fig:sorter_exec_times@cref}{{[figure][7][4]4.7}{62}}
-\newlabel{fig:sorter_mem_bc}{{4.8a}{63}}
-\newlabel{fig:sorter_mem_bc@cref}{{[subfigure][1][4,8]4.8a}{63}}
-\newlabel{sub@fig:sorter_mem_bc}{{a}{63}}
-\newlabel{sub@fig:sorter_mem_bc@cref}{{[subfigure][1][4,8]4.8a}{63}}
-\newlabel{fig:sorter_mem_nat}{{4.8b}{63}}
-\newlabel{fig:sorter_mem_nat@cref}{{[subfigure][2][4,8]4.8b}{63}}
-\newlabel{sub@fig:sorter_mem_nat}{{b}{63}}
-\newlabel{sub@fig:sorter_mem_nat@cref}{{[subfigure][2][4,8]4.8b}{63}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces \input diss-7.cpt\relax \relax }}{63}}
-\newlabel{fig:sorter_mem}{{4.8}{63}}
-\newlabel{fig:sorter_mem@cref}{{[figure][8][4]4.8}{63}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Conclusion}{65}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Method}{58}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Examples}{59}}
+\@writefile{toc}{\contentsline {subsubsection}{Kahn process network}{59}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces \input diss-2.cpt\relax \relax }}{60}}
+\newlabel{fig:kpn_process_outline}{{4.1}{60}}
+\newlabel{fig:kpn_process_outline@cref}{{[figure][1][4]4.1}{60}}
+\newlabel{fig:kpn_exec_times_bc}{{4.2a}{61}}
+\newlabel{fig:kpn_exec_times_bc@cref}{{[subfigure][1][4,2]4.2a}{61}}
+\newlabel{sub@fig:kpn_exec_times_bc}{{a}{61}}
+\newlabel{sub@fig:kpn_exec_times_bc@cref}{{[subfigure][1][4,2]4.2a}{61}}
+\newlabel{fig:kpn_exec_times_nat}{{4.2b}{61}}
+\newlabel{fig:kpn_exec_times_nat@cref}{{[subfigure][2][4,2]4.2b}{61}}
+\newlabel{sub@fig:kpn_exec_times_nat}{{b}{61}}
+\newlabel{sub@fig:kpn_exec_times_nat@cref}{{[subfigure][2][4,2]4.2b}{61}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces \input diss-3.cpt\relax \relax }}{61}}
+\newlabel{fig:kpn_exec_times}{{4.2}{61}}
+\newlabel{fig:kpn_exec_times@cref}{{[figure][2][4]4.2}{61}}
+\@writefile{toc}{\contentsline {subsubsection}{Sieve of Eratosthenes}{61}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces \input diss-4.cpt\relax \relax }}{62}}
+\newlabel{fig:sieve_process_outline}{{4.3}{62}}
+\newlabel{fig:sieve_process_outline@cref}{{[figure][3][4]4.3}{62}}
+\newlabel{fig:sieve_exec_times_bc}{{4.4a}{62}}
+\newlabel{fig:sieve_exec_times_bc@cref}{{[subfigure][1][4,4]4.4a}{62}}
+\newlabel{sub@fig:sieve_exec_times_bc}{{a}{62}}
+\newlabel{sub@fig:sieve_exec_times_bc@cref}{{[subfigure][1][4,4]4.4a}{62}}
+\newlabel{fig:sieve_exec_times_nat}{{4.4b}{62}}
+\newlabel{fig:sieve_exec_times_nat@cref}{{[subfigure][2][4,4]4.4b}{62}}
+\newlabel{sub@fig:sieve_exec_times_nat}{{b}{62}}
+\newlabel{sub@fig:sieve_exec_times_nat@cref}{{[subfigure][2][4,4]4.4b}{62}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces \input diss-5.cpt\relax \relax }}{62}}
+\newlabel{fig:sieve_exec_times}{{4.4}{62}}
+\newlabel{fig:sieve_exec_times@cref}{{[figure][4][4]4.4}{62}}
+\newlabel{fig:sieve_without_ftt}{{4.5a}{63}}
+\newlabel{fig:sieve_without_ftt@cref}{{[subfigure][1][4,5]4.5a}{63}}
+\newlabel{sub@fig:sieve_without_ftt}{{a}{63}}
+\newlabel{sub@fig:sieve_without_ftt@cref}{{[subfigure][1][4,5]4.5a}{63}}
+\newlabel{fig:sieve_ftt}{{4.5b}{63}}
+\newlabel{fig:sieve_ftt@cref}{{[subfigure][2][4,5]4.5b}{63}}
+\newlabel{sub@fig:sieve_ftt}{{b}{63}}
+\newlabel{sub@fig:sieve_ftt@cref}{{[subfigure][2][4,5]4.5b}{63}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Sieve fork tree\relax }}{63}}
+\newlabel{fig:sieve_fork_tree}{{4.5}{63}}
+\newlabel{fig:sieve_fork_tree@cref}{{[figure][5][4]4.5}{63}}
+\@writefile{toc}{\contentsline {subsubsection}{Concurrent sort}{63}}
+\newlabel{fig:sorter_process_single}{{4.6a}{64}}
+\newlabel{fig:sorter_process_single@cref}{{[subfigure][1][4,6]4.6a}{64}}
+\newlabel{sub@fig:sorter_process_single}{{a}{64}}
+\newlabel{sub@fig:sorter_process_single@cref}{{[subfigure][1][4,6]4.6a}{64}}
+\newlabel{fig:sorter_process_full}{{4.6b}{64}}
+\newlabel{fig:sorter_process_full@cref}{{[subfigure][2][4,6]4.6b}{64}}
+\newlabel{sub@fig:sorter_process_full}{{b}{64}}
+\newlabel{sub@fig:sorter_process_full@cref}{{[subfigure][2][4,6]4.6b}{64}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces \input diss-6.cpt\relax \relax }}{64}}
+\newlabel{fig:sorter_process_outline}{{4.6}{64}}
+\newlabel{fig:sorter_process_outline@cref}{{[figure][6][4]4.6}{64}}
+\newlabel{fig:sorter_exec_times_bc}{{4.7a}{64}}
+\newlabel{fig:sorter_exec_times_bc@cref}{{[subfigure][1][4,7]4.7a}{64}}
+\newlabel{sub@fig:sorter_exec_times_bc}{{a}{64}}
+\newlabel{sub@fig:sorter_exec_times_bc@cref}{{[subfigure][1][4,7]4.7a}{64}}
+\newlabel{fig:sorter_exec_times_nat}{{4.7b}{64}}
+\newlabel{fig:sorter_exec_times_nat@cref}{{[subfigure][2][4,7]4.7b}{64}}
+\newlabel{sub@fig:sorter_exec_times_nat}{{b}{64}}
+\newlabel{sub@fig:sorter_exec_times_nat@cref}{{[subfigure][2][4,7]4.7b}{64}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces \input diss-7.cpt\relax \relax }}{64}}
+\newlabel{fig:sorter_exec_times}{{4.7}{64}}
+\newlabel{fig:sorter_exec_times@cref}{{[figure][7][4]4.7}{64}}
+\newlabel{fig:sorter_mem_bc}{{4.8a}{65}}
+\newlabel{fig:sorter_mem_bc@cref}{{[subfigure][1][4,8]4.8a}{65}}
+\newlabel{sub@fig:sorter_mem_bc}{{a}{65}}
+\newlabel{sub@fig:sorter_mem_bc@cref}{{[subfigure][1][4,8]4.8a}{65}}
+\newlabel{fig:sorter_mem_nat}{{4.8b}{65}}
+\newlabel{fig:sorter_mem_nat@cref}{{[subfigure][2][4,8]4.8b}{65}}
+\newlabel{sub@fig:sorter_mem_nat}{{b}{65}}
+\newlabel{sub@fig:sorter_mem_nat@cref}{{[subfigure][2][4,8]4.8b}{65}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces \input diss-8.cpt\relax \relax }}{65}}
+\newlabel{fig:sorter_mem}{{4.8}{65}}
+\newlabel{fig:sorter_mem@cref}{{[figure][8][4]4.8}{65}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Conclusion}{67}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \bibdata{refs}
@@ -477,84 +570,85 @@
 \bibcite{blazy2006formal}{10}
 \bibcite{blazy2009mechanized}{11}
 \bibcite{brookes1983behavioural}{12}
-\@writefile{toc}{\contentsline {chapter}{Bibliography}{67}}
-\bibcite{Claessen99functionalpearls}{13}
-\bibcite{delahaye2007extracting}{14}
-\bibcite{deleuzelight}{15}
-\bibcite{friedman1988applications}{16}
-\bibcite{ganz1999trampolined}{17}
-\bibcite{hoareetal2001tackling}{18}
-\bibcite{howe1996proving}{19}
-\bibcite{kahn1976coroutines}{20}
-\bibcite{functory}{21}
-\bibcite{kiselyov2010delimited}{22}
-\bibcite{kiselyov2012delimited}{23}
-\bibcite{leroyocaml}{24}
-\bibcite{ocamlmpi}{25}
-\bibcite{leroy2009formal}{26}
-\bibcite{letouzey2008extraction}{27}
-\bibcite{liskov1988promises}{28}
-\bibcite{lochbihler2012machine}{29}
-\bibcite{jocaml}{30}
-\bibcite{milner1982calculus}{31}
-\bibcite{OCamlLight}{32}
-\bibcite{pierce2002types}{33}
-\bibcite{pierce2000behavioral}{34}
-\bibcite{pitts2011howe}{35}
-\bibcite{sangiorgi1992problem}{36}
-\bibcite{sevvcik2011relaxed}{37}
-\bibcite{Ott}{38}
-\bibcite{shan2004shift}{39}
-\bibcite{Ocamlnet}{40}
-\bibcite{Async}{41}
-\bibcite{tollitte2012producing}{42}
-\bibcite{vouillon2008lwt}{43}
-\@writefile{toc}{\contentsline {chapter}{\numberline {A}Full semantics}{71}}
+\@writefile{toc}{\contentsline {chapter}{Bibliography}{69}}
+\bibcite{church1940formulation}{13}
+\bibcite{Claessen99functionalpearls}{14}
+\bibcite{delahaye2007extracting}{15}
+\bibcite{deleuzelight}{16}
+\bibcite{friedman1988applications}{17}
+\bibcite{ganz1999trampolined}{18}
+\bibcite{hoareetal2001tackling}{19}
+\bibcite{howe1996proving}{20}
+\bibcite{kahn1976coroutines}{21}
+\bibcite{functory}{22}
+\bibcite{kiselyov2010delimited}{23}
+\bibcite{kiselyov2012delimited}{24}
+\bibcite{leroyocaml}{25}
+\bibcite{ocamlmpi}{26}
+\bibcite{leroy2009formal}{27}
+\bibcite{letouzey2008extraction}{28}
+\bibcite{liskov1988promises}{29}
+\bibcite{lochbihler2012machine}{30}
+\bibcite{jocaml}{31}
+\bibcite{milner1982calculus}{32}
+\bibcite{OCamlLight}{33}
+\bibcite{pierce2002types}{34}
+\bibcite{pierce2000behavioral}{35}
+\bibcite{pitts2011howe}{36}
+\bibcite{sangiorgi1992problem}{37}
+\bibcite{sevvcik2011relaxed}{38}
+\bibcite{Ott}{39}
+\bibcite{shan2004shift}{40}
+\bibcite{Ocamlnet}{41}
+\bibcite{Async}{42}
+\bibcite{tollitte2012producing}{43}
+\bibcite{vouillon2008lwt}{44}
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Full semantics}{73}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{chap:fullsemantics}{{A}{78}}
-\newlabel{chap:fullsemantics@cref}{{[appendix][1][2147483647]A}{78}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {B}Coq definitions and theorem statements}{79}}
+\newlabel{chap:fullsemantics}{{A}{79}}
+\newlabel{chap:fullsemantics@cref}{{[appendix][1][2147483647]A}{79}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {B}Coq definitions and theorem statements}{80}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{cha:full_proof_statements}{{B}{80}}
-\newlabel{cha:full_proof_statements@cref}{{[appendix][2][2147483647]B}{80}}
-\@writefile{toc}{\contentsline {section}{\numberline {B.1}Weak bisimilarity definitions and theorems}{80}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.1}Definitions of reduction relations}{80}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.2}Definitions of weak bisimilarity}{81}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.3}Weak bisimilarity properties}{82}}
-\@writefile{toc}{\contentsline {section}{\numberline {B.2}Monadic laws}{82}}
-\@writefile{toc}{\contentsline {section}{\numberline {B.3}Fork and join}{82}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.4}Fork commutativity}{82}}
-\@writefile{toc}{\contentsline {section}{\numberline {B.4}Deadlock properties}{82}}
-\@writefile{toc}{\contentsline {section}{\numberline {B.5}Equivalence}{82}}
+\newlabel{cha:full_proof_statements}{{B}{81}}
+\newlabel{cha:full_proof_statements@cref}{{[appendix][2][2147483647]B}{81}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.1}Weak bisimilarity definitions and theorems}{81}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.1}Definitions of reduction relations}{81}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.2}Definitions of weak bisimilarity}{82}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.3}Weak bisimilarity properties}{83}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.2}Monadic laws}{83}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.3}Fork and join}{83}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.4}Fork commutativity}{83}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.4}Deadlock properties}{83}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.5}Equivalence}{83}}
 \citation{OCaml}
 \citation{LWT}
 \citation{Async}
 \citation{Lem}
 \citation{Ott}
-\@writefile{toc}{\contentsline {chapter}{\numberline {C}Project Proposal}{83}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {C}Project Proposal}{85}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {C.1}Introduction of work to be undertaken}{83}}
-\@writefile{toc}{\contentsline {section}{\numberline {C.2}Description of starting point}{83}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.1}Introduction of work to be undertaken}{85}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.2}Description of starting point}{85}}
 \citation{Claessen99functionalpearls}
 \citation{deleuzelight}
 \citation{vouillon2008lwt}
-\@writefile{toc}{\contentsline {section}{\numberline {C.3}Substance and structure}{84}}
-\@writefile{toc}{\contentsline {section}{\numberline {C.4}Criteria}{84}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.3}Substance and structure}{86}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.4}Criteria}{86}}
 \citation{Coq}
 \citation{OCamlLight}
 \citation{OCamlLightWeb}
-\@writefile{toc}{\contentsline {section}{\numberline {C.5}Timetable}{85}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.1}Week 1 and 2}{85}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.2}Week 3 and 4}{85}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.3}Week 5 and 6}{85}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.4}Week 7 and 8}{85}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.5}Week 9 and 10}{86}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.6}Week 11 and 12}{86}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.7}Week 13 and 14}{86}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.8}Week 15 and 16}{86}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.9}Week 17 and 18}{86}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.10}Week 19 and 20}{86}}
-\@writefile{toc}{\contentsline {section}{\numberline {C.6}Resource Declaration}{86}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.5}Timetable}{87}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.1}Week 1 and 2}{87}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.2}Week 3 and 4}{87}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.3}Week 5 and 6}{87}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.4}Week 7 and 8}{87}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.5}Week 9 and 10}{88}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.6}Week 11 and 12}{88}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.7}Week 13 and 14}{88}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.8}Week 15 and 16}{88}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.9}Week 17 and 18}{88}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5.10}Week 19 and 20}{88}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.6}Resource Declaration}{88}}

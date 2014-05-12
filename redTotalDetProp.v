@@ -814,6 +814,7 @@ Proof.
  apply red_not_value in H14; contradiction.
 Qed.
 
+(*
 Lemma  JO_red_inpair_eval1_td : forall (e e':expr) (e'':expr),
      totalDetTauStep e e'' ->
      totalDetTauStep (E_inpair e e') (E_inpair e'' e').
@@ -908,6 +909,70 @@ Proof.
  reflexivity.
  apply red_not_value in H8; contradiction.
  apply red_not_value in H9; contradiction.
+Qed.
+*)
+
+Lemma  JO_red_pair_1_td : forall (e e':expr) (e'':expr),
+     totalDetTauStep e e'' ->
+     totalDetTauStep (E_pair e e') (E_pair e'' e').
+Proof.
+intros.
+ assert (L:=H).
+ apply ttStep.
+ intuition.
+ inversion H.
+ intuition.
+ substs.
+ inversion H3.
+ substs.
+ apply tStep with (s:=s).
+ apply JO_red_pair_1.
+ assumption.
+ inversion H0.
+ substs.
+ apply tts_not_val in H; simpl in H; intuition.
+ substs.
+ inversion L.
+ intuition.
+ apply H1 in H6; intuition.
+ inversion H.
+ intuition.
+ apply tts_not_val in H; simpl in H; intuition.
+ substs.
+ inversion H0.
+ substs.
+ inversion H1.
+ substs.
+ apply tts_not_val in H; simpl in H; intuition. 
+ substs.
+ inversion L; intuition.
+ apply tStep in H7.
+ apply H8 in H7; substs; reflexivity.
+ apply tts_not_val in H; simpl in H; intuition. 
+Qed.
+
+Lemma  JO_red_pair_2_td : forall (e e':expr) (e'':expr),
+     (is_value_of_expr e) ->
+     totalDetTauStep e' e'' ->
+     totalDetTauStep (E_pair e e') (E_pair e e'').
+Proof.
+intros.
+ apply ttStep.
+ assert (L:=H0).
+ apply tts_not_val in L.
+ inversion H0.
+ substs.
+ intuition.
+ inverts H2.
+ apply tStep with (s:=s).
+ apply JO_red_pair_2; intuition.
+ inversion H3; substs; intuition.
+ apply red_not_value in H10; intuition.
+ apply H1 in H11; apply H11.
+ inverts H3.
+ inverts H5; intuition.
+ apply red_not_value in H10; intuition.
+ apply tStep in H11; apply H4 in H11; substs; reflexivity.
 Qed.
 
 

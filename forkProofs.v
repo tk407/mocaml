@@ -15,7 +15,7 @@ Load redTotalDetProp.
 Definition swapbodyl : expr :=E_ret   
                                    ( 
                                      ( E_taggingright
-                                        (E_inpair 
+                                        (E_pair 
                                           (   
                                                     (E_proj2  (E_ident (1))) 
                                           ) 
@@ -27,7 +27,7 @@ Definition swapbodyl : expr :=E_ret
 Definition swapbodyr : expr :=E_ret   
                                    (E_taggingleft  
                                      ( 
-                                        (E_inpair 
+                                        (E_pair 
                                           (   
                                                     (E_proj2  (E_ident (2))) 
                                           ) 
@@ -77,7 +77,7 @@ Proof.
  apply S_star with (y:=E_ret 
                                     ( E_taggingleft 
                                      (
-                                        (E_inpair 
+                                        (E_pair 
                                           (   
                                                     (v') 
                                           ) 
@@ -87,8 +87,8 @@ Proof.
  simpl.
  apply JO_red_evalret_td.
  apply JO_red_evalinl_td.
- simpl; auto.
- apply JO_red_inpair_eval1_td.
+ simpl; intuition.
+ apply JO_red_pair_1_td.
  simpl; auto.
  apply JO_red_proj2_td.
  trivial.
@@ -96,32 +96,22 @@ Proof.
  apply S_star with (y:=E_ret  
                                     ( E_taggingleft 
                                      ( 
-                                        (E_inpair (v') (v)  
+                                        (E_pair (v') (v)  
                                         )
                                      ))).
  apply JO_red_evalret_td.
  apply JO_red_evalinl_td.
  simpl; auto.
- apply JO_red_inpair_eval2_td.
- simpl; auto.
+ intuition.
+ apply JO_red_pair_2_td.
+ assumption.
  apply JO_red_proj1_td.
  trivial.
  trivial.
- apply S_star with (y:=((E_ret
-     ( E_taggingleft (
-        ( (E_pair v' v))))))).
- apply JO_red_evalret_td.
- simpl; auto.
- apply JO_red_evalinl_td.
- simpl; auto.
- apply JO_red_inpair_td.
- simpl; auto.
- simpl; auto.
- apply S_star with (y:=(E_live_expr ( (E_taggingleft (((E_pair v' v))))))).
+ apply star1.
  apply JO_red_ret_td.
  apply sstar1.
  simpl;auto.
- apply star_refl.
 Qed.
 
 Lemma swapf_right_b : forall (v v' : expr), 
@@ -156,33 +146,31 @@ Proof.
  apply S_star with (y:=(E_ret   
                                    (  
                                      ( E_taggingright
-                                        (E_inpair v' (E_proj1 (E_pair v v'))  
+                                        (E_pair v' (E_proj1 (E_pair v v'))  
                                         )
                                      )
                                    ))).
  simpl.
  Hint Resolve JO_red_evalret_td.
  Hint Resolve JO_red_evalinr_td.
- Hint Resolve JO_red_inpair_eval1_td.
+ Hint Resolve JO_red_pair_1_td.
+ Hint Resolve JO_red_pair_2_td.
  Hint Resolve JO_red_proj2_td.
  intuition.
+ apply JO_red_evalret_td. 
+ apply JO_red_evalinr_td; intuition; simpl in H1; intuition.
  apply S_star with (y:=(E_ret
        (
           (E_taggingright
-             (E_inpair v' v))))).
- Hint Resolve JO_red_inpair_eval2_td.
+             (E_pair v' v))))).
+ Hint Resolve JO_red_pair_2_td.
  Hint Resolve JO_red_proj1_td.
- intuition.
- apply S_star with (y:=((E_ret
-     (
-        (E_taggingright (E_pair v' v)))))).
- Hint Resolve JO_red_inpair_td.
- intuition.
- apply S_star with (y:=(E_live_expr ( ((E_taggingright (E_pair v' v)))))).
+ apply JO_red_evalret_td; intuition.
+ apply JO_red_evalinr_td; intuition; simpl in H1; intuition.
+ apply star1. 
  apply JO_red_ret_td.
  apply sstar1.
  simpl;auto.
- apply star_refl.
 Qed.
 
 Lemma swapf_left_b : forall (v v' : expr), 
