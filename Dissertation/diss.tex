@@ -4,6 +4,7 @@
 % Last updated by MR on 2 August 2001
 
 \documentclass[12pt,twoside,notitlepage]{report}
+\usepackage{stackengine}
 
 \usepackage{a4}
 \usepackage{verbatim}
@@ -14,6 +15,11 @@
 \usepackage{amsfonts}
 \usepackage{amsthm}
 \usepackage{amssymb}
+
+%\usepackage{stmaryrd}
+
+
+
 
 \makeatletter
 %\newcommand{\xleftrightarrow}[2][]{\ext@arrow 3359\leftrightarrowfill@{#1}{#2}}
@@ -30,6 +36,9 @@
    #3$%
 }
 \makeatother
+
+\newcommand{\red}[2]{\stackon[.05ex]{\stackunder[-0.05ex]{$\longrightarrow$}{$\scriptstyle #1$}}{$\scriptstyle #2$}}
+\newcommand{\xred}[1]{\stackunder[-0.05ex]{$\dashrightarrow$}{$\scriptstyle #1$}}
 
 
 % \overfence definition
@@ -147,7 +156,7 @@
 % Tikz set up
 \usepackage{tikz}
 \usepackage{tikz-cd}
-\usetikzlibrary{arrows, shapes, positioning, fit, trees, decorations.pathmorphing, decorations.markings}
+\usetikzlibrary{arrows, topaths, shapes, positioning, fit, trees, decorations.pathmorphing, decorations.markings}
 %\usepackage{harvard}
 
 \usepackage[final]{pdfpages}
@@ -454,43 +463,43 @@ To call this system a monad, I need to satisfy three axioms:
 I will return to the exact nature of the equivalence relation $ \equiv $ used in this project in the evaluation section. \label{sec:first_mention_of_equiv}
 
 
-The concept of a monad comes from category theory. Category theory is a general tool that is often used to model functional programming languages and programs. The monad concept in category theory has a slightly different, but equivalent representation. Instead of bind and ret, there are three operations: $ (T, \eta, \mu) $, commonly called lift or unit, map and join. Lift packages an object, map takes a function between regular objects and returns a function between the packaged counterparts of the objects and join unpackages a layer on a doubly packaged object. These three operations have to satisfy two conditions, called coherence conditions.
-\begin{enumerate}
-
-\item{
-\iftoggle{wordcount}{}{
-\[ \mu \circ T \mu = \mu \circ \mu T \]
-}
-Or as commutative diagram:
-\begin{center}
-\begin{tikzcd}
-T^3 \arrow{r}{T\mu} \arrow{d}[swap]{\mu T}
-& T^2 \arrow{d}{\mu} \\
-T^2 \ar{r}[swap]{\mu} & T
-\end{tikzcd}
-\end{center}
-This property roughly demands that unpackaging from three layers to one is associative.
-
-
-
-}
-\item{
-\[ \mu \circ T\eta = \mu \circ \eta T = 1_T \]
-
-Or as commutative diagram:
-\begin{center}
-\begin{tikzcd}
-T \arrow{r}{\eta T} \arrow{d}[swap]{T \eta } \arrow[equal]{rd}
-& T^2 \arrow{d}{\mu} \\
-T^2 \ar{r}[swap]{\mu} & T
-\end{tikzcd}
-\end{center}
-
-That is to say packaging and then subsequently unpackaging an object behaves as an identity.
-}
-\end{enumerate}
-
-While this formulation is equivalent to the parametric type, bind and ret approach it is rarely used mainstream programming languages.
+%The concept of a monad comes from category theory. Category theory is a general tool that is often used to model functional programming languages and programs. The monad concept in category theory has a slightly different, but equivalent representation. Instead of bind and ret, there are three operations: $ (T, \eta, \mu) $, commonly called lift or unit, map and join. Lift packages an object, map takes a function between regular objects and returns a function between the packaged counterparts of the objects and join unpackages a layer on a doubly packaged object. These three operations have to satisfy two conditions, called coherence conditions.
+%\begin{enumerate}
+%
+%\item{
+%\iftoggle{wordcount}{}{
+%\[ \mu \circ T \mu = \mu \circ \mu T \]
+%}
+%Or as commutative diagram:
+%\begin{center}
+%\begin{tikzcd}
+%T^3 \arrow{r}{T\mu} \arrow{d}[swap]{\mu T}
+%& T^2 \arrow{d}{\mu} \\
+%T^2 \ar{r}[swap]{\mu} & T
+%\end{tikzcd}
+%\end{center}
+%This property roughly demands that unpackaging from three layers to one is associative.
+%
+%
+%
+%}
+%\item{
+%\[ \mu \circ T\eta = \mu \circ \eta T = 1_T \]
+%
+%Or as commutative diagram:
+%\begin{center}
+%\begin{tikzcd}
+%T \arrow{r}{\eta T} \arrow{d}[swap]{T \eta } \arrow[equal]{rd}
+%& T^2 \arrow{d}{\mu} \\
+%T^2 \ar{r}[swap]{\mu} & T
+%\end{tikzcd}
+%\end{center}
+%
+%That is to say packaging and then subsequently unpackaging an object behaves as an identity.
+%}
+%\end{enumerate}
+%
+%While this formulation is equivalent to the parametric type, bind and ret approach it is rarely used mainstream programming languages.
 
 \section{Tools}
 The project uses a chain of three tools: \begin{enumerate}
@@ -1242,6 +1251,7 @@ Recursion is very characteristic of functional programming languages. There are 
                                                   \end{equation}
 The assumption of rule (\ref{eq:t_all}) is always true because of (\ref{eq:t_fun}) in \Cref{fig:syntyparrow}.
 
+$A \red{s}{rl} B$.
 
 \subsubsection{The reduction relation of MOCaml}
 
@@ -1267,8 +1277,8 @@ The assumption of rule (\ref{eq:t_all}) is always true because of (\ref{eq:t_fun
         \begin{minipage}{\textwidth}
          \begin{tabularx}{\textwidth}{>{\raggedright}X}
              \textit{Evaluation}  \tabularnewline   \begin{equation}
-                                     e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'
-                                     \tag{Red}\label{eq:red}\end{equation} \vspace{-9mm}
+                                    e \, \red{s}{rl} \, e'
+                                                \tag{Red}\label{eq:red}\end{equation} \vspace{-9mm}
              \end{tabularx}
         \end{minipage}
         \end{tabular}
@@ -1295,7 +1305,7 @@ CoInductive select : Set := Seq : decision -> select -> select.
 
 Co-inductive data structures represent potentially infinite data.  They are supported by a number of programming languages, since they are useful for defining data structures such as lazy lists, trees and streams. In \Cref{lst:coqselectstar} I define \verb|select| where each element is a pair of a decision and a further \verb|select| representing the rest of the decisions. 
 
-The 4-tuple $ (e, s, rl, e') $ means that given the selection operator $ s $, a starting expression $ e $  can move to expression $ e' $ with a side-effect $ rl $. I use the notation $ e \overset{rl}{\underset{s}{\longrightarrow}} e' $ as in (\ref{eq:red}) in \Cref{fig:reductiom_semantics}. The $ rl $ label may be $ \tau $ which is a silent action or an atomic action $ e $ that can be observed. A silent action $\tau$ is considered unobservable from outside MOCaml. The atomic action $e$ is considered an expression within the model.  This choice was based on the behaviour of placeholders in \Cref{sec:comp_place_syn}. The inspiration to use a labelled transition system to model side-effects comes from Milner's ``A calculus of communicating systems" book\cite{milner1982calculus}.
+The 4-tuple $ (e, s, rl, e') $ means that given the selection operator $ s $, a starting expression $ e $  can move to expression $ e' $ with a side-effect $ rl $. I use the notation $ e \red{s}{rl} e' $ as in (\ref{eq:red}) in \Cref{fig:reductiom_semantics}. The $ rl $ label may be $ \tau $ which is a silent action or an atomic action $ e $ that can be observed. A silent action $\tau$ is considered unobservable from outside MOCaml. The atomic action $e$ is considered an expression within the model.  This choice was based on the behaviour of placeholders in \Cref{sec:comp_place_syn}. The inspiration to use a labelled transition system to model side-effects comes from Milner's ``A calculus of communicating systems" book\cite{milner1982calculus}.
 
 
 
@@ -1315,20 +1325,20 @@ The 4-tuple $ (e, s, rl, e') $ means that given the selection operator $ s $, a 
         {\rule{\linewidth}{\arrayrulewidth}}\\
         \begin{minipage}{\textwidth}
          \begin{tabularx}{\textwidth}{>{\raggedright}X}
-             \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline   \begin{equation}
+             \textit{Evaluation} \hfill \fbox{$e \, \red{s}{rl} \, e'$}  \tabularnewline   \begin{equation}
                                      \inferrule
                                        {  }
-                                       { ( \lambda\, x\,:\,T. e)\, v \overset{\tau}{\underset{s}{\longrightarrow}} \{v / x\}e } \tag{R-Subst} \label{eq:r-subst}
+                                       { ( \lambda\, x\,:\,T. e)\, v \, \red{s}{\tau} \,\{v / x\}e } \tag{R-Subst} \label{eq:r-subst}
                                      \end{equation} \vspace{-5mm}
                                      \tabularnewline   \begin{equation}
                                       \inferrule
-                                       { e \overset{rl}{\underset{s}{\longrightarrow}} e''}
-                                       { e\,e' \, \overset{rl}{\underset{s}{\longrightarrow}}\, e''\, e'\,  } \tag{R-App1}\label{eq:r-app1}
+                                       { e \red{s}{rl} e''}
+                                       { e\,e' \, \red{s}{rl}\, e''\, e'\,  } \tag{R-App1}\label{eq:r-app1}
                                        \end{equation}\vspace{-5mm}
                                      \tabularnewline   \begin{equation}
                                      \inferrule
-                                      { e' \overset{rl}{\underset{s}{\longrightarrow}} e''}
-                                      { v\,e' \, \overset{rl}{\underset{s}{\longrightarrow}}\, v\, e''\,  } \tag{R-App2}\label{eq:r-app2}
+                                      { e' \red{s}{rl} e''}
+                                      { v\,e' \, \red{s}{rl}\, v\, e''\,  } \tag{R-App2}\label{eq:r-app2}
                                                                \end{equation}
              \end{tabularx}
         \end{minipage}
@@ -1356,31 +1366,31 @@ The 4-tuple $ (e, s, rl, e') $ means that given the selection operator $ s $, a 
                \end{tabularx}\\
            {\rule{\linewidth}{\arrayrulewidth}}\vspace{2mm}\\
             \begin{tabularx}{\textwidth}{>{\raggedright}X}
-                \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline \begin{equation}
+                \textit{Evaluation} \hfill \fbox{$e \,\red{s}{rl} \, e'$}  \tabularnewline \begin{equation}
                 \inferrule
-                { e \overset{rl}{\underset{s}{\longrightarrow}} e'}
-                { \textbf{left}\,e \, \overset{rl}{\underset{s}{\longrightarrow}}\, \textbf{left}\,e'\,  } \tag{R-Left} \label{eq:r-left} \end{equation}\vspace{-5mm}
+                { e \red{s}{rl} e'}
+                { \textbf{left}\,e \, \red{s}{rl}\, \textbf{left}\,e'\,  } \tag{R-Left} \label{eq:r-left} \end{equation}\vspace{-5mm}
                 \tabularnewline
                 \begin{equation}
                 \inferrule
-                { e \overset{rl}{\underset{s}{\longrightarrow}} e'}
-                { \textbf{right}\,e \, \overset{rl}{\underset{s}{\longrightarrow}}\, \textbf{right}\,e'\,  } \tag{R-Right}\label{eq:r-right} \end{equation}\vspace{-5mm} \tabularnewline  
+                { e \red{s}{rl} e'}
+                { \textbf{right}\,e \, \red{s}{rl}\, \textbf{right}\,e'\,  } \tag{R-Right}\label{eq:r-right} \end{equation}\vspace{-5mm} \tabularnewline  
                 \begin{equation}
                         \inferrule
-                                                       { e \overset{rl}{\underset{s}{\longrightarrow}} e' }
-                                                       { (\textrm{\textbf{case} $  e $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ }) \\\\ s\Big\downarrow rl \\\\
+                                                       { e \red{s}{rl} e' }
+                                                       { (\textrm{\textbf{case} $  e $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ }) \\\\ {\scriptstyle s}\!\big\downarrow\!{\scriptstyle rl} \\\\
                                                        (\textrm{\textbf{case} $  e' $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ }) } \tag{R-Case} \label{eq:r-case}
                                                      \end{equation} \vspace{-7mm}
                                                      \tabularnewline 
                            \begin{equation}
                                         \inferrule
                                           {  }
-                                          { (\textrm{\textbf{case} $  \textbf{left}\, v $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ }) \overset{\tau}{\underset{s}{\longrightarrow}} \{v / x_1\}e_1 } \tag{R-CaseL}\label{eq:r-casel}
+                                          { (\textrm{\textbf{case} $  \textbf{left}\, v $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ }) \red{s}{\tau} \{v / x_1\}e_1 } \tag{R-CaseL}\label{eq:r-casel}
                                         \end{equation}  \vspace{-11mm}
                                         \tabularnewline \begin{equation}
                                             \inferrule
                                             {  }
-                                            { (\textrm{\textbf{case} $  \textbf{right}\, v $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ }) \overset{\tau}{\underset{s}{\longrightarrow}} \{v / x_2\}e_2 } \tag{R-CaseR} \label{eq:r-caser}
+                                            { (\textrm{\textbf{case} $  \textbf{right}\, v $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ }) \red{s}{\tau} \{v / x_2\}e_2 } \tag{R-CaseR} \label{eq:r-caser}
                                                                              \end{equation} \vspace{-7mm}
                 \end{tabularx}
            \end{minipage}
@@ -1389,7 +1399,7 @@ The 4-tuple $ (e, s, rl, e') $ means that given the selection operator $ s $, a 
   \label{fig:semeval}
 \end{figure}
 
-In \Cref{fig:semeval} I describe the transition rules for constructs related to sum types: the destructor \textbf{case} and the constructors \textbf{left} and \textbf{right}. The tags \textbf{left} and \textbf{right} reduce their argument until it is a value by rules (\ref{eq:r-left}) and (\ref{eq:r-right}) respectively. The \textbf{case} expression first reduces its argument $ e $ to a tagged value by rule (\ref{eq:r-case}). Depending on the tag of the value, this is then reduced by either (\ref{eq:r-casel}) or (\ref{eq:r-caser}) to  $ e_1 $ or $ e_2 $ respectively with substituting the value within the tag for the corresponding variable. The \textbf{case} expression can be used to dynamically use some behaviour information and signal within MOCaml without the need to include the complexity of redefining constructs like if and tests. Much like in the case of functions, \textbf{case} binds the variables $ x_1 $ and $ x_2 $ within the expressions $ e_1 $ and $ e_2 $ respectively. As the substitution does not avoid variable capture the user must take care to use fresh variables. 
+In \Cref{fig:semeval} I describe the transition rules for constructs related to sum types: the destructor \textbf{case} and the constructors \textbf{left} and \textbf{right}. The tags \textbf{left} and \textbf{right} reduce their argument until it is a value by rules (\ref{eq:r-left}) and (\ref{eq:r-right}) respectively. The \textbf{case} expression first reduces its argument $ e $ to a tagged value by rule (\ref{eq:r-case}). Depending on the tag of the value, this is then silently reduced by either (\ref{eq:r-casel}) or (\ref{eq:r-caser}) to  $ e_1 $ or $ e_2 $ respectively with substituting the value within the tag for the corresponding variable. The \textbf{case} expression can be used to dynamically use some behaviour information and signal within MOCaml without the need to include the complexity of redefining constructs like if and tests. Much like in the case of functions, \textbf{case} binds the variables $ x_1 $ and $ x_2 $ within the expressions $ e_1 $ and $ e_2 $ respectively. As the substitution does not avoid variable capture the user must take care to use fresh variables. 
 
 
 % Pair opsem
@@ -1402,50 +1412,51 @@ In \Cref{fig:semeval} I describe the transition rules for constructs related to 
                         $ v $\, ::=  &\dots  & \textit{values:}\tabularnewline
                         & $ \{v,\,v'\}$  & \textit{pair}\tabularnewline
                       \end{tabularx}\\
-                  {\rule{1.1\linewidth}{\arrayrulewidth}}\\
+                  {\rule{1\linewidth}{\arrayrulewidth}}\\
   \begin{tabular}{l  l}
-    \begin{minipage}{0.5\linewidth}
-     \vspace{-7mm}\begin{tabular}{l}
+    \begin{minipage}{0.42\linewidth}
+     \vspace{0mm}\begin{tabular}{l}
     \begin{tabularx}{\textwidth}{>{\raggedright}X}
-     \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline   \begin{equation}
+     \textit{Evaluation} \hfill   \tabularnewline   \begin{equation}
                                          \inferrule
-                                           { e \overset{rl}{\underset{s}{\longrightarrow}} e''}
-                                           { \{e,e'\} \overset{rl}{\underset{s}{\longrightarrow}} \{e'',e'\} } \tag{R-Pair1}\label{eq:r-pair1}
+                                           { e \red{s}{rl} e''}
+                                           { \{e,e'\} \red{s}{rl} \{e'',e'\} } \tag{R-Pair1}\label{eq:r-pair1}
                                          \end{equation} \vspace{-5mm}
                                          \tabularnewline
                                          \begin{equation}
                                            \inferrule
-                                             { e' \overset{rl}{\underset{s}{\longrightarrow}} e''}
-                                             { \{v,e'\} \overset{rl}{\underset{s}{\longrightarrow}} \{v,e''\} } \tag{R-Pair2} \label{eq:r-pair2}
+                                             { e' \red{s}{rl} e''}
+                                             { \{v,e'\} \red{s}{rl} \{v,e''\} } \tag{R-Pair2} \label{eq:r-pair2}
                                              \end{equation} \vspace{-5mm}
                                          \tabularnewline
                                           \begin{equation}
                                          \inferrule
                                          {}
-                                         { \textbf{proj}_1\,\{v,\,\,v'\} \, \overset{\tau}{\underset{s}{\longrightarrow}}\, v  } \tag{R-Proj1}\label{eq:r-proj1}
+                                         { \textbf{proj}_1\,\{v,\,\,v'\} \, \red{s}{\tau}\, v  } \tag{R-Proj1}\label{eq:r-proj1}
                                          \end{equation}\vspace{-7mm}
     \end{tabularx} 
     \end{tabular}
-    \end{minipage} & \begin{minipage}{0.50\linewidth}
+    \end{minipage} & \begin{minipage}{0.43\linewidth}
         \begin{tabular}{l}
         \begin{minipage}{\textwidth}
          \begin{tabularx}{\textwidth}{>{\raggedright}X}
+          \vspace{2.5pt} \hfill \fbox{$e \, \red{s}{rl} \, e'$}\tabularnewline \vspace{1pt}
                                      \begin{equation}
                                        \inferrule
-                                       { e \overset{rl}{\underset{s}{\longrightarrow}} e'}
-                                       { \textbf{proj}_1\,e \, \overset{rl}{\underset{s}{\longrightarrow}}\, \textbf{proj}_1\,e  } \tag{R-Proj1-Eval}\label{eq:r-evalproj1}
+                                       { e \red{s}{rl} e'}
+                                       { \textbf{proj}_1\,e \, \red{s}{rl}\, \textbf{proj}_1\,e  } \tag{R-Proj1-Eval}\label{eq:r-evalproj1}
                                        \end{equation}\vspace{-7mm}
                                                      \tabularnewline
                                      \begin{equation}
                                      \inferrule
-                                     { e \overset{rl}{\underset{s}{\longrightarrow}} e'}
-                                      { \textbf{proj}_2\,e \, \overset{rl}{\underset{s}{\longrightarrow}}\, \textbf{proj}_2\,e  } \tag{R-Proj2-Eval}\label{eq:r-evalproj2}
+                                     { e \red{s}{rl} e'}
+                                      { \textbf{proj}_2\,e \, \red{s}{rl}\, \textbf{proj}_2\,e  } \tag{R-Proj2-Eval}\label{eq:r-evalproj2}
                                       \end{equation}\vspace{-7mm}
                                      \tabularnewline
                                       \begin{equation}
                                        \inferrule
                                       {}
-                                        { \textbf{proj2}\,\{v,\,\,v'\} \, \overset{\tau}{\underset{s}{\longrightarrow}}\, v'  } \tag{R-Proj2}\label{eq:r-proj2}
+                                        { \textbf{proj}_2\,\{v,\,\,v'\} \, \red{s}{\tau}\, v'  } \tag{R-Proj2}\label{eq:r-proj2}
                                                                                                                 \end{equation}
              \end{tabularx}
         \end{minipage} 
@@ -1458,7 +1469,9 @@ In \Cref{fig:semeval} I describe the transition rules for constructs related to 
   \label{fig:evalprod}
 \end{figure}
 
-\Cref{fig:evalprod} details the operational semantics of pairs, the constructor $ \{e,\,e'\} $ and destructors $ \textbf{proj}_1 $ and $ \textbf{proj}_2 $. All three of these constructs first reduce their arguments left-to-right by the rules (\ref{eq:r-pair1}) and (\ref{eq:r-pair2}) in the case of $ \{e,\,e'\} $ and by the rules (\ref{eq:r-evalproj1}) and (\ref{eq:r-evalproj2}) for $ \textbf{proj}_1 $ and $ \textbf{proj}_2 $ respectively. When reduced, $ \textbf{proj}_1 $ and $ \textbf{proj}_2 $ take the left and right values by the rules (\ref{eq:r-proj1}) and (\ref{eq:r-proj2}) respectively. These semantics mimic the implementation by Pierce.  In a previous iteration of these primitives I provided them curried, that is to say available for partial application. However, Ott did not handle the partial application correctly with respect to the value subgrammar. The new semantics actually provide a way to offer partially applied counterparts to these primitives: 
+\Cref{fig:evalprod} details the operational semantics of pairs, the constructor $ \{e,\,e'\} $ and destructors $ \textbf{proj}_1 $ and $ \textbf{proj}_2 $. All three of these constructs first reduce their arguments left-to-right by the rules (\ref{eq:r-pair1}) and (\ref{eq:r-pair2}) in the case of $ \{e,\,e'\} $ and by the rules (\ref{eq:r-evalproj1}) and (\ref{eq:r-evalproj2}) for $ \textbf{proj}_1 $ and $ \textbf{proj}_2 $ respectively. When reduced, $ \textbf{proj}_1 $ and $ \textbf{proj}_2 $ silently take the left and right values by the rules (\ref{eq:r-proj1}) and (\ref{eq:r-proj2}) respectively. 
+
+These semantics mimic the implementation by Pierce.  In a previous iteration of these primitives I provided them curried, that is to say available for partial application. However, Ott did not handle the partial application correctly with respect to the value subgrammar. The new semantics actually provide a way to offer partially applied counterparts to these primitives: 
 \[ \lambda\, x\, :\, T.\lambda\,y\,:\,T'.\{x,\,y\},\quad\lambda\, x\, :\, T\star T'.\textbf{proj}_1\,x,\quad\lambda\, x\, :\, T\star T'.\textbf{proj}_2\,x   \]
 The above expressions has equivalent behaviour to the curried versions of the corresponding primitives.
 
@@ -1469,15 +1482,15 @@ The above expressions has equivalent behaviour to the curried versions of the co
   $\underbracket{\overbracket{\textrm{
   \begin{minipage}{\textwidth}
            \begin{tabularx}{\textwidth}{>{\raggedright}X}
-               \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline    \begin{equation}
+               \textit{Evaluation} \hfill \fbox{$e \, \red{s}{rl} \, e'$}  \tabularnewline    \begin{equation}
                                        \inferrule
                                         {}
-                                        { \textbf{fix}\,(\lambda x:T. e) \, \overset{\tau}{\underset{s}{\longrightarrow}}\, \{(\textbf{fix}\,(\lambda x:T. e))/x \}e  } \tag{R-Fix} \label{eq:r-fix}
+                                        { \textbf{fix}\,(\lambda x:T. e) \, \red{s}{\tau}\, \{(\textbf{fix}\,(\lambda x:T. e))/x \}e  } \tag{R-Fix} \label{eq:r-fix}
                                                                  \end{equation} \vspace{-7mm}
               \tabularnewline    \begin{equation}
                \inferrule
-                {e \overset{rl}{\underset{s}{\longrightarrow}} e'}
-                { \textbf{fix}\,e \, \overset{rl}{\underset{s}{\longrightarrow}}\, \textbf{fix}\,e'   } \tag{R-Fix-Eval}
+                {e \red{s}{rl} e'}
+                { \textbf{fix}\,e \, \red{s}{rl}\, \textbf{fix}\,e'   } \tag{R-Fix-Eval}
                                                                            \label{eq:r-evalfix}  \end{equation} 
                \end{tabularx}
           \end{minipage}
@@ -1491,7 +1504,7 @@ In denotational semantics loops and other recursions are treated as the greatest
 This axiom poses a requirement on the type of $ y $: it should be $ (T \rightarrow T) \rightarrow T $ which is the type in \Cref{fig:semfix}. (I return to the exact notion of the equivalence relation $ \equiv $ in \Cref{sec:behave_equiv} for theoretical evaluation.)
 In untyped $ \lambda $-calculus there are many simple terms that behave as fixpoints, for example the Y combinator:
 \[ Y = \lambda f.(\lambda x.f\ (x\ x))\ (\lambda x.f\ (x\ x))  \]
-However in strict, call-by-value languages like MOCaml arguments are always reduced before the function application can begin. In this setting the Y combinator would always diverge. There a few implementation options in call-by-value languages, but I have chosen to use the one described in Pierce\cite[p.~144]{pierce2002types}. This style fits well with the tool chain I used as it does not require a partial function application that Ott sometimes handles incorrectly with respect to the value subgrammar. In this implementation \textbf{fix} first reduces its argument by the rule (\ref{eq:r-evalfix}) and when the argument reduced to a function abstraction \textbf{fix} substitutes the fixed function into its variable as shown in rule (\ref{eq:r-fix}).
+However in strict, call-by-value languages like MOCaml arguments are always reduced before the function application can begin. In this setting the Y combinator would always diverge. There a few implementation options in call-by-value languages, but I have chosen to use the one described in Pierce\cite[p.~144]{pierce2002types}. This style fits well with the tool chain I used as it does not require a partial function application that Ott sometimes handles incorrectly with respect to the value subgrammar. In this implementation \textbf{fix} first reduces its argument by the rule (\ref{eq:r-evalfix}) and when the argument reduced to a function abstraction \textbf{fix} silently substitutes the fixed function into its variable as shown in rule (\ref{eq:r-fix}).
 \clearpage
 
 \subsection{Concurrency features: computation place holders, monadic primitives and fork}
@@ -1567,7 +1580,7 @@ In previous subsections there were no constructs that accept external computatio
                                                     { \Gamma \, \vdash \, e \, : \, \textbf{con } T \\\\ 
                                                       \Gamma \, \vdash \, e' \, : \, T \rightarrow \textbf{con } T'}
                                                     { \Gamma\, \vdash \, e\, \gg= \,e' \, :\, \textbf{con } T'} \tag{T-Bind}\label{eq:t-bind}
-                                                    \end{equation}\vspace{-9mm}
+                                                    \end{equation}\vspace{-5mm}
                       \end{tabularx}
         \end{minipage}
         \end{tabular}
@@ -1657,10 +1670,10 @@ This corresponds to the type shown in rule (\ref{eq:t-fork}) in \Cref{fig:semfor
   $\underbracket{\overbracket{\textrm{
  \begin{minipage}{\textwidth}
           \begin{tabularx}{\textwidth}{>{\raggedright}X}
-              \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline    \begin{equation}
+              \textit{Evaluation} \hfill \fbox{$e \, \red{s}{rl} \, e'$}  \tabularnewline    \begin{equation}
                                        \inferrule
                                         {}
-                                        { \textbf{comp }\,e \, \overset{e}{\underset{s}{\longrightarrow}}\,  e } \tag{R-DoComp}\label{eq:r-evalcomp}
+                                        { \textbf{comp }\,e \, \red{s}{e}\,  e } \tag{R-DoComp}\label{eq:r-evalcomp}
                                         \end{equation}\vspace{-7mm}
               \end{tabularx}
          \end{minipage}
@@ -1698,30 +1711,30 @@ I chose to always reduce a place holder to an expression within the framework to
                     {\rule{\linewidth}{\arrayrulewidth}}\\
  \begin{minipage}{\textwidth}
           \begin{tabularx}{\textwidth}{>{\centering}X}
-              \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline    {\begin{equation}
+              \textit{Evaluation} \hfill \fbox{$e \, \red{s}{rl}\, e'$}  \tabularnewline    {\begin{equation}
                                        \inferrule
                                         {}
-                                        { \textbf{ret }\,v \, \overset{\tau}{\underset{s}{\longrightarrow}}\, \textbf{live } v } \tag{R-Return}\label{eq:r-ret}
+                                        { \textbf{ret }\,v \, \red{s}{\tau}\, \textbf{live } v } \tag{R-Return}\label{eq:r-ret}
                                         \end{equation}\vspace{-15mm}}
                                         \tabularnewline   { \begin{equation}
                                         \inferrule
-                                         { e \overset{rl}{\underset{s}{\longrightarrow}} e'}
-                                        { \textbf{ret }\,e \, \overset{rl}{\underset{s}{\longrightarrow}}\, \textbf{ret }\,e' } \tag{R-Evalret}\label{eq:r-evalret}
+                                         { e \red{s}{rl} e'}
+                                        { \textbf{ret }\,e \, \red{s}{rl}\, \textbf{ret }\,e' } \tag{R-Evalret}\label{eq:r-evalret}
                                                                                 \end{equation}\vspace{-7mm}}
                                       \tabularnewline  { \begin{equation}
                                                                             \inferrule
                                                                             {}
-                                                                            { \textbf{live }  v\,\gg=\,e' \, \overset{\tau}{\underset{s}{\longrightarrow}}\, e'\, v  } \tag{R-Dobind}\label{eq:r-dobind} \end{equation}\vspace{-15mm}}
+                                                                            { \textbf{live }  v\,\gg=\,e' \, \red{s}{\tau}\, e'\, v  } \tag{R-Dobind}\label{eq:r-dobind} \end{equation}\vspace{-15mm}}
                                       \tabularnewline  { \begin{equation}
                                       \inferrule
-                                       { e \overset{rl}{\underset{s}{\longrightarrow}} e''}
-                                       { \textbf{live }  e\,\gg=\,e' \, \overset{rl}{\underset{s}{\longrightarrow}}\, \textbf{live } e''\, \gg= e'\,  } \tag{R-Movebind}\label{eq:r-movebind}
+                                       { e \red{s}{rl} e''}
+                                       { \textbf{live }  e\,\gg=\,e' \, \red{s}{rl}\, \textbf{live } e''\, \gg= e'\,  } \tag{R-Movebind}\label{eq:r-movebind}
                                                                 \end{equation}\vspace{-9mm}}
               \tabularnewline  { \begin{equation}
               \inferrule
-              { e \overset{rl}{\underset{s}{\longrightarrow}} e''}
-              { e\,\gg=\,e' \, \overset{rl}{\underset{s}{\longrightarrow}}\, e''\, \gg= e'\,  } \tag{R-Evalbind} \label{eq:r-evalbind}
-                                                                                                      \end{equation}\vspace{-7mm}}
+              { e \red{s}{rl} e''}
+              { e\,\gg=\,e' \, \red{s}{rl}\, e''\, \gg= e'\,  } \tag{R-Evalbind} \label{eq:r-evalbind}
+              \end{equation}}
               \end{tabularx}
          \end{minipage}
          \end{tabular}
@@ -1730,37 +1743,37 @@ I chose to always reduce a place holder to an expression within the framework to
   \label{fig:evalmon}
 \end{figure}
 
-\Cref{fig:evalmon} shows the semantics of the concurrent type constructor \textbf{ret} and the operation \textbf{bind}. The \textbf{ret} operation first reduces its argument to a value with rule (\ref{eq:r-evalret}) and then boxes it up as a concurrent value with rule (\ref{eq:r-ret}). 
+\Cref{fig:evalmon} shows the semantics of the concurrent type constructor \textbf{ret} and the operation \textbf{bind}. The \textbf{ret} operation first reduces its argument to a value with rule (\ref{eq:r-evalret}) and then boxes it up silently as a concurrent value with rule (\ref{eq:r-ret}). 
 
 
-Bind evaluates left to right: it evalutes the expression on the left to a concurrent box with rule (\ref{eq:r-evalbind}), reduces the internal expression of the box with rule (\ref{eq:r-movebind}) and then passes it to the expression on the right with rule (\ref{eq:r-dobind}). This fits well with the idea of sequencing operations: any side effect $ e' $ might have happens after the side effects of $ e $.
+Bind evaluates left to right: it evalutes the expression on the left to a concurrent box with rule (\ref{eq:r-evalbind}), reduces the internal expression of the box with rule (\ref{eq:r-movebind}) and then silently passes it to the expression on the right with rule (\ref{eq:r-dobind}). This fits well with the idea of sequencing operations: any side effect $ e' $ might have happens after the side effects of $ e $.
 % Fork opsem
 
-\begin{figure}
+\begin{figure}[H]
   \centering
   $\underbracket{\overbracket{\textrm{
   \begin{tabular}{l}
     \begin{minipage}{\linewidth}
      \begin{tabularx}{\textwidth}{>{\raggedright}X}
-                 \textit{Evaluation} \hfill \fbox{$e \, \overset{rl}{\underset{s}{\longrightarrow}} \, e'$}  \tabularnewline   \begin{equation}
+                 \textit{Evaluation} \hfill \fbox{$e \, \red{s}{rl} \, e'$}  \tabularnewline   \begin{equation}
                                          \inferrule
-                                           {e \overset{rl}{\underset{s}{\longrightarrow}} e'' \\ e' \notin \text{Values} }
-                                           { \textbf{fork } (\textbf{live } e) (\textbf{live } e')  \overset{rl}{\underset{L\,\, s}{\longrightarrow}} \textbf{fork } (\textbf{live } e'') (\textbf{live } e')  } \tag{R-Forkmove1} \label{eq:forkmove1}
+                                           {e \red{s}{el} e'' \\ e' \notin \text{Values} }
+                                           { \textbf{fork } (\textbf{live } e) (\textbf{live } e')  \red{L\,\,s}{rl} \textbf{fork } (\textbf{live } e'') (\textbf{live } e')  } \tag{R-Forkmove1} \label{eq:forkmove1}
                                          \end{equation} \vspace{-7mm}
                                          \tabularnewline   \begin{equation}
                                           \inferrule
-                                            {e' \overset{rl}{\underset{s}{\longrightarrow}} e'' \\ e \notin \text{Values} }
-                                            { \textbf{fork } (\textbf{live } e) (\textbf{live } e') \overset{rl}{\underset{R\,\,s}{\longrightarrow}} \textbf{fork }  (\textbf{live } e) (\textbf{live } e'')  } \tag{R-Forkmove2} \label{eq:forkmove2}
+                                            {e' \red{s}{rl} e'' \\ e \notin \text{Values} }
+                                            { \textbf{fork } (\textbf{live } e) (\textbf{live } e') \red{R\,\,s}{rl} \textbf{fork }  (\textbf{live } e) (\textbf{live } e'')  } \tag{R-Forkmove2} \label{eq:forkmove2}
                                            \end{equation}\vspace{-7mm}\tabularnewline
                                             \begin{equation}
                                             \inferrule
                                             {}
-                                            { \textbf{fork } (\textbf{live } v) (\textbf{live } e')  \overset{\tau}{\underset{s}{\longrightarrow}} \textbf{live } \textbf{left}  \{v, (\textbf{live } e')\}  } \tag{R-Forkdeath1}\label{eq:r-forkdeath1}   \end{equation} \vspace{-7mm} \tabularnewline
+                                            { \textbf{fork } (\textbf{live } v) (\textbf{live } e')  \red{s}{\tau} \textbf{live } \textbf{left}  \{v, (\textbf{live } e')\}  } \tag{R-Forkdeath1}\label{eq:r-forkdeath1}   \end{equation} \vspace{-7mm} \tabularnewline
                           \begin{equation}
                                                                       \inferrule
                                                                       {}
-                         { \textbf{fork } (\textbf{live } e) (\textbf{live } v')  \overset{\tau}{\underset{s}{\longrightarrow}} \textbf{live } \textbf{right}  \{(\textbf{live }e) ,  v'\}  } \tag{R-Forkdeath2}\label{eq:r-forkdeath2}   \end{equation} \vspace{-7mm}\tabularnewline\begin{equation}\inferrule{e \overset{rl}{\underset{s}{\longrightarrow}} e'' }{ \textbf{fork }\,\,  e\,\, e'  \overset{rl}{\underset{s}{\longrightarrow}} \textbf{fork } \,\, e'' \,\, e' } \tag{R-Forkeval1} \label{eq:forkeval1}\end{equation}\vspace{-7mm}
-                        \tabularnewline\begin{equation}\inferrule{e' \overset{rl}{\underset{s}{\longrightarrow}} e'' }{ \textbf{fork }\,\,  v\,\, e'  \overset{rl}{\underset{s}{\longrightarrow}} \textbf{fork } \,\, v \,\, e'' } \tag{R-Forkeval2} \label{eq:forkeval2}\end{equation}   
+                         { \textbf{fork } (\textbf{live } e) (\textbf{live } v')  \red{s}{\tau} \textbf{live } \textbf{right}  \{(\textbf{live }e) ,  v'\}  } \tag{R-Forkdeath2}\label{eq:r-forkdeath2}   \end{equation} \vspace{-7mm}\tabularnewline\begin{equation}\inferrule{e \red{s}{rl} e'' }{ \textbf{fork }\,\,  e\,\, e' \red{s}{rl} \textbf{fork } \,\, e'' \,\, e' } \tag{R-Forkeval1} \label{eq:forkeval1}\end{equation}\vspace{-7mm}
+                        \tabularnewline\begin{equation}\inferrule{e' \red{s}{rl} e'' }{ \textbf{fork }\,\,  v\,\, e'  \red{s}{rl} \textbf{fork } \,\, v \,\, e'' } \tag{R-Forkeval2} \label{eq:forkeval2}\end{equation}   
                  \end{tabularx}
     \end{minipage}
     \end{tabular}
@@ -1769,7 +1782,7 @@ Bind evaluates left to right: it evalutes the expression on the left to a concur
   \label{fig:evalfork}
 \end{figure}
 
-In \Cref{fig:evalfork} I give the detailed operational semantics of \textbf{fork}. First, \textbf{fork} reduces its arguments, left-to-right, to \textbf{live} boxes by rule (\ref{eq:forkeval1}) and then by rule (\ref{eq:forkeval2}). This is the first time the selection operator of the reduction relation is explicitly specified. A decision of $ L $ will try to reduce the left edge of the \textbf{fork}, a value of $ R $ will try to reduce the right edge. If neither edge is a value, decision $ L $ reduces the left edge with rule (\ref{eq:forkmove1}) while a decision $ R $ reduces the right edge with rule (\ref{eq:forkmove2}) When either edge contains a value the \textbf{fork} is forced to return to the respective tagged value with rules (\ref{eq:r-forkdeath1}) and (\ref{eq:r-forkdeath2}), regardless of the decision. This gives a finer grade of control for the user to choose what to do with the other edge, however it increases overhead as value checks always have to be carried out on both edges.   \clearpage
+In \Cref{fig:evalfork} I give the detailed operational semantics of \textbf{fork}. First, \textbf{fork} reduces its arguments, left-to-right, to \textbf{live} boxes by rule (\ref{eq:forkeval1}) and then by rule (\ref{eq:forkeval2}). This is the first time the selection operator of the reduction relation is explicitly specified. If neither edge is a value, decision $ L $ reduces the left edge with rule (\ref{eq:forkmove1}) while a decision $ R $ reduces the right edge with rule (\ref{eq:forkmove2}). When either edge contains a value \textbf{fork} is forced to silently reduce to the respective tagged value with rules (\ref{eq:r-forkdeath1}) and (\ref{eq:r-forkdeath2}), regardless of the decision. This gives a finer grade of control for the user to choose what to do with the partially reduced edge, however it increases overhead as value checks always have to be carried out on both edges.   \clearpage
 \section{Proof assisstant system}
 In this section I briefly outline the structure of the translated proof assistant representation and how I modified it to be extractable to OCaml. 
 \subsection{Outline of the proof assistant code}
@@ -2352,23 +2365,23 @@ To show that erasing labels is safe it suffices to show that there exists a dete
 \begin{thm}[Unique labels]
 \label{thm:unique_label}
 For all expressions $ e,\, e'$, selection value $ s $ and reduction labels $ rl, rl' $:
- if $ e \overset{rl}{\underset{s}{\longrightarrow}}e' $ and $ e \overset{rl'}{\underset{s}{\longrightarrow}}e' $ then $ rl = rl' $. 
+ if $ e \red{s}{rl}e' $ and $ e \red{s}{rl'}e' $ then $ rl = rl' $. 
 \end{thm}
 \subsubsection{Equivalence}
-As usual I denote the logical model reduction as $ e\, \underset{s}{\overset{rl}{\longrightarrow}}\, e' $, while I denote the extractable reduction as $ e\, \underset{s}{\dashrightarrow}\, e' $.
+As usual I denote the logical model reduction as $ e\, \red{s}{rl}\, e' $, while I denote the extractable reduction as $ e\, \xred{s}\, e' $.
 
 \begin{thm}[Model reduction implies extractable reduction]
 \label{thm:jo_to_xjo}
-For all expressions $ e,\,e' $, selection $ s $ and reduction label $ rl $ if $ e\, \underset{s}{\overset{rl}{\longrightarrow}}\, e' $ then $  e\, \underset{s}{\dashrightarrow}\, e' $.
-\[  e\, \underset{s}{\overset{rl}{\longrightarrow}}\, e' \,\,\,\Rightarrow \,\,\, e\, \underset{s}{\dashrightarrow}\, e' \]
+For all expressions $ e,\,e' $, selection $ s $ and reduction label $ rl $ if $ e\, \red{s}{rl}\, e' $ then $  e\, \xred{s}\, e' $.
+\[  e\, \red{s}{rl}\, e' \,\,\,\Rightarrow \,\,\, e\, \xred{s}\, e' \]
 \end{thm}
 
 \Cref{thm:jo_to_xjo} means that if we denote the set of reduction triples $ (e,s,e') $ for the logical and extractable relations by $ S_L $ and $ S_X $ respectively, then $ S_L \subseteq S_X $.
 
 \begin{thm}[Extractable reduction implies model reduction]
 \label{thm:xjo_to_jo}
-For all expressions $ e,\,e' $ and selection $ s $ if $ e\, \underset{s}{\dashrightarrow}\, e' $ then there is a reduction label $ rl $ such that $ e\, \underset{s}{\overset{rl}{\longrightarrow}}\, e' $.
-\[ e\, \underset{s}{\dashrightarrow}\, e' \,\,\,\Rightarrow \,\,\,  e\, \underset{s}{\overset{rl}{\longrightarrow}}\, e' \]
+For all expressions $ e,\,e' $ and selection $ s $ if $ e\, \xred{s}\, e' $ then there is a reduction label $ rl $ such that $ e\, \red{s}{rl}\, e' $.
+\[ e\, \xred{s}\, e' \,\,\,\Rightarrow \,\,\,  e\, \red{s}{rl}\, e' \]
 \end{thm}
 
 \Cref{thm:xjo_to_jo} means that $ S_X \subseteq S_L $, therefore $ S_X \equiv S_L \equiv S $ and furthermore by \Cref{thm:unique_label} it follows that there is a total function $ L\,:\, S \rightarrow RL $ where $ RL $ is the set of reduction labels. As the reduction label is determined by the triple.
@@ -2402,13 +2415,15 @@ In \Cref{fig:kpn_process_outline,fig:sieve_process_outline,fig:sorter_process_ou
 \item{\verb|sieve|: The well known sieve of Eratosthenes.}
 \item{\verb|sorter|: Concurrent sort of a list of integers.}
 \end{enumerate}
-\subsubsection{Kahn process network}
-
-\begin{figure}
+\subsubsection{Kpn}
+\begin{figure}[H]
 \centering
-\hspace*{-8em} \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm,
+\scalebox{0.6}{%
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm,
   thick,main node/.style={circle,draw,
   font=\sffamily\Large\bfseries,minimum size=8mm}, mvar/.style={rectangle, draw, ,minimum size=3mm}]
+  \begin{scope}
+  \clip (-2,-5) rectangle (14.25, 4.3);
   \node[mvar] (F2) [label=below:{$\text{FIFO}_2$}] {};
   \node[mvar] (F3) [below of=F2, label=below:{$\text{FIFO}_3$}] {};
   \node[mvar] (F5) [below of=F3, label=below:{$\text{FIFO}_5$}] {};
@@ -2444,10 +2459,11 @@ In \Cref{fig:kpn_process_outline,fig:sieve_process_outline,fig:sorter_process_ou
     (M35) edge [bend left=40]   (Merge235)
     (Merge235) edge   (M235)
     (M235) edge   (P)
-    (P) edge [out=150, in=40] (F2)
-    (P) edge [out=120, in=130]  (F3)
-    (P) edge [out=-150, in=-40]  (F5);
-\end{tikzpicture}
+    (P) edge [out=90, in=135, distance=3.5cm] (F2)
+    (P) edge [out=90, in=135, distance=7cm]  (F3)
+    (P) edge [out=90, in=135, distance=9.5cm]  (F5);
+  \end{scope}
+\end{tikzpicture}}
 \cprotect\caption{\verb|kpn| process outline}
 \label{fig:kpn_process_outline}
 \end{figure}
@@ -2753,12 +2769,9 @@ However, the concurrency framework does not prescribe any evaluation strategy. I
 
 
 \subsubsection{Concurrent sort}
-The last example is concurrent sort. Sorting of a list of integers can be done by single comparator units as shown in \Cref{fig:sorter_process_single} which takes in two values and outputs the lower on one edge and the higher on the other. To sort an entire list we can arrange these elements in a network shown in \Cref{fig:sorter_process_full}. This network takes in the $ n $ element list $ x_0, x_1, \dots, x_n $ and outputs the result $ r_0, r_1, \dots, r_n $. For an $ n $ element list the network has $ \frac{n(n-1)}{2} $ nodes. Notice that bubble sort and insertion sort are two scheduling of this network. For simplicity I did not show the message variables in \Cref{fig:sorter_process_outline} but they are used on each arrow. This problem is a good example of a task best suited for lightweight concurrency: a very large number of simple threads statically allocated. For a list size of 500, there are 124750 threads. 
-
 \begin{figure}
 \centering
-
-\begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{0.45\linewidth} %
 \begin{tikzpicture}[->,>=stealth',auto,
   thick,main node/.style={circle,draw,
   font=\sffamily\Large\bfseries,minimum size=8mm}, mvar/.style={rectangle, draw, ,minimum size=3mm}]
@@ -2794,7 +2807,7 @@ The last example is concurrent sort. Sorting of a list of integers can be done b
 \caption{Single comparator}
 \label{fig:sorter_process_single}
 \end{subfigure}
-\begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{0.45\linewidth} %
 \begin{tikzpicture}[->,>=stealth',auto,
   thick,main node/.style={circle,draw,
   font=\sffamily\Large\bfseries,minimum size=8mm}, mvar/.style={rectangle, draw, ,minimum size=3mm}]
@@ -2914,6 +2927,10 @@ The last example is concurrent sort. Sorting of a list of integers can be done b
 \label{fig:sorter_process_outline}
 \end{figure}
 
+
+The last example is concurrent sort. Sorting of a list of integers can be done by single comparator units as shown in \Cref{fig:sorter_process_single} which takes in two values and outputs the lower on one edge and the higher on the other. To sort an entire list we can arrange these elements in a network shown in \Cref{fig:sorter_process_full}. This network takes in the $ n $ element list $ x_0, x_1, \dots, x_n $ and outputs the result $ r_0, r_1, \dots, r_n $. For an $ n $ element list the network has $ \frac{n(n-1)}{2} $ nodes. Notice that bubble sort and insertion sort are two scheduling of this network. For simplicity I did not show the message variables in \Cref{fig:sorter_process_outline} but they are used on each arrow. This problem is a good example of a task best suited for lightweight concurrency: a very large number of simple threads statically allocated. For a list size of 500, there are 124750 threads. 
+
+
 As expected, my system performed with the same characteristics as other lightweight concurrency solutions, but with a high overhead. Interestingly, the \textbf{vm} lightweight implementation shows very bad behaviour, however the heavyweight \textbf{sys} implementation performs better with lists longer than 250 elements. The memory use of my system is much higher than the other implementations as shown in \Cref{fig:sorter_mem}.
 
 
@@ -2956,8 +2973,22 @@ As expected, my system performed with the same characteristics as other lightwei
 \cleardoublepage
 \chapter{Conclusion}
 
-I hope that this rough guide to writing a dissertation is \LaTeX\ has
-been helpful and saved you time.
+% Conclusion on the project
+
+In this project I have demonstrated that it is possible to build a lightweight concurrency framework in OCaml based on formal semantics. I defined the exact semantics of MOCaml in a simple format using Ott, providing a precise, low level documentation of the framework. After translation to Coq, I proved a number of desirable properties of a concurrency library. These proofs act as high level, behavioural documentation of the system. I successfully extracted OCaml code implementing the semantics. This code is then supported by some syntactical sugar for construction of concurrency structures and scheduling to form a usable framework. I evaluated MOCaml against a number of other implementations based on performance to document the runtime characteristics of the framework. Overall, MOCaml met the expectations: its performance behaviour is the same as other lightweight concurrency frameworks but with a large overhead. This overhead is due to the trade-off between theoretical simplicity and efficiency.
+
+
+
+
+The project left a number of theoretical questions intentionally open, including proofs of type preservation, progress and the nature of the congruence relation. On the practical side, MOCaml is only a minimal example of a concurrency framework: type checking, verified support for communication channels, locks, further concurrency primitives and handling of exceptions are all possible future extensions of this project. 
+
+
+% Conclusion on the method
+
+More generally, I have shown an efficient workflow for developing a library in a mainstream language underpinned by formal reasoning. The Ott, Coq (extended with the logical inductive relation extraction plugin) and OCaml toolchain provides the necessary support to describe the intended semantics in an easy-to-read format, reason about said semantics and finally extract a program implementing it. An efficient workflow is necessary to make formal semantics based development a feasible option in software engineering.
+
+
+There are many directions open for formal semantics driven development. While this approach is not warranted in all situations. Foundational libraries and libraries with high safety requirements, like concurrency or security frameworks, can potentially benefit from the approach taken in this project. In these situations, often the library is developed first and documentation occurs later, based on semantics gleaned from the initial plan and some unit testing. This documentation is sometimes partial or has unverified assumptions, for example the unit testing did not cover all edge cases. Software built on a not verified library may have unexpected behaviour and hard to find, costly errors. This problem is largely eliminated by developing the self-documenting semantics first and using verified tools to extract a program satisfying the specifications.
 
 
 
@@ -3069,7 +3100,8 @@ Lemma isExprRelationWeakBisimilarity_equiv_WBSM :
   forall (R : relation expr), 
    isExprRelationWeakBisimilarity R <-> WBSM R.
 
-Lemma WBSM_comp : forall (R S : relation expr), WBSM R -> WBSM S -> WBSM (comp R S).
+Lemma WBSM_comp : forall (R S : relation expr), WBSM R -> WBSM S -> 
+                   WBSM (comp R S).
 
 Lemma WBSM_eeq : forall (R S : relation expr), eeq R S -> WBSM R -> WBSM S.
 
@@ -3077,10 +3109,80 @@ Lemma WBSM_trans : forall (R : relation expr), WBSM R -> WBSM (trans R).
 
 Lemma WBSM_star :forall (R : relation expr), WBSM R -> WBSM (star R).
 
-Lemma WBSM_union2 : forall (R S : relation expr), WBSM R -> WBSM S -> WBSM (union2 R S).
+Lemma WBSM_union2 : forall (R S : relation expr), WBSM R -> WBSM S -> 
+                     WBSM (union2 R S).
 \end{lstlisting}
 \end{minipage}
 \section{Monadic laws}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq}, caption={Monadic left and right ret neutrality}]
+Inductive mon_left_id_rel : relation expr :=
+| mon_left_id_bound : forall (e e' : expr), is_value_of_expr e' -> 
+           mon_left_id_rel ((E_ret e) >>= e') (E_apply e' e)
+| mon_left_id_inbound : forall (e e' : expr), is_value_of_expr e' -> 
+           mon_left_id_rel ((E_live_expr e) >>= e') (E_apply e' e)
+| mon_left_id_unbound : forall (e : expr), mon_left_id_rel (e) (e).
+
+Theorem mon_left_id_wbsm : WBSM mon_left_id_rel.
+
+Theorem mon_left_id_rel_vewbsm : VEWBSM mon_left_id_rel.
+
+Inductive mon_right_id_rel : relation expr :=
+| mon_right_id_bound : forall (a : expr) (x : value_name) (t : typexpr), is_value_of_expr a ->
+ mon_right_id_rel (E_live_expr (a) >>= 
+   (E_function x t (E_ret (E_ident x))))  (E_live_expr ( a))
+| mon_right_id_inbound : forall (a : expr) (x : value_name) (t : typexpr), is_value_of_expr a ->
+ mon_right_id_rel 
+   (E_apply (E_function x t (E_ret (E_ident x))) ( (a)))
+   (E_live_expr ( a))
+| mon_right_id_unbound : forall (a : expr), is_value_of_expr a ->
+ mon_right_id_rel  (E_ret a)  (E_live_expr a)
+| mon_right_id_ret : forall (a : expr), 
+  mon_right_id_rel (E_live_expr a)  (E_live_expr a).
+
+Theorem mon_right_id_wbsm : WBSM mon_right_id_rel.
+
+Theorem mon_right_id_rel_vewbsm : VEWBSM mon_right_id_rel.
+
+Inductive mon_right_id_ext_rel : relation expr :=
+| mon_right_id_ext_bound : forall (a : expr) (x : value_name) (t : typexpr),
+  mon_right_id_ext_rel 
+  (E_live_expr (a) >>= (E_function x t (E_ret (E_ident x))))  
+  (E_ret a)
+| mon_right_id_ext_orig : forall (a b : expr) (x : value_name) (t : typexpr), mon_right_id_rel a b -> mon_right_id_ext_rel a b.
+
+Theorem mon_right_id_ext_wbsm : WBSM mon_right_id_ext_rel.
+
+Theorem mon_right_id_ext_rel_vewbsm : VEWBSM mon_right_id_ext_rel.
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq}, caption={Monadic associativity}]
+Definition exprClosedOnVariable : expr -> value_name -> Prop := 
+fun e v =>   ( forall (e' : expr), (subst_expr e' v e) = e ).
+
+Inductive mon_assoc_rel : relation expr :=
+| mon_assoc_start : forall (e e' e'' : expr) (v v' v'' : value_name) 
+(t t' : typexpr), 
+  v <> v'' -> v' <> v'' -> exprClosedOnVariable e' v'' ->
+  exprClosedOnVariable e'' v'' ->
+   mon_assoc_rel 
+   (e >>= (E_function v t e') >>= (E_function v' t' e''))
+   (e >>= (E_function v'' t (E_apply (E_function v t e') 
+     (E_ident v'') >>= (E_function v' t' e''))))
+| mon_assoc_s1 : forall (e e' e'' : expr) (v v' v'' : value_name) (t t' : typexpr), v <> v'' -> v' <> v'' -> is_value_of_expr e ->  exprClosedOnVariable e' v'' -> exprClosedOnVariable e'' v'' ->
+    mon_assoc_rel ( (E_apply (E_function v t e') e ) >>= (E_function v' t' e'')) (E_apply (E_function v'' t (E_apply (E_function v t e') (E_ident v'') >>= (E_function v' t' e''))) e)
+| mon_assoc_s2 : forall (e e' e'' : expr) (v v' v'' : value_name) (t t' : typexpr), v <> v'' -> v' <> v'' -> is_value_of_expr e -> exprClosedOnVariable e' v'' -> exprClosedOnVariable e'' v'' ->
+    mon_assoc_rel ( ( ( (subst_expr e v e'))  ) >>= (E_function v' t' e''))    ( ( ((E_apply (E_function v t e') e) >>= (E_function v' t' e''))) )
+| mon_assoc_s3 : forall (e e' e'' : expr) (v v' : value_name) (t t' : typexpr), is_value_of_expr e -> 
+    mon_assoc_rel ( ( ( (subst_expr e v e'))  ) >>= (E_function v' t' e''))    ( ( ((subst_expr e v e') >>= (E_function v' t' e''))) )
+| mon_assoc_fin : forall (e : expr) , 
+    mon_assoc_rel e e.
+\end{lstlisting}
+\end{minipage}
+
 \section{Fork and join}
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language={Coq}, caption={Fork commutativity}]

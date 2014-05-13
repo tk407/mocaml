@@ -25,7 +25,7 @@ typexpr, t :: TE_ ::=
 
 redlabel, rl :: RL_ ::=
   | tau                                    ::   :: tau
-  | RE expr                                ::   :: labelled
+  | RE expr                                ::   :: labelled {{ tex [[expr]] }}
 
 % Terms
 expr, e :: E_ ::=
@@ -33,7 +33,7 @@ expr, e :: E_ ::=
   | unit                             ::   :: unit
   | expr expr'                           ::   :: apply 
   | expr >>= expr'                       ::   :: bind
-  | function value_name : t -> e          ::   :: function (+ bind value_name in e +)
+  | function x : t . e                   ::   :: function (+ bind x in e +)
   | fix e                                ::   :: fix
   | comp e                               ::    :: comp
   | live e                               ::   :: live_expr
@@ -45,23 +45,23 @@ expr, e :: E_ ::=
   | ( expr )                             :: S :: paren {{ ich [[expr]] }} {{ ocaml [[expr]] }}
   | inl e                                ::   :: taggingleft
   | inr e                                ::   :: taggingright
-  | case e1 of inl x1  => e2 | inr x2 => e3  ::   :: case
+  | case e of inl x1  => e1 | inr x2 => e2  ::   :: case (+ bind x1 in e1 bind x2 in e2 +)
   | { v / x } e                        :: M :: subst 
     {{ isa subst_expr [[v]] [[x]] [[e]] }}
     {{ ch (subst_expr [[v]] [[x]] [[e]]) }}
     {{ ocaml (subst_expr [[v]] [[x]] [[e]]) }}
-  | { ( fix (function x : t -> e) ) / x' } e                      :: M :: fix_subst 
+  | { ( fix (function x : t . e) ) / x' } e                      :: M :: fix_subst 
     {{ isa subst_expr (E_fix  (E_function [[x]] [[t]] [[e]]) ) [[x']] [[e]] }}
     {{ ch (subst_expr (E_fix  (E_function [[x]] [[t]] [[e]]) ) [[x']] [[e]]) }}
     {{ ocaml (subst_expr (E_fix  (E_function [[x]] [[t]] [[e]]) ) [[x']] [[e]]) }}
-    {{ tex \{ [[fix]] ([[function]] [[x]] [[:]] [[t]] [[->]] [[e]]) / [[x']] \} [[e]] }}
+    {{ tex \{ [[fix]] ([[function]] [[x]] [[:]] [[t]][[.]] [[e]]) / [[x']] \} [[e]] }}
 
 
 
 %Values
 value, v :: V_ ::=
   | unit                           ::   :: unit
-  | function value_name : typexpr -> expr        ::   :: function
+  | function x : typexpr . expr        ::   :: function
   | live e                         ::   :: live_expr
   | inl v                              ::   :: taggedleft
   | inr v                              ::   :: taggedright
@@ -92,7 +92,8 @@ formula :: formula_ ::=
 %Terminals
 terminals :: terminals_ ::=
   |  ->                                ::   :: arrow      {{ tex \rightarrow }}
-  |  function                          ::   :: function   {{ tex \lambda }}
+  |  '.'                               ::   :: fundot      {{ tex . }}
+  | function                           ::   :: function   {{ tex \lambda }}
   | |-                                 ::   :: turnstile  {{ tex \vdash }}
   | -->                                ::   :: red        {{ tex \longrightarrow }}
   | '{'                                ::   :: leftbrace  {{ tex \{ }}
@@ -100,23 +101,24 @@ terminals :: terminals_ ::=
   | '['                                ::   :: leftsqbrack  {{ tex [ }}
   | ']'                                ::   :: rightsqbrack {{ tex ] }}
   | con                                ::   :: concurrent {{ tex \textbf{con} }}
-  | comp                               ::   :: computation {{ tex comp }}
+  | comp                               ::   :: computation {{ tex \textbf{comp} }}
   | exp                                ::   :: expression {{ tex exp }}
-  | live                               ::   :: conlive    {{ tex Live }}
+  | live                               ::   :: conlive    {{ tex \textbf{live} }}
   | fix                                ::   :: fix        {{ tex \textbf{fix} }}
   | proj1                                ::   :: proj1        {{ tex \mathrm{ \textbf{proj}_1 } }}
   | proj2                                ::   :: proj2        {{ tex \mathrm{ \textbf{proj}_2 } }}
   | tau                                ::   :: tau        {{ tex \tau }}
-  | >>=                                ::   :: bind {{ tex >>= }}
+  | >>=                                ::   :: bind {{ tex \gg= }}
   | '*'                                ::   :: product_t    {{ tex * }}
   | ','                                ::   :: pair_elem   {{ tex , }}
   | inl                                ::   :: lefttag     {{ tex \textbf{left} }}
   | inr                                ::   :: righttag    {{ tex \textbf{right} }}
-  | case                               ::   :: case    {{ tex Case }}
-  | of                                 ::   :: of       {{ tex of }}
+  | case                               ::   :: case    {{ tex \textbf{case} }}
+  | of                                 ::   :: of       {{ tex \textbf{of} }}
   | =>                                 ::   :: doublearrow {{ tex \Rightarrow }}
   | '+'                                ::   :: plus {{ tex + }}
   | ':'                                ::   :: funtype {{ tex : }}
+  | in                                 ::   :: setin {{ tex \in }}
 
 %parsing 
 %V_fork_curry <= V_constant
@@ -211,7 +213,7 @@ G |- e e' : t2
 
 G,x1: t1 |- e : t
 --------------------------- I :: lambda
-G |- function x1 : t1 -> e : t1->t
+G |- function x1 : t1 . e : t1->t
 
 G |- e : t
 ---------------------------  :: live_exp
@@ -256,10 +258,10 @@ defns
 Jop :: JO_ ::= 
 
 defn 
-e [ s ] --> [ rl ]  e' :: :: red :: red_ {{ tex [[e]]\, \overset{ [[rl]] }{\underset{ [[s]] }{\longrightarrow} }\, [[e']] }} by 
+e [ s ] --> [ rl ]  e' :: :: red :: red_ {{ tex [[e]]\, \red{[[s]]}{[[rl]]}\, [[e']] }} by 
 
 ------------------------------- :: app
-(function x : t -> e)  v [ s ] --> [ tau ] {v/x}  e
+(function x : t . e)  v [ s ] --> [ tau ] {v/x}  e
 
 %Concurrent constructs
 
@@ -338,7 +340,7 @@ e [ s ] --> [ rl ] e'
 ( fix e ) [ s ] --> [ rl ] ( fix e' )
 
 ----------------------- :: fix_app
-( fix (function x : t -> e) )  [ s ] --> [ tau ] { ( fix (function x : t -> e) ) / x } e
+( fix (function x : t . e) )  [ s ] --> [ tau ] { ( fix (function x : t . e) ) / x } e
 
 % Pairs
 % Note this could be defined to be parallel, but I want to constrain concurrency to fork
@@ -377,11 +379,11 @@ inl e [ s ] --> [ rl ] inl e'
 inr e [ s ] --> [ rl ] inr e'
 
 --------------------------------------------------------- :: evalcaseinl
-case (inl v) of inl x => e | inr x' => e' [ s ] --> [ tau ] { v / x } e
+case (inl v) of inl x1 => e1 | inr x2 => e2 [ s ] --> [ tau ] { v / x1 } e1
 
 --------------------------------------------------------- :: evalcaseinr
-case (inr v) of inl x => e | inr x' => e' [ s ] --> [ tau ] { v / x' } e'
+case (inr v) of inl x1 => e | inr x2 => e2 [ s ] --> [ tau ] { v / x2 } e2
 
                                       e [ s ] --> [ rl ] e'
 ------------------------------------------------------------------------------------ :: evalcase
-case e of inl x => e'' | inr x' => e''' [ s ] --> [ rl ] case e' of inl x => e'' | inr x' => e'''
+case e of inl x1 => e1 | inr x2 => e2 [ s ] --> [ rl ] case e' of inl x1 => e1 | inr x2 => e2

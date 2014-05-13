@@ -25,7 +25,7 @@ Inductive expr : Set :=
  | E_unit : expr
  | E_apply (expr5:expr) (expr':expr)
  | E_bind (expr5:expr) (expr':expr)
- | E_function (value_name5:value_name) (t:typexpr) (e:expr)
+ | E_function (x:value_name) (t:typexpr) (e:expr)
  | E_fix (e:expr)
  | E_comp (e:expr)
  | E_live_expr (e:expr)
@@ -36,7 +36,7 @@ Inductive expr : Set :=
  | E_ret (e:expr)
  | E_taggingleft (e:expr)
  | E_taggingright (e:expr)
- | E_case (e1:expr) (x1:value_name) (e2:expr) (x2:value_name) (e3:expr).
+ | E_case (e:expr) (x1:value_name) (e1:expr) (x2:value_name) (e2:expr).
 
 Inductive redlabel : Set := 
  | RL_tau : redlabel
@@ -53,7 +53,7 @@ Fixpoint is_value_of_expr (e_5:expr) : Prop :=
   | E_unit => (True)
   | (E_apply expr5 expr') => False
   | (E_bind expr5 expr') => False
-  | (E_function value_name5 t e) => (True)
+  | (E_function x t e) => (True)
   | (E_fix e) => False
   | (E_comp e) => False
   | (E_live_expr e) => (True)
@@ -64,7 +64,7 @@ Fixpoint is_value_of_expr (e_5:expr) : Prop :=
   | (E_ret e) => False
   | (E_taggingleft e) => ((is_value_of_expr e))
   | (E_taggingright e) => ((is_value_of_expr e))
-  | (E_case e1 x1 e2 x2 e3) => False
+  | (E_case e x1 e1 x2 e2) => False
 end.
 
 (** library functions *)
@@ -83,7 +83,7 @@ Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr
   | E_unit => E_unit 
   | (E_apply expr5 expr') => E_apply (subst_expr e_5 x_5 expr5) (subst_expr e_5 x_5 expr')
   | (E_bind expr5 expr') => E_bind (subst_expr e_5 x_5 expr5) (subst_expr e_5 x_5 expr')
-  | (E_function value_name5 t e) => E_function value_name5 t (if list_mem eq_value_name x_5 (cons value_name5 nil) then e else (subst_expr e_5 x_5 e))
+  | (E_function x t e) => E_function x t (if list_mem eq_value_name x_5 (cons x nil) then e else (subst_expr e_5 x_5 e))
   | (E_fix e) => E_fix (subst_expr e_5 x_5 e)
   | (E_comp e) => E_comp (subst_expr e_5 x_5 e)
   | (E_live_expr e) => E_live_expr (subst_expr e_5 x_5 e)
@@ -94,7 +94,7 @@ Fixpoint subst_expr (e_5:expr) (x_5:value_name) (e__6:expr) {struct e__6} : expr
   | (E_ret e) => E_ret (subst_expr e_5 x_5 e)
   | (E_taggingleft e) => E_taggingleft (subst_expr e_5 x_5 e)
   | (E_taggingright e) => E_taggingright (subst_expr e_5 x_5 e)
-  | (E_case e1 x1 e2 x2 e3) => E_case (subst_expr e_5 x_5 e1) x1 (subst_expr e_5 x_5 e2) x2 (subst_expr e_5 x_5 e3)
+  | (E_case e x1 e1 x2 e2) => E_case (subst_expr e_5 x_5 e) x1 (if list_mem eq_value_name x_5 (cons x1 nil) then e1 else (subst_expr e_5 x_5 e1)) x2 (if list_mem eq_value_name x_5 (cons x2 nil) then e2 else (subst_expr e_5 x_5 e2))
 end.
 
 Definition subst_redlabel (e5:expr) (x5:value_name) (rl5:redlabel) : redlabel :=
@@ -119,7 +119,7 @@ Fixpoint fv_expr (e_5:expr) : list value_name :=
   | E_unit => nil
   | (E_apply expr5 expr') => (app (fv_expr expr5) (fv_expr expr'))
   | (E_bind expr5 expr') => (app (fv_expr expr5) (fv_expr expr'))
-  | (E_function value_name5 t e) => ((list_minus eq_value_name (fv_expr e) (cons value_name5 nil)))
+  | (E_function x t e) => ((list_minus eq_value_name (fv_expr e) (cons x nil)))
   | (E_fix e) => ((fv_expr e))
   | (E_comp e) => ((fv_expr e))
   | (E_live_expr e) => ((fv_expr e))
@@ -130,7 +130,7 @@ Fixpoint fv_expr (e_5:expr) : list value_name :=
   | (E_ret e) => ((fv_expr e))
   | (E_taggingleft e) => ((fv_expr e))
   | (E_taggingright e) => ((fv_expr e))
-  | (E_case e1 x1 e2 x2 e3) => (app (fv_expr e1) (app (fv_expr e2) (fv_expr e3)))
+  | (E_case e x1 e1 x2 e2) => (app (fv_expr e) (app (list_minus eq_value_name (fv_expr e1) (cons x1 nil)) (list_minus eq_value_name (fv_expr e2) (cons x2 nil))))
 end.
 
 Definition fv_redlabel (rl5:redlabel) : list value_name :=
@@ -295,14 +295,14 @@ Inductive JO_red : expr -> select -> redlabel -> expr -> Prop :=    (* defn red 
  | JO_red_evalinr : forall (e:expr) (s:select) (rl:redlabel) (e':expr),
      JO_red e s rl e' ->
      JO_red (E_taggingright e) s rl (E_taggingright e')
- | JO_red_evalcaseinl : forall (x:value_name) (e:expr) (x':value_name) (e':expr) (s:select) (v:expr),
+ | JO_red_evalcaseinl : forall (x1:value_name) (e1:expr) (x2:value_name) (e2:expr) (s:select) (v:expr),
      is_value_of_expr v ->
-     JO_red (E_case  (E_taggingleft v)  x e x' e') s RL_tau  (subst_expr  v   x   e ) 
- | JO_red_evalcaseinr : forall (x:value_name) (e:expr) (x':value_name) (e':expr) (s:select) (v:expr),
+     JO_red (E_case  (E_taggingleft v)  x1 e1 x2 e2) s RL_tau  (subst_expr  v   x1   e1 ) 
+ | JO_red_evalcaseinr : forall (x1:value_name) (e:expr) (x2:value_name) (e2:expr) (s:select) (v:expr),
      is_value_of_expr v ->
-     JO_red (E_case  (E_taggingright v)  x e x' e') s RL_tau  (subst_expr  v   x'   e' ) 
- | JO_red_evalcase : forall (e:expr) (x:value_name) (e'':expr) (x':value_name) (e''':expr) (s:select) (rl:redlabel) (e':expr),
+     JO_red (E_case  (E_taggingright v)  x1 e x2 e2) s RL_tau  (subst_expr  v   x2   e2 ) 
+ | JO_red_evalcase : forall (e:expr) (x1:value_name) (e1:expr) (x2:value_name) (e2:expr) (s:select) (rl:redlabel) (e':expr),
      JO_red e s rl e' ->
-     JO_red (E_case e x e'' x' e''') s rl (E_case e' x e'' x' e''').
+     JO_red (E_case e x1 e1 x2 e2) s rl (E_case e' x1 e1 x2 e2).
 
 
