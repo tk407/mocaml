@@ -28,6 +28,11 @@ Nick Benton and Vasileios Koutavas.
 \newblock A mechanized bisimulation for the nu-calculus.
 \newblock {\em Higher-Order and Symbolic Computation (to appear, 2013)}, 2008.
 
+\bibitem{berghofer2003program}
+Stefan Berghofer.
+\newblock Program extraction in simply-typed higher order logic.
+\newblock In {\em Types for Proofs and Programs}, pages 21--38. Springer, 2003.
+
 \bibitem{bergstra1984process}
 Jan~A Bergstra and Jan~Willem Klop.
 \newblock Process algebra for synchronous communication.

@@ -19,7 +19,7 @@
 \contentsline {subsection}{\numberline {2.5.3}Back-up}{18}
 \contentsline {subsection}{\numberline {2.5.4}Testing plan}{18}
 \contentsline {chapter}{\numberline {3}Implementation}{19}
-\contentsline {section}{\numberline {3.1}The semantics}{20}
+\contentsline {section}{\numberline {3.1}The semantics}{21}
 \contentsline {subsection}{\numberline {3.1.1}Sequential features: arrow, sum and product types, fixpoint}{22}
 \contentsline {subsubsection}{The type judgement relation}{22}
 \contentsline {subsubsection}{Arrow types}{23}
@@ -36,7 +36,7 @@
 \contentsline {section}{\numberline {3.2}Proof assisstant system}{37}
 \contentsline {subsection}{\numberline {3.2.1}Outline of the proof assistant code}{37}
 \contentsline {subsection}{\numberline {3.2.2}Extractable reduction relation}{40}
-\contentsline {section}{\numberline {3.3}OCaml system}{41}
+\contentsline {section}{\numberline {3.3}OCaml system}{40}
 \contentsline {subsection}{\numberline {3.3.1}Outline of the OCaml code}{41}
 \contentsline {subsection}{\numberline {3.3.2}Hand modifications and justifications}{41}
 \contentsline {subsection}{\numberline {3.3.3}Syntactic sugar}{43}
@@ -47,14 +47,14 @@
 \contentsline {subsubsection}{Monadic laws}{48}
 \contentsline {subsubsection}{Fork commutativity}{49}
 \contentsline {subsubsection}{Fork associativity}{50}
-\contentsline {subsubsection}{Deadlock properties}{51}
-\contentsline {subsubsection}{Remarks on congruence}{52}
+\contentsline {subsubsection}{Deadlock properties}{50}
+\contentsline {subsubsection}{Remarks on congruence}{51}
 \contentsline {subsection}{\numberline {4.1.3}Equivalence of the logical model and the extractable model}{52}
-\contentsline {subsubsection}{Label erasure}{53}
+\contentsline {subsubsection}{Label erasure}{52}
 \contentsline {subsubsection}{Equivalence}{53}
 \contentsline {section}{\numberline {4.2}Performance}{53}
 \contentsline {subsection}{\numberline {4.2.1}Method}{54}
-\contentsline {subsection}{\numberline {4.2.2}Examples}{55}
+\contentsline {subsection}{\numberline {4.2.2}Examples}{54}
 \contentsline {subsubsection}{Kpn}{55}
 \contentsline {subsubsection}{Sieve of Eratosthenes}{58}
 \contentsline {subsubsection}{Concurrent sort}{61}
@@ -62,11 +62,12 @@
 \contentsline {chapter}{Bibliography}{67}
 \contentsline {chapter}{\numberline {A}Full semantics}{71}
 \contentsline {chapter}{\numberline {B}Coq definitions and theorem statements}{78}
-\contentsline {section}{\numberline {B.1}Weak bisimilarity definitions and theorems}{79}
-\contentsline {section}{\numberline {B.2}Monadic laws}{82}
-\contentsline {section}{\numberline {B.3}Fork and join}{84}
-\contentsline {section}{\numberline {B.4}Deadlock properties}{85}
-\contentsline {section}{\numberline {B.5}Equivalence}{85}
+\contentsline {section}{\numberline {B.1}Supporting lemmas}{78}
+\contentsline {section}{\numberline {B.2}Weak bisimilarity definitions and theorems}{79}
+\contentsline {section}{\numberline {B.3}Monadic laws}{82}
+\contentsline {section}{\numberline {B.4}Fork and join}{84}
+\contentsline {section}{\numberline {B.5}Deadlock properties}{85}
+\contentsline {section}{\numberline {B.6}Equivalence}{85}
 \contentsline {chapter}{\numberline {C}Project Proposal}{87}
 \contentsline {section}{\numberline {C.1}Introduction of work to be undertaken}{87}
 \contentsline {section}{\numberline {C.2}Description of starting point}{87}
