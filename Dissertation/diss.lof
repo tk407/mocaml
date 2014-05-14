@@ -13,7 +13,7 @@
 \contentsline {figure}{\numberline {3.9}{\ignorespaces Operational semantics of sum types\relax }}{28}
 \contentsline {figure}{\numberline {3.10}{\ignorespaces Operational semantics of product types\relax }}{29}
 \contentsline {figure}{\numberline {3.11}{\ignorespaces Operational semantics of the fixpoint operator\relax }}{30}
-\contentsline {figure}{\numberline {3.12}{\ignorespaces Syntax and typing of the computation place holder\relax }}{31}
+\contentsline {figure}{\numberline {3.12}{\ignorespaces Syntax and typing of the computation placeholder\relax }}{31}
 \contentsline {figure}{\numberline {3.13}{\ignorespaces Syntax and typing of the monadic primitives: ret and bind\relax }}{32}
 \contentsline {figure}{\numberline {3.14}{\ignorespaces Syntax and typing of the fork operator\relax }}{32}
 \contentsline {figure}{\numberline {3.15}{\ignorespaces Operational semantics of the computation placeholder\relax }}{34}

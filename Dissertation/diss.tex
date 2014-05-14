@@ -119,7 +119,7 @@
   deletekeywords={...},            % if you want to delete keywords from the given language
   escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
   extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
-  frame=shadowbox,                    % adds a frame around the code
+  frame=single,                    % adds a frame around the code
   frameround=tttt,
   keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
   keywordstyle=\color{myblue},       % keyword style
@@ -246,7 +246,7 @@ To write an OCaml framework for lightweight threading. This framework should be 
 
 \section*{Work Completed}
 
-The semantics were defined in the file \verb|mconbase.ott|. These semantics were translated to a representation in Coq in \verb|mconbase.v|. The representation was modified for extraction in the file \verb|mconextract.v|. Supporting proofs are in files \verb|progress.v|, \verb|weakBisimulations.v|, \verb|forkProofs.v|, \verb|redTotalDetProp.v|, \verb|forkDeadlock.v|, \verb|mconbaseMonProofs.v|. The semantics were hand extracted to the file \verb|combinedPieces.ml|, made runnable in \verb|mconbase.ml|. The OCaml code was evaluated using the files \verb|sugarcube.ml, mvars.ml, kpn.ml, sieve.ml, sorter.ml|. All other files are libraries used in the project.
+The semantics were defined in the file \verb|mconbase.ott|. These semantics were translated to a representation in Coq in \verb|mconbase.v|. The representation was modified for extraction in the file \verb|mconextract.v|. Supporting proofs are in files \verb|progress.v|, \verb|weakBisimulations.v|, \verb|forkProofs.v|, \verb|redTotalDetProp.v|, \verb|forkDeadlock.v|, \verb|mconbaseMonProofs.v|. The semantics were hand extracted to the file \verb|combinedPieces.ml|, made runnable in \verb|mconbase.ml|. The OCaml code was evaluated using the files \verb|sugarcube.ml, mvars.ml, kpn.ml, sieve.ml, sorter.ml|. All other files are libraries used in the project: WeakUpTo by Damien Pous, LibTactics by Benjamin Pierce, the logical inductive extraction plugin by Delehaye et al and the lightweight concurrency evaluation framework by Christophe Deleuze. 
 
 \section*{Special Difficulties}
 
@@ -304,19 +304,19 @@ extent for a comparable purpose.
 % Appendicies = \infty
 \chapter{Introduction}
 
-This dissertation describes a project to build a concurrency framework for OCaml. This framework is designed with correctness in mind: developing the well defined semantics, modelled in a proof assistant and finally extracted to actual code. The project aims to be a verifiable reference implementation. 
+This dissertation describes a project to build a concurrency framework for OCaml. The framework was designed with correctness in mind: developing the well defined semantics, modelled in a proof assistant and finally extracted to actual code. The project aimed to be a verifiable reference implementation. 
 
 \section{Motivation}
 Verification of core libraries is becoming increasingly important as more and more subtle bugs are discovered in libraries considered safe. Some of these bugs even extensive unit testing could not find. As Dijkstra said, \begin{quote}``Testing shows the presence, not the absence of bugs."\end{quote} On the other hand, verification can show the absence of bugs, at least with respect to the formal model of the system.
 
-Motivation of the project is to implement a verified concurrency framework in OCaml. Verified concurrent systems have been researched for languages including C\cite{sevvcik2011relaxed}, C++ and Java\cite{lochbihler2012machine}, but not yet for OCaml. 
+The motivation for this project is to implement a verified concurrency framework in OCaml. Verified concurrent systems have been implemented for languages including C\cite{sevvcik2011relaxed}, C++ and Java\cite{lochbihler2012machine}, but not yet for OCaml. 
 
 \section{Overview of concurrency}
-Concurrency is the concept of more than one thread of execution making progress in the same time period. A particular form of concurrency is parallelism, when threads physically run simultaneously.
+Concurrency is the concept of more than one thread of execution making progress in the same time period. It is a useful concept in structuring programs: by not prescribing an order of execution for parts of a program, automatic tools and runtime systems may find a better ordering than the programmer would have at the time of programming. A particular form of concurrency is parallelism, when threads physically run simultaneously.
 
 Concurrent computation has became common in many applications in computer science with the rise of faster systems often with multiple cores. Concurrency in a computation can be exploited on several levels ranging from hardware supported instruction and thread level parallelism to software based heavy and lightweight models. 
 
-This project aims to model lightweight, cooperative concurrency. No threads are exposed to the underlying operating system or hardware. Lightweight concurrency often provides faster switch between threads  but some blocking operations on the process level will block all internal threads. The threads in this approach expose the points of possible interleaving and the scheduling is done in software.
+This project aims to model lightweight, cooperative concurrency. No threads are exposed to the underlying operating system or hardware. Lightweight concurrency often provides faster switching between threads  but some blocking operations on the process level will block all internal threads. The threads in this approach expose the points of possible interleaving and the scheduling is done in software.
 
 Most general-purpose languages offer some way of exploiting concurrency in computations. Functional programming is a good fit for concurrency, since it discourages the use of mutable data structures that lead to race conditions.  However, support for concurrency in functional languages is often lacking. Functional languages that have both actual industrial applications and large sets of features are of particular interest. These languages include OCaml and Haskell. I focused on OCaml. 
  
@@ -324,7 +324,7 @@ Most general-purpose languages offer some way of exploiting concurrency in compu
 \section{Current implementations of a concurrency framework in OCaml}
 There are two very successful monadic concurrency frameworks for OCaml. LWT\cite{LWT} and Async\cite{Async}. They both provide primitives and syntax extensions for concurrent development. Neither is supported by a clear semantic description, because their main focus is ease of use and speed . 
 
-LWT, the lightweight cooperative threading library\cite{vouillon2008lwt} was designed as an open source framework entirely written in OCaml in a monadic style. It was successfully used in several large projects including the Unison file synchroniser and the Ocsigen Web server. LWT includes many primitives to provide a feature rich framework, including primitives for thread creation, composition and cancellation, thread local storage and support for various synchronisation techniques. 
+LWT, the lightweight cooperative threading library\cite{vouillon2008lwt}, was designed as an open source framework entirely written in OCaml in a monadic style. It was successfully used in several large projects including the Unison file synchroniser and the Ocsigen Web server. LWT includes many primitives to provide a feature rich framework, including primitives for thread creation, composition and cancellation, thread local storage and support for various synchronisation techniques. 
 
 
 \begin{minipage}{\linewidth}
@@ -334,12 +334,12 @@ LWT, the lightweight cooperative threading library\cite{vouillon2008lwt} was des
  
  let main () =
    @\label{lst:lwtsyntaxHeadsDefStart}@let heads =
-     Lwt_unix.sleep 1.0 >>
-     @\label{lst:lwtsyntaxHeadsDefEnd}@return (print_endline "Heads");
+     Lwt_unix.sleep 1.0 >>=
+     @\label{lst:lwtsyntaxHeadsDefEnd}@fun () -> return (print_endline "Heads");
    in
 @\label{lst:lwtsyntaxTailsDefStart}@   let tails =
-     Lwt_unix.sleep 2.0 >>
-@\label{lst:lwtsyntaxTailsDefEnd}@     return (print_endline "Tails");
+     Lwt_unix.sleep 2.0 >>=
+@\label{lst:lwtsyntaxTailsDefEnd}@    fun () -> return (print_endline "Tails");
    in
 @\label{lst:lwtsyntaxThreadStart}@   lwt () = heads <&> tails in
 @\label{lst:lwtsyntaxThreadEnd}@   return (print_endline "Finished")
@@ -351,9 +351,9 @@ LWT, the lightweight cooperative threading library\cite{vouillon2008lwt} was des
 
 
 
-Is \Cref{lst:lwtsyntax} an example of the syntax of LWT. Lines \ref{lst:lwtsyntaxHeadsDefStart}--\ref{lst:lwtsyntaxHeadsDefEnd} define heads, a function that sleeps for 1 second and then prints "Head", and lines \ref{lst:lwtsyntaxTailsDefStart}--\ref{lst:lwtsyntaxTailsDefEnd} define tails which sleeps for 2 seconds and then prints "Tails".  Lines \ref{lst:lwtsyntaxThreadStart}--\ref{lst:lwtsyntaxThreadEnd} create a thread that waits on heads and tails and then prints "Finished".  In LWT, semantics mostly follow the principle of continuations. We build a sequence of computations and the scheduler can pick between parallel computations at points of sequencing.
+\Cref{lst:lwtsyntax} is an example of the syntax of LWT. Lines \ref{lst:lwtsyntaxHeadsDefStart}--\ref{lst:lwtsyntaxHeadsDefEnd} define \verb|heads|, a function that sleeps for 1 second and then prints ``Head", and lines \ref{lst:lwtsyntaxTailsDefStart}--\ref{lst:lwtsyntaxTailsDefEnd} define \verb|tails| which sleeps for 2 seconds and then prints ``Tails".  Lines \ref{lst:lwtsyntaxThreadStart}--\ref{lst:lwtsyntaxThreadEnd} create a thread that waits on heads and tails and then prints ``Finished".  In LWT, semantics mostly follow the principle of continuations. We build a sequence of computations and the scheduler can pick between parallel computations at points of sequencing.
 
-An other implementation, Async is an open source concurrency library for OCaml developed by Jane Street. Unlike LWT the basic semantics are designed with promises in mind. A promise is a container that can be used in place of a value of the same type, but computations with a promise only evaluate when the actual value has been calculated. The concurrency arises naturally by interleaving the fulfilment of these containers. 
+Another implementation, Async, is an open source concurrency library for OCaml developed by Jane Street Capital. Unlike LWT the basic semantics are designed with promises in mind. A promise is a container that can be used in place of a value of the same type, but computations with a promise only evaluate when the actual value has been calculated. The concurrency arises naturally by interleaving the fulfilment of these containers. 
 
 
 \begin{minipage}{\linewidth}
@@ -362,8 +362,8 @@ An other implementation, Async is an open source concurrency library for OCaml d
 open Core.Std
 open Async.Std
 
-let heads=(after (sec 1.0)  >>| fun () -> (print_endline "Heads"))
-let tails=(after (sec 2.0)  >>| fun () -> (print_endline "Tails"))
+let heads=after (sec 1.0)  >>| fun () -> print_endline "Heads"
+let tails=after (sec 2.0)  >>| fun () -> print_endline "Tails"
 let head_and_tails = (Deferred.both
    heads
    tails)
@@ -388,11 +388,11 @@ There are a number of other experimental implementations of concurrency in OCaml
 
 There has been a lot of work on formulating the semantics of concurrent and distributed systems. Some of the most common models for lightweight concurrency\cite{deleuzelight} are full\cite{friedman1988applications,leroyocaml} and delimited\cite{kiselyov2010delimited} continuations\cite{shan2004shift}, trampolined style\cite{ganz1999trampolined}, continuation monads\cite{Claessen99functionalpearls}, promise monads\cite{liskov1988promises} and event based programming (as used, for example in the OCamlNet\cite{Ocamlnet} project). This work focuses on the continuation monad style. Monads will be detailed in \Cref{sec:monad_second_mention}.
 
-All concurrency styles have at least one base concurrent primitive that achieves concurrent behaviour. This primitives can come in many forms and under many names, for example fork, join or choose. Each with differing signatures and semantics:\label{sec:con_prims}
+All concurrency styles have at least one base concurrent primitive that achieves concurrent behaviour. These primitives can come in many forms and under many names, for example \textit{fork}, \textit{join} or \textit{choose}, with differing signatures and semantics:\label{sec:con_prims}
 \begin{itemize}
-\item{\textbf{Fork} would commonly take two different computations and evaluate them together. Its return semantics would be to return when one thread finished but include the partially completed other computation if possible.}
-\item{\textbf{Join} may take many threads, but it waits for all threads to finish.}
-\item{\textbf{Choose} can also take many computations, however it would commonly either only evaluate one thread or discard every thread but the one that finished first.}
+\item{\textit{Fork} commonly takes two different computations and evaluate them together. Its return semantics would be to return when one thread finished but include the partially completed other computation if possible.}
+\item{\textit{Join} may take many threads, but it waits for all threads to finish.}
+\item{\textit{Choose} can also take many computations, however it commonly either only evaluates one thread or discards every thread but the one that finished first.}
 \end{itemize}
 
 \section{Semantics to logic}
@@ -424,7 +424,7 @@ Axioms include:
 %Process calculus ?
 
 %Choices for concurrency semantics
-This project aimed to have simple but powerful operational semantics. Simplicity is required in both the design and the interface. There is a short timespan for implementation, but the model should have comparable formal properties to full, well known process calculi. 
+This project aimed to have simple but powerful operational semantics. Simplicity is required in both the design and the interface. There is a short timespan for implementation, but the model should have comparable formal properties to full, well-known process calculi. 
 
 I focused on providing primitives for operations on processes including parallel and sequential composition and recursion. I have left out formal treatment of communication channels in order to limit the scope of the project.  
 
@@ -433,18 +433,18 @@ I focused on providing primitives for operations on processes including parallel
 %Why I chose continuation monads vs. World
 Deleuze\cite{deleuzelight} surveys a number of implementation styles of lightweight concurrency for OCaml. The styles fall in two broad categories: direct and indirect styles. The direct style involves keeping an explicit queue of continuations that can be executed at any given time and a scheduler that picks the next element from the queue.  Within this style there are various approaches to using continuations. Two examples that have been explored in OCaml are full or call/cc and delimited continuations. 
 
-A full continuation captures the entire current control stack and passes it on as a first class value. When this value is ``applied" the system replaces the control stack with the captured stack. Leroy\cite{leroyocaml} explores call/cc style semantics for OCaml, however advises against the use of his library.
+A full continuation captures the entire current control stack and passes it on as a first class value. When this value is ``applied" the system replaces the control stack with the captured stack. Leroy\cite{leroyocaml} explores call/cc style semantics for OCaml, however he advises against the use of his library.
 
 Delimited continuations set boundaries on this capture process and only capture part of the control stack. Kiselyov\cite{kiselyov2010delimited, kiselyov2012delimited} developed an OCaml library for delimited continuations and advocates it over call/cc style.
 
 Indirect styles include the trampolined style and two monadic styles: continuations and promises. 
 
-Trampolined style, as Ganz\cite{ganz1999trampolined} describes, involves a scheduler and a way to box up computation into either \lstinline|Doing of unit -> T 'a| for unfinished computations or \lstinline|Done of 'a| for values. The scheduler then can pick which one of these boxes to evaluate. 
+Trampolined style, as Ganz\cite{ganz1999trampolined} describes, involves a scheduler and a way to box up computations of type \lstinline|'a T| into either \lstinline|Doing of unit -> 'a T| for unfinished computations or \lstinline|Done of 'a| for values. The scheduler can then pick which one of these boxes to evaluate. 
 
-Monadic styles also box up computations: continuation monads box up continuations\cite{Claessen99functionalpearls}, while promise monads\cite{liskov1988promises} box up value place holders that would be the finished product of a computation. Both of these monadic approaches have a further requirements in the way operations relate to each other. LWT is designed with continuation monads in mind, while Async is based on the promise monad.
+Monadic styles also box up computations: continuation monads box up continuations\cite{Claessen99functionalpearls}, while promise monads\cite{liskov1988promises} box up value placeholders that would be the finished product of a computation. Both of these monadic approaches have further requirements in the way operations relate to each other.
 
 
-Simplicity and similarity to current implementations like LWT and Async were the two factors in the decision between these styles. Both direct styles and the promise monad style keep concurrency state data that is external to the language and has to be maintained at runtime explicitly. The extra structure would make the implementation slightly more complex. LWT and Async both provide monadic style interfaces therefore I chose the continuation monad style.
+Simplicity and similarity to current implementations were the two factors in the decision between these styles. With the exception of the continuation monad style, all styles maintain some external concurrency state information at runtime. This external state increases modelling complexity, as the behaviour of this data structure also has to be modelled. Furthermore, the LWT framework is based on the continuation monad style. For these reasons, I chose to use the continuation style.
 
 
 
@@ -457,24 +457,24 @@ Simplicity and similarity to current implementations like LWT and Async were the
 %Most monads support further operations and a concurrency monad is one such monad. Beside the two necessary operations (return and bind) a concurrency monad has to support at least one that deals with concurrent execution.
 
 \label{sec:monad_second_mention}
-A monad\cite{hoareetal2001tackling} in functional programming is a construct to structure computations that are in some sense ``sequenced" together. This sequencing can be, for example, string concatenation, simple operation sequencing (the well known semicolon of imperative programming) or conditional execution. Monads are a popular approach to organising code that may have side-effects. Input/output, concurrency, exceptions and foreign language interfaces are applications of this concept. Most presentations of monads go along the following lines: there is a parametric type $ \textbf{con} \, T $ where $ T $ is the type parameter. Note $ \textbf{con} $ is an arbitrary name, a marker for a particular monad. The Input/Output monad would often have IO as the marker. Furthermore, there are two operations: \lstinline|ret| and \lstinline|bind|.
+A monad\cite{hoareetal2001tackling} in functional programming is a construct to structure computations that are in some sense ``sequenced" together. This sequencing can be, for example, string concatenation, simple operation sequencing (the well known semicolon of imperative programming) or conditional execution. Monads are a popular approach to organising code that may have side-effects. Input/output, concurrency, exceptions and foreign language interfaces are applications of this concept. Most presentations of monads go along the following lines: there is a parametric type $ \textbf{con} \, T $ where $ T $ is the type parameter. Note $ \textbf{con} $ is an arbitrary name, a marker for a particular monad; for example The input/output monad would often have IO as the marker. Furthermore, there are two operations common to all monads: \textit{ret} and \textit{bind}.
 
-The \lstinline|ret| operation takes any value of the language and gives its monadic counterpart. With types \lstinline|ret| can be represented as $ \textbf{ret} \, :\, \forall \alpha. \alpha\, \rightarrow\, \textbf{con}\, \alpha $.
+The \textit{ret} operation takes any value of the language and gives its monadic counterpart. With types \textit{ret} can be represented as $ \textbf{ret} \, :\, \forall \alpha. \alpha\, \rightarrow\, \textbf{con}\, \alpha $.
 
-The \lstinline|bind| (often written as $ \gg= $)  takes a monadic value (that is, one in the parametric type $ \textbf{con} \, \alpha $) and a function that can map the inner value to a new monadic value (that is, it has type $ \alpha \, \rightarrow \, \textbf{con} \, \beta $). Bind then returns a $ \textbf{con} \, \beta $. With types $ \gg= $ means: $ \gg= \, : \, \forall \alpha \, \beta. \; \textbf{con} \, \alpha \rightarrow (\alpha \rightarrow \textbf{con} \, \beta) \rightarrow \textbf{con} \, \beta $.
+The \textit{bind} operation (often written as $ \gg= $)  takes a monadic value (that is, one in the parametric type $ \textbf{con} \, \alpha $) and a function that can map the inner value to a new monadic value (that is, it has type $ \alpha \, \rightarrow \, \textbf{con} \, \beta $). Bind then returns a $ \textbf{con} \, \beta $. With types $ \gg= $ means: $ \gg= \, : \, \forall \alpha \, \beta. \; \textbf{con} \, \alpha \rightarrow (\alpha \rightarrow \textbf{con} \, \beta) \rightarrow \textbf{con} \, \beta $.
 
-To call this system a monad, I need to satisfy three axioms:
+To call my system a monad, I need to satisfy three axioms:
 
 \begin{enumerate}
-\item{\lstinline|ret| is a left neutral element of bind:
+\item{\textit{ret} is a left neutral element of bind:
 \[ (\textbf{ret} \, x) \, \gg=\, f \quad \equiv \quad f \, x \]}
-\item{\lstinline|ret| is a right neutral element of bind:
+\item{\textit{ret} is a right neutral element of bind:
 \[ m \, \gg=\, \textbf{ret} \quad \equiv \quad m \]}
-\item{\lstinline|bind| is associative:
+\item{\textit{bind} is associative:
 \[ (m \, \gg= \, f) \, \gg= g \quad \equiv \quad m\, \gg= \, (\lambda\, x. (f\, x \, \gg= \, g) ) \]}
 \end{enumerate}
 
-I will return to the exact nature of the equivalence relation $ \equiv $ used in this project in the evaluation section. \label{sec:first_mention_of_equiv}
+I will return to the exact nature of the equivalence relation $ \equiv $ used in this project in the theoretical evaluation section(\Cref{sec:behave_equiv}). \label{sec:first_mention_of_equiv}
 
 
 %The concept of a monad comes from category theory. Category theory is a general tool that is often used to model functional programming languages and programs. The monad concept in category theory has a slightly different, but equivalent representation. Instead of bind and ret, there are three operations: $ (T, \eta, \mu) $, commonly called lift or unit, map and join. Lift packages an object, map takes a function between regular objects and returns a function between the packaged counterparts of the objects and join unpackages a layer on a doubly packaged object. These three operations have to satisfy two conditions, called coherence conditions.
@@ -556,7 +556,7 @@ The high level view of the relationship between these tools is shown in \Cref{fi
 I spent the preparation phase acquainting myself with all three of these systems, as I have not used them before for any serious work.
 \subsection{Ott}
 % Why Ott (because it is awesome)
-To avoid duplication of the semantics in several formats I have to chosen to use a supporting tool called Ott\cite{Ott}. It enables the use of a simple ASCII-art like description of grammars, typing and reduction relations. Ott can export to various destination formats including most proof assistants and \LaTeX. Ott  is the primary form of the semantics from which all further forms are derived in the project.
+To avoid duplication of the semantics in several formats I chose to use a supporting tool called Ott\cite{Ott}. It enables the use of a simple ASCII-art description of grammars, typing and reduction relations. Ott can export to various destination formats including most proof assistants and \LaTeX. Ott  is the primary form of the semantics from which all further forms are derived in the project.
 
 Term expression grammars and other grammars can be defined in the well known Backus-Naur form with some extensions. \vspace{5mm}
 
@@ -574,7 +574,7 @@ t :: 't_' ::=                                 {{ com term    }}
 \end{minipage}
 
 
-In \Cref{lst:ottgrammarex} the non-terminal t for terms is defined with 5 productions: variables, lambda abstractions, applications, parentheses grouping and variable substitution. Each of these rules have a name, such as Var and Lam. Each of these names are prefixed by the string ``t\_" in translation to have non-ambiguous names. The right hand side of each line in \Cref{lst:ottgrammarex} is a so called homomorphism. A homomorphism describes a manual translation to a target language.  \label{sec:ott_homo} It starts with a destination like \lstinline[language={Ott}]|ocaml| for OCaml,\lstinline[language={Ott}]|tex| or \lstinline[language={Ott}]|com| for \LaTeX\, and \lstinline[language={Ott}]|ich| for Isabelle, Coq and HOL. An expression in double square brackets \lstinline[language={Ott}]|[[t]]| stands for the translation of the expression within the brackets. 
+In \Cref{lst:ottgrammarex} the non-terminal t for terms is defined with 5 productions: variables, lambda abstractions, applications, parentheses grouping and variable substitution. Each of these rules have a name, such as Var and Lam. Each of these names are prefixed by the string ``t\_" in translation to have non-ambiguous names. The right hand side of each line in \Cref{lst:ottgrammarex} is a so-called homomorphism. A homomorphism describes a manual translation to a target language.  \label{sec:ott_homo} It starts with a destination like \lstinline[language={Ott}]|ocaml| for OCaml,\lstinline[language={Ott}]|tex| or \lstinline[language={Ott}]|com| for \LaTeX\, and \lstinline[language={Ott}]|ich| for Isabelle, Coq and HOL. An expression in double square brackets \lstinline[language={Ott}]|[[t]]| stands for the translation of the expression within the brackets. 
 
 There are meta flags S and M to describe syntactic sugar and meta productions that are not generated as data structure elements in target languages, but instead use their homomorphisms: for example the substitution term will be rewritten as an application of the tsubst\_t relation defined elsewhere. 
 
@@ -613,11 +613,11 @@ substitutions
 \end{minipage}
 
 
-The statement \lstinline[language={Ott}]|single t x :: tsubsts| in \Cref{lst:ottsubstex} defines a single substitution function called tsubsts\_t over terms defined by the grammar for t and for variables represented by the metavariable x. This is the same tsubst\_t mentioned \Cref{lst:ottgrammarex}.
+The statement \lstinline[language={Ott}]|single t x :: tsubst| in \Cref{lst:ottsubstex} defines a single substitution function called tsubst\_t over terms defined by the grammar for t and for variables represented by the metavariable x. This is the same tsubst\_t mentioned \Cref{lst:ottgrammarex}.
 
 
 
-Finally paramount to most semantics are relations like the reduction relation.
+Finally paramount to most semantics are relations like the reduction relation.\vspace{3mm}
 
 
 \begin{minipage}{\linewidth}
@@ -642,7 +642,7 @@ Jop :: '' ::=
 \end{lstlisting}
 \end{minipage}
 
-In \Cref{lst:ottredex} I define a set of mutually recursive relations named Jop with one relation in it the $\longrightarrow$ or reduce relation. Each element of this relation takes the form t1 $\longrightarrow$ t2, where t1 and t2 are both terms of the grammar defined in \Cref{lst:ottgrammarex}. There are three statements for function application: the actual substitution, reduction of the first term and reduction of the second term. 
+In \Cref{lst:ottredex} I define a set of mutually recursive relations named \verb|Jop| with one relation in it, the $\longrightarrow$ or reduce relation. Each element of this relation takes the form t1 $\longrightarrow$ t2, where t1 and t2 are both terms of the grammar defined in \Cref{lst:ottgrammarex}. There are three statements for function application: the actual substitution, reduction of the first term and reduction of the second term. 
 
 \begin{lstlisting}[language={Ott}, caption={Ott single reduction}]
 t1 --> t1'
@@ -650,13 +650,13 @@ t1 --> t1'
 t1 t --> t1' t
 \end{lstlisting}
 
-The premises appear line-by-line above the ascii-art line, and the result below the line. Next to the line is the name of the statement, prefixed by the name of the relation to avoid ambiguity. 
+The premises appear line-by-line above the ASCII-art line, and the result below the line. Next to the line is the name of the statement, prefixed by the name of the relation to avoid ambiguity. 
 
 
 
 \subsection{Coq}
 % Brief overview of proof assistants, reason for the choice of Coq
-Ott is able to generate output for a number of proof assistants, including Coq and Isabelle, which both provide good extraction facilities to OCaml. They are at a glance rather similar. The choice between the two came down to advice from supervisors as I did not have experience with either systems. This project was developed with the Coq proof assistant. 
+Ott is able to generate output for a number of proof assistants, including Coq and Isabelle, which both provide good extraction facilities to OCaml. Coq and Isabelle are, at a glance, rather similar. The choice between the two came down to advice from supervisors as I did not have experience with either system. This project was developed with the Coq proof assistant. 
 
 Coq is a formal proof assistant with a mathematical higher-level language called \textit{Gallina}, based around the Calculus of Inductive Constructions. Gallina can be used to define functions and predicates, state, formally prove and machine check mathematical theorems and extract certified programs to high level languages like Haskell and OCaml.
 % Short guide to reading Coq
@@ -670,7 +670,7 @@ forall A B : Prop, A /\ B -> B \/ B
 \end{lstlisting}
 
 
-Coq can define predicates and relations over sets. In \Cref{lst:coqpredex} I have defined a proposition, a tautology that if the product of two integers is zero, then at least one of them must be zero.
+Coq can define predicates and relations over sets. In \Cref{lst:coqpredex} I have defined a proposition, that if the product of two integers is zero, then at least one of them must be zero.
 
 
 \begin{lstlisting}[language={Coq},caption={Coq Prop predicate example},label={lst:coqpredex}]
@@ -760,7 +760,7 @@ Theorem length_corr : forall (n : nat) (s : seq n), length n s = n.
 \end{lstlisting}
 
 \end{minipage}
-Each Lemma, Theorem, Example has a name and a statement. The statement is a proposition. This is followed by the proof in which a sequence of steps modify the assumed hypotheses and the goal proposition until it has been proven. These steps, called tactics, can be simple applications of previous theorems and axioms or as complex as a SAT solver. Coq comes with a language Ltac to allow users to build their own tactics.
+Each Lemma, Theorem and Example has a name and a statement. The statement is a proposition. This is followed by the proof in which a sequence of steps modify the assumed hypotheses and the goal proposition until it has been proven. These steps, called tactics, can be simple applications of previous theorems and axioms or as complex as a SAT solver. Coq comes with a language Ltac to allow users to build their own tactics.
 
 % Methods of extraction
 
@@ -835,7 +835,7 @@ Most descriptions of reduction relations and indeed the output of Ott is of this
 
 \subsection{OCaml}
 % Brief overview of OCaml
-OCaml is a high level programming language. It combines functional, object-oriented and imperative paradigms and used in large scale industrial and academic projects where speed and correctness are of utmost importance. OCaml uses one of the most powerful type and inference systems available to make efficient and correct software engineering possible.
+OCaml is a high level programming language. It combines functional, object-oriented and imperative paradigms and is used in large scale industrial and academic projects where speed and correctness are of utmost importance. OCaml uses one of the most powerful type and inference systems available to make efficient and correct software engineering possible.
 
 OCaml supports a wide range of functional features: from simple functions, to mutually recursive functions with pattern matching.
 \vspace{3mm}
@@ -933,12 +933,12 @@ Further extensions that the project could have:
 \end{itemize}
 After Part II I want to extend the project with the following features:
 \begin{itemize}
-\item{A formal treatment communication between threads. Channel semantics was not within the scope of this project}
+\item{A formal treatment of communication between threads. Channel semantics was not within the scope of this project.}
 \item{A documentation on how to use the project: both from a user's perspective and from a developer/researcher's perspective.}
 \end{itemize}
 
 \subsection{Development process}
-I used a spiral development pattern in the project. This pattern seemed well suited for fast paced development that is required by the Part II schedule. However, at a later stage it became apparent that a waterfall model might have been better suited for this project: with the full implementation chain, shown in \Cref{fig:detailedimploutline}, the project had high viscosity. Each change in the initial semantics required between a few hundred to thousands of lines of change throughout the system. 
+I used a spiral development pattern in the project. This pattern seemed well suited for the fast paced development that is required by the Part II schedule. However, at a later stage it became apparent that a waterfall model might have been better suited for this project: with the full implementation chain, shown in \Cref{fig:detailedimploutline}, the project had high viscosity. Each change in the initial semantics required between a few hundred to thousands of lines of change throughout the system. 
 \subsection{Back-up}
 Throughout the project I have made frequent back-ups in the form of a Dropbox account, a Google Drive account and an infrequently used back-up drive. I used git on GitHub as a version control system. Transparency of development was important for me, therefore my overseers, my supervisor and my Director of Studies all had access to the version control system and the automatically updated Dropbox account.
 \subsection{Testing plan}
@@ -948,11 +948,11 @@ I identified a set of theoretical properties to evaluate and if possible prove s
 \chapter{Implementation}
 For simplicity, I call the concurrency framework MOCaml. MOCaml was implemented as a small language of expressions and a reduction relation.  These two were then translated to OCaml as a set of type definitions and an evaluation function respectively. 
 
-MOCaml supports a number of features: simple sequencing, concurrent execution, recursion, casing and user supplied scheduling. Furthermore, with simple syntactic sugar it is possible to extend the framework by safe shared communication channels and complex scheduling decisions. 
+MOCaml supports a number of features: simple sequencing, concurrent execution, recursion, casing and user supplied scheduling. Furthermore, with simple syntactic sugar it is possible to extend the framework with safe shared communication channels and complex scheduling decisions. 
 
 \Cref{lst:mocamlexample} is an example of the framework in use:  the user has defined two threads, \lstinline|increment| and \lstinline|print|, that run concurrently. The thread  \lstinline|increment| adds one to a shared reference cell while \lstinline|print| prints it. These two threads are evaluated with a random scheduling algorithm.
 
-The general development workflow is as follows: a MOCaml user would build an expression within the language with the provided syntactic sugar by for example boxing up a user computation with \lstinline|boxc| on \Cref{lst:mocamlexample_boxc} or forming the parallel composition of two threads with \lstinline|fork| on \Cref{lst:mocamlexample_forkbuilder}. The built expression is then passed to a scheduler as on \Cref{lst:mocamlexample_passtosched}. The user can choose to use a provided scheduler like the infinite random scheduler defined on \Crefrange{lst:mocamlexample_randsched_start}{lst:mocamlexample_randsched_end} or build his own using the single step evaluation function \lstinline|xJO_red12|.
+The general development workflow is as follows: a MOCaml user builds an expression within the language with the provided syntactic sugar by for example boxing up a user computation with \lstinline|boxc| on \Cref{lst:mocamlexample_boxc} or forming the parallel composition of two threads with \lstinline|fork| on \Cref{lst:mocamlexample_forkbuilder}. The built expression is then passed to a scheduler as on \Cref{lst:mocamlexample_passtosched}. The user can choose to use a provided scheduler like the infinite random scheduler defined on \Crefrange{lst:mocamlexample_randsched_start}{lst:mocamlexample_randsched_end} or build his own using the single step evaluation function \lstinline|xJO_red12|.
 \begin{figure}[H]
 \centering
 \begin{lstlisting}[caption={A simple example in MOCaml}, label={lst:mocamlexample},  escapeinside={@}{@}]
@@ -1001,7 +1001,7 @@ The implementation of MOCaml was done in 5 stages as shown in \Cref{fig:detailed
 \end{enumerate}
 
 \section{The semantics}\label{sec:the-semanticssec:the-semantics}
-In this section I describe the implemented semantics. These semantics were written in Ott.  Much of the inspiration for the semantics of the sequential features comes from Benjamin C. Pierce: \textit{Types and Programming Languages}\cite{pierce2002types}. The Ott code was based on the simply typed $ \lambda $-calculus\cite{church1940formulation}. For a \LaTeX\, version of the full semantics as produced by Ott see \cref{chap:fullsemantics}.
+In this section I describe the implemented semantics. These semantics were written in Ott.  Much of the inspiration for the semantics of the sequential features comes from Benjamin C. Pierce: \textit{Types and Programming Languages}\cite{pierce2002types}. The Ott code was based on the simply typed $ \lambda $-calculus\cite{church1940formulation}. \Cref{chap:fullsemantics} shows a  \LaTeX\, version of the full semantics as produced by Ott.
 
  
 The semantics splits into three main parts
@@ -1014,7 +1014,7 @@ The semantics splits into three main parts
 \item{Reduction judgements}
 \end{enumerate}
 
-I detail the semantics in two groups of features: sequential features that form a standard extension to the simply typed $ \lambda $-calculus and the concurrency features. The basic features are arrow types (functions), sum types (tagged unions), product types (pairs) and the fixpoint combinator. The monadic concurrency features are the monadic primitives and the fork operator. Each feature group is presented by first examining the syntax and typing rules of the features followed by their operational semantics. In the syntax parts I introduce every new syntactic form used in the evaluation and typing rules, but I do not repeat previously mentioned syntax. The presentation of both the syntax and the evaluation and typing rules were slightly simplified for better readability.   
+I detail the semantics in two groups of features: sequential features that form a standard extension to the simply typed $ \lambda $-calculus and concurrency features. The basic features are arrow types (functions), sum types (tagged unions), product types (pairs) and the fixpoint combinator. The monadic concurrency features are the monadic primitives and the fork operator. Each feature group is presented by first examining the syntax and typing rules of the features followed by their operational semantics. In the syntax parts I introduce every new syntactic form used in the evaluation and typing rules, but I do not repeat previously mentioned syntax. The presentation of both the syntax and the evaluation and typing rules have been slightly simplified for better readability.   
 \subsection{Sequential features: arrow, sum and product types, fixpoint}
 \subsubsection{The type judgement relation}
 \begin{figure}[H]
@@ -1061,9 +1061,9 @@ I detail the semantics in two groups of features: sequential features that form 
   \cprotect\caption{Syntax of the type judgement with the example of \textbf{unit}}
   \label{fig:typing_semantics}
 \end{figure}
-As MOCaml is a simply typed language: that is to say that each well formed expression has one or more type. The typing judgement is a relation relating expressions to types, built inductively by typing rules with no quantification. 
+MOCaml is a simply typed language: that is, each well formed expression has one or more type. The typing judgement is a relation relating expressions to types, built inductively by typing rules with no quantification. 
 
-MOCaml, like many other languages, supports variables. The type of a variable is decided by a further piece of information, the typing environment $ \Gamma $. The typing environment is a variable-to-type function, often written as a list of variable-type pairs. The type judgement relation is therefore a triple $ (\Gamma,\,e,\,T) $ where $ \Gamma $ is the typing environment, $ e $ is an expression and $ T $ is its type. This triple is often written as $ \Gamma\,\vdash\,e\,:\,T $. 
+MOCaml, like many other languages, supports variables. The type of a variable is decided by the typing environment $ \Gamma $. The typing environment is a variable-to-type function, often written as a list of variable-type pairs. The type judgement relation is therefore a triple $ (\Gamma,\,e,\,T) $ where $ \Gamma $ is the typing environment, $ e $ is an expression and $ T $ is its type. This triple is often written as $ \Gamma\,\vdash\,e\,:\,T $. 
 
 Two simple examples of typing judgements are the variable typing rule (\ref{eq:t-var}) and the \textbf{unit} typing rule (\ref{eq:t-unit}) in \Cref{fig:typing_semantics}. Variables get their types from the typing environment $ \Gamma $ and the expression () has type \textbf{unit} in all environments.
 \subsubsection{Arrow types}
@@ -1077,7 +1077,7 @@ Two simple examples of typing judgements are the variable typing rule (\ref{eq:t
     \textit{Syntax} &  & \tabularnewline
     $ e $\, ::=  &\dots  & \textit{expressions:}\tabularnewline
       & $ \lambda x:T.e$  & \textit{abstraction}\tabularnewline
-      & $ e\, e $  & \textit{application}\tabularnewline
+      & $ e\, e' $  & \textit{application}\tabularnewline
       &   & \tabularnewline
       $ T $\, ::=  &\dots  & \textit{types:}\tabularnewline
       & $T \rightarrow T$  & $ \rightarrow $ \textit{type}\tabularnewline
@@ -1093,7 +1093,7 @@ Two simple examples of typing judgements are the variable typing rule (\ref{eq:t
                           \end{equation}\vspace{-7mm}
                         \tabularnewline   \begin{equation}
                         \inferrule
-                        { \Gamma \, \vdash \, e \, : \, T\rightarrow T' \\\\  \Gamma \, \vdash \, e' \, : \, T'}
+                        { \Gamma \, \vdash \, e \, : \, T\rightarrow T' \\\\  \Gamma \, \vdash \, e' \, : \, T}
                         { \Gamma\, \vdash \, e\,e' \, :\, T'} \tag{T-App} \label{eq:t-app}
                         \end{equation}\vspace{-5mm}
                       \end{tabularx}
@@ -1118,7 +1118,7 @@ Arrow types or functions are ubiquitous in functional programming languages. In 
   \centering
   $\underbracket{\overbracket{\textrm{
   \begin{tabular}{l | l}
-    \begin{minipage}[t][][t]{0.33\linewidth}
+    \begin{minipage}[t][][t]{0.35\linewidth}
     \begin{tabularx}{\textwidth}{l >{\raggedleft}X}
     \textit{Syntax} &   \tabularnewline
      $ e $  ::=  \dots&   \textit{terms:}\tabularnewline
@@ -1131,10 +1131,10 @@ Arrow types or functions are ubiquitous in functional programming languages. In 
       $ T $\, ::=  \dots&   \textit{types:}\tabularnewline
        $ T+T' $  &   \textit{sum}\tabularnewline
     \end{tabularx} 
-    \end{minipage} & \begin{minipage}{0.65\linewidth}
+    \end{minipage} & \begin{minipage}{0.63\linewidth}
         \begin{tabular}{l}
-        \begin{minipage}{\textwidth}
-           \begin{tabularx}{\textwidth}{>{\raggedright}X}
+        \begin{minipage}{\linewidth}
+           \begin{tabularx}{\linewidth}{>{\raggedright}X}
                         \textit{Typing} \hfill \fbox{$ \Gamma\, \vdash \, e\, :\, T$}  \tabularnewline   \begin{equation}
                         \inferrule
                           { \Gamma\, \vdash \, \, e\, :\, T}
@@ -1148,7 +1148,7 @@ Arrow types or functions are ubiquitous in functional programming languages. In 
                         \tabularnewline   \begin{equation}
                         \inferrule
                         { \Gamma\, \vdash \, \, e\, :\, T + T' \\\\ \Gamma,x_1:T\, \vdash \, \, e_1\, :\, T'' \\\\ \Gamma,x_2:T'\, \vdash \, \, e_2\, :\, T''}
-                        { \Gamma\, \vdash \, (\textrm{\textbf{case} $  e $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ })\, :\, T''} \tag{T-Case}  \label{eq:t-case}
+                        { \Gamma\, \vdash \, (\textrm{\textbf{case} $  e $ \textbf{of} \newline \textbf{left} $ x_1 \Rightarrow e_1 $  \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ })\, :\, T''} \tag{T-Case}  \label{eq:t-case}
                                                   \end{equation}\vspace{-5mm}
                       \end{tabularx}
         \end{minipage}
@@ -1161,7 +1161,7 @@ Arrow types or functions are ubiquitous in functional programming languages. In 
 \end{figure}
 
 
-Many circumstances require the ability to describe expressions that are either one type or the other. Sum types or otherwise known as labelled unions are a simple solution to this. 
+Many circumstances require the ability to describe expressions that are either one type or another. Sum types or otherwise known as labelled unions are a simple solution to this. 
 
 \Cref{fig:semsyntype} shows the basic structure of sum types that is based on Pierce\cite[p.~132]{pierce2002types}. An expression $ e $ that has type $ T $ can be labelled as a variant in a sum type by attaching a label $ \textbf{left } e $ and $ \textbf{right } e $. As shown in (\ref{eq:t-left}) and (\ref{eq:t-right}) these variants will have type $ T + T' $ for some type $ T' $ and $ T $ respectively. A labelled expression can then be destructed by the expression "$ \textrm{\textbf{case} $  e $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ } $". The typing rule (\ref{eq:t-case}) gives the \textbf{case} expression the common type,  $ T'' $, of $ e_1 $ and $ e_2 $ when assuming $ x_1\,:\,T $ and $ x_2\,:\,T' $ respectively. Pierce gives a slightly more complex version of sum types that ensures that every expression has a unique type.  For this project I used the version given here for simplicity, but further work should include a change to the uniquely typable variant. 
 
@@ -1169,7 +1169,7 @@ In this project I use sum types in the signature of \textbf{fork} that will be d
 
 
 \subsubsection{Product types}
-A second very common feature of functional languages is pairs or product types. Grouping different types of data together in one logical unit often makes code more simple. For example computations with complex numbers would be rather unintuitive if we always had to handle the real and imaginary parts separately. To define products, first I introduce the syntax $ \{e, e' \} $, the pair of expressions $ e $ and $ e' $. If $ e $ and $ e' $ have types $ T $ and $ T' $ respectively the type of the pair $ \{e,\, e'\} $ is written $ T\star T' $ as described in rule (\ref{eq:t-pair}). I introduced two primitive functions to deal with pairs: $ \textbf{proj}_1 $ takes the first element of a pair and $ \textbf{proj}_2 $ takes the second. If a pair has type  $ T\star T' $ the projections will have types $ T $ and $ T' $ by the rules (\ref{eq:t-proj1}) and (\ref{eq:t-proj2}) respectively.
+A second very common feature of functional languages is pairs or product types. Grouping different types of data together in one logical unit often makes code simpler. For example computations with complex numbers would be rather unintuitive if we always had to handle the real and imaginary parts separately. To define products, first I introduce the syntax $ \{e, e' \} $, the pair of expressions $ e $ and $ e' $. If $ e $ and $ e' $ have types $ T $ and $ T' $ respectively the type of the pair $ \{e,\, e'\} $ is written $ T\star T' $ as described in rule (\ref{eq:t-pair}). I introduced two primitive functions to deal with pairs: $ \textbf{proj}_1 $ takes the first element of a pair and $ \textbf{proj}_2 $ takes the second. If a pair has type  $ T\star T' $ the projections will have types $ T $ and $ T' $ by the rules (\ref{eq:t-proj1}) and (\ref{eq:t-proj2}) respectively.
 
 \begin{figure}[h]
   \centering
@@ -1207,7 +1207,7 @@ A second very common feature of functional languages is pairs or product types. 
                                           \inferrule
                                           {\Gamma\, \vdash \, e \, :\,  T\star T'}
                                           { \Gamma\, \vdash \, \textbf{proj}_2\,e \, :\, T'} \tag{T-Proj2}\label{eq:t-proj2}
-                                                                    \end{equation}
+                                                                    \end{equation}\vspace{-5mm}
                                       \end{tabularx}
                         \end{minipage}
         \end{tabular}
@@ -1252,7 +1252,7 @@ A second very common feature of functional languages is pairs or product types. 
 \end{figure}
 
 
-Recursion is very characteristic of functional programming languages. There are many ways to achieve recursive constructs in terms and even in types. A very elegant treatment surfaced from the formal study of recursive constructs in the form of fixpoints with the syntax and typing properties shown in \Cref{fig:semfix}. The \textbf{fix} primitive is based on the idea, that if a function $ f $ is supplied that takes ``the rest of the computation" and it can prefix a step, then by assuming that the \textbf{fix} of $ f $ is ``the rest of the computation" it is simple to show that \textbf{fix} must have type $ (T \rightarrow T)\rightarrow T $ as shown in the rule (\ref{eq:t_fix}).  It is important to note that because of (\ref{eq:t_fix}) all types have at least one term in them: 
+Recursion is very characteristic of functional programming languages. There are many ways to achieve recursive constructs in terms and even in types. A very elegant treatment surfaced from the formal study of recursive constructs in the form of fixpoints with the syntax and typing properties shown in \Cref{fig:semfix}. The \textbf{fix} primitive is based on the idea that, if a function $ f \, :\, T \rightarrow T $ is supplied that takes ``the rest of the computation" and $ f $ can prefix a step, then by assuming that the \textbf{fix} of $ f $ is ``the rest of the computation" it is simple to show that \textbf{fix} $ e $ must have type $ T $ as shown in the rule (\ref{eq:t_fix}).  It is important to note that because of (\ref{eq:t_fix}) all types have at least one term in them, as demonstrated by the derivation tree (\ref{eq:t_all}).
 
 \begin{equation}
 \inferrule* [left=T-Fix] {\inferrule* [left=T-Abs] {\inferrule* [left=T-Var]{x:T \in \Gamma,\,x:T}{\Gamma,\,x:T\, \vdash \,  x\, :\,T}} {\Gamma\, \vdash \, \lambda\, x\, :\, T. x\, :\,T\rightarrow T  }} {\Gamma\, \vdash \, \textbf{fix}\,(\lambda\, x\, :\, T. \, x)\, :\,T  } \label{eq:t_all} \tag{T-All}
@@ -1298,9 +1298,9 @@ Recursion is very characteristic of functional programming languages. There are 
 
 The reduction semantics of MOCaml is given as small step labelled transitions. In small step semantics the reduction relation between two expressions $ e\, \rightarrow\, e' $ means that $ e $ can directly and atomically transition to $ e' $. 
 
-Labelled transitions further extend the idea of reduction relations by attaching a label to each reduction. In this project I used a 4-tuple $ (e, s, rl, e') $ of the starting expression, a selection operator that will be supplied at runtime to pick between potential reductions, a reduction label that describes the observable action and the ending expression of the transition.
+Labelled transitions further extend the idea of reduction relations by attaching a label to each reduction. In this project I used a 4-tuple $ (e, s, rl, e') $ of the starting expression, a selection operator that will be supplied at runtime to pick between potential reductions, a reduction label that describes the observable action, and the ending expression of the transition.
 
-As \Cref{fig:evalfork} in \Cref{sec:fork_sem} will show, MOCaml has to make a decision at every \textbf{fork} it encounters when reducing an expression a step. I wanted the selection($ s $) to fully describe all decisions($ d $) that the system has to make. I opted for a co-inductive stream of decisions because there can be an arbitrary number of \textbf{fork}s nested in each other with an arbitrary number of decisions necessary to make a single step. \vspace{5mm}
+As \Cref{fig:evalfork} in \Cref{sec:fork_sem} will show, MOCaml has to make a decision at every \textbf{fork} it encounters when reducing an expression a step. I wanted the selection $ s $ to fully describe all decisions $ d $ that the system has to make. I opted for a co-inductive stream of decisions because there can be an arbitrary number of \textbf{fork}s nested in each other with an arbitrary number of decisions necessary to make a single step. \vspace{5mm}
 
 \begin{minipage}{\linewidth}
 
@@ -1346,7 +1346,7 @@ The 4-tuple $ (e, s, rl, e') $ means that given the selection operator $ s $, a 
                                      \inferrule
                                       { e' \red{s}{rl} e''}
                                       { v\,e' \, \red{s}{rl}\, v\, e''\,  } \tag{R-App2}\label{eq:r-app2}
-                                                               \end{equation}
+                                                               \end{equation} \vspace{-5mm}
              \end{tabularx}
         \end{minipage}
         \end{tabular}
@@ -1358,7 +1358,7 @@ The 4-tuple $ (e, s, rl, e') $ means that given the selection operator $ s $, a 
 \end{figure}
 
 
-\Cref{fig:evalarrow} shows the transition rules for functions and applications. I used call-by-value semantics for functions and left-to-right reduction. This means that in an application $ e\,e' $ first $ e $ reduces to a function abstraction by rule (\ref{eq:r-app1}), then the argument reduces to a value by rule (\ref{eq:r-app1}). This argument value is then substituted into the function body with the rule (\ref{eq:r-subst}). I used two simplifications in logic that might make development slightly harger: arguments of abstractions are explicitly annotated in functions and substitution does not provide facilities for renaming. The lack of renaming is a trade-off between logical simplicity and ease of use and I chose to keep the logical model as simple as possible. It is presumed that the user of the framework takes care of picking fresh variable names, but I provided facilities with the syntactic sugar to pick fresh variables. \label{sec:subst_caveat}
+\Cref{fig:evalarrow} shows the transition rules for functions and applications. I used call-by-value semantics for functions and left-to-right reduction. This means that in an application $ e\,e' $ first $ e $ reduces to a function abstraction by rule (\ref{eq:r-app1}), then the argument reduces to a value by rule (\ref{eq:r-app1}). This argument value is then substituted into the function body with the rule (\ref{eq:r-subst}). I used two simplifications in logic that might make development slightly harder: arguments of abstractions are explicitly annotated in functions and substitution does not provide facilities for renaming. The lack of renaming is a trade-off between logical simplicity and ease of use and I chose to keep the logical model as simple as possible. It is presumed that the user of the framework takes care of picking fresh variable names, but I provide facilities with the syntactic sugar to pick fresh variables. \label{sec:subst_caveat}
 
 % Sum opsem
 \begin{figure}[H]
@@ -1398,7 +1398,7 @@ The 4-tuple $ (e, s, rl, e') $ means that given the selection operator $ s $, a 
                                             \inferrule
                                             {  }
                                             { (\textrm{\textbf{case} $  \textbf{right}\, v $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ }) \red{s}{\tau} \{v / x_2\}e_2 } \tag{R-CaseR} \label{eq:r-caser}
-                                                                             \end{equation} \vspace{-7mm}
+                                                                             \end{equation}\vspace{-5mm}
                 \end{tabularx}
            \end{minipage}
 }}}$
@@ -1451,13 +1451,13 @@ In \Cref{fig:semeval} I describe the transition rules for constructs related to 
                                      \begin{equation}
                                        \inferrule
                                        { e \red{s}{rl} e'}
-                                       { \textbf{proj}_1\,e \, \red{s}{rl}\, \textbf{proj}_1\,e  } \tag{R-Proj1-Eval}\label{eq:r-evalproj1}
+                                       { \textbf{proj}_1\,e \, \red{s}{rl}\, \textbf{proj}_1\,e'  } \tag{R-Proj1-Eval}\label{eq:r-evalproj1}
                                        \end{equation}\vspace{-7mm}
                                                      \tabularnewline
                                      \begin{equation}
                                      \inferrule
                                      { e \red{s}{rl} e'}
-                                      { \textbf{proj}_2\,e \, \red{s}{rl}\, \textbf{proj}_2\,e  } \tag{R-Proj2-Eval}\label{eq:r-evalproj2}
+                                      { \textbf{proj}_2\,e \, \red{s}{rl}\, \textbf{proj}_2\,e'  } \tag{R-Proj2-Eval}\label{eq:r-evalproj2}
                                       \end{equation}\vspace{-7mm}
                                      \tabularnewline
                                       \begin{equation}
@@ -1468,7 +1468,7 @@ In \Cref{fig:semeval} I describe the transition rules for constructs related to 
              \end{tabularx}
         \end{minipage} 
         \end{tabular}
-        \end{minipage} 
+        \end{minipage}\vspace{-5mm}
     \end{tabular}
     \end{tabular}
 }}}$
@@ -1479,7 +1479,9 @@ In \Cref{fig:semeval} I describe the transition rules for constructs related to 
 \Cref{fig:evalprod} details the operational semantics of pairs, the constructor $ \{e,\,e'\} $ and destructors $ \textbf{proj}_1 $ and $ \textbf{proj}_2 $. All three of these constructs first reduce their arguments left-to-right by the rules (\ref{eq:r-pair1}) and (\ref{eq:r-pair2}) in the case of $ \{e,\,e'\} $ and by the rules (\ref{eq:r-evalproj1}) and (\ref{eq:r-evalproj2}) for $ \textbf{proj}_1 $ and $ \textbf{proj}_2 $ respectively. When reduced, $ \textbf{proj}_1 $ and $ \textbf{proj}_2 $ silently take the left and right values by the rules (\ref{eq:r-proj1}) and (\ref{eq:r-proj2}) respectively. 
 
 These semantics mimic the implementation by Pierce\cite[p.~126]{pierce2002types}.  In a previous iteration of these primitives, I provided them as function values. The \textbf{pair} primitive was a higher order function, and $ \textbf{proj}_1 $ and $ \textbf{proj}_2 $ could be passed around as values unapplied. However, Ott did not handle the partial application of the \textbf{pair} primitive correctly with respect to the value subgrammar. Therefore, I decided to include them as fully applied primitives. The new semantics actually provide a way to offer the original versions of the primitives by $ \lambda $-abstraction: 
-\[ \lambda\, x\, :\, T.\lambda\,y\,:\,T'.\{x,\,y\},\quad\lambda\, x\, :\, T\star T'.\textbf{proj}_1\,x,\quad\lambda\, x\, :\, T\star T'.\textbf{proj}_2\,x   \]
+\[ \lambda\, x\, :\, T.\lambda\,y\,:\,T'.\{x,\,y\}\]
+\[\lambda\, x\, :\, T\star T'.\textbf{proj}_1\,x \] 
+\[\lambda\, x\, :\, T\star T'.\textbf{proj}_2\,x   \]
 The above expressions has equivalent behaviour to the original versions of the corresponding primitives.
 
 % Fixpoint opsem
@@ -1498,7 +1500,7 @@ The above expressions has equivalent behaviour to the original versions of the c
                \inferrule
                 {e \red{s}{rl} e'}
                 { \textbf{fix}\,e \, \red{s}{rl}\, \textbf{fix}\,e'   } \tag{R-Fix-Eval}
-                                                                           \label{eq:r-evalfix}  \end{equation} 
+                                                                           \label{eq:r-evalfix}  \end{equation}\vspace{-5mm} 
                \end{tabularx}
           \end{minipage}
 }}}$
@@ -1511,12 +1513,12 @@ In denotational semantics loops and other recursions are treated as the greatest
 This axiom poses a requirement on the type of $ y $: it should be $ (T \rightarrow T) \rightarrow T $ which is the type in \Cref{fig:semfix}. (I return to the exact notion of the equivalence relation $ \equiv $ in \Cref{sec:behave_equiv} for theoretical evaluation.)
 In untyped $ \lambda $-calculus there are many simple terms that behave as fixpoints, for example the Y combinator:
 \[ Y = \lambda f.(\lambda x.f\ (x\ x))\ (\lambda x.f\ (x\ x))  \]
-However in strict, call-by-value languages like MOCaml arguments are always reduced before the function application can begin. In this setting the Y combinator would always diverge. There are few implementation options in call-by-value languages, but I chose to use the one described in Pierce\cite[p.~144]{pierce2002types}. This style fits well with the tool chain I used. Pierce's implementation does not require a partial function application that Ott sometimes handles incorrectly with respect to the value subgrammar. In this implementation \textbf{fix} first reduces its argument by the rule (\ref{eq:r-evalfix}) to a value and if it is a function abstraction \textbf{fix} silently substitutes the fixed function into its variable as shown in rule (\ref{eq:r-fix}).
+However in strict, call-by-value languages like MOCaml arguments are always reduced before the function application can begin. In this setting the Y combinator would always diverge. There are a few implementation options in call-by-value languages, but I chose to use the one described in Pierce\cite[p.~144]{pierce2002types}. This style fits well with the tool chain I used. Pierce's implementation does not require a partial function application that Ott sometimes handles incorrectly with respect to the value subgrammar. In this implementation \textbf{fix} first reduces its argument by the rule (\ref{eq:r-evalfix}) to a value and if it is a function abstraction \textbf{fix} silently substitutes the fixed function into its variable as shown in rule (\ref{eq:r-fix}).
 \clearpage
 
-\subsection{Concurrency features: computation place holders, monadic primitives and fork}
+\subsection{Concurrency features: computation placeholders, monadic primitives and fork}
 The standard features described in the previous section form the basis on which I built the primitives for monadic concurrency. In this section I first describe the syntax and types of the primitives and then move on to operational details.
-\subsubsection{Computation place holders}
+\subsubsection{Computation placeholders}
 \label{sec:comp_place_syn}
 \begin{figure}[h!]
   \centering
@@ -1536,18 +1538,18 @@ The standard features described in the previous section form the basis on which 
                          \inferrule
                           { \Gamma \, \vdash \, e \, : \,  T}
                           {\Gamma \, \vdash \,\textbf{comp } e \, : \,  T} \tag{T-Comp}
-                          \end{equation}
+                          \end{equation}\vspace{-5mm}
                       \end{tabularx}
         \end{minipage}
         \end{tabular}
         \end{minipage} 
     \end{tabular}
 }}}$
-  \caption{Syntax and typing of the computation place holder}
+  \caption{Syntax and typing of the computation placeholder}
   \label{fig:syntypcomp}
 \end{figure}
 
-In previous subsections there were no constructs that accept external computations and MOCaml could not behave as a general purpose concurrency framework without the ability to insert arbitrary computations. In \Cref{fig:syntypcomp} I introduce a new expression called a computation place holder. These are the holes that will be filled by actual OCaml $ \textbf{unit} \rightarrow \text{expr} $ functions to be evaluated. 
+In previous subsections there were no constructs that accept external computations and MOCaml could not behave as a general purpose concurrency framework without the ability to insert arbitrary computations. In \Cref{fig:syntypcomp} I introduce a new expression called a computation placeholder. This is a hole that will be filled by an actual OCaml $ \textbf{unit} \rightarrow \text{expr} $ function to be evaluated. 
 
 \subsubsection{Monadic primitives}
 
@@ -1644,26 +1646,28 @@ As a first approximation, I had to decide on the signature of \textbf{fork}. On 
 
 I chose to use a primitive with two arguments as that can maintain a simple evaluation context with reductions from language expression to expression. The choice between these three argument styles is largely arbitrary as they all implicitly form the binary parallel composition $ e \, | \, e' $. A primitive with several arguments can be elegantly simulated by composing several binary primitives.
 
-To stay within the monad I decided to have the arguments as already boxed terms, that is of type $ \textbf{con } T $ and $ \textbf{con } T' $ for some $ T$ and $T' $. The \textbf{fork} primitive is not curried, however this behaviour can be simulated by:
+To stay within the monad I decided to have the arguments as already boxed terms, that is of type $ \textbf{con } T $ and $ \textbf{con } T' $ for some $ T$ and $T' $. The \textbf{fork} primitive is not curried, but curried behaviour can be simulated by:
 \[ \lambda x \,:\,\textbf{con }T.(\lambda y \,:\,\textbf{con }T'.(\textbf{fork}\,\,x\,\,y)) \]
 
 For simplicity, I describe \textbf{fork} as the curried higher-order function: given the first argument it returns a function that takes only one parameter and will then behave as the parallel composition. This gives the following signature:
 
 \[ \textbf{fork} \, : \, \textbf{con } T \rightarrow \, (\textbf{con } T'\, \rightarrow\, R ) \tag{T-Fork1} \]  
 
-where $ R $ is the as yet undescribed return type. Currying allows partial application of \textbf{fork} and to be passed around as a value with only one edge filled. 
+where $ R $ is the as yet undescribed return type. Currying allows partial application of \textbf{fork} to be passed around as a value with only one edge filled. 
 
 To keep within the monad, I require that $ R $ be a concurrent type, that is $ R =  \textbf{con } R' $ for some $ R' $ type. 
 
 There are many choices available for the return type. Other popular concurrency primitives, like the ones mentioned in \Cref{sec:con_prims}, have varying return semantics. For example, \textbf{join} would return the pair of values resulting from the two expressions giving $ R = \textbf{con }(T \star T') $. Another primitive, \textbf{choose} would pick one and discard the other: $ R = \textbf{con }(T + T') $. 
 
-I wanted to provide a combination of these: to signal which thread has finished first, but keep the partially reduced other edge around, so the user can use it. From the previous constructions a return type as $ R = \textbf{con }((T\star \textbf{con } T') + ((\textbf{con } T) \star T')) $ could describe this behaviour. The full signature is shown in  (\ref{eq:fork_full_sig}).
+I wanted to provide a combination of these: to signal which thread has finished first, but keep the partially reduced other edge around, so the user can use it. From the previous constructions a return type as $ R = \textbf{con }((T\star \textbf{con } T') + ((\textbf{con } T) \star T')) $ could describe this behaviour. Putting this all together, (\ref{eq:fork_full_sig}) gives the full signature of \textbf{fork}:
 
- At first glance, this seems to be a rather complex signature but  it is versatile enough to implement both \textbf{join} and \textbf{choose} and capture the semantics of a wide range of problems well. The return type also raises the question of interleaving semantics: as I am implementing concurrency in software I was not constrained by hardware to interleave reductions. It would be perfectly acceptable to reduce both edges of a \textbf{fork} at the same time if possible. Indeed this project was originally designed with possibly non-interleaving semantics in mind. However, that led to a blow up in the number of rules, the complexity of the signature of \textbf{fork} ($ R = \textbf{con }((T\star \textbf{con } T') + ((\textbf{con } T) \star T') + (T \star T'))   $) and the number of potential behaviours of the system. I chose to simplify to interleaving semantics for the theoretical simplicity over potential efficiency gains.
-
-Putting this all together gives the full signature of \textbf{fork} as 
 \begin{equation}
-\textbf{fork} \, : \!\!\!\!\! \underbrace{\textbf{con } T}_{\text{left computation}}\!\!\!\!\!\! \rightarrow \, \!\!\!\!\!\!\overbrace{\textbf{con } T'}^{\text{right computation}}\!\!\!\!\!\!\!\! \rightarrow\, \textbf{con }(\underbrace{(\!\!\!\!\!\!\overbrace{T}^{\text{finished value}}\!\!\!\!\!\!\star\,\, \textbf{con } T')}_{\text{left edge finished}} + \underbrace{((\textbf{con } \!\!\!\!\!\!\!\!\!\!\!\!\overbrace{T}^{\text{partially reduced}}\!\!\!\!\!\!\!\!\!\!) \star T'))}_{\text{right edge finished}} \tag{Fork-Full-Signature}\label{eq:fork_full_sig} \end{equation}
+\textbf{fork} \, : \!\!\!\!\! \underbrace{\textbf{con } T}_{\text{left computation}}\!\!\!\!\!\! \rightarrow \, \!\!\!\!\!\!\overbrace{\textbf{con } T'}^{\text{right computation}}\!\!\!\!\!\!\!\! \rightarrow\, \textbf{con }(\underbrace{(\!\!\!\!\!\!\overbrace{T}^{\text{finished value}}\!\!\!\!\!\!\star\,\, \textbf{con } T')}_{\text{left edge finished}} + \underbrace{((\!\!\!\!\!\!\overbrace{\textbf{con } T}^{\text{partially reduced}}\!\!\!\!\!) \star T'))}_{\text{right edge finished}} \tag{Fork-Full-Signature}\label{eq:fork_full_sig} \end{equation}
+
+At first glance, this seems to be a rather complex signature but  it is versatile enough to implement both \textbf{join} and \textbf{choose} and capture the semantics of a wide range of problems well. The return type also raises the question of interleaving semantics: as I am implementing concurrency in software I was not constrained by hardware to interleave reductions. It would be perfectly acceptable to reduce both edges of a \textbf{fork} at the same time if possible. Indeed this project was originally designed with possibly non-interleaving semantics in mind. However, that led to a blow up in the number of rules, the complexity of the signature of \textbf{fork} ($ R = \textbf{con }((T\star \textbf{con } T') + ((\textbf{con } T) \star T') + (T \star T'))   $) and the number of potential behaviours of the system. I chose to simplify to interleaving semantics for the theoretical simplicity over potential efficiency gains.
+
+ 
+
 
 
 This corresponds to the type shown in rule (\ref{eq:t-fork}) in \Cref{fig:semfork}.
@@ -1681,7 +1685,7 @@ This corresponds to the type shown in rule (\ref{eq:t-fork}) in \Cref{fig:semfor
                                        \inferrule
                                         {}
                                         { \textbf{comp }\,e \, \red{s}{e}\,  e } \tag{R-DoComp}\label{eq:r-evalcomp}
-                                        \end{equation}\vspace{-7mm}
+                                        \end{equation}\vspace{-5mm}
               \end{tabularx}
          \end{minipage}
 }}}$
@@ -1689,7 +1693,7 @@ This corresponds to the type shown in rule (\ref{eq:t-fork}) in \Cref{fig:semfor
   \label{fig:evalcomp}
 \end{figure}
 
-\Cref{fig:evalcomp} shows the reduction rule (\ref{eq:r-evalcomp}) for a computation place holder. It only exists in this form in the logical model: the placeholder will be fully replaced by a call to an OCaml function that returns an expression. A simple example could be \Cref{lst:ocaml_comp_place}. This computation placeholder is then reduced by the case in \Cref{lst:ocaml_red_comp}. Computation placeholders serve as a tool to prove, in \Cref{sec:behave_equiv}, that the sequence of actual code calls obey certain order properties. 
+\Cref{fig:evalcomp} shows the reduction rule (\ref{eq:r-evalcomp}) for a computation placeholder. It only exists in this form in the logical model: the placeholder will be fully replaced by a call to an OCaml function that returns an expression. A simple example could be \Cref{lst:ocaml_comp_place}. This computation placeholder is then reduced by the case in \Cref{lst:ocaml_red_comp}. Computation placeholders serve as a tool to prove, in \Cref{sec:behave_equiv}, that the sequence of actual code calls obey certain order properties. 
 
 \begin{lstlisting}[caption={OCaml computation placeholder example}, label={lst:ocaml_comp_place}]
 E_comp (fun _ -> print_string "Hello!"; E_unit)
@@ -1703,7 +1707,7 @@ let rec xJO_red12 p1 p2 =
   ...
 \end{lstlisting}
 
-I chose to always reduce a place holder to an expression within the framework to provide an easy way for flexible, dynamic behaviour. This also means that the typing statement in \Cref{fig:syntypcomp} is not enforced: it is assumed that the user pays attention to the type of the returned expression. Future work could include a way to type check expressions and to modify the extracted OCaml to enforce this typing rule.
+I chose to always reduce a placeholder to an expression within the framework to provide an easy way for flexible, dynamic behaviour. This also means that the typing statement in \Cref{fig:syntypcomp} is not enforced: it is assumed that the user pays attention to the type of the returned expression. Future work could include a way to type check expressions and to modify the extracted OCaml to enforce this typing rule.
 
 % Monprim opsem
 \begin{figure}[H]
@@ -1741,7 +1745,7 @@ I chose to always reduce a place holder to an expression within the framework to
               \inferrule
               { e \red{s}{rl} e''}
               { e\,\gg=\,e' \, \red{s}{rl}\, e''\, \gg= e'\,  } \tag{R-Evalbind} \label{eq:r-evalbind}
-              \end{equation}}
+              \end{equation}\vspace{-5mm}}
               \end{tabularx}
          \end{minipage}
          \end{tabular}
@@ -1753,7 +1757,7 @@ I chose to always reduce a place holder to an expression within the framework to
 \Cref{fig:evalmon} shows the operational semantics of the concurrent type constructor \textbf{ret} and the operation \textbf{bind}. The \textbf{ret} operation first reduces its argument to a value with rule (\ref{eq:r-evalret}) and then boxes it up silently as a concurrent value with rule (\ref{eq:r-ret}). 
 
 
-Bind evaluates left to right: it evalutes the expression on the left to a concurrent box with rule (\ref{eq:r-evalbind}), reduces the internal expression of the box with rule (\ref{eq:r-movebind}) and then silently passes it to the expression on the right with rule (\ref{eq:r-dobind}). This fits well with the idea of sequencing operations: any side effect $ e' $ might have happens after the side effects of $ e $.
+Bind evaluates left to right: it evaluates the expression on the left to a concurrent box with rule (\ref{eq:r-evalbind}), reduces the internal expression of the box with rule (\ref{eq:r-movebind}) and then silently passes it to the expression on the right with rule (\ref{eq:r-dobind}). This fits well with the idea of sequencing operations: any side effect $ e' $ might produce happens after the side effects of $ e $.
 % Fork opsem
 
 \begin{figure}[H]
@@ -1780,7 +1784,7 @@ Bind evaluates left to right: it evalutes the expression on the left to a concur
                                                                       \inferrule
                                                                       {}
                          { \textbf{fork } (\textbf{live } e) (\textbf{live } v')  \red{s}{\tau} \textbf{live } \textbf{right}  \{(\textbf{live }e) ,  v'\}  } \tag{R-Forkdeath2}\label{eq:r-forkdeath2}   \end{equation} \vspace{-7mm}\tabularnewline\begin{equation}\inferrule{e \red{s}{rl} e'' }{ \textbf{fork }\,\,  e\,\, e' \red{s}{rl} \textbf{fork } \,\, e'' \,\, e' } \tag{R-Forkeval1} \label{eq:forkeval1}\end{equation}\vspace{-7mm}
-                        \tabularnewline\begin{equation}\inferrule{e' \red{s}{rl} e'' }{ \textbf{fork }\,\,  v\,\, e'  \red{s}{rl} \textbf{fork } \,\, v \,\, e'' } \tag{R-Forkeval2} \label{eq:forkeval2}\end{equation}   
+                        \tabularnewline\begin{equation}\inferrule{e' \red{s}{rl} e'' }{ \textbf{fork }\,\,  v\,\, e'  \red{s}{rl} \textbf{fork } \,\, v \,\, e'' } \tag{R-Forkeval2} \label{eq:forkeval2}\end{equation}\vspace{-5mm}   
                  \end{tabularx}
     \end{minipage}
     \end{tabular}
@@ -1790,7 +1794,7 @@ Bind evaluates left to right: it evalutes the expression on the left to a concur
 \end{figure}
 
 In \Cref{fig:evalfork} I give the detailed operational semantics of \textbf{fork}. First, \textbf{fork} reduces its arguments, left-to-right, to \textbf{live} boxes by rule (\ref{eq:forkeval1}) and then by rule (\ref{eq:forkeval2}). This is the first time the selection operator of the reduction relation is explicitly specified. If neither edge is a value, decision $ L $ reduces the left edge with rule (\ref{eq:forkmove1}) while a decision $ R $ reduces the right edge with rule (\ref{eq:forkmove2}). When either edge contains a value, \textbf{fork} is forced to silently reduce to the respective tagged value with rules (\ref{eq:r-forkdeath1}) and (\ref{eq:r-forkdeath2}), regardless of the decision. This gives a finer grade of control for the user to choose what to do with the partially reduced edge, however it increases overhead as value checks always have to be carried out on both edges.   \clearpage
-\section{Proof assisstant system}
+\section{Proof assistant system}
 In this section I briefly outline the structure of the translated proof assistant representation and how I modified it to be extractable to OCaml. 
 \subsection{Outline of the proof assistant code}
 
@@ -1868,7 +1872,7 @@ end.
 \end{lstlisting}
 
 \end{minipage}	
-Ott offers single and multiple substitution predicates for its destination languages. These are implemented as fixpoints in Coq.  Expression substitution(\Cref{lst:coqexprsubst}) is an example of these automatically generated fixpoints.
+Ott offers single and multiple substitution predicates for its destination languages. These are implemented as fixpoints in Coq.  Expression substitution (\Cref{lst:coqexprsubst}) is an example of these automatically generated fixpoints.
 \begin{minipage}{\linewidth}
 
 \begin{lstlisting}[language={Coq},caption={Coq expression substitution}, label={lst:coqexprsubst}]
@@ -1885,7 +1889,7 @@ end
 
 \end{minipage}	
 }
-\item{\textbf{Logical inductive sets} are inductively defined sets of propositions. The reduction relation and the typing relation is represented as logical inductive set. For example a clause in the reduction relation was translated from the simple inference rule presentation in \Cref{lst:ottcontextapp1} to a proposition in the logical inductive set \lstinline[language={Coq}]|JO_red| in \Cref{lst:coqlogind}.
+\item{\textbf{Logical inductive sets} are inductively defined sets of propositions. The reduction relation and the typing relation is represented as logical inductive sets. For example a clause in the reduction relation was translated from the simple inference rule presentation in \Cref{lst:ottcontextapp1} to a proposition in the logical inductive set \lstinline[language={Coq}]|JO_red| in \Cref{lst:coqlogind}.
 
 
 \begin{lstlisting}[language={Ott}, caption={Ott reduction relation example}, label={lst:ottcontextapp1}]
@@ -1926,7 +1930,7 @@ Defined.
 \subsection{Extractable reduction relation}
 As I mentioned in \Cref{sec:first_mention_logind}, Coq provides built-in extraction facilities to OCaml and Haskell, but not from inductive sets and fixpoints that involve propositions, more specifically the \textit{Prop} sort. However, with the extraction plugin developed by Delahaye et al\cite{delahaye2007extracting,tollitte2012producing} I can extract such programs.
 
-I rewrote the value check logical fixpoint to an extractable version by simply replacing the True and False propositions by their boolean counterpart and successfully extracted it by the built-in Coq extraction. However, not even the Coq plugin could extract the original reduction relation generated by Ott. 
+I rewrote the value check logical fixpoint to an extractable version by simply replacing the True and False propositions by their boolean counterparts and successfully extracted it by the built-in Coq extraction. However, not even the Coq plugin could extract the original reduction relation generated by Ott. 
 
 The first problem that surfaced was that the extraction plugin does not generate code that backtracks from a case where the reduction relation is invoked on an internal part. If an expression $ e $ does not reduce and the extracted function is called it will fail with a fatal error (\lstinline|assert false|). I chose to add a logically superfluous assumption of expression $ e $ not being a value. This assumption is superfluous as an expression that reduces cannot be a value by the \lstinline[language={Coq}]|red_not_value| theorem(\Cref{lst:red_not_value}).  \Cref{lst:coqredunsafe,lst:coqxredsafe} are a good example of how this transformation happens. \vspace{4mm}
 
@@ -1960,12 +1964,12 @@ In this section I give a brief outline of the structure of the extracted OCaml, 
 \subsection{Outline of the OCaml code}
 The OCaml code consists of the extracted versions of the following:
 \begin{itemize}
-\item{Inductive sets, like expressions, constants and type expressions(in \Cref{lst:coqtypexpr}) are extracted as tagged variants or type constructors.}
+\item{Inductive sets, like expressions, constants and type expressions (in \Cref{lst:coqtypexpr}) are extracted as tagged variants or type constructors.}
 \item{Fixpoints(like \Cref{lst:coqvaluesub}) and logical inductive sets like the expression substitution(in \Cref{lst:coqexprsubst}) and xJO\_red12, the single step reduction relation are extracted as functions.}
-\item{The metavariable \verb|value_name| is an OCaml \lstinline|int| instead of a constructor based extraction of Coq \lstinline[language={Coq}]|nat|. This has the caveat that \lstinline|int| may overflow or represent negative numbers, while the Coq \lstinline[language={Coq}]|nat| cannot. Realistically, no program would have this problem.}
+\item{The metavariable \verb|value_name| is an OCaml \lstinline|int| instead of a constructor based extraction of Coq \lstinline[language={Coq}]|nat|. This has the caveat that \lstinline|int| may overflow or represent negative numbers, while the Coq \lstinline[language={Coq}]|nat| cannot. Realistically, no MOCaml program would have this problem.}
 \end{itemize}
 \subsection{Hand modifications and justifications}
-I have made a number of modifications to the OCaml code to make it runnable. The Coq extraction defines the computation place holders as \lstinline|E_comp of expr|. I changed \lstinline|expr| to be an OCaml function \lstinline|unit -> expr| to include external computations and inserted the call to these functions at the relevant places. An example could be \Cref{lst:ocaml_comp_place2}, which, when reduced, prints ``Hello!" and behaves as the unit value from then on. 
+I have made a number of modifications to the OCaml code to make it runnable. The Coq extraction defines the computation placeholders as \lstinline|E_comp of expr|. I changed \lstinline|expr| to be an OCaml function \lstinline|unit -> expr| to include external computations and inserted the call to these functions at the relevant places. An example could be \Cref{lst:ocaml_comp_place2}, which, when reduced, prints ``Hello!" and behaves as the unit value from then on. 
 \begin{lstlisting}[caption={OCaml computation placeholder example}, label={lst:ocaml_comp_place2}]
 E_comp (fun _ -> print_string "Hello!"; E_unit)
 \end{lstlisting}
@@ -1992,11 +1996,10 @@ type select = | Seq of decision * (unit -> select)
 
 \end{minipage}
 
-As the extraction plugin is experimental there were a number of inefficiencies and a few issues due to the fact that the semantics of OCaml and Coq pattern matching differs. In Coq logical inductive definition cases act as a large disjunction, instead of a sequential tried: if an earlier case fails in OCaml the match fails, while Coq would just keep going.
+As the extraction plugin is experimental there were a number of inefficiencies and a few issues due to the fact that sometimes the plugin incorrectly handles OCaml pattern matching when presented with a relation with overlapping conclusions. In Coq logical inductive relation, pattern matching does not commit until the success of a case or failure of all cases. However, the extracted OCaml commits to a case as soon as satisfying the syntactical requirements of the case. This commitment can cause unexpected behaviour when cases may overlap with each other.
 
 
-Tollitte\cite{tollitte2012producing} made progress on the merging of cases when one case subsumes an other. However, in the case of MOCaml, these were not always correctly identified. For example the case in \Crefrange{lst:ocamlvalexpappcaseStart}{lst:ocamlvalexpappcaseEnd} in \Cref{lst:ocamlorigapp} subsumes the case in \Cref{lst:ocamlorigsub}. The plugin was unable to infer this as that would have required it to show that function term is always a value, regardless of its arguments. This is an issue as any function applied to an argument that can be reduced will fail, as the case in \Cref{lst:ocamlorigsub} comes first.
-
+Tollitte\cite{tollitte2012producing} made progress on merging cases when one case subsumes another. However, in the case of MOCaml, these were not always correctly identified. For example the case in \Crefrange{lst:ocamlvalexpappcaseStart}{lst:ocamlvalexpappcaseEnd} in \Cref{lst:ocamlorigapp} subsumes the case in \Cref{lst:ocamlorigsub}. The plugin was unable to infer this as that would have required it to show that function term is always a value, regardless of its arguments. This is an issue as any function applied to an argument that can be reduced will fail, as the case in \Cref{lst:ocamlorigsub} comes first. 
 
 \vspace{3mm}
 
@@ -2100,7 +2103,9 @@ The multiple layers of automatic naming make development in raw MOCaml cumbersom
 \begin{minipage}{\linewidth}
 
 \begin{lstlisting}[caption={OCaml random scheduler}, label={lst:ocamlrandsched}]
-  let rec makerand () = if Random.bool() then Seq(S_First, makerand) else Seq(S_Second, makerand)
+  let rec makerand () = if Random.bool() 
+                           then Seq(S_First, makerand) 
+                           else Seq(S_Second, makerand)
   
   let rec evalrand e n = (match n with 
                        | 0 -> e
@@ -2121,7 +2126,7 @@ A monadic concurrency framework should satisfy a number of properties: monadic l
 
 First the semantics of the equivalence $ \equiv $ had to be examined. If two expressions are equivalent they should behave the same: for an outside observer there should to be no difference which exact expression is evaluated in a black box computation. One way to capture this is by keeping track of potential results and side-effects. Results are the return values of an expression, side-effects are the computation placeholders invoked by the system. That is why I phrased the operational semantics with labelled transitions: the labels are descriptions of the side-effects.
 
-Labelled transition systems, like the operational semantics I have defined, are a common way to describe systems with side-effects. As the selection operator is external and not determined by the system I consider it and therefore the transition system non-deterministic. Brookes\cite{brookes1983behavioural} surveys various equivalence relations over non-deterministic labelled transitions systems. I chose to follow Milner\cite{milner1982calculus} and used weak bisimilarity.
+Labelled transition systems, like the operational semantics I have defined, are a common way to describe systems with side-effects. As the selection operator is external and not determined by the system I consider it and therefore the transition system non-deterministic. Brookes\cite{brookes1983behavioural} surveys various equivalence relations over non-deterministic labelled transition systems. I chose to follow Milner\cite{milner1982calculus} and used weak bisimilarity.
 
 \subsection{Weak bisimilarity}
 Bisimilarity is a standard method for establishing behavioural equivalence of a non-deterministic language used by Milner for CCS\cite{milner1982calculus}, Pierce and Sangiorgi for $ \pi $-calculus\cite{pierce2000behavioral} and Bergstra for the Algebra of Communicating Processes\cite{bergstra1986algebra,bergstra1985algebra} among others. 
@@ -2170,7 +2175,7 @@ A relation $ \mathcal{R} $ between expressions is a \textit{weak bisimulation} i
 \end{itemize}
 \end{defn}
 
-I proved the equivalence of these two definitions for the transition system of MOCaml. This second definition is much easier to show in Coq as Coq generates an inversion lemma for a single step, as used in Sangiorgi's definition, however not for a weak reduction required by Milner's definition. This is a marked difference: the proofs in the following section took around five thousand lines of code in a previous iteration with Milner's definition, while only a few hundred lines with Sangiorgi's definition.
+I proved the equivalence of these two definitions for the transition system of MOCaml. This second definition is much easier to show in Coq as Coq generates an inversion lemma for a single step, as used in Sangiorgi's definition, however not for a weak reduction required by Milner's definition. This is a marked difference: the proofs in the following section took around five thousand lines of code in a previous iteration with Milner's definition, but only a few hundred lines with Sangiorgi's definition.
 \begin{defn}[Weak bisimilarity]
 \label{defn:weak_bisimilarity}
 Two expressions $ p $ and $ q $ are \textit{weakly bisimilar} or $ p\approx q $ if there is a weak bisimulation $ \mathcal{R} $ such that $ (p,q) \in \mathcal{R} $.
@@ -2204,7 +2209,7 @@ x | y &= y | x \tag{$\, \mid $ commutativity} \label{eq:fork_comm}\\
 \delta \cdot x &= \tag{$\cdot$ deadlock}\delta \label{eq:bind_deadlock}
 \end{align}
 
-Sequential composition or bind is denoted by $ \cdot $ and a process that cannot move forward is denoted by $ \delta $. Bergstra\cite{bergstra1984process} calls process $ \delta $ \textit{deadlocked}. In the above axioms $ \mid $ denotes ``parallel composition" which resembles the \textbf{fork} operator of MOCaml.
+Sequential composition or \textbf{bind} is denoted by $ \cdot $ and a process that cannot move forward is denoted by $ \delta $. Bergstra\cite{bergstra1984process} calls process $ \delta $ \textit{deadlocked}. In the above axioms $ \mid $ denotes ``parallel composition" which resembles the \textbf{fork} operator of MOCaml.
 
 \subsubsection{Monadic laws}
 \label{sec:equivs}
@@ -2302,7 +2307,7 @@ For all expressions $ e, \delta$ if $ \delta $ is a deadlocked expression
 \[  (\textbf{fork}\,(\textbf{live }\delta)\,(\textbf{live }e))\gg=\text{takeright}\quad \approx_v \quad \textbf{ret }e \]
 \end{thm}
 
-\begin{lstlisting}[language={Coq}, caption={The $\mathit{takeright}$ function in $ \lambda $ notation}, label={lst:takeright_op}, escapeinside={@}{@}]
+\begin{lstlisting}[language={Coq}, caption={The $\mathit{takeright}$ function with $ \lambda $ notation}, label={lst:takeright_op}, escapeinside={@}{@}]
 Definition takeright : expr :=
     @$\lambda$@ x : T. case x of
               left  x1 => proj2 x1
@@ -2320,11 +2325,11 @@ Note, however, the value equality comes for free: $ \delta $ may never be a valu
 
 \subsubsection{Remarks on congruence}
 
-The various equivalences of \Cref{sec:equivs} give meaningful insight into the behaviour of the mentioned expressions when considered in isolation. However, it falls short of the original aim of provide an equality that implies the ability to replace these expressions when composed with others. 
+The various equivalences of \Cref{sec:equivs} give meaningful insight into the behaviour of the mentioned expressions when considered in isolation. However, it falls short of the original aim of providing an equality that implies the ability to replace these expressions when composed with others. 
 
 This broader notion of equality is called a \textit{congruence}. Intuitively an equivalence $ \equiv $ between expressions is a congruence if it is compatible with the syntax and semantics of the language. That is, given an occurrence of an expression $ e $ in some context $ C $ (written as $ C[e] $) and an equivalence $ e \equiv e' $, $ e $ can be freely substituted: $ C[e]\equiv C[e'] $. In other words, a congruence is compositional.
 
-Construction of a congruence relation over MOCaml is desirable, however not at all trivial. It is easy to see that the previously defined value equal weak bisimilarity (\Cref{defn:ve_weak_bisimilarity}) is not a congruence: $ \lambda $-abstractions are only  value equal weak bisimilar to themselves, as they are values. Even though the body may be substituted, the $ \lambda $-abstraction would not be equivalent under this relation.
+Construction of a congruence relation over MOCaml is desirable, however not at all trivial. It is easy to see that the previously defined value equal weak bisimilarity (\Cref{defn:ve_weak_bisimilarity}) is not a congruence: The body of a $ \lambda $-abstraction is not a context that is compositional. As $ \lambda $-abstractions are values, two $ \lambda $-abstractions are only equivalent under value equal weak bisimilarity if their bodies are textually equal.
 \[ \lambda x : T.( \delta \gg= x)\quad \not\approx_v \quad \lambda x : T.\delta \]
 
 However, weak bisimilarity also does not suffice: all values are trivially weakly bisimilar, since they do not reduce, but when substituted into a context arbitrary values will not behave the same. I decided to exclude proofs about congruences from the scope of this project. However, Howe's method\cite{howe1996proving}, as described by Pitts\cite{pitts2011howe}, is a standard way of establishing a congruence relation. This method is based on finding a pre-congruence candidate relation $ \lesssim $ and forming a congruence by Howe's construction. In simple languages it would follow that the symmetrisation of the pre-congruence relation  $ \lesssim \cap \lesssim^{\text{op}} = \simeq $ is a congruence. However, the semantics of MOCaml are not deterministic. Pitts notes that in this case the congruence $  \simeq$ is not equivalent to the symmetrisation of the pre-congruence relation. He suggests a method to overcome this, by using the transitive closure of the Howe's construction over an extension of applicative bisimilarity to open terms. However, in a setting with $ \tau $ reductions this bisimilarity would have to be weakened which may cause further complications. I left the exploration of this method as potential further work.
@@ -2343,7 +2348,7 @@ However, weak bisimilarity also does not suffice: all values are trivially weakl
 \subsection{Equivalence of the logical model and the extractable model}
 In this section I will prove the equivalence of the original logical model of the reduction relation generated by Ott and the relation extracted to OCaml.
 \subsubsection{Label erasure}
-As labels are only used to show properties of the system I decided not to include them in the extractable semantics: If labels were included, they would be completely ignored by the framework, but potentially introduce further runtime overhead.
+As labels are only used to show properties of the system I decided not to include them in the extractable semantics. If labels were included, they would be completely ignored by the framework, but potentially introduce further runtime overhead.
 
 To show that erasing labels is safe it suffices to show that there exists a deterministic partial function $ (e,s,e') \rightarrow rl $ from reduction triples (start expression, selection operator and destination expression) to labels. First, I proved that for any given reduction triple if a label exists it is unique:
 \begin{thm}[Unique labels]
@@ -2381,7 +2386,7 @@ To evaluate the performance of the framework I followed Deleuze\cite{deleuzeligh
 \item{\textbf{promise}: A promise monad based implementation of lightweight concurrency\cite[p.~13-15]{deleuzelight}.}
 \item{\textbf{tramp}: A lightweight implementation based on the trampolined style\cite[p.~11-12]{deleuzelight}.}
 \item{\textbf{lwt}: An LWT\cite{LWT} based implementation of lightweight concurrency.}
-\item{\textbf{equeue}: An event-based programming style lightweight concurrency implementation\cite[p.~15-18]{deleuzelight} based on the \textbf{Equeue} library of OCamlNet. I did not use this implementation in the evaluation as I could not find the right libraries to compile this.}
+\item{\textbf{equeue}: An event-based programming style lightweight concurrency implementation\cite[p.~15-18]{deleuzelight} based on the \textbf{Equeue} library of OCamlNet. I did not use this implementation in the evaluation as I could not find the right libraries to compile it.}
 \end{enumerate}
 \subsection{Method}
 Deleuze provides three examples to evaluate for performance, based on the examples used in Kahn's process language paper\cite{kahn1976coroutines}. I have implemented the examples in MOCaml using the random scheduler in \Cref{sec:random_sched} as the default scheduling algorithm. I measured the runtime and memory use of both my implementation and the library implementations for various input sizes. The runtime was measured with \textit{Unix.time} and the memory use was measured with the quick stat function of the \verb|Gc| module of OCaml which gives an interface to the garbage collector. Both bytecode and native code versions were measured. All programs were measured as both OCaml byetcode and native code. All examples were run on an Intel i7-2720QM CPU, which is a 4 core hyperthreaded system. This computer had 8 GBs of memory, OCaml version 3.12.1, a Linux kernel version 3.11.0-15-generic, and caml-shift version of August 2013.
@@ -2391,7 +2396,7 @@ My conjecture was that MOCaml will perform with similar characteristics as light
 \subsection{Examples}
 The three examples provided by Deleuze are all process networks from Kahn\cite{kahn1976coroutines}. A process network is a set of independent processes which communicate through message variables only. 
 
-A message variable (mvar) is a shared reference cell that blocks in two cases: if a thread tries to read an empty cell or if a thread tries to put something in a filled cell. A read from an mvar consumes the contents of the variable. The scope of this project did not include formalisation of communication procedures like message variables, however it is simple to implement within the framework. Access to a message variable is atomic as no two threads run in parallel, even though they are all concurrent. Furthermore, Deleuze used message First-in-First-out queues where putting information to the message FIFO never blocks. 
+A message variable (mvar) is a shared reference cell that blocks in two cases: if a thread tries to read an empty cell or if a thread tries to put something in a filled cell. A read from an mvar consumes the contents of the variable. The scope of this project did not include formalisation of communication procedures like message variables, but they are simple to implement within the framework. Access to a message variable is atomic as no two threads run in parallel, even though they are all concurrent. Furthermore, Deleuze used message First-in-First-out queues where putting information to the message FIFO never blocks. 
 
 In \Cref{fig:kpn_process_outline,fig:sieve_process_outline,fig:sorter_process_outline} processes are denoted with a circle. Message variables and FIFOs are denoted by squares. Solid lines denote data flow and dashed lines mean process creation.
 \begin{enumerate}
@@ -2402,8 +2407,8 @@ In \Cref{fig:kpn_process_outline,fig:sieve_process_outline,fig:sorter_process_ou
 \subsubsection{Kpn}
 \begin{figure}[H]
 \centering
-\scalebox{0.6}{%
-\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm,
+\scalebox{1}{%
+\hspace*{-3em}\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm,
   thick,main node/.style={circle,draw,
   font=\sffamily\Large\bfseries,minimum size=8mm}, mvar/.style={rectangle, draw, ,minimum size=3mm}]
   \begin{scope}
@@ -2599,7 +2604,7 @@ This problem is a good example of dynamic thread creation that most general purp
 \end{figure}
 
 
-As described in \Cref{sec:random_sched}, the default MOCaml scheduler chooses threads to reduce at random .Unexpectedly, the default implementation (MOCaml) in \Cref{fig:sieve_exec_times} exhibits an exponential behaviour. The reason for this is in the way random selection parameters relate to the \textbf{fork} tree formed by the expression.
+As described in \Cref{sec:random_sched}, the default MOCaml scheduler chooses threads to reduce at random. Unexpectedly, the default implementation (MOCaml) in \Cref{fig:sieve_exec_times} exhibits an exponential behaviour. The reason for this is in the way random selection parameters relate to the \textbf{fork} tree formed by the expression.
 
 \begin{figure}[H]
 \centering
@@ -2738,7 +2743,7 @@ As described in \Cref{sec:random_sched}, the default MOCaml scheduler chooses th
 \end{figure}
 
 
-Uniform random reductions assigns equal probabilities to each edge of a fork as it can be seen in \Cref{fig:sieve_without_ftt}. In general the probability that the filter process of the $ k $th prime fires is $ \frac{1}{2^{k+1}} $. This uneven probability distribution means that for the expected number of reduction steps taken by the system before finding the $ k $th prime is bigger than $ 2^{k+1} \in O(2^{k}) $ as it has to make at least one step within each filter.
+Uniform random reductions assigns equal probabilities to each edge of a fork as shown in \Cref{fig:sieve_without_ftt}. In general the probability that the filter process of the $ k $th prime fires is $ \frac{1}{2^{k+1}} $. This uneven probability distribution means that for the expected number of reduction steps taken by the system before finding the $ k $th prime is bigger than $ 2^{k+1} \in O(2^{k}) $ as it has to make at least one step within each filter.
 
 However, although the default scheduler in the MOCaml concurrency framework is random, the user is not restricted to uniform probabilities for each decision. It is possible to keep track of the fork tree at runtime and equalize the scheduling probabilities of all processes with every computation placeholder. This results in the scheduling probabilities shown in \Cref{fig:sieve_ftt}. These probabilities reduce the expected number of steps for the $ k $th prime to $ k(k+1) $. The speedup is easily seen on \Cref{fig:sieve_exec_times} with the series $ \text{MOCaml}_{\text{ftt}} $.
 
@@ -2910,7 +2915,7 @@ However, although the default scheduler in the MOCaml concurrency framework is r
 The last example is concurrent sort. Sorting of a list of integers can be implemented by single comparator units which take in two values and output the lower on one edge and the higher on the other (\Cref{fig:sorter_process_single}). To sort an entire list we can arrange these elements in a network shown in \Cref{fig:sorter_process_full}. This network takes in the $ n $ element list $ x_0, x_1, \dots, x_n $ and outputs the result $ r_0, r_1, \dots, r_n $. For an $ n $ element list the network has $ \frac{n(n-1)}{2} $ nodes. Different schedulings of this network correspond to different algorithms, such as bubble sort and insertion sort. For simplicity I did not show the message variables in \Cref{fig:sorter_process_outline} but they are used on each arrow. This problem is a good example of a task best suited for lightweight concurrency: a very large number of simple threads statically allocated. For a list size of 500, there are 124750 threads. 
 
 
-As expected, my system performed with the same characteristics as other lightweight concurrency solutions, but with a high overhead. Interestingly, the \textbf{vm} lightweight implementation performs very poorly, even though it is lighweight. On the other hand, the heavyweight \textbf{sys} implementation changes characteristics when the list grows larger than 250 elements and performs similarly to lightweight implementations. The memory use of my system is much higher than the other implementations (\Cref{fig:sorter_mem}).
+As expected, my system performed with the same characteristics as other lightweight concurrency solutions, but with a high overhead. Interestingly, the \textbf{vm} lightweight implementation performs very poorly, even though it is lightweight. On the other hand, the heavyweight \textbf{sys} implementation changes characteristics when the list grows larger than 250 elements and performs similarly to lightweight implementations. The memory use of my system is much higher than the other implementations (\Cref{fig:sorter_mem}).
 
 
 \begin{figure}[h]

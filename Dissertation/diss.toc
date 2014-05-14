@@ -28,12 +28,12 @@
 \contentsline {subsubsection}{Fixpoint combinator}{25}
 \contentsline {subsubsection}{The reduction relation of MOCaml}{26}
 \contentsline {subsubsection}{Operational semantics of the sequential MOCaml features}{27}
-\contentsline {subsection}{\numberline {3.1.2}Concurrency features: computation place holders, monadic primitives and fork}{31}
-\contentsline {subsubsection}{Computation place holders}{31}
+\contentsline {subsection}{\numberline {3.1.2}Concurrency features: computation placeholders, monadic primitives and fork}{31}
+\contentsline {subsubsection}{Computation placeholders}{31}
 \contentsline {subsubsection}{Monadic primitives}{31}
 \contentsline {subsubsection}{Fork}{32}
 \contentsline {subsubsection}{The operational semantics of the MOCaml concurrency features}{34}
-\contentsline {section}{\numberline {3.2}Proof assisstant system}{37}
+\contentsline {section}{\numberline {3.2}Proof assistant system}{37}
 \contentsline {subsection}{\numberline {3.2.1}Outline of the proof assistant code}{37}
 \contentsline {subsection}{\numberline {3.2.2}Extractable reduction relation}{40}
 \contentsline {section}{\numberline {3.3}OCaml system}{40}

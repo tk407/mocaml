@@ -5,11 +5,11 @@ Lem, a tool for lightweight executable mathematics.
 \newblock \url{http://www.cs.kent.ac.uk/people/staff/sao/lem/}.
 
 \bibitem{LWT}
-Lwt, lightweight threading library.
+Lwt, {L}ightweight {T}hreading library.
 \newblock \url{http://ocsigen.org/lwt/}.
 
 \bibitem{OCaml}
-Ocaml.
+{OC}aml.
 \newblock \url{http://ocaml.org/}.
 
 \bibitem{OCamlLightWeb}
@@ -20,7 +20,7 @@ Ott, a tool for writing definitions of programming languages and calculi.
 Bruno Barras, Samuel Boutin, Cristina Cornes, Judica{\"e}l Courant,
   Jean-Christophe Filliatre, Eduardo Gimenez, Hugo Herbelin, Gerard Huet, Cesar
   Munoz, Chetan Murthy, et~al.
-\newblock The coq proof assistant.
+\newblock The {Coq} proof assistant.
 \newblock \url{http://coq.inria.fr/}.
 
 \bibitem{benton2008mechanized}
@@ -51,18 +51,23 @@ Jan~A Bergstra and Jan~Willem Klop.
 
 \bibitem{blazy2006formal}
 Sandrine Blazy, Zaynah Dargaye, and Xavier Leroy.
-\newblock Formal verification of a c compiler front-end.
+\newblock Formal verification of a {C} compiler front-end.
 \newblock In {\em FM 2006: Formal Methods}, pages 460--475. Springer, 2006.
 
 \bibitem{blazy2009mechanized}
 Sandrine Blazy and Xavier Leroy.
-\newblock Mechanized semantics for the clight subset of the c language.
+\newblock Mechanized semantics for the {Clight} subset of the {C} language.
 \newblock {\em Journal of Automated Reasoning}, 43(3):263--288, 2009.
 
 \bibitem{brookes1983behavioural}
 Stephen Brookes and William Rounds.
 \newblock Behavioural equivalence relations induced by programming logics.
 \newblock {\em Automata, Languages and Programming}, pages 97--108, 1983.
+
+\bibitem{Async}
+Jane~Street Capital.
+\newblock Async, open source concurrency library.
+\newblock \url{http://janestreet.github.io/}.
 
 \bibitem{church1940formulation}
 Alonzo Church.
@@ -81,8 +86,8 @@ David Delahaye, Catherine Dubois, and Jean-Fr{\'e}d{\'e}ric {\'E}tienne.
 
 \bibitem{deleuzelight}
 Christophe Deleuze.
-\newblock Light weight concurrency in ocaml: Continuations, monads, promises,
-  events.
+\newblock {Light Weight Concurrency} in {OCaml}: {C}ontinuations, {M}onads,
+  {P}romises, {E}vents.
 
 \bibitem{friedman1988applications}
 Daniel~P Friedman.
@@ -98,7 +103,7 @@ Steven~E Ganz, Daniel~P Friedman, and Mitchell Wand.
 \bibitem{hoareetal2001tackling}
 CAR Hoareetal.
 \newblock Tackling the awkward squad: monadic input/output, concurrency,
-  exceptions, and foreign-language calls in haskell.
+  exceptions, and foreign-language calls in {H}askell.
 \newblock {\em Engineering theories of software construction}, 180:47, 2001.
 
 \bibitem{howe1996proving}
@@ -119,24 +124,24 @@ Jean-Christophe Filli{\^a}tre~K Kalyanasundaram.
 
 \bibitem{kiselyov2010delimited}
 Oleg Kiselyov.
-\newblock Delimited control in ocaml, abstractly and concretely: System
+\newblock Delimited control in {OC}aml, abstractly and concretely: {S}ystem
   description.
 \newblock In {\em Functional and Logic Programming}, pages 304--320. Springer,
   2010.
 
 \bibitem{kiselyov2012delimited}
 Oleg Kiselyov.
-\newblock Delimited control in ocaml, abstractly and concretely.
+\newblock Delimited control in {OC}aml, abstractly and concretely.
 \newblock {\em Theoretical Computer Science}, 435:56--76, 2012.
-
-\bibitem{leroyocaml}
-Xavier Leroy.
-\newblock Ocaml-callcc: call/cc for ocaml (2005).
-\newblock \url{http://pauillac.inria.fr/~xleroy/software.html#callcc}.
 
 \bibitem{ocamlmpi}
 Xavier Leroy.
-\newblock Ocamlmpi: Interface with the mpi message-passing interface.
+\newblock {OCamlMPI}: Interface with the {MPI Message-passing Interface}.
+
+\bibitem{leroyocaml}
+Xavier Leroy.
+\newblock {OC}aml-callcc: call/cc for {OC}aml.
+\newblock \url{http://pauillac.inria.fr/~xleroy/software.html#callcc}, 2005.
 
 \bibitem{leroy2009formal}
 Xavier Leroy.
@@ -145,7 +150,7 @@ Xavier Leroy.
 
 \bibitem{letouzey2008extraction}
 Pierre Letouzey.
-\newblock Extraction in coq: An overview.
+\newblock Extraction in {Coq}: {An} overview.
 \newblock In {\em Logic and Theory of Algorithms}, pages 359--369. Springer,
   2008.
 
@@ -173,7 +178,7 @@ Robin Milner.
 
 \bibitem{OCamlLight}
 Scott Owens.
-\newblock A sound semantics for ocaml light.
+\newblock A sound semantics for {OCaml} light.
 \newblock In {\em Programming Languages and Systems}, pages 1--15. Springer,
   2008.
 
@@ -219,13 +224,8 @@ Chung-chieh Shan.
 
 \bibitem{Ocamlnet}
 Gerd Stolpmann.
-\newblock Ocamlnet.
+\newblock {OC}aml{N}et.
 \newblock \url{http://projects.camlcity.org/projects/ocamlnet.html}.
-
-\bibitem{Async}
-Jane Street.
-\newblock Async, open source concurrency library.
-\newblock \url{http://janestreet.github.io/}.
 
 \bibitem{tollitte2012producing}
 Pierre-Nicolas Tollitte, David Delahaye, and Catherine Dubois.
