@@ -12,46 +12,28 @@ Load redTotalDetProp.
 
 
 
-Definition swapbodyl : expr :=E_ret   
-                                   ( 
-                                     ( E_taggingright
-                                        (E_pair 
-                                          (   
-                                                    (E_proj2  (E_ident (1))) 
-                                          ) 
-                                          (E_proj1 (E_ident (1)))  
-                                        )
-                                     )
-                                    ).
+Definition swapbodyl : expr :=
+            E_ret (  
+             E_taggingright (
+              E_pair (E_proj2  (E_ident (1))) 
+                     (E_proj1  (E_ident (1)))
+                            )
+                   ).
 
-Definition swapbodyr : expr :=E_ret   
-                                   (E_taggingleft  
-                                     ( 
-                                        (E_pair 
-                                          (   
-                                                    (E_proj2  (E_ident (2))) 
-                                          ) 
-                                          (E_proj1  (E_ident (2)))  
-                                        )
-                                     )
-                                    ).
+Definition swapbodyr : expr :=
+            E_ret (  
+             E_taggingleft (
+              E_pair (E_proj2  (E_ident (2))) 
+                     (E_proj1  (E_ident (2)))
+                           )
+                   ).
 
 Definition swapbody : expr := E_case (E_ident (0)) 
-           (1) ( 
-                 swapbodyl
-               ) 
-           (2) (
-
-                swapbodyr
-
-               ).
+           (1) (swapbodyl) 
+           (2) (swapbodyr).
 
 Definition swapf : expr :=
-    E_function (0) TE_unit 
-      (
-       swapbody
-
-      ).
+    E_function (0) TE_unit swapbody.
 
 
 
