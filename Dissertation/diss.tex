@@ -15,6 +15,7 @@
 \usepackage{amsfonts}
 \usepackage{amsthm}
 \usepackage{amssymb}
+\usepackage{thmtools}
 
 %\usepackage{stmaryrd}
 
@@ -145,7 +146,7 @@
 \newtheorem*{cor}{Corollary}
 \newtheorem*{KL}{Klein's Lemma}
 \theoremstyle{definition}
-\newtheorem{defn}{Definition}[section]
+\newtheorem{defn}[thm]{Definition}
 \newtheorem{conj}{Conjecture}[section]
 \newtheorem{exmp}{Example}[section]
 \theoremstyle{remark}
@@ -277,6 +278,8 @@ extent for a comparable purpose.
 \listoffigures
 
 \lstlistoflistings
+
+\listoftheorems[numwidth=3em]
 
 
 
@@ -572,7 +575,7 @@ t :: 't_' ::=                                 {{ com term    }}
 
 In \Cref{lst:ottgrammarex} the non-terminal t for terms is defined with 5 productions: variables, lambda abstractions, applications, parentheses grouping and variable substitution. Each of these rules have a name, such as Var and Lam. Each of these names are prefixed by the unique prefix t\_ to have non-ambiguous names. The right hand side of each line describes the translation to target languages, for example com will  generate the given description for the \LaTeX\, target. 
 
-There are meta flags S and M to describe syntactical sugar and meta productions that are not generated as data structure elements in target languages, but instead have their own instructions: for example the substitution term will be rewritten as an application of the tsubst\_t relation defined elsewhere. 
+There are meta flags S and M to describe syntactic sugar and meta productions that are not generated as data structure elements in target languages, but instead have their own instructions: for example the substitution term will be rewritten as an application of the tsubst\_t relation defined elsewhere. 
 
 In many languages one might want to define a value subgrammar, which can be used both in the reduction relation definition and in proving properties of the semantics. Ott has support for general subgrammar relation check.
 
@@ -993,8 +996,8 @@ In this section I describe the implemented semantics. These semantics were writt
 The semantics splits into three main parts
 \begin{enumerate}
 \item{Grammars:\begin{itemize}
-\item{expressions, denoted by $ e $}
-\item{values, denoted by $ v $}
+\item{expression grammar, denoted by $ e $}
+\item{value subgrammar, denoted by $ v $}
 \end{itemize}}
 \item{Types and type judgements}
 \item{Reduction judgements}
@@ -1548,7 +1551,7 @@ In previous subsections there were no constructs that accept external computatio
   \centering
   $\underbracket{\overbracket{\textrm{
   \begin{tabular}{l | l}
-    \begin{minipage}{0.5\linewidth}
+    \begin{minipage}{0.47\linewidth}
     \begin{tabularx}{\textwidth}{l l >{\raggedleft}X}
     \textit{Syntax} &  & \tabularnewline
     $ e $\, ::=  &\dots  & \textit{terms:}\tabularnewline
@@ -1703,19 +1706,19 @@ I chose to always reduce a place holder to an expression within the framework to
   \centering
   $\underbracket{\overbracket{\textrm{
   \begin{tabular}{l}
-  \begin{tabularx}{\textwidth}{l l r}
+  \begin{tabularx}{0.7\linewidth}{l l r}
                         \textit{Values} &  & \tabularnewline
                           $ v $\, ::=  &\dots  & \textit{values:}\tabularnewline
                           & $ \textbf{live } e$  & \textit{live}\tabularnewline
                         \end{tabularx}\\
-                    {\rule{\linewidth}{\arrayrulewidth}}\\
- \begin{minipage}{\textwidth}
-          \begin{tabularx}{\textwidth}{>{\centering}X}
+                    {\rule{0.9\linewidth}{\arrayrulewidth}}\\
+ \begin{minipage}{0.9\textwidth}
+          \begin{tabularx}{\textwidth}{>{\raggedright}X}
               \textit{Evaluation} \hfill \fbox{$e \, \red{s}{rl}\, e'$}  \tabularnewline    {\begin{equation}
                                        \inferrule
                                         {}
                                         { \textbf{ret }\,v \, \red{s}{\tau}\, \textbf{live } v } \tag{R-Return}\label{eq:r-ret}
-                                        \end{equation}\vspace{-15mm}}
+                                        \end{equation}\vspace{-9mm}}
                                         \tabularnewline   { \begin{equation}
                                         \inferrule
                                          { e \red{s}{rl} e'}
@@ -1724,12 +1727,12 @@ I chose to always reduce a place holder to an expression within the framework to
                                       \tabularnewline  { \begin{equation}
                                                                             \inferrule
                                                                             {}
-                                                                            { \textbf{live }  v\,\gg=\,e' \, \red{s}{\tau}\, e'\, v  } \tag{R-Dobind}\label{eq:r-dobind} \end{equation}\vspace{-15mm}}
+                                                                            { \textbf{live }  v\,\gg=\,e' \, \red{s}{\tau}\, e'\, v  } \tag{R-Dobind}\label{eq:r-dobind} \end{equation}\vspace{-9mm}}
                                       \tabularnewline  { \begin{equation}
                                       \inferrule
                                        { e \red{s}{rl} e''}
                                        { \textbf{live }  e\,\gg=\,e' \, \red{s}{rl}\, \textbf{live } e''\, \gg= e'\,  } \tag{R-Movebind}\label{eq:r-movebind}
-                                                                \end{equation}\vspace{-9mm}}
+                                                                \end{equation}\vspace{-7mm}}
               \tabularnewline  { \begin{equation}
               \inferrule
               { e \red{s}{rl} e''}
@@ -1817,7 +1820,7 @@ Inductive typexpr : Set :=
 \end{minipage}
 
 
-Notice how terms have a one-to-one correspondence except for $ (\,t\,) $ that has no counterpart: the flag S tells Ott that it is only syntactical sugar. Syntactical sugar does not get translated to a type constructor, however with so called homomorphisms, like
+Notice how terms have a one-to-one correspondence except for $ (\,t\,) $ that has no counterpart: the flag S tells Ott that it is only syntactic sugar. syntactic sugar does not get translated to a type constructor, however with so called homomorphisms, like
  \[\text{ \lstinline[language={Ott}]|\{\{ ich [[t]] \}\}| } \] 
  one can specify how exactly to translate them. A homomorphism starts with a destination like \lstinline[language={Ott}]|ocaml| for OCaml or \lstinline[language={Ott}]|ich| for Isabelle, Coq and HOL. An expression in double square brackets \lstinline[language={Ott}]|[[t]]| stands for the translation of the expression within the brackets.
 }
@@ -2039,7 +2042,7 @@ My solution was to insert the correct step into the failing match as in \Cref{ls
 \end{lstlisting}
 
 \end{minipage}
-A reoccurring inefficiency comes from the extraction plugin generating a default failing case in all situations, even if the default case may never happen. \Cref{lst:ocamlunneededdefault2} in \Cref{lst:ocamlorigapp} is an example of this: a boolean may only take the values true or false. A similar issue occurs when evaluating a function:  \Cref{lst:ocamlunneededmatchonfun} in the same listing matches by giving a name to the return value, but generates a default case as well. I simply removed the superfluous match and replaced the name of the return value with the function call.
+A reoccurring inefficiency comes from the extraction plugin generating a default failing case in all situations, even if the default case may never happen. \Cref{lst:ocamlunneededdefault2} in \Cref{lst:ocamlorigapp} is an example of an unnecessary default case: a boolean may only take the values true or false. A similar issue occurs when evaluating a function:  \Cref{lst:ocamlunneededmatchonfun} in the same listing matches by giving a name to the return value, but generates a default case as well. I simply removed the superfluous match and replaced the name of the return value with the function call.
 
 A further issue occurs when occasionally the plugin reorders matches on assumptions. Even though the safe assumption was inserted in the case in \Cref{lst:ocamlswapassume} it was reordered by the plugin to come after the unsafe assumption.\vspace{2mm}
 
@@ -2077,7 +2080,7 @@ The multiple layers of automatic naming make development in raw MOCaml cumbersom
 
 
  \lstinline|let fork a b = E_fork (a, b)|}
-\item{Round-robin and random schedulers in \Cref{lst:ocamlrrsched} and \Cref{lst:ocamlrandsched} respectively.}
+\item{Round-robin and random schedulers in \Cref{lst:ocamlrrsched} and \Cref{lst:ocamlrandsched} respectively.\label{sec:random_sched}}
 \end{itemize}
 \begin{minipage}{\linewidth}
 
@@ -2109,64 +2112,66 @@ The multiple layers of automatic naming make development in raw MOCaml cumbersom
 
 \cleardoublepage
 \chapter{Evaluation}
-In this chapter I evaluate the implementation from two perspectives: theoretical and performance. The theoretical evaluation examines the implementation 
+In this chapter I evaluate the project from two perspectives: I explore and prove some theoretical properties of the semantics and I evaluate the performance of MOCaml against other concurrency implementations.
 
 
 \section{Theoretical evaluation}
 \label{sec:behave_equiv}
-There are a number of properties that are expected from this system: monadic laws, process calculus axioms and potentially properties of the fixpoint operator, predicates for pairs, type preservation and progress. These requirements are all phrased as equivalences as mentioned in \Cref{sec:first_mention_of_equiv}. 
+A monadic concurrency framework should satisfy a number of properties: monadic laws, process calculus axioms and potentially properties of the fixpoint operator, predicates for pairs, type preservation and progress. These requirements are all phrased as equivalence between expressions as mentioned in \Cref{sec:first_mention_of_equiv}. 
 
-First the semantics of the equivalence $ \equiv $ had to be examined. If two expressions are equivalent they should behave the same: for an outside observer there has to be no difference which exact expression is evaluated in a black box computation. One way to capture this is by keeping track of potential effects and side-effects. Effects are the return values of an expression, side-effects are the computation placeholders invoked by the system. That is why I phrased the operational semantics with labelled transitions: the labels are descriptions of the side-effects.
+First the semantics of the equivalence $ \equiv $ had to be examined. If two expressions are equivalent they should behave the same: for an outside observer there should to be no difference which exact expression is evaluated in a black box computation. One way to capture this is by keeping track of potential results and side-effects. Results are the return values of an expression, side-effects are the computation placeholders invoked by the system. That is why I phrased the operational semantics with labelled transitions: the labels are descriptions of the side-effects.
 
-Labelled transition systems, like the operational semantics I have defined, is a common way to describe systems with side-effects. As the selection operator is external and not determined by the system I consider it and therefore the transition system non-deterministic. Brookes\cite{brookes1983behavioural} surveys various equivalence relations over non-deterministic labelled transitions systems. I chose to follow Milner\cite{milner1982calculus} and use weak bisimilarity with a slight modification.
+Labelled transition systems, like the operational semantics I have defined, are a common way to describe systems with side-effects. As the selection operator is external and not determined by the system I consider it and therefore the transition system non-deterministic. Brookes\cite{brookes1983behavioural} surveys various equivalence relations over non-deterministic labelled transitions systems. I chose to follow Milner\cite{milner1982calculus} and used weak bisimilarity.
 
 \subsection{Weak bisimilarity}
 Bisimilarity is a standard method for establishing behavioural equivalence of a non-deterministic language used by Milner for CCS\cite{milner1982calculus}, Pierce and Sangiorgi for $ \pi $-calculus\cite{pierce2000behavioral} and Bergstra for the Algebra of Communicating Processes\cite{bergstra1986algebra,bergstra1985algebra} among others. 
 
-In the following definitions I use $ p,\, q,\, e $ as expressions, $ \alpha $ as an atomic action, $ \tau $ as a silent action, $ \delta $ as an action that may be either silent or atomic and $ p \overset{\delta}{\rightarrow} p' $ as the statement that for some selection value $ p $ may transition in a single step to $ p' $ with a side-effect $ \delta $.
+In the following definitions I use $ p,\, q,\, e $ (and $ p',\,q',\, e' $ etc.) as expressions, $ \alpha $ as an atomic action, $ \tau $ as a silent action, $ \sigma $ as an action that may be either silent or atomic and $ p \overset{\sigma}{\rightarrow} p' $ as the statement that for some selection value $ p $ may transition in a single step to $ p' $ with a side-effect $ \sigma $.
 
-\begin{defn}
+\begin{defn}[Bisimilarity]
 Two expressions $ p $ and $ q $ are \textit{bisimilar} if and only if
 \begin{itemize}
-\item{For all $ q' $ such that $ q \overset{\delta}{\rightarrow} q' $ there is a $ p' $ such that $ p \overset{\delta}{\rightarrow} p' $ and $ p' $ and $ q' $ are bisimilar. }
-\item{For all $ p' $ such that $ p \overset{\delta}{\rightarrow} p' $ there is a $ q' $ such that $ q \overset{\delta}{\rightarrow} q' $ and $ p' $ and $ q' $ are bisimilar. }
+\item{For all $ q' $ such that $ q \overset{\sigma}{\rightarrow} q' $ there is a $ p' $ such that $ p \overset{\sigma}{\rightarrow} p' $ and $ p' $ and $ q' $ are bisimilar. }
+\item{For all $ p' $ such that $ p \overset{\sigma}{\rightarrow} p' $ there is a $ q' $ such that $ q \overset{\sigma}{\rightarrow} q' $ and $ p' $ and $ q' $ are bisimilar. }
 \end{itemize}
 \end{defn}
 
-Weak bisimilarity is an extension to bisimilarity by noting that in some cases not all reductions need to be observable: Milner\cite{milner1982calculus} introduces $ \tau $ or silent reductions that do not have observable effects. In this setting it would be unnecessarily restrictive to require that two expression simulate the unobservable behaviour of each other. 
+Weak bisimilarity is an extension to bisimilarity in which not all reductions are observable: Milner\cite{milner1982calculus} introduces $ \tau $ or silent reductions that do not have observable side-effects. In a setting with $ \tau $ reductions it would be unnecessarily restrictive to require that two expressions simulate the unobservable behaviour of each other. 
 
-\begin{defn}
+\begin{defn}[Silent reduction]
 $ p $ \textit{silently reduces} to $ p' $ or $ p \overset{\tau}{\Rightarrow} p' $ if and only if $ (p, p') \in \left(\overset{\tau}{\rightarrow}\right)^* $, that is, the two expressions are in the transitive, reflexive closure of $ \overset{\tau}{\rightarrow} $. More simply if $ p $ can reduce to $ p' $ with zero or more $ \tau $ steps.
 \end{defn}
 
-\begin{defn}
-$ p $ \textit{weakly reduces} to $ p' $ with side-effect $ \delta $ or $ p \overset{\delta}{\Rightarrow} p' $ if and only if 
+\begin{defn}[Weak reduction]
+$ p $ \textit{weakly reduces} to $ p' $ with side-effect $ \sigma $ or $ p \overset{\sigma}{\Rightarrow} p' $ if and only if 
 \begin{itemize}
-\item{in the case $ \delta = \tau $, $ p \overset{\tau}{\Rightarrow} p' $}
-\item{in the case $ \delta = \alpha $, there exist $ p_1, p_2 $ expressions such that $ p \overset{\tau}{\Rightarrow} p_1 $, $ p_1 \overset{\alpha}{\rightarrow} p_2 $, $ p_2 \overset{\tau}{\Rightarrow} p' $}
+\item{in the case $ \sigma = \tau $, $ p \overset{\tau}{\Rightarrow} p' $}
+\item{in the case $ \sigma = \alpha $, there exist $ p_1, p_2 $ expressions such that $ p \overset{\tau}{\Rightarrow} p_1 $, $ p_1 \overset{\alpha}{\rightarrow} p_2 $, $ p_2 \overset{\tau}{\Rightarrow} p' $}
 \end{itemize}
 \end{defn}
 
 A simplified version of Milner's definition for weak bisimilarity states:
-\begin{defn}[Milner]
+\begin{defn}[Milner's weak bisimulation]
 A relation $ \mathcal{R} $ between expressions is a \textit{weak bisimulation} if and only if for all expressions $ p $ and $ q $ such that $ (p,q)\in \mathcal{R} $ or $ p\, \mathcal{R}\, q $:
 \begin{itemize}
-\item{For all $ q' $ such that $ q \overset{\delta}{\Rightarrow} q' $ there is a $ p' $ such that $ p \overset{\delta}{\Rightarrow} p' $. and $ (p', q') \in \mathcal{R}$. }
-\item{For all $ p' $ such that $ p \overset{\delta}{\Rightarrow} p' $ there is a $ q' $ such that $ q \overset{\delta}{\Rightarrow} q' $. and $ (p', q') \in \mathcal{R}$. }
+\item{For all $ q' $ such that $ q \overset{\sigma}{\Rightarrow} q' $ there is a $ p' $ such that $ p \overset{\sigma}{\Rightarrow} p' $. and $ (p', q') \in \mathcal{R}$. }
+\item{For all $ p' $ such that $ p \overset{\sigma}{\Rightarrow} p' $ there is a $ q' $ such that $ q \overset{\sigma}{\Rightarrow} q' $. and $ (p', q') \in \mathcal{R}$. }
 \end{itemize}
 \end{defn}
 
-Sangiorgi\cite{sangiorgi1992problem} remarks that there is an equivalent definition that is much easier to show:
-\begin{defn}[Sangiorgi]
+Weak bisimulation has a number of useful properties: if $ \mathcal{R} $ and $ \mathcal{S} $ are weak bisimulations then $ \mathcal{R}^{-1}, \mathcal{R}^*, \mathcal{R}^+, \mathcal{R}\cup\mathcal{S}$  and $\mathcal{R} \circ \mathcal{S} $ are all weak bisimulations.
+
+Sangiorgi\cite{sangiorgi1992problem} remarks that there is an equivalent definition that uses only a single step:
+\begin{defn}[Sangiorgi's weak bisimulation]
 A relation $ \mathcal{R} $ between expressions is a \textit{weak bisimulation} if and only if for all expressions $ p $ and $ q $ such that $ (p,q)\in \mathcal{R} $ or $ p\, \mathcal{R}\, q $:
 \begin{itemize}
-\item{For all $ q' $ such that $ q \overset{\delta}{\rightarrow} q' $ there is a $ p' $ such that $ p \overset{\delta}{\Rightarrow} p' $. and $ (p', q') \in \mathcal{R}$. }
-\item{For all $ p' $ such that $ p \overset{\delta}{\rightarrow} p' $ there is a $ q' $ such that $ q \overset{\delta}{\Rightarrow} q' $. and $ (p', q') \in \mathcal{R}$. }
+\item{For all $ q' $ such that $ q \overset{\sigma}{\rightarrow} q' $ there is a $ p' $ such that $ p \overset{\sigma}{\Rightarrow} p' $. and $ (p', q') \in \mathcal{R}$. }
+\item{For all $ p' $ such that $ p \overset{\sigma}{\rightarrow} p' $ there is a $ q' $ such that $ q \overset{\sigma}{\Rightarrow} q' $. and $ (p', q') \in \mathcal{R}$. }
 \end{itemize}
 \end{defn}
 
-I proved this equivalence for the transition system of MOCaml. This second definition is much easier to show in Coq as Coq generates an inversion lemma for a single step however not for a weak reduction. Weak bisimulation has a number of useful properties: if $ \mathcal{R} $ and $ \mathcal{S} $ are weak bisimulations then $ \mathcal{R}^{-1}, \mathcal{R}^*, \mathcal{R}^+, \mathcal{R}\cup\mathcal{S}$  and $\mathcal{R} \circ \mathcal{S} $ are all weak bisimulations.
-\begin{defn}
+I proved the equivalence of these two definitions for the transition system of MOCaml. This second definition is much easier to show in Coq as Coq generates an inversion lemma for a single step, as used in Sangiorgi's definition, however not for a weak reduction required by Milner's definition. This is a marked difference: the proofs in the following section took around five thousand lines of code in a previous iteration with Milner's definition, while only a few hundred lines with Sangiorgi's definition.
+\begin{defn}[Weak bisimilarity]
 \label{defn:weak_bisimilarity}
 Two expressions $ p $ and $ q $ are \textit{weakly bisimilar} or $ p\approx q $ if there is a weak bisimulation $ \mathcal{R} $ such that $ (p,q) \in \mathcal{R} $.
 \end{defn}
@@ -2175,12 +2180,12 @@ Two expressions $ p $ and $ q $ are \textit{weakly bisimilar} or $ p\approx q $ 
 
 While weak bisimilarity perfectly captures side-effect behaviour it does not capture equality of return values: all values are weakly bisimilar as values do not reduce. Therefore in many cases I will use a restriction of weak bisimilarity:
 
-\begin{defn}
+\begin{defn}[Value equal]
 \label{defn:ve_weak_bisim}
 A weak bisimulation $ \mathcal{R} $ is \textit{value equal} if for all $ v, v' $ values if $ v\,\mathcal{R}\,v' $ then $ v = v' $
 \end{defn}
 
-\begin{defn}
+\begin{defn}[Value equal weak bisimilarity]
 \label{defn:ve_weak_bisimilarity}
 Two expressions $ p $ and $ q $ are \textit{value equal weakly bisimilar} or $ p\approx_v q $ if there is a value equal weak bisimulation $ \mathcal{R} $ such that $ p\, \mathcal{R} \, q $.
 \end{defn}
@@ -2190,22 +2195,23 @@ These definitions also enjoy the same properties as their non-restricted counter
 
 In this section I introduce a number of properties that I required from the implementation and the way they apply. I give a slightly informal statement for each of these properties and a sketch of the major points in the proofs. \Cref{cha:full_proof_statements} gives the precise Coq statements of the theorems along with some supporting lemmas and structures. 
 
-First, I describe the three monadic laws mentioned in \Cref{sec:monad_first_mention}. Then I attempt to show some of the basic process algebra axioms used by Bergstra for his Algebra of Communicating Processes\cite{bergstra1986algebra,bergstra1984process}. These properties can be summarized as follows:
+First, I describe the three monadic laws mentioned in \Cref{sec:monad_first_mention}. Then I attempt to show some of the basic process algebra axioms used by Bergstra for his Algebra of Communicating Processes\cite{bergstra1984process,bergstra1986algebra}. These properties can be summarized as follows:
 \begin{align}
-x + y &= y + x \label{eq:fork_comm}\\
-(x + y) + z &= x + (y + z) \label{eq:fork_assoc}\\
-x + x &= x \label{eq:choice_id}\\
-(x + y)\cdot z &= (x \cdot z) + (y \cdot z) \label{eq:fork_bind_distribute}\\
-(x \cdot y)\cdot z &= x \cdot (y \cdot z) \label{eq:bind_assoc}\\
-\delta + x &= x \label{eq:fork_deadlock} \\
-\delta \cdot x &= \delta \label{eq:bind_deadlock}
+x + y &= y + x \tag{+ commutativity} \label{eq:fork_comm}\\
+(x + y) + z &= x + (y + z) \tag{+ associativity} \label{eq:fork_assoc}\\
+x + x &= x \tag{+ idempotence}\label{eq:choice_id}\\
+(x + y)\cdot z &= (x \cdot z) + (y \cdot z) \tag{+ $ \cdot $ distributivity} \label{eq:fork_bind_distribute}\\
+(x \cdot y)\cdot z &= x \cdot (y \cdot z) \tag{$\cdot$ associativity} \label{eq:bind_assoc}\\
+\delta + x &= x \tag{+ deadlock}\label{eq:fork_deadlock} \\
+\delta \cdot x &= \tag{$\cdot$ deadlock}\delta \label{eq:bind_deadlock}
 \end{align}
 
-In the above axioms $ + $ denotes ``alternative composition" which resembles the \textbf{choose} operator. Sequential composition is denoted by $ \cdot $ and a process that cannot move forward, that is it is deadlocked is written as $ \delta $. 
+In the above axioms $ + $ denotes ``alternative composition" which resembles the \textbf{choose} operator. Sequential composition is denoted by $ \cdot $ and a process that cannot move forward $ \delta $. Bergstra\cite{bergstra1984process} calls process $ \delta $ \textit{deadlocked}.
 
-By understanding $ + $ as the \textbf{fork} primitive of MOCaml only \Cref{eq:fork_comm,eq:fork_assoc,eq:fork_deadlock} may be true: because of the semantics of \textbf{fork} \Cref{eq:choice_id,eq:fork_bind_distribute} cannot be true as they may duplicate side-effects. Sequential composition or bind is denoted by $ \cdot $.
+If we instead interpret $ + $ as the fork primitive of MOCaml only \Cref{eq:fork_comm,eq:fork_assoc,eq:fork_deadlock} may hold. Due to the semantics of \textbf{fork} \Cref{eq:choice_id,eq:fork_bind_distribute} do not hold as they may duplicate side-effects. Sequential composition or bind is denoted by $ \cdot $.
 
 \subsubsection{Monadic laws}
+\label{sec:equivs}
 The formal proofs of the following theorems about the monadic laws governing \textbf{ret} and bind $ \gg= $ can be found in \verb|mconbaseMonProofs.v|.
 
 \begin{thm}[Return is left neutral to bind]
@@ -2213,7 +2219,7 @@ For all expressions $ e, f $, if $ f $ is a value then
 \[ \textbf{ret } e\,\gg=\, f\quad \approx_v \quad f\,e \]
 \end{thm}
 
-The left neutrality has a caveat: it is only true if the function is a value. If this was not the case then the left hand side of the weak bisimilarity would first reduce $ f $ and then $ e $ which was a conscious decision: it felt unintuitive to reduce the later part of a sequencing first. 
+The left neutrality has a caveat: it is only true if the function is a value. If this was not the case then the left hand side of the weak bisimilarity would first reduce $ f $ and then $ e $. This was a conscious decision : it felt unintuitive to reduce the later part of a sequencing first. 
 
 \begin{thm}[Return is right neutral to bind]
 For any value $ v$
@@ -2225,9 +2231,9 @@ For any expression $ e$
 \[  \textbf{live }e\,\gg=\, \textbf{ret}\quad \approx_v \quad \textbf{ret } e \]
 \end{thm}
 
-While the general statement of the right neutrality is 
+The general statement of the right neutrality is 
 \[  e\,\gg=\, \textbf{ret}\quad \approx_v \quad e \]
-This is not true in general: if $ e $ reduces to a live expression that has an unreduced expression boxed the right hand side does not generate the side-effects of the boxed up computation. However, it is possible to show that in general if $ e $ always reduces to a boxed up value it will hold.
+However, this is not true in general for MOCaml. If $ e $ reduces to a live expression that has an unreduced expression boxed then the right hand side does not generate the side-effects of the boxed up computation. However, it is possible to show that if $ e $ always reduces to a boxed up value then right neutrality holds.
 
 \begin{thm}[Bind is associative]
 For any expression $ e $, values $ f, g $ and variable $ x $, if $ x $ appears neither in $ f $ nor in $ g $ either bound or free
@@ -2251,36 +2257,20 @@ For all expressions $ e, e'$
 \[  \textbf{fork}\,(\textbf{live }e)\,(\textbf{live }e')\quad \approx_v \quad (\textbf{fork}\,(\textbf{live }e')\,(\textbf{live }e))\gg=\text{swapf} \]
 \end{thm}
 
-\begin{lstlisting}[language={Coq}, caption={Swapf operator}, label={lst:swapf_op}]
-Definition swapbodyl : expr :=
-         E_ret (E_taggingright
-            (E_inpair 
-              (E_proj2  (E_ident (1))) 
-              (E_proj1  (E_ident (1)))  
-            )
-     ).
-
-Definition swapbodyr : expr :=
-          E_ret (E_taggingleft  
-            (E_inpair 
-               (E_proj2  (E_ident (2))) 
-               (E_proj1  (E_ident (2)))  
-            )).
-
-Definition swapbody : expr := E_case (E_ident (0)) 
-           (1)  swapbodyl
-           (2)  swapbodyr.
-
+\begin{lstlisting}[language={Coq}, caption={The $\mathit{swapf}$ operator with $ \lambda $ notation}, label={lst:swapf_op},escapeinside={@}{@}]
 Definition swapf : expr :=
-    E_function (0) TE_unit swapbody.
+    @$\lambda$@ x : T. case x of left  x1 => 
+                      ret(right {proj2 x1, proj1 x1}) 
+                     | right x2 =>
+                      ret(left  {proj2 x2, proj1 x2}) 
 \end{lstlisting}
-\Cref{lst:swapf_op} shows the definition of the swapf operator. It just swaps the output of the commuted fork to the correct return value. Notice that it does not obey the typing rule: to define swapf with correct type there has to be a family of swapf operators for each possible return type. By binding swapf onto the commuted \textbf{fork} we get a value equal weak bisimilarity as swapf is always silent.
+\Cref{lst:swapf_op} shows the definition of the $\mathit{swapf}$ operator in a simplified $ \lambda $ notation. \Cref{lst:orig_coq_swapf} shows the original Coq definition. The $ \mathit{swapf} $ operator just swaps the output of the commuted \textbf{fork} to the correct return value. Notice that $ \mathit{swapf} $ contains a type variable $ T $. This variable is due to $ \mathit{swapf} $ being a family of operations, one for each \textbf{fork} return type. By binding $\mathit{swapf}$ onto the commuted \textbf{fork} we get a value equal weak bisimilarity as $\mathit{swapf}$ is always silent when applied to the return value of a \textbf{fork}.
 
 \subsubsection{Fork associativity}
 Fork in this implementation is not associative:
 
 \begin{thm}[Fork is not associative]
-There are expressions $a, b, c$
+There are expressions $a, b, c$ such that
 \[  \textbf{fork}\,(\textbf{live }(\textbf{fork}\,(\textbf{live }a)\,(\textbf{live }b)))\,(\textbf{live }c)\quad \not\approx \quad \textbf{fork}\,(\textbf{live }a)\,(\textbf{live }(\textbf{fork}\,(\textbf{live }b)\,(\textbf{live }c)) \]
 \end{thm}
 
@@ -2299,11 +2289,11 @@ While \ref{eq:fork_assoc_counter_r} may run the computation on the right, \ref{e
 \subsubsection{Deadlock properties}
 The properties involving deadlock may be found in the file \verb|forkDeadlock.v|.
 
-\begin{defn}
-An expression $ \delta $ is \textit{deadlocked} if it can weakly reduce and any weak reduction it may make is silent and finishes in another \textit{deadlocked} expression. 
+\begin{defn}[Deadlock]
+An expression $ \delta $ is \textit{deadlocked} if it can reduce and any weak reduction it may make is silent and finishes in another \textit{deadlocked} expression. 
 \end{defn}
 
-This definition is closer to the common understanding of livelock, however as Bergstra\cite{bergstra1984process} explains: the ``action" taken by $ \delta $ is virtual, just acknowledging stagnation. This can occur by the incorrect use of the fixpoint combinator for example. In the proofs for the theorems below I used a stricter definition by only allowing deadlocked expressions that deterministically $ \tau $-step to themselves. An example of this is the expression used to show that all types are occupied in (\ref{eq:t_all}).
+This definition is closer to the common understanding of livelock, however as Bergstra\cite{bergstra1984process} explains: the ``action" taken by $ \delta $ is virtual, just acknowledging stagnation. Deadlock can occur by the incorrect use of the fixpoint combinator for example. In the proofs for the theorems below I used a stricter definition by only allowing deadlocked expressions that deterministically $ \tau $-step to themselves. An example of an expression satisfying this stricter definition is the term used to show that all types are occupied in (\ref{eq:t_all}).
 \begin{thm}[Fork deadlock]
 For all expressions $ e, \delta$ if $ \delta $ is a deadlocked expression
 \[  \textbf{fork}\,(\textbf{live }\delta)\,(\textbf{live }e)\quad \approx \quad e \]
@@ -2316,34 +2306,32 @@ For all expressions $ e, \delta$ if $ \delta $ is a deadlocked expression
 \[  (\textbf{fork}\,(\textbf{live }\delta)\,(\textbf{live }e))\gg=\text{takeright}\quad \approx_v \quad \textbf{ret }e \]
 \end{thm}
 
-\begin{lstlisting}[language={Coq}, caption={takeright operator}, label={lst:takeright_op}]
+\begin{lstlisting}[language={Coq}, caption={The $\mathit{takeright}$ function in $ \lambda $ notation}, label={lst:takeright_op}, escapeinside={@}{@}]
 Definition takeright : expr :=
-    E_function (0) TE_unit 
-      (E_case (E_ident (0)) 
-           (1) (E_proj2  (E_ident (1))) 
-           (2) (E_ret (E_proj2  (E_ident (2))))).
+    @$\lambda$@ x : T. case x of
+              left  x1 => proj2 x1
+            | right x2 => ret (proj1 x2).
 \end{lstlisting}
 
-As with swapf, this also violates typing, however for each type there is a takeright that is correct.
+\Cref{lst:takeright_op} shows the definition of the $ \mathit{takeright} $ function in a simplified notation. \Cref{lst:orig_coq_takeright} shows the original Coq definition. Much like $\mathit{swapf}$, $\mathit{takeright}$ is also a family of functions based on the return type $ T $ of the preceding \textbf{fork}.
 
 \begin{thm}[Bind deadlock]
 For all expressions $ e, \delta$ if $ \delta $ is a deadlocked expression
 \[  \delta \gg= e\quad \approx_v \quad \delta \]
 \end{thm}
 
-Note however the value equality comes for free: $ \delta $ may never be a value.
+Note, however, the value equality comes for free: $ \delta $ may never be a value.
 
 \subsubsection{Remarks on congruence}
 
-These equivalences give meaningful insight into the behaviour of the mentioned expressions in of themselves. However, it falls short of the original aim of provide an equality that implies the ability to replace these expressions when composed with others. 
+The various equivalences of \Cref{sec:equivs} give meaningful insight into the behaviour of the mentioned expressions when considered in isolation. However, it falls short of the original aim of provide an equality that implies the ability to replace these expressions when composed with others. 
 
-This notion of equality is called a \textit{congruence}. Intuitively an equivalence $ \equiv $ between expressions is a congruence if it is compatible with the syntax and semantics of the language. That is to say that given an occurrence of an expression $ e $ in some context $ C $, written as $ C[e] $, and $ e \equiv e' $, then $ e $ can be freely substituted: $e \equiv e'\, \Rightarrow\, C[e]\equiv C[e'] $. This means that it is compositional.
+This broader notion of equality is called a \textit{congruence}. Intuitively an equivalence $ \equiv $ between expressions is a congruence if it is compatible with the syntax and semantics of the language. That is, given an occurrence of an expression $ e $ in some context $ C $ (written as $ C[e] $) and an equivalence $ e \equiv e' $, $ e $ can be freely substituted: $ C[e]\equiv C[e'] $. In other words, a congruence is compositional.
 
-It is easy to see that the previously defined value equal weak bisimilarity is not a congruence: functions are only  value equal weak bisimilar to themselves (they are values), however may contain expressions that could be substituted:
-\[ \lambda x : T. \delta \gg= x\quad \not\approx_v \quad \lambda x : T.\delta \]
+Construction of a congruence relation over MOCaml is desirable, however not at all trivial. It is easy to see that the previously defined value equal weak bisimilarity (\Cref{defn:ve_weak_bisimilarity}) is not a congruence: $ \lambda $-abstractions are only  value equal weak bisimilar to themselves, as they are values. Even though the body may be substituted, the $ \lambda $-abstraction would not be equivalent under this relation.
+\[ \lambda x : T.( \delta \gg= x)\quad \not\approx_v \quad \lambda x : T.\delta \]
 
-However, weak bisimilarity also does not suffice: all values are weakly bisimilar, but clearly when substituted into a context they will not behave the same. 
-Construction of a congruence relation over MOCaml is desireable, however not at all trivial. I decided to exclude proofs about congruences from the scope of this project. A method to establish a congruence is to use Howe's method\cite{howe1996proving} as described by Pitts\cite{pitts2011howe}. Howe's method is based on finding a pre-congruence candidate relation $ \lesssim $. In simple languages it would follow that $ \lesssim \cap \lesssim^{\text{op}} = \simeq $ is a congruence. However, the semantics of MOCaml are not deterministic and Pitts notes that in this case the congruence $  \simeq \neq \lesssim \cap \lesssim^{\text{op}} $ and suggests a method to overcome this. 
+However, weak bisimilarity also does not suffice: all values are trivially weakly bisimilar, since they do not reduce, but when substituted into a context arbitrary values will not behave the same. I decided to exclude proofs about congruences from the scope of this project. However, Howe's method\cite{howe1996proving}, as described by Pitts\cite{pitts2011howe}, is a standard way of establishing a congruence relation. This method is based on finding a pre-congruence candidate relation $ \lesssim $ and forming a congruence by Howe's construction. In simple languages it would follow that the symmetrisation of the pre-congruence relation  $ \lesssim \cap \lesssim^{\text{op}} = \simeq $ is a congruence. However, the semantics of MOCaml are not deterministic. Pitts notes that in this case the congruence $  \simeq$ is not equivalent to the symmetrisation of the pre-congruence relation. He suggests a method to overcome this, by using the transitive closure of the Howe's construction over an extension of applicative bisimilarity to open terms. However, in a setting with $ \tau $ reductions this bisimilarity would have to be weakened which may cause further complications. I left the exploration of this method as potential further work.
 
 
 
@@ -2359,20 +2347,20 @@ Construction of a congruence relation over MOCaml is desireable, however not at 
 \subsection{Equivalence of the logical model and the extractable model}
 In this section I will prove the equivalence of the original logical model of the reduction relation generated by Ott and the relation extracted to OCaml.
 \subsubsection{Label erasure}
-As labels are only used to show properties of the system I decided not to include them in the extractable semantics: they would be completely ignored by the framework, but potentially make the overhead worse.
+As labels are only used to show properties of the system I decided not to include them in the extractable semantics: If labels were included, they would be completely ignored by the framework, but potentially introduce further runtime overhead.
 
-To show that erasing labels is safe it suffices to show that there exists a deterministic partial function $ (e,s,e') \rightarrow rl $. First, I proved that for any given start expression, selection operator and destination expression triple if a label exists it is unique:
+To show that erasing labels is safe it suffices to show that there exists a deterministic partial function $ (e,s,e') \rightarrow rl $ from reduction triples (start expression, selection operator and destination expression) to labels. First, I proved that for any given reduction triple if a label exists it is unique:
 \begin{thm}[Unique labels]
 \label{thm:unique_label}
 For all expressions $ e,\, e'$, selection value $ s $ and reduction labels $ rl, rl' $:
  if $ e \red{s}{rl}e' $ and $ e \red{s}{rl'}e' $ then $ rl = rl' $. 
 \end{thm}
 \subsubsection{Equivalence}
-As usual I denote the logical model reduction as $ e\, \red{s}{rl}\, e' $, while I denote the extractable reduction as $ e\, \xred{s}\, e' $.
+I denote the logical model reduction as $ e\, \red{s}{rl}\, e' $, as usual, while I denote the extractable reduction as $ e\, \xred{s}\, e' $.
 
 \begin{thm}[Model reduction implies extractable reduction]
 \label{thm:jo_to_xjo}
-For all expressions $ e,\,e' $, selection $ s $ and reduction label $ rl $ if $ e\, \red{s}{rl}\, e' $ then $  e\, \xred{s}\, e' $.
+For all expressions $ e,\,e' $, selection $ s $ and reduction label $ rl $, if $ e\, \red{s}{rl}\, e' $ then $  e\, \xred{s}\, e' $.
 \[  e\, \red{s}{rl}\, e' \,\,\,\Rightarrow \,\,\, e\, \xred{s}\, e' \]
 \end{thm}
 
@@ -2384,7 +2372,7 @@ For all expressions $ e,\,e' $ and selection $ s $ if $ e\, \xred{s}\, e' $ then
 \[ e\, \xred{s}\, e' \,\,\,\Rightarrow \,\,\,  e\, \red{s}{rl}\, e' \]
 \end{thm}
 
-\Cref{thm:xjo_to_jo} means that $ S_X \subseteq S_L $, therefore $ S_X \equiv S_L \equiv S $ and furthermore by \Cref{thm:unique_label} it follows that there is a total function $ L\,:\, S \rightarrow RL $ where $ RL $ is the set of reduction labels. As the reduction label is determined by the triple.
+\Cref{thm:xjo_to_jo} means that $ S_X \subseteq S_L $, therefore $ S_X \equiv S_L \equiv S $ and furthermore by \Cref{thm:unique_label} it follows that there is a total function $ L\,:\, S \rightarrow RL $ where $ RL $ is the set of reduction labels, as the reduction label is determined by the triple.
 
 % Practical evaluation
 \section{Performance}
@@ -2393,23 +2381,23 @@ To evaluate the performance of the framework I followed Deleuze\cite{deleuzeligh
 \begin{enumerate}
 \item{\textbf{sys}: A heavyweight implementation with system threads.}
 \item{\textbf{vm}: A lightweight concurrency implementation based on the \verb|thread| library of OCaml. This implementation is only available in bytecode.}
-\item{\textbf{cont}: A continuation monad based lightweight implementation\cite[p.~12-13]{deleuzelight}, without verification. Note, this is a much lighter implementation compared to the one in this project.}
+\item{\textbf{cont}: A continuation monad based lightweight implementation\cite[p.~12-13]{deleuzelight}, without verification. This is a much lighter implementation than the one in this project.}
 \item{\textbf{promise}: A promise monad based implementation of lightweight concurrency\cite[p.~13-15]{deleuzelight}.}
 \item{\textbf{tramp}: A lightweight implementation based on the trampolined style\cite[p.~11-12]{deleuzelight}.}
 \item{\textbf{lwt}: An LWT\cite{LWT} based implementation of lightweight concurrency.}
 \item{\textbf{equeue}: An event-based programming style lightweight concurrency implementation\cite[p.~15-18]{deleuzelight} based on the \textbf{Equeue} library of OCamlNet. I did not use this implementation in the evaluation as I could not find the right libraries to compile this.}
 \end{enumerate}
 \subsection{Method}
-Deleuze provides three examples to evaluate, based on the examples used in Kahn's process language paper\cite{kahn1976coroutines}. I have implemented the examples in my system. I measured the runtime and memory use of both my implementation and the library implementations for various input sizes. The runtime was measured with \textit{Unix.time} and the memory use was measured with the quick stat function of the \verb|Gc| module of OCaml which gives an interface to the garbage collector. Both bytecode and native code versions were measured. All programs were measured as both OCaml byetcode and native code. All examples were run on an Intel i7-2720QM CPU that is a 4 core hyperthreaded system. This computer had 8 GBs of memory, OCaml version 3.12.1, a linux kernel version 3.11.0-15-generic, caml-shift version of August 2013.
+Deleuze provides three examples to evaluate for performance, based on the examples used in Kahn's process language paper\cite{kahn1976coroutines}. I have implemented the examples in MOCaml using the random scheduler in \Cref{sec:random_sched} as the default scheduling algorithm. I measured the runtime and memory use of both my implementation and the library implementations for various input sizes. The runtime was measured with \textit{Unix.time} and the memory use was measured with the quick stat function of the \verb|Gc| module of OCaml which gives an interface to the garbage collector. Both bytecode and native code versions were measured. All programs were measured as both OCaml byetcode and native code. All examples were run on an Intel i7-2720QM CPU, which is a 4 core hyperthreaded system. This computer had 8 GBs of memory, OCaml version 3.12.1, a Linux kernel version 3.11.0-15-generic, and caml-shift version of August 2013.
 
 
-My conjecture was that my system will perform with similar characteristics as lightweight systems, however with a serious overhead due to the complex pattern matching and constructor based system.
+My conjecture was that MOCaml will perform with similar characteristics as lightweight systems, but with a serious interpretive overhead.
 \subsection{Examples}
 The three examples provided by Deleuze are all process networks from Kahn\cite{kahn1976coroutines}. A process network is a set of independent processes which communicate through message variables only. 
 
 A message variable (mvar) is a shared reference cell that blocks in two cases: if a thread tries to read an empty cell or if a thread tries to put something in a filled cell. A read from an mvar consumes the contents of the variable. The scope of this project did not include formalisation of communication procedures like message variables, however it is simple to implement within the framework. Access to a message variable is atomic as no two threads run in parallel, even though they are all concurrent. Furthermore, Deleuze used message First-in-First-out queues where putting information to the message FIFO never blocks. 
 
-In \Cref{fig:kpn_process_outline,fig:sieve_process_outline,fig:sorter_process_outline} processes are denoted with a circle and message variables and FIFOs are denoted by squares. Solid lines denote data flow and dashed lines mean process creation.
+In \Cref{fig:kpn_process_outline,fig:sieve_process_outline,fig:sorter_process_outline} processes are denoted with a circle. Message variables and FIFOs are denoted by squares. Solid lines denote data flow and dashed lines mean process creation.
 \begin{enumerate}
 \item{\verb|kpn|: A process network calculating all positive integers of the form $ 2^a3^b5^c $ for all $ a,b,c $ non-negative integers}
 \item{\verb|sieve|: The well known sieve of Eratosthenes.}
@@ -2427,17 +2415,17 @@ In \Cref{fig:kpn_process_outline,fig:sieve_process_outline,fig:sorter_process_ou
   \node[mvar] (F2) [label=below:{$\text{FIFO}_2$}] {};
   \node[mvar] (F3) [below of=F2, label=below:{$\text{FIFO}_3$}] {};
   \node[mvar] (F5) [below of=F3, label=below:{$\text{FIFO}_5$}] {};
-  \node[main node] (T2) [right = 1 of F2, label=below:{$\times 2$}] {};
-  \node[main node] (T3) [right = 1 of F3,  label=below:{$\times 3$}] {};
-  \node[main node] (T5) [right = 1 of F5, label=below:{$\times 5$}] {};
+  \node[main node] (T2) [right = 1 of F2, label=below:{$\times \textit{2}$}] {};
+  \node[main node] (T3) [right = 1 of F3,  label=below:{$\times \textit{3}$}] {};
+  \node[main node] (T5) [right = 1 of F5, label=below:{$\times \textit{5}$}] {};
   \node[mvar] (M2) [right of=T2, label=below:{$\text{m}_2$}] {};
   \node[mvar] (M3) [right of=T3, label=below:{$\text{m}_3$}] {};
   \node[mvar] (M5) [right of=T5, label=below:{$\text{m}_5$}] {};
-  \node[main node] (Merge35) [below=0.5 of M3, xshift=2cm, label=below:{$\text{merge}_{35}$}] {};
-  \node[mvar] (M35) [right of=Merge35, label=below:{$\text{m}_{35}$}] {};
-  \node[main node] (Merge235) [below=0.5 of M2, xshift=6cm, label=below:{$\text{merge}_{235}$}] {};
-   \node[mvar] (M235) [right of=Merge235, label=below:{$\text{m}_{235}$}] {};
-  \node[main node] (P) [right of=M235, label=below:{P}] {};
+  \node[main node] (Merge35) [below=0.5 of M3, xshift=2cm, label=below:{$\textit{merge}_{35}$}] {};
+  \node[mvar] (M35) [right of=Merge35, label=below:{$\textit{m}_{35}$}] {};
+  \node[main node] (Merge235) [below=0.5 of M2, xshift=6cm, label=below:{$\textit{merge}_{235}$}] {};
+   \node[mvar] (M235) [right of=Merge235, label=below:{$\textit{m}_{235}$}] {};
+  \node[main node] (P) [right of=M235, label=below:{\textit{P}}] {};
 %  \node[main node] (S) [right of=E] {S};
 %  \node[main node] (F) [right of=S] {F};
 %  \node[main node] (I) [right of=F] {I};
@@ -2471,23 +2459,23 @@ In \Cref{fig:kpn_process_outline,fig:sieve_process_outline,fig:sorter_process_ou
 
 \verb|Kpn| is a process network of 6 static threads shown in \Cref{fig:kpn_process_outline}:
 \begin{itemize}
-\item{$ \times 2 $, $ \times 3 $, $ \times 5 $ multiply their input (taken from the corresponding FIFO) by 2, 3 and 5 respectively.}
-\item{$ \text{merge}_{35} $ merges the output of $ \times 3 $, $ \times 5 $ using the corresponding message variables: it outputs the lower and fetches a new element that edge.}
-\item{Similarly, $ \text{merge}_{235} $ merges the output of $ \text{merge}_{35} $ and $ \times 2 $}
-\item{P prints the numbers coming in and copies them to the three FIFOs at the beginning.}
+\item{The processes $ \times \textit{2} $, $ \times \textit{3} $, $ \times \textit{5} $ multiply their input (taken from the corresponding FIFO) by 2, 3 and 5 respectively.}
+\item{The process $ \textit{merge}_{35} $ merges the output of $ \times \textit{3} $, $ \times \textit{5} $ processes using the corresponding message variables: it outputs the lower and fetches a new element that edge.}
+\item{Similarly, the process $ \textit{merge}_{235} $ merges the output of the $ \textit{merge}_{35} $ and $ \times \textit{2} $ processes}
+\item{The process \textit{P} prints the numbers coming in and copies them to the three FIFOs at the beginning.}
 \end{itemize}
-This network exemplifies a common case in concurrency: a low number of static threads with simple behaviour. In line with the expectation \Cref{fig:kpn_exec_times} shows that my implementation exhibits exactly the same behaviour as other lightweight implementation, but with a serious overhead: up to 200 times slower than the fastest implementation, \textbf{tramp}.  
+This network exemplifies a common case in concurrency: a low number of static threads with simple behaviour. As expected, \Cref{fig:kpn_exec_times} shows that MOCaml exhibits exactly the same behaviour as other lightweight implementations, but with a serious overhead: it is up to 200 times slower than the fastest implementation, \textbf{tramp}.  
 
 The memory requirement of this system is uninteresting in all implementations: as the process structure is static, so is the memory use.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
-\begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{0.9\linewidth}
 \includegraphics[width=\linewidth]{./kpn_exec_times_bw}
 \caption{Bytecode}
 \label{fig:kpn_exec_times_bc}
 \end{subfigure}
-\begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{0.9\linewidth}
 \includegraphics[width=\linewidth]{./kpn_exec_times_opt_bw}
 \caption{Native code}
 \label{fig:kpn_exec_times_nat}
@@ -2501,16 +2489,16 @@ The memory requirement of this system is uninteresting in all implementations: a
 \subsubsection{Sieve of Eratosthenes}
 The sieve of Eratosthenes is one of the simplest algorithms to find primes:
 \begin{enumerate}
-\item{Start with number 2 and have all numbers greater or equal to 2 not crossed out.}
-\item{Take the lowest not crossed out number: it is a prime.}
-\item{Cross out all numbers divisible by the prime just found.}
+\item{Start with number 2 and consider all numbers greater than 2 unmarked.}
+\item{Take the lowest unmarked number: it is a prime.}
+\item{Mark all numbers divisible by the prime just found.}
 \item{Repeat from step 2.}
 \end{enumerate}
 
 This algorithm is implemented using a dynamic process network. Initially the network is made up of four types of processes:
 \begin{enumerate}
 \item{Integers: generates the infinite sequence of integers starting from 2}
-\item{Sift: If a number $ p $ is read Sift puts $ p $ forward to the printer process and it creates a new process, Filter $ p $ and inserts it between the input of Sift and Sift itself in the flow of numbers as shown in \Cref{fig:sieve_process_outline}. }
+\item{Sift: If a number $ p $ is read Sift puts $ p $ forward to the printer process. Sift also creates a new process, Filter $ p $ and inserts it between the input of Sift and Sift itself in the flow of numbers (\Cref{fig:sieve_process_outline}). }
 \item{Filter $ p $ discards all numbers divisible by $ p $ and passes everything else on.}
 \item{Print just prints all numbers consumed.}
 \end{enumerate}
@@ -2598,16 +2586,14 @@ This problem is a good example of dynamic thread creation that most general purp
 \label{fig:sieve_process_outline}
 \end{figure}
 
-
-
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
-\begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{0.6\linewidth}
 \includegraphics[width=\linewidth]{./sieve_exec_times_bw}
 \caption{Bytecode}
 \label{fig:sieve_exec_times_bc}
 \end{subfigure}
-\begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{0.6\linewidth}
 \includegraphics[width=\linewidth]{./sieve_exec_times_opt_bw}
 \caption{Native code}
 \label{fig:sieve_exec_times_nat}
@@ -2617,15 +2603,9 @@ This problem is a good example of dynamic thread creation that most general purp
 \end{figure}
 
 
-Unlike the expectation, the concurrency framework with random reductions (mcon) in \Cref{fig:sieve_exec_times} exhibits an exponential behaviour. The reason for this is in the way random selection parameters relate to the \textbf{fork} tree formed by the expression.
+As described in \Cref{sec:random_sched}, the default MOCaml scheduler chooses threads to reduce at random .Unexpectedly, the default implementation (MOCaml) in \Cref{fig:sieve_exec_times} exhibits an exponential behaviour. The reason for this is in the way random selection parameters relate to the \textbf{fork} tree formed by the expression.
 
-Uniform random reductions assigns equal probabilities to each edge of a fork as it can be seen in \Cref{fig:sieve_without_ftt}. In general the probability that the filter process of the $ k $th prime fires is $ \frac{1}{2^{k+1}} $. This uneven probability distribution means that for the expected number of reduction steps taken by the system before finding the $ k $th prime is bigger than $ 2^{k+1} \in O(2^{k}) $ as it has to make at least one step within each filter.
-
-However, the concurrency framework does not prescribe any evaluation strategy. It is possible to keep track of the fork tree at runtime and equalize the scheduling probabilities of all processes with every computation placeholder. This results in the scheduling probabilities shown in \Cref{fig:sieve_ftt}. These probabilities reduce the expected number of steps for the $ k $th prime to $ k(k+1) $. The speedup is easily seen on \Cref{fig:sieve_exec_times} with the series $ \text{mcon}_{\text{ftt}} $.
-
-% Define styles for the different kind of edges in a Feynman diagram
-
-\begin{figure}
+\begin{figure}[H]
 \centering
 \begin{subfigure}[b]{0.45\linewidth}
 \begin{tikzpicture}[
@@ -2762,14 +2742,17 @@ However, the concurrency framework does not prescribe any evaluation strategy. I
 \end{figure}
 
 
+Uniform random reductions assigns equal probabilities to each edge of a fork as it can be seen in \Cref{fig:sieve_without_ftt}. In general the probability that the filter process of the $ k $th prime fires is $ \frac{1}{2^{k+1}} $. This uneven probability distribution means that for the expected number of reduction steps taken by the system before finding the $ k $th prime is bigger than $ 2^{k+1} \in O(2^{k}) $ as it has to make at least one step within each filter.
 
+However, although the default scheduler in the MOCaml concurrency framework is random, the user is not restricted to uniform probabilities for each decision. It is possible to keep track of the fork tree at runtime and equalize the scheduling probabilities of all processes with every computation placeholder. This results in the scheduling probabilities shown in \Cref{fig:sieve_ftt}. These probabilities reduce the expected number of steps for the $ k $th prime to $ k(k+1) $. The speedup is easily seen on \Cref{fig:sieve_exec_times} with the series $ \text{MOCaml}_{\text{ftt}} $.
 
+% Define styles for the different kind of edges in a Feynman diagram
 
 
 
 
 \subsubsection{Concurrent sort}
-\begin{figure}
+\begin{figure}[H]
 \centering
 \begin{subfigure}[b]{0.45\linewidth} %
 \begin{tikzpicture}[->,>=stealth',auto,
@@ -2928,20 +2911,20 @@ However, the concurrency framework does not prescribe any evaluation strategy. I
 \end{figure}
 
 
-The last example is concurrent sort. Sorting of a list of integers can be done by single comparator units as shown in \Cref{fig:sorter_process_single} which takes in two values and outputs the lower on one edge and the higher on the other. To sort an entire list we can arrange these elements in a network shown in \Cref{fig:sorter_process_full}. This network takes in the $ n $ element list $ x_0, x_1, \dots, x_n $ and outputs the result $ r_0, r_1, \dots, r_n $. For an $ n $ element list the network has $ \frac{n(n-1)}{2} $ nodes. Notice that bubble sort and insertion sort are two scheduling of this network. For simplicity I did not show the message variables in \Cref{fig:sorter_process_outline} but they are used on each arrow. This problem is a good example of a task best suited for lightweight concurrency: a very large number of simple threads statically allocated. For a list size of 500, there are 124750 threads. 
+The last example is concurrent sort. Sorting of a list of integers can be implemented by single comparator units which take in two values and output the lower on one edge and the higher on the other (\Cref{fig:sorter_process_single}). To sort an entire list we can arrange these elements in a network shown in \Cref{fig:sorter_process_full}. This network takes in the $ n $ element list $ x_0, x_1, \dots, x_n $ and outputs the result $ r_0, r_1, \dots, r_n $. For an $ n $ element list the network has $ \frac{n(n-1)}{2} $ nodes. Different schedulings of this network correspond to different algorithms, such as bubble sort and insertion sort. For simplicity I did not show the message variables in \Cref{fig:sorter_process_outline} but they are used on each arrow. This problem is a good example of a task best suited for lightweight concurrency: a very large number of simple threads statically allocated. For a list size of 500, there are 124750 threads. 
 
 
-As expected, my system performed with the same characteristics as other lightweight concurrency solutions, but with a high overhead. Interestingly, the \textbf{vm} lightweight implementation shows very bad behaviour, however the heavyweight \textbf{sys} implementation performs better with lists longer than 250 elements. The memory use of my system is much higher than the other implementations as shown in \Cref{fig:sorter_mem}.
+As expected, my system performed with the same characteristics as other lightweight concurrency solutions, but with a high overhead. Interestingly, the \textbf{vm} lightweight implementation performs very poorly, even though it is lighweight. On the other hand, the heavyweight \textbf{sys} implementation changes characteristics when the list grows larger than 250 elements and performs similarly to lightweight implementations. The memory use of my system is much higher than the other implementations (\Cref{fig:sorter_mem}).
 
 
 \begin{figure}[h]
 \centering
-\begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{0.8\linewidth}
 \includegraphics[width=\linewidth]{./sorter_exec_times_bw}
 \caption{Bytecode}
 \label{fig:sorter_exec_times_bc}
 \end{subfigure}
-\begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{0.8\linewidth}
 \includegraphics[width=\linewidth]{./sorter_exec_times_opt_bw}
 \caption{Native code}
 \label{fig:sorter_exec_times_nat}
@@ -2954,12 +2937,12 @@ As expected, my system performed with the same characteristics as other lightwei
 
 \begin{figure}[h]
 \centering
-\begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{0.8\linewidth}
 \includegraphics[width=\linewidth]{./sorter_mem_bw}
 \caption{Bytecode}
 \label{fig:sorter_mem_bc}
 \end{subfigure}
-\begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{0.8\linewidth}
 \includegraphics[width=\linewidth]{./sorter_mem_opt_bw}
 \caption{Native code}
 \label{fig:sorter_mem_nat}
@@ -2975,7 +2958,7 @@ As expected, my system performed with the same characteristics as other lightwei
 
 % Conclusion on the project
 
-In this project I have demonstrated that it is possible to build a lightweight concurrency framework in OCaml based on formal semantics. I defined the exact semantics of MOCaml in a simple format using Ott, providing a precise, low level documentation of the framework. After translation to Coq, I proved a number of desirable properties of a concurrency library. These proofs act as high level, behavioural documentation of the system. I successfully extracted OCaml code implementing the semantics. This code is then supported by some syntactical sugar for construction of concurrency structures and scheduling to form a usable framework. I evaluated MOCaml against a number of other implementations based on performance to document the runtime characteristics of the framework. Overall, MOCaml met the expectations: its performance behaviour is the same as other lightweight concurrency frameworks but with a large overhead. This overhead is due to the trade-off between theoretical simplicity and efficiency.
+In this project I have demonstrated that it is possible to build a lightweight concurrency framework in OCaml based on formal semantics. I defined the exact semantics of MOCaml in a simple format using Ott, providing precise, low level documentation of the framework. After translation to Coq, I proved a number of desirable properties of a concurrency library. These proofs act as high level, behavioural documentation of the system. I then successfully extracted OCaml code implementing the semantics. This code is supported by some syntactic sugar for construction of concurrency structures and scheduling to form a usable framework. I evaluated MOCaml against a number of other implementations based on performance to document the runtime characteristics of the framework. Overall, MOCaml met the expectations: its performance behaviour is the same as other lightweight concurrency frameworks but with a large overhead. This overhead is due to the trade-off between theoretical simplicity and efficiency.
 
 
 
@@ -2985,10 +2968,10 @@ The project left a number of theoretical questions intentionally open, including
 
 % Conclusion on the method
 
-More generally, I have shown an efficient workflow for developing a library in a mainstream language underpinned by formal reasoning. The Ott, Coq (extended with the logical inductive relation extraction plugin) and OCaml toolchain provides the necessary support to describe the intended semantics in an easy-to-read format, reason about said semantics and finally extract a program implementing it. An efficient workflow is necessary to make formal semantics based development a feasible option in software engineering.
+More generally, I have demonstrated an efficient workflow for developing a library in a mainstream language underpinned by formal reasoning. The toolchain of Ott, Coq (extended with the logical inductive relation extraction plugin) and OCaml  provides the necessary support to describe the intended semantics in an easy-to-read format, reason about said semantics and finally extract a program implementing it. An efficient workflow is necessary to make formal semantics based development a feasible option in software engineering.
 
 
-There are many directions open for formal semantics driven development. While this approach is not warranted in all situations. Foundational libraries and libraries with high safety requirements, like concurrency or security frameworks, can potentially benefit from the approach taken in this project. In these situations, often the library is developed first and documentation occurs later, based on semantics gleaned from the initial plan and some unit testing. This documentation is sometimes partial or has unverified assumptions, for example the unit testing did not cover all edge cases. Software built on a not verified library may have unexpected behaviour and hard to find, costly errors. This problem is largely eliminated by developing the self-documenting semantics first and using verified tools to extract a program satisfying the specifications.
+There are many directions open for formal semantics driven development. While an approach based on formal semantics is not warranted in all situations, foundational libraries and libraries with high safety requirements, like concurrency or security frameworks, can potentially benefit from the level of rigour used in this project. In these situations, the library is often developed first and documentation occurs later, based on semantics gleaned from the initial plan and some unit testing. This documentation is sometimes partial or has unverified assumptions, for example the unit testing did not cover all edge cases. Software built on an unverified library may have unexpected behaviour and hard to find, costly errors. This problem is largely eliminated by the approach taken in this project: developing the self-documenting semantics first and using verified tools to extract a program satisfying the specifications.
 
 
 
@@ -3185,6 +3168,33 @@ Inductive mon_assoc_rel : relation expr :=
 
 \section{Fork and join}
 \begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq}, caption={The original Coq $\mathit{swapf}$ function}, label={lst:orig_coq_swapf}]
+Definition swapbodyl : expr :=
+            E_ret (  
+             E_taggingright (
+              E_pair (E_proj2  (E_ident (1))) 
+                     (E_proj1  (E_ident (1)))
+                            )
+                   ).
+
+Definition swapbodyr : expr :=
+            E_ret (  
+             E_taggingleft (
+              E_pair (E_proj2  (E_ident (2))) 
+                     (E_proj1  (E_ident (2)))
+                           )
+                   ).
+
+Definition swapbody : expr := E_case (E_ident (0)) 
+           (1) (swapbodyl) 
+           (2) (swapbodyr).
+
+Definition swapf : expr :=
+    E_function (0) TE_unit swapbody.
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[language={Coq}, caption={Fork commutativity}]
 Inductive fork_comm_rel :  relation expr := 
  | forkee_start : forall (e e' : expr), fork_comm_rel (e # e') (e' # e)
@@ -3195,6 +3205,15 @@ Theorem fork_comm_wbsm: WBSM fork_comm_rel.
 \end{lstlisting}
 \end{minipage}
 \section{Deadlock properties}
+\begin{minipage}{1\linewidth}
+\begin{lstlisting}[language={Coq}, caption={The original Coq $\mathit{takeright}$ function}, label={lst:orig_coq_takeright}]
+Definition takeright : expr :=
+    E_function (0) TE_unit 
+      (E_case (E_ident (0)) 
+           (1) (E_proj2  (E_ident (1))) 
+           (2) (E_ret (E_proj2  (E_ident (2))))).
+\end{lstlisting}
+\end{minipage}
 \section{Equivalence}
 \cleardoublepage
 
