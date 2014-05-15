@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.1.11)  14 MAY 2014 22:56
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.1.11)  15 MAY 2014 16:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -901,7 +901,7 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 225.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (10.57771pt too wide) in paragraph at lines 225--239
+Overfull \hbox (42.05103pt too wide) in paragraph at lines 225--239
 []
  []
 
@@ -1059,119 +1059,123 @@ Chapter 3.
 [19
 
 
-] <implOut.pdf, id=125, 283.0575pt x 531.9875pt>
-File: implOut.pdf Graphic file (type pdf)
- <use implOut.pdf>
-Package pdftex.def Info: implOut.pdf used on input line 989.
-(pdftex.def)             Requested size: 141.5284pt x 265.9931pt.
+]
+Overfull \hbox (2.17207pt too wide) in paragraph at lines 1008--1009
+ [][][][]\OT1/cmr/m/n/12 Runnable 
+ []
 
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+Overfull \hbox (34.74225pt too wide) in paragraph at lines 1012--1013
+ [][] 
+ []
 
-[20] [21 <./implOut.pdf>]
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1060--1060
+[20]
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1090--1090
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1060--1060
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1090--1090
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1060--1060
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1090--1090
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1060--1060
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1090--1090
 [][] 
  []
 
 \openout4 = `diss-1.cpt'.
 
-(./diss-1.cpt) (./diss-1.cpt) [22]
-Overfull \hbox (8.33176pt too wide) in paragraph at lines 1104--1104
+(./diss-1.cpt) (./diss-1.cpt) [21]
+Overfull \hbox (8.33176pt too wide) in paragraph at lines 1134--1134
  []|\OT1/cmr/m/it/12 expressions:|
  []
 
 
-Overfull \hbox (3.75388pt too wide) in paragraph at lines 1104--1104
+Overfull \hbox (3.75388pt too wide) in paragraph at lines 1134--1134
  []|\OT1/cmr/m/it/12 abstraction|
  []
 
 
-Overfull \hbox (3.30382pt too wide) in paragraph at lines 1104--1104
+Overfull \hbox (3.30382pt too wide) in paragraph at lines 1134--1134
  []|\OT1/cmr/m/it/12 application|
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1104--1104
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1134--1134
 [][] 
  []
 
 
-Overfull \hbox (8.33176pt too wide) in paragraph at lines 1104--1104
+Overfull \hbox (8.33176pt too wide) in paragraph at lines 1134--1134
  []|\OT1/cmr/m/it/12 expressions:|
  []
 
 
-Overfull \hbox (3.75388pt too wide) in paragraph at lines 1104--1104
+Overfull \hbox (3.75388pt too wide) in paragraph at lines 1134--1134
  []|\OT1/cmr/m/it/12 abstraction|
  []
 
 
-Overfull \hbox (3.30382pt too wide) in paragraph at lines 1104--1104
+Overfull \hbox (3.30382pt too wide) in paragraph at lines 1134--1134
  []|\OT1/cmr/m/it/12 application|
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1104--1104
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1134--1134
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1104--1104
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1134--1134
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1104--1104
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1134--1134
 [][] 
  []
 
 
-Overfull \hbox (16.54192pt too wide) detected at line 1158
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[22]
+Overfull \hbox (16.54192pt too wide) detected at line 1188
 []
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1158--1158
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1188--1188
 [][] 
  []
 
 
-Overfull \hbox (16.54192pt too wide) detected at line 1158
+Overfull \hbox (16.54192pt too wide) detected at line 1188
 []
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1158--1158
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1188--1188
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1158--1158
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1188--1188
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1158--1158
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1188--1188
 [][] 
  []
 
 
-Overfull \hbox (23.99898pt too wide) in paragraph at lines 1119--1159
+Overfull \hbox (23.99898pt too wide) in paragraph at lines 1149--1189
  []$[]$ 
  []
 
@@ -1179,386 +1183,392 @@ Overfull \hbox (23.99898pt too wide) in paragraph at lines 1119--1159
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [23]
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1216--1216
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1246--1246
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1216--1216
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1246--1246
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1216--1216
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1246--1246
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1216--1216
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1246--1246
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1216--1216
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1246--1246
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1216--1216
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1246--1246
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1216--1216
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1246--1246
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1216--1216
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1246--1246
 [][] 
  []
 
 
-Overfull \hbox (23.99269pt too wide) in paragraph at lines 1176--1217
+Overfull \hbox (23.99269pt too wide) in paragraph at lines 1206--1247
  []$[]$ 
  []
 
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1279--1279
+[][] 
+ []
+
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1279--1279
+[][] 
+ []
+
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1279--1279
+[][] 
+ []
+
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1279--1279
+[][] 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 [24]
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1249--1249
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1324--1324
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1249--1249
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1324--1324
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1249--1249
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1324--1324
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1249--1249
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1324--1324
 [][] 
  []
 
 [25]
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1294--1294
-[][] 
- []
-
-
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1294--1294
-[][] 
- []
-
-
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1294--1294
-[][] 
- []
-
-
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1294--1294
-[][] 
- []
-
-
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 1305--1312
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 1335--1342
 []$[]$ 
  []
 
 [26]
-Underfull \hbox (badness 10000) in alignment at lines 1355--1355
+Underfull \hbox (badness 10000) in alignment at lines 1385--1385
 [][][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1355--1355
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1385--1385
 [][] 
  []
 
 
-Underfull \hbox (badness 10000) in alignment at lines 1355--1355
+Underfull \hbox (badness 10000) in alignment at lines 1385--1385
 [][][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1355--1355
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1385--1385
 [][] 
  []
 
 
-Underfull \hbox (badness 10000) in alignment at lines 1355--1355
+Underfull \hbox (badness 10000) in alignment at lines 1385--1385
 [][][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1355--1355
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1385--1385
 [][] 
  []
 
 
-Underfull \hbox (badness 10000) in alignment at lines 1355--1355
+Underfull \hbox (badness 10000) in alignment at lines 1385--1385
 [][][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1355--1355
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1385--1385
 [][] 
+ []
+
+
+Underfull \hbox (badness 10000) in alignment at lines 1434--1434
+[][][] 
+ []
+
+
+Underfull \hbox (badness 10000) in alignment at lines 1434--1434
+[][][] 
+ []
+
+
+Underfull \hbox (badness 10000) in alignment at lines 1434--1434
+[][][] 
+ []
+
+
+Underfull \hbox (badness 10000) in alignment at lines 1434--1434
+[][][] 
+ []
+
+
+Overfull \hbox (7.83325pt too wide) in paragraph at lines 1396--1435
+ []$[]$ 
  []
 
 [27]
-Underfull \hbox (badness 10000) in alignment at lines 1404--1404
+Underfull \hbox (badness 10000) in alignment at lines 1504--1504
 [][][] 
  []
 
 
-Underfull \hbox (badness 10000) in alignment at lines 1404--1404
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1504--1504
+[][] 
+ []
+
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1504--1504
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in alignment at lines 1504--1504
 [][][] 
  []
 
 
-Underfull \hbox (badness 10000) in alignment at lines 1404--1404
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1504--1504
+[][] 
+ []
+
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1504--1504
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in alignment at lines 1504--1504
 [][][] 
  []
 
 
-Underfull \hbox (badness 10000) in alignment at lines 1404--1404
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1504--1504
+[][] 
+ []
+
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1504--1504
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in alignment at lines 1504--1504
 [][][] 
  []
 
 
-Overfull \hbox (7.83325pt too wide) in paragraph at lines 1366--1405
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1504--1504
+[][] 
+ []
+
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1504--1504
+[][] 
+ []
+
+
+Overfull \hbox (19.83325pt too wide) in paragraph at lines 1445--1505
  []$[]$ 
  []
 
 [28]
-Underfull \hbox (badness 10000) in alignment at lines 1474--1474
-[][][] 
- []
-
-
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1474--1474
-[][] 
- []
-
-
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1474--1474
-[][] 
- []
-
-
-Underfull \hbox (badness 10000) in alignment at lines 1474--1474
-[][][] 
- []
-
-
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1474--1474
-[][] 
- []
-
-
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1474--1474
-[][] 
- []
-
-
-Underfull \hbox (badness 10000) in alignment at lines 1474--1474
-[][][] 
- []
-
-
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1474--1474
-[][] 
- []
-
-
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1474--1474
-[][] 
- []
-
-
-Underfull \hbox (badness 10000) in alignment at lines 1474--1474
-[][][] 
- []
-
-
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1474--1474
-[][] 
- []
-
-
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1474--1474
-[][] 
- []
-
-
-Overfull \hbox (19.83325pt too wide) in paragraph at lines 1415--1475
+Overfull \hbox (7.83325pt too wide) in paragraph at lines 1521--1537
  []$[]$ 
  []
 
-[29]
-Overfull \hbox (7.83325pt too wide) in paragraph at lines 1491--1507
- []$[]$ 
- []
-
-[30]
-Overfull \hbox (11.32922pt too wide) in paragraph at lines 1547--1547
+[29] [30]
+Overfull \hbox (11.32922pt too wide) in paragraph at lines 1577--1577
  []|\OT1/cmr/m/it/12 computation|
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1547--1547
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1577--1577
 [][] 
  []
 
 
-Overfull \hbox (11.32922pt too wide) in paragraph at lines 1547--1547
+Overfull \hbox (11.32922pt too wide) in paragraph at lines 1577--1577
  []|\OT1/cmr/m/it/12 computation|
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1547--1547
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1577--1577
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1547--1547
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1577--1577
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1547--1547
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1577--1577
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1598--1598
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1628--1628
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1598--1598
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1628--1628
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1598--1598
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1628--1628
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1598--1598
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1628--1628
 [][] 
  []
 
 
-Overfull \hbox (19.87556pt too wide) in paragraph at lines 1558--1599
+Overfull \hbox (19.87556pt too wide) in paragraph at lines 1588--1629
  []$[]$ 
  []
 
 
-Overfull \hbox (5.4322pt too wide) in paragraph at lines 1637--1637
+Overfull \hbox (5.4322pt too wide) in paragraph at lines 1667--1667
  []|\OT1/cmr/m/it/12 terms:|
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1637--1637
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1667--1667
 [][] 
  []
 
 
-Overfull \hbox (5.4322pt too wide) in paragraph at lines 1637--1637
+Overfull \hbox (5.4322pt too wide) in paragraph at lines 1667--1667
  []|\OT1/cmr/m/it/12 terms:|
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1637--1637
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1667--1667
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1637--1637
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1667--1667
 [][] 
  []
 
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 1637--1637
+Overfull \hbox (12.0pt too wide) in paragraph at lines 1667--1667
 [][] 
  []
 
 
-Overfull \hbox (32.23323pt too wide) in paragraph at lines 1615--1638
+Overfull \hbox (32.23323pt too wide) in paragraph at lines 1645--1668
  []$[]$ 
  []
 
 [31
 
 ] [32] [33]
-Overfull \hbox (7.83325pt too wide) in paragraph at lines 1681--1692
+Overfull \hbox (7.83325pt too wide) in paragraph at lines 1711--1722
  []$[]$ 
  []
 
 [34]
-Underfull \hbox (badness 10000) in alignment at lines 1752--1752
+Underfull \hbox (badness 10000) in alignment at lines 1782--1782
 [][][] 
  []
 
 
-Underfull \hbox (badness 10000) in alignment at lines 1752--1752
+Underfull \hbox (badness 10000) in alignment at lines 1782--1782
 [][][] 
  []
 
 
-Underfull \hbox (badness 10000) in alignment at lines 1752--1752
+Underfull \hbox (badness 10000) in alignment at lines 1782--1782
 [][][] 
  []
 
 
-Underfull \hbox (badness 10000) in alignment at lines 1752--1752
+Underfull \hbox (badness 10000) in alignment at lines 1782--1782
 [][][] 
  []
 
 
-Overfull \hbox (19.83325pt too wide) in paragraph at lines 1765--1792
+Overfull \hbox (19.83325pt too wide) in paragraph at lines 1795--1822
  []$[]$ 
  []
 
 [35] [36] [37
 
 ] [38] [39]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 1947--1957
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 1978--1988
 []$[]$ 
  []
 
 [40]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 1981--1990
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 2012--2021
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 1991--1998
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 2022--2029
 []$[]$ 
  []
 
 [41]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 2006--2016
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 2037--2047
 []$[]$ 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 2017--2035
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 2048--2066
 []$[]$
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 2038--2049
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 2069--2080
 []$[]$
  []
 
 [42]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 2052--2065
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 2083--2096
 []$[]$
  []
 
@@ -1568,13 +1578,13 @@ Chapter 4.
 
 
 ] [46] [47] [48]
-Underfull \hbox (badness 2512) in paragraph at lines 2247--2248
+Underfull \hbox (badness 2512) in paragraph at lines 2279--2280
 \OT1/cmr/m/n/12 The proofs of \OT1/cmr/bx/n/12 fork \OT1/cmr/m/n/12 com-mu-ta-t
 iv-ity and as-so-cia-tiv-ity may be found in
  []
 
 [49]
-Overfull \hbox (65.10492pt too wide) detected at line 2275
+Overfull \hbox (65.10492pt too wide) detected at line 2307
 [] \OT1/cmr/m/n/12 ([]([] ([]\OML/cmm/m/it/12 a\OT1/cmr/m/n/12 ) ([]\OML/cmm/m/
 it/12 b\OT1/cmr/m/n/12 ))) ([]\OML/cmm/m/it/12 c\OT1/cmr/m/n/12 )  \OMS/cmsy/m/
 n/12 6^^Y  [] \OT1/cmr/m/n/12 ([]\OML/cmm/m/it/12 a\OT1/cmr/m/n/12 ) ([]([] ([]
@@ -1582,7 +1592,7 @@ n/12 6^^Y  [] \OT1/cmr/m/n/12 ([]\OML/cmm/m/it/12 a\OT1/cmr/m/n/12 ) ([]([] ([]
  []
 
 [50] [51] [52] [53]
-Underfull \hbox (badness 2644) in paragraph at lines 2386--2387
+Underfull \hbox (badness 2644) in paragraph at lines 2418--2419
 []\OT1/cmr/bx/n/12 promise\OT1/cmr/m/n/12 : A promise monad based im-ple-men-ta
 -tion of lightweight
  []
@@ -1591,23 +1601,23 @@ Underfull \hbox (badness 2644) in paragraph at lines 2386--2387
 \openout4 = `diss-2.cpt'.
 
 
-Overfull \hbox (15.16867pt too wide) in paragraph at lines 2455--2456
+Overfull \hbox (15.16867pt too wide) in paragraph at lines 2487--2488
  [][] 
  []
 
 (./diss-2.cpt) (./diss-2.cpt) [55]
-<./kpn_exec_times_bw.pdf, id=253, 361.35pt x 252.945pt>
+<./kpn_exec_times_bw.pdf, id=247, 361.35pt x 252.945pt>
 File: ./kpn_exec_times_bw.pdf Graphic file (type pdf)
 
 <use ./kpn_exec_times_bw.pdf>
-Package pdftex.def Info: ./kpn_exec_times_bw.pdf used on input line 2475.
+Package pdftex.def Info: ./kpn_exec_times_bw.pdf used on input line 2507.
 (pdftex.def)             Requested size: 370.74237pt x 259.52118pt.
 
-<./kpn_exec_times_opt_bw.pdf, id=254, 361.35pt x 252.945pt>
+<./kpn_exec_times_opt_bw.pdf, id=248, 361.35pt x 252.945pt>
 File: ./kpn_exec_times_opt_bw.pdf Graphic file (type pdf)
 
 <use ./kpn_exec_times_opt_bw.pdf>
-Package pdftex.def Info: ./kpn_exec_times_opt_bw.pdf used on input line 2480.
+Package pdftex.def Info: ./kpn_exec_times_opt_bw.pdf used on input line 2512.
 (pdftex.def)             Requested size: 370.74237pt x 259.52118pt.
 \openout4 = `diss-3.cpt'.
 
@@ -1615,53 +1625,53 @@ Package pdftex.def Info: ./kpn_exec_times_opt_bw.pdf used on input line 2480.
 imes_opt_bw.pdf>]
 \openout4 = `diss-4.cpt'.
 
- (./diss-4.cpt) (./diss-4.cpt) <./sieve_exec_times_bw.pdf, id=271, 361.35pt x 2
+ (./diss-4.cpt) (./diss-4.cpt) <./sieve_exec_times_bw.pdf, id=265, 361.35pt x 2
 52.945pt>
 File: ./sieve_exec_times_bw.pdf Graphic file (type pdf)
 
 <use ./sieve_exec_times_bw.pdf>
-Package pdftex.def Info: ./sieve_exec_times_bw.pdf used on input line 2593.
+Package pdftex.def Info: ./sieve_exec_times_bw.pdf used on input line 2625.
 (pdftex.def)             Requested size: 247.16577pt x 173.0154pt.
 
-<./sieve_exec_times_opt_bw.pdf, id=272, 361.35pt x 252.945pt>
+<./sieve_exec_times_opt_bw.pdf, id=266, 361.35pt x 252.945pt>
 File: ./sieve_exec_times_opt_bw.pdf Graphic file (type pdf)
 
 <use ./sieve_exec_times_opt_bw.pdf>
-Package pdftex.def Info: ./sieve_exec_times_opt_bw.pdf used on input line 2598.
+Package pdftex.def Info: ./sieve_exec_times_opt_bw.pdf used on input line 2630.
 
 (pdftex.def)             Requested size: 247.16577pt x 173.0154pt.
 \openout4 = `diss-5.cpt'.
 
  (./diss-5.cpt) (./diss-5.cpt) [58]
-Overfull \hbox (4.67523pt too wide) in paragraph at lines 2670--2671
+Overfull \hbox (4.67523pt too wide) in paragraph at lines 2702--2703
 [][] 
  []
 
 
-Overfull \hbox (4.67523pt too wide) in paragraph at lines 2729--2730
+Overfull \hbox (4.67523pt too wide) in paragraph at lines 2761--2762
 [][] 
  []
 
 [59 <./sieve_exec_times_bw.pdf> <./sieve_exec_times_opt_bw.pdf>]
-Overfull \hbox (32.89072pt too wide) in paragraph at lines 2906--2907
+Overfull \hbox (32.89072pt too wide) in paragraph at lines 2938--2939
 [][] 
  []
 
 \openout4 = `diss-6.cpt'.
 
 (./diss-6.cpt) (./diss-6.cpt) [60]
-<./sorter_exec_times_bw.pdf, id=292, 361.35pt x 252.945pt>
+<./sorter_exec_times_bw.pdf, id=286, 361.35pt x 252.945pt>
 File: ./sorter_exec_times_bw.pdf Graphic file (type pdf)
 
 <use ./sorter_exec_times_bw.pdf>
-Package pdftex.def Info: ./sorter_exec_times_bw.pdf used on input line 2924.
+Package pdftex.def Info: ./sorter_exec_times_bw.pdf used on input line 2956.
 (pdftex.def)             Requested size: 329.55226pt x 230.68977pt.
 
-<./sorter_exec_times_opt_bw.pdf, id=293, 361.35pt x 252.945pt>
+<./sorter_exec_times_opt_bw.pdf, id=287, 361.35pt x 252.945pt>
 File: ./sorter_exec_times_opt_bw.pdf Graphic file (type pdf)
 
 <use ./sorter_exec_times_opt_bw.pdf>
-Package pdftex.def Info: ./sorter_exec_times_opt_bw.pdf used on input line 2929
+Package pdftex.def Info: ./sorter_exec_times_opt_bw.pdf used on input line 2961
 .
 (pdftex.def)             Requested size: 329.55226pt x 230.68977pt.
 \openout4 = `diss-7.cpt'.
@@ -1670,17 +1680,17 @@ Package pdftex.def Info: ./sorter_exec_times_opt_bw.pdf used on input line 2929
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<./sorter_mem_bw.pdf, id=294, 361.35pt x 252.945pt>
+<./sorter_mem_bw.pdf, id=288, 361.35pt x 252.945pt>
 File: ./sorter_mem_bw.pdf Graphic file (type pdf)
  <use ./sorter_mem_bw.pdf>
-Package pdftex.def Info: ./sorter_mem_bw.pdf used on input line 2942.
+Package pdftex.def Info: ./sorter_mem_bw.pdf used on input line 2974.
 (pdftex.def)             Requested size: 329.55226pt x 230.68977pt.
 
-<./sorter_mem_opt_bw.pdf, id=295, 361.35pt x 252.945pt>
+<./sorter_mem_opt_bw.pdf, id=289, 361.35pt x 252.945pt>
 File: ./sorter_mem_opt_bw.pdf Graphic file (type pdf)
 
 <use ./sorter_mem_opt_bw.pdf>
-Package pdftex.def Info: ./sorter_mem_opt_bw.pdf used on input line 2947.
+Package pdftex.def Info: ./sorter_mem_opt_bw.pdf used on input line 2979.
 (pdftex.def)             Requested size: 329.55226pt x 230.68977pt.
 \openout4 = `diss-8.cpt'.
 
@@ -1714,32 +1724,32 @@ Appendix A.
 
 
 ] [72] [73]
-Underfull \hbox (badness 10000) in paragraph at lines 2994--2994
+Underfull \hbox (badness 10000) in paragraph at lines 3026--3026
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2994--2994
+Underfull \hbox (badness 10000) in paragraph at lines 3026--3026
 
  []
 
 [74]
-Underfull \hbox (badness 10000) in paragraph at lines 2994--2994
+Underfull \hbox (badness 10000) in paragraph at lines 3026--3026
 
  []
 
 [75] [76]
-Overfull \hbox (1.5806pt too wide) detected at line 2994
+Overfull \hbox (1.5806pt too wide) detected at line 3026
 []
  []
 
 
-Overfull \hbox (7.8986pt too wide) detected at line 2994
+Overfull \hbox (7.8986pt too wide) detected at line 3026
 []
  []
 
 
-Overfull \hbox (93.71465pt too wide) detected at line 2994
+Overfull \hbox (93.71465pt too wide) detected at line 3026
 []
  []
 
@@ -1747,31 +1757,10 @@ Overfull \hbox (93.71465pt too wide) detected at line 2994
 Appendix B.
 [78
 
-]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 3054--3085
-[]$[]$ 
- []
-
-[79]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 3086--3107
-[]$[]$ 
- []
-
-[80] [81]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 3152--3176
-[]$[]$ 
- []
-
-[82] [83]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 3205--3215
-[]$[]$ 
- []
-
-[84] [85] [86
-
-]
+] [79] [80] [81] [82] [83] [84] [85] [86]
 Appendix C.
 (./partIIproposal.tex [87
+
 
 ] [88] [89] [90])
 \tf@loe=\write9
@@ -1779,11 +1768,11 @@ Appendix C.
 
  [91] (./diss.aux) ) 
 Here is how much of TeX's memory you used:
- 23187 strings out of 493307
- 444121 string characters out of 6139905
- 987401 words of memory out of 5000000
- 26040 multiletter control sequences out of 15000+600000
- 23050 words of font info for 85 fonts, out of 8000000 for 9000
+ 23262 strings out of 493307
+ 445635 string characters out of 6139905
+ 1080042 words of memory out of 5000000
+ 26117 multiletter control sequences out of 15000+600000
+ 22378 words of font info for 81 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  56i,71n,63p,1275b,1885s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
@@ -1811,10 +1800,10 @@ ublic/amsfonts/cm/cmtt12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
 amsfonts/latxfont/lcircle1.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
 c/amsfonts/symbols/msam10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfs
 s1200.pfb>
-Output written on diss.pdf (105 pages, 632102 bytes).
+Output written on diss.pdf (105 pages, 632851 bytes).
 PDF statistics:
- 496 PDF objects out of 1000 (max. 8388607)
- 349 compressed objects within 4 object streams
+ 490 PDF objects out of 1000 (max. 8388607)
+ 345 compressed objects within 4 object streams
  0 named destinations out of 1000 (max. 500000)
- 58 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 53 words of extra memory for PDF output out of 10000 (max. 10000000)
 

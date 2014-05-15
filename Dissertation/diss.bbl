@@ -100,17 +100,17 @@ Steven~E Ganz, Daniel~P Friedman, and Mitchell Wand.
 \newblock Trampolined style.
 \newblock In {\em ACM SIGPLAN Notices}, volume~34, pages 18--27. ACM, 1999.
 
-\bibitem{hoareetal2001tackling}
-CAR Hoareetal.
-\newblock Tackling the awkward squad: monadic input/output, concurrency,
-  exceptions, and foreign-language calls in {H}askell.
-\newblock {\em Engineering theories of software construction}, 180:47, 2001.
-
 \bibitem{howe1996proving}
 Douglas~J Howe.
 \newblock Proving congruence of bisimulation in functional programming
   languages.
 \newblock {\em Information and Computation}, 124(2):103--112, 1996.
+
+\bibitem{hoareetal2001tackling}
+Simon~PEYTON JONES.
+\newblock Tackling the awkward squad: monadic input/output, concurrency,
+  exceptions, and foreign-language calls in {H}askell.
+\newblock {\em Engineering theories of software construction}, 180:47, 2001.
 
 \bibitem{kahn1976coroutines}
 Gilles Kahn, David MacQueen, et~al.

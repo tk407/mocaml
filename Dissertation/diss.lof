@@ -2,7 +2,7 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces High level view of the tool chain\relax }}{9}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Detailed outline of the implementation\relax }}{21}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Detailed outline of the implementation\relax }}{20}
 \contentsline {figure}{\numberline {3.2}{\ignorespaces \input diss-1.cpt\relax \relax }}{22}
 \contentsline {figure}{\numberline {3.3}{\ignorespaces Syntax and typing of arrow types\relax }}{23}
 \contentsline {figure}{\numberline {3.4}{\ignorespaces Syntax and typing of sum types\relax }}{24}

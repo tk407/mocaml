@@ -203,7 +203,7 @@
 \Huge
 {\bf Monadic Concurrency in OCaml} \\
 \vspace*{5mm}
-Part II in Computer Science \\
+Computer Science Tripos Part II \\
 \vspace*{5mm}
 Churchill College \\
 \vspace*{5mm}
@@ -226,14 +226,14 @@ Churchill College \\
 Name:               & \bf Tam\'as Kisp\'eter                     \\
 College:            & \bf Churchill College                     \\
 Project Title:      & \bf Monadic Concurrency in OCaml \\
-Examination:        & \bf Part II in Computer Science, July 2014        \\
+Examination:        & \bf Computer Science Tripos Part II, July 2014        \\
 Word Count:         & \bf 12000\footnotemark[1]            \\
 Project Originator: & Tam\'as Kisp\'eter                    \\
 Supervisor:         & Jeremy Yallop                    \\ 
 \end{tabular}
 }
 \footnotetext[1]{This word count was computed
-by {\tt detex diss.tex | tr -cd '0-9A-Za-z $\tt\backslash$n' | wc -w}
+by {\tt texcount, version 3.0.0.24}
 }
 \stepcounter{footnote}
 
@@ -288,7 +288,7 @@ extent for a comparable purpose.
 
 \newpage
 \section*{Acknowledgements}
-
+I would like to thank Jeremy Yallop and Leo White for their unfaltering support, weekly sanity checks and invaluable input. Furthermore, Ciaran Deasy, Andrew Sheriff, Alex Marshall and Vit Huang for supporting me in the last couple of weeks.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % now for the chapters
 
@@ -316,7 +316,7 @@ Concurrency is the concept of more than one thread of execution making progress 
 
 Concurrent computation has became common in many applications in computer science with the rise of faster systems often with multiple cores. Concurrency in a computation can be exploited on several levels ranging from hardware supported instruction and thread level parallelism to software based heavy and lightweight models. 
 
-This project aims to model lightweight, cooperative concurrency. No threads are exposed to the underlying operating system or hardware. Lightweight concurrency often provides faster switching between threads  but some blocking operations on the process level will block all internal threads. The threads in this approach expose the points of possible interleaving and the scheduling is done in software.
+This project aims to model lightweight, cooperative concurrency. No threads are exposed to the operating system or hardware. Lightweight concurrency often provides faster switching between threads  but some blocking operations on the process level will block all internal threads. The threads in this approach expose the points of possible interleaving and the scheduling is done in software.
 
 Most general-purpose languages offer some way of exploiting concurrency in computations. Functional programming is a good fit for concurrency, since it discourages the use of mutable data structures that lead to race conditions.  However, support for concurrency in functional languages is often lacking. Functional languages that have both actual industrial applications and large sets of features are of particular interest. These languages include OCaml and Haskell. I focused on OCaml. 
  
@@ -324,7 +324,7 @@ Most general-purpose languages offer some way of exploiting concurrency in compu
 \section{Current implementations of a concurrency framework in OCaml}
 There are two very successful monadic concurrency frameworks for OCaml. LWT\cite{LWT} and Async\cite{Async}. They both provide primitives and syntax extensions for concurrent development. Neither is supported by a clear semantic description, because their main focus is ease of use and speed . 
 
-LWT, the lightweight cooperative threading library\cite{vouillon2008lwt}, was designed as an open source framework entirely written in OCaml in a monadic style. It was successfully used in several large projects including the Unison file synchroniser and the Ocsigen Web server. LWT includes many primitives to provide a feature rich framework, including primitives for thread creation, composition and cancellation, thread local storage and support for various synchronisation techniques. 
+LWT, the lightweight cooperative threading library\cite{vouillon2008lwt}, was designed as an open source framework entirely written in OCaml in a monadic style. It was used in several large projects including the Unison file synchroniser and the Ocsigen Web server. LWT includes many primitives to provide a feature rich framework, including primitives for thread creation, composition and cancellation, thread local storage and support for various synchronisation techniques. 
 
 
 \begin{minipage}{\linewidth}
@@ -351,9 +351,9 @@ LWT, the lightweight cooperative threading library\cite{vouillon2008lwt}, was de
 
 
 
-\Cref{lst:lwtsyntax} is an example of the syntax of LWT. Lines \ref{lst:lwtsyntaxHeadsDefStart}--\ref{lst:lwtsyntaxHeadsDefEnd} define \verb|heads|, a function that sleeps for 1 second and then prints ``Head", and lines \ref{lst:lwtsyntaxTailsDefStart}--\ref{lst:lwtsyntaxTailsDefEnd} define \verb|tails| which sleeps for 2 seconds and then prints ``Tails".  Lines \ref{lst:lwtsyntaxThreadStart}--\ref{lst:lwtsyntaxThreadEnd} create a thread that waits on heads and tails and then prints ``Finished".  In LWT, semantics mostly follow the principle of continuations. We build a sequence of computations and the scheduler can pick between parallel computations at points of sequencing.
+\Cref{lst:lwtsyntax} is an example of the syntax of LWT. Lines \ref{lst:lwtsyntaxHeadsDefStart}--\ref{lst:lwtsyntaxHeadsDefEnd} define \verb|heads|, a function that sleeps for 1 second and then prints ``Head", and lines \ref{lst:lwtsyntaxTailsDefStart}--\ref{lst:lwtsyntaxTailsDefEnd} define \verb|tails| which sleeps for 2 seconds and then prints ``Tails".  Lines \ref{lst:lwtsyntaxThreadStart}--\ref{lst:lwtsyntaxThreadEnd} create a thread that waits on heads and tails and then prints ``Finished".  In LWT, semantics follow the principle of continuations. We build a sequence of computations and the scheduler can pick between parallel continuations at points of sequencing.
 
-Another implementation, Async, is an open source concurrency library for OCaml developed by Jane Street Capital. Unlike LWT the basic semantics are designed with promises in mind. A promise is a container that can be used in place of a value of the same type, but computations with a promise only evaluate when the actual value has been calculated. The concurrency arises naturally by interleaving the fulfilment of these containers. 
+Another implementation, Async, is an open source concurrency library for OCaml developed by Jane Street Capital. Unlike LWT, the basic semantics are designed with promises in mind. A promise is a container that can be used in place of a value of the same type, but computations with a promise only evaluate when the actual value has been calculated. The concurrency arises naturally by interleaving the fulfilment of these containers. 
 
 
 \begin{minipage}{\linewidth}
@@ -396,7 +396,7 @@ All concurrency styles have at least one base concurrent primitive that achieves
 \end{itemize}
 
 \section{Semantics to logic}
-The semantics of concurrency can be modelled in logic, in particular, logics used by proof assistants. The developer can use this model to formally verify properties about the semantics\cite{benton2008mechanized,blazy2009mechanized,blazy2006formal,leroy2009formal}. Coq\cite{Coq}, HOL and Isabelle are widely used proof assistants. Tools like Ott\cite{Ott} help with the modelling process with ASCII-art notation and translation to proof assistants and \LaTeX.
+The semantics of concurrency can be modelled in logic, in particular, logics used by proof assistants. The developer can use this model to formally verify properties about the semantics\cite{benton2008mechanized,blazy2006formal,blazy2009mechanized,leroy2009formal}. Coq\cite{Coq}, HOL and Isabelle are widely used proof assistants. Tools like Ott\cite{Ott} help with the modelling process with ASCII-art notation and translation to proof assistants and \LaTeX.
 
 
 \section{Logic to runnable code}
@@ -642,7 +642,7 @@ Jop :: '' ::=
 \end{lstlisting}
 \end{minipage}
 
-In \Cref{lst:ottredex} I define a set of mutually recursive relations named \verb|Jop| with one relation in it, the $\longrightarrow$ or reduce relation. Each element of this relation takes the form t1 $\longrightarrow$ t2, where t1 and t2 are both terms of the grammar defined in \Cref{lst:ottgrammarex}. There are three statements for function application: the actual substitution, reduction of the first term and reduction of the second term. 
+In \Cref{lst:ottredex} I define a set of mutually recursive relations named \verb|Jop| with one relation in it, the $\longrightarrow$ or reduction relation. Each element of this relation takes the form t1 $\longrightarrow$ t2, where t1 and t2 are both terms of the grammar defined in \Cref{lst:ottgrammarex}. There are three statements for function application: the actual substitution, reduction of the first term and reduction of the second term. 
 
 \begin{lstlisting}[language={Ott}, caption={Ott single reduction}]
 t1 --> t1'
@@ -835,7 +835,7 @@ Most descriptions of reduction relations and indeed the output of Ott is of this
 
 \subsection{OCaml}
 % Brief overview of OCaml
-OCaml is a high level programming language. It combines functional, object-oriented and imperative paradigms and is used in large scale industrial and academic projects where speed and correctness are of utmost importance. OCaml uses one of the most powerful type and inference systems available to make efficient and correct software engineering possible.
+OCaml is a high level programming language. It combines functional, object-oriented and imperative paradigms and is used in large scale industrial and academic projects where speed and correctness are  important. OCaml uses one of the most powerful type and inference systems available to make efficient and correct software engineering possible.
 
 OCaml supports a wide range of functional features: from simple functions, to mutually recursive functions with pattern matching.
 \vspace{3mm}
@@ -924,18 +924,7 @@ The project should also include the following features:
 \item{Monadic laws should be obeyed by the implementation.}
 \item{The concurrency behaviour should exhibit properties required by process calculi.}
 \end{itemize}
-Further extensions that the project could have:
-\begin{itemize}
-\item{Like most theoretical languages, a proof of type preservation and progress would be good feature.}
-\item{A typechecker would be beneficial for potential users.}
-\item{Extensive syntactic sugar could greatly improve the use of the framework.}
-\item{A hand optimized version of the extracted semantics might prove viable as compared to other implementations.}
-\end{itemize}
-After Part II I want to extend the project with the following features:
-\begin{itemize}
-\item{A formal treatment of communication between threads. Channel semantics was not within the scope of this project.}
-\item{A documentation on how to use the project: both from a user's perspective and from a developer/researcher's perspective.}
-\end{itemize}
+Furthermore, the project could benefit from some syntactic sugar to aid development.
 
 \subsection{Development process}
 I used a spiral development pattern in the project. This pattern seemed well suited for the fast paced development that is required by the Part II schedule. However, at a later stage it became apparent that a waterfall model might have been better suited for this project: with the full implementation chain, shown in \Cref{fig:detailedimploutline}, the project had high viscosity. Each change in the initial semantics required between a few hundred to thousands of lines of change throughout the system. 
@@ -984,13 +973,54 @@ let run () = let n = ref 1 in
 
 The implementation of MOCaml was done in 5 stages as shown in \Cref{fig:detailedimploutline}. \label{sec:detailed_impl}
 
-\begin{figure}[h]
-\begin{center}
-\includegraphics[scale=0.5]{implOut}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=2cm, auto, >=stealth',pil/.style={
+           ->,
+           thick,
+           shorten <=2pt,
+           shorten >=2pt,}, pildashed/.style={
+                      ->,
+                      thick,
+                      dashed,
+                      shorten <=2pt,
+                      shorten >=2pt,},scale=1.4, every node/.style={scale=0.9}, ]
+\node[draw, rectangle] (o) {Ott};
+\node[right of=o] (otch) {};
+\node[below of={otch}] (otc) {Generation}
+  edge[pildashed] (otch);
+\node[draw, rectangle, right of={otch}] (c) {Coq}
+  edge[pil, <-] (o);
+\node[right of=c] (ceoh) {};
+\node[below of={ceoh}] (ceo) {Hand modification}
+  edge[pildashed] (ceoh);
+\node[draw, rectangle, right of={ceoh},align=center, text width=2.1cm] (exc) {Extractable Coq}
+  edge[pil, <-] (c);
+\node[right of=exc] (ceoh) {};
+\node[below of={ceoh}] (ceo) {Extraction}
+  edge[pildashed] (ceoh);
+\node[draw, rectangle, right of={ceoh}] (oc) {OCaml}
+  edge[pildashed, <-] (exc);
+\node[draw, ellipse, above of={ceoh}] (exp) {Extraction plugin}
+  edge[pil, <-] (exc)
+  edge[pil] (oc);
+\node[right of=oc] (rceoh) {};
+\node[draw, rectangle, right of={rceoh},align=center, text width=1.65cm] (roc) {Runnable OCaml}
+  edge[pil, <-] (oc);
+\node[below of={rceoh}] (rceo) {Hand modification}
+  edge[pildashed] (rceoh);
+\end{tikzpicture}
 \caption{Detailed outline of the implementation}
 \label{fig:detailedimploutline}
-\end{center}
 \end{figure}
+
+%\begin{figure}[h]
+%\begin{center}
+%\includegraphics[scale=0.5]{implOut}
+%\caption{Detailed outline of the implementation}
+%\label{fig:detailedimploutline}
+%\end{center}
+%\end{figure}
 
 \begin{enumerate}
 \item[Stage 1.]{I defined the overall semantics in Ott.}
@@ -1163,7 +1193,7 @@ Arrow types or functions are ubiquitous in functional programming languages. In 
 
 Many circumstances require the ability to describe expressions that are either one type or another. Sum types or otherwise known as labelled unions are a simple solution to this. 
 
-\Cref{fig:semsyntype} shows the basic structure of sum types that is based on Pierce\cite[p.~132]{pierce2002types}. An expression $ e $ that has type $ T $ can be labelled as a variant in a sum type by attaching a label $ \textbf{left } e $ and $ \textbf{right } e $. As shown in (\ref{eq:t-left}) and (\ref{eq:t-right}) these variants will have type $ T + T' $ for some type $ T' $ and $ T $ respectively. A labelled expression can then be destructed by the expression "$ \textrm{\textbf{case} $  e $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ } $". The typing rule (\ref{eq:t-case}) gives the \textbf{case} expression the common type,  $ T'' $, of $ e_1 $ and $ e_2 $ when assuming $ x_1\,:\,T $ and $ x_2\,:\,T' $ respectively. Pierce gives a slightly more complex version of sum types that ensures that every expression has a unique type.  For this project I used the version given here for simplicity, but further work should include a change to the uniquely typable variant. 
+\Cref{fig:semsyntype} shows the basic structure of sum types that is based on Pierce\cite[p.~132]{pierce2002types}. An expression $ e $ that has type $ T $ can be labelled as a variant in a sum type by attaching a label $ \textbf{left } e $ and $ \textbf{right } e $. As shown in (\ref{eq:t-left}) and (\ref{eq:t-right}) these variants will have type $ T + T' $ for some type $ T' $ and $ T $ respectively. A labelled expression can then be destructed by the expression ``$ \textrm{\textbf{case} $  e $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ } $". The typing rule (\ref{eq:t-case}) gives the \textbf{case} expression the common type,  $ T'' $, of $ e_1 $ and $ e_2 $ when assuming $ x_1\,:\,T $ and $ x_2\,:\,T' $ respectively. Pierce gives a slightly more complex version of sum types that ensures that every expression has a unique type.  For this project I used the version given here for simplicity, but further work should include a change to the uniquely typable variant. 
 
 In this project I use sum types in the signature of \textbf{fork} that will be detailed in \Cref{sec:fork_sem}.  
 
@@ -1312,7 +1342,7 @@ CoInductive select : Set := Seq : decision -> select -> select.
 
 In \Cref{lst:coqselectstar} I define \verb|select| with the co-inductive notation introduced in \Cref{sec:coq_coind}, where each element is a pair of a decision and a further \verb|select| representing the rest of the decisions. 
 
-The 4-tuple $ (e, s, rl, e') $ means that given the selection operator $ s $, a starting expression $ e $  can move to expression $ e' $ with a side-effect $ rl $. I use the notation $ e \red{s}{rl} e' $ as in (\ref{eq:red}) in \Cref{fig:reductiom_semantics}. The $ rl $ label may be $ \tau $ which is a silent action or an atomic action $ e $ that can be observed. A silent action $\tau$ is considered unobservable from outside MOCaml. The atomic action $e$ is considered an expression within the model.  This choice was based on the behaviour of placeholders in \Cref{sec:comp_place_syn}. The inspiration to use a labelled transition system to model side-effects comes from Milner's ``A calculus of communicating systems" book\cite{milner1982calculus}.
+The 4-tuple $ (e, s, rl, e') $ means that given the selection operator $ s $, a starting expression $ e $  can move to expression $ e' $ with a side-effect $ rl $. I use the notation $ e\, \red{s}{rl}\, e' $ as in (\ref{eq:red}) in \Cref{fig:reductiom_semantics}. The $ rl $ label may be $ \tau $ which is a silent action or an atomic action $ e $ that can be observed. A silent action $\tau$ is considered unobservable from outside MOCaml. The atomic action $e$ is considered an expression within the model.  This choice was based on the behaviour of placeholders in \Cref{sec:comp_place_syn}. The inspiration to use a labelled transition system to model side-effects comes from Milner's ``A calculus of communicating systems" book\cite{milner1982calculus}.
 
 
 
@@ -1339,12 +1369,12 @@ The 4-tuple $ (e, s, rl, e') $ means that given the selection operator $ s $, a 
                                      \end{equation} \vspace{-5mm}
                                      \tabularnewline   \begin{equation}
                                       \inferrule
-                                       { e \red{s}{rl} e''}
+                                       { e\, \red{s}{rl}\, e''}
                                        { e\,e' \, \red{s}{rl}\, e''\, e'\,  } \tag{R-App1}\label{eq:r-app1}
                                        \end{equation}\vspace{-5mm}
                                      \tabularnewline   \begin{equation}
                                      \inferrule
-                                      { e' \red{s}{rl} e''}
+                                      { e'\, \red{s}{rl}\, e''}
                                       { v\,e' \, \red{s}{rl}\, v\, e''\,  } \tag{R-App2}\label{eq:r-app2}
                                                                \end{equation} \vspace{-5mm}
              \end{tabularx}
@@ -1375,16 +1405,16 @@ The 4-tuple $ (e, s, rl, e') $ means that given the selection operator $ s $, a 
             \begin{tabularx}{\textwidth}{>{\raggedright}X}
                 \textit{Evaluation} \hfill \fbox{$e \,\red{s}{rl} \, e'$}  \tabularnewline \begin{equation}
                 \inferrule
-                { e \red{s}{rl} e'}
+                { e\, \red{s}{rl}\, e'}
                 { \textbf{left}\,e \, \red{s}{rl}\, \textbf{left}\,e'\,  } \tag{R-Left} \label{eq:r-left} \end{equation}\vspace{-5mm}
                 \tabularnewline
                 \begin{equation}
                 \inferrule
-                { e \red{s}{rl} e'}
+                { e\, \red{s}{rl}\, e'}
                 { \textbf{right}\,e \, \red{s}{rl}\, \textbf{right}\,e'\,  } \tag{R-Right}\label{eq:r-right} \end{equation}\vspace{-5mm} \tabularnewline  
                 \begin{equation}
                         \inferrule
-                                                       { e \red{s}{rl} e' }
+                                                       { e\, \red{s}{rl}\, e' }
                                                        { (\textrm{\textbf{case} $  e $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ }) \\\\ {\scriptstyle s}\!\big\downarrow\!{\scriptstyle rl} \\\\
                                                        (\textrm{\textbf{case} $  e' $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ }) } \tag{R-Case} \label{eq:r-case}
                                                      \end{equation} \vspace{-7mm}
@@ -1392,12 +1422,12 @@ The 4-tuple $ (e, s, rl, e') $ means that given the selection operator $ s $, a 
                            \begin{equation}
                                         \inferrule
                                           {  }
-                                          { (\textrm{\textbf{case} $  \textbf{left}\, v $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ }) \red{s}{\tau} \{v / x_1\}e_1 } \tag{R-CaseL}\label{eq:r-casel}
+                                          { (\textrm{\textbf{case} $  \textbf{left}\, v $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ })\, \red{s}{\tau}\, \{v / x_1\}e_1 } \tag{R-CaseL}\label{eq:r-casel}
                                         \end{equation}  \vspace{-11mm}
                                         \tabularnewline \begin{equation}
                                             \inferrule
                                             {  }
-                                            { (\textrm{\textbf{case} $  \textbf{right}\, v $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ }) \red{s}{\tau} \{v / x_2\}e_2 } \tag{R-CaseR} \label{eq:r-caser}
+                                            { (\textrm{\textbf{case} $  \textbf{right}\, v $ \textbf{of} \textbf{left} $ x_1 \Rightarrow e_1 $ \vline\, \textbf{right} $ x_2 \Rightarrow e_2 $ })\, \red{s}{\tau}\, \{v / x_2\}e_2 } \tag{R-CaseR} \label{eq:r-caser}
                                                                              \end{equation}\vspace{-5mm}
                 \end{tabularx}
            \end{minipage}
@@ -1426,14 +1456,14 @@ In \Cref{fig:semeval} I describe the transition rules for constructs related to 
     \begin{tabularx}{\textwidth}{>{\raggedright}X}
      \textit{Evaluation} \hfill   \tabularnewline   \begin{equation}
                                          \inferrule
-                                           { e \red{s}{rl} e''}
-                                           { \{e,e'\} \red{s}{rl} \{e'',e'\} } \tag{R-Pair1}\label{eq:r-pair1}
+                                           { e\, \red{s}{rl}\, e''}
+                                           { \{e,e'\}\, \red{s}{rl}\, \{e'',e'\} } \tag{R-Pair1}\label{eq:r-pair1}
                                          \end{equation} \vspace{-5mm}
                                          \tabularnewline
                                          \begin{equation}
                                            \inferrule
-                                             { e' \red{s}{rl} e''}
-                                             { \{v,e'\} \red{s}{rl} \{v,e''\} } \tag{R-Pair2} \label{eq:r-pair2}
+                                             { e'\, \red{s}{rl}\, e''}
+                                             { \{v,e'\}\, \red{s}{rl}\, \{v,e''\} } \tag{R-Pair2} \label{eq:r-pair2}
                                              \end{equation} \vspace{-5mm}
                                          \tabularnewline
                                           \begin{equation}
@@ -1450,13 +1480,13 @@ In \Cref{fig:semeval} I describe the transition rules for constructs related to 
           \vspace{2.5pt} \hfill \fbox{$e \, \red{s}{rl} \, e'$}\tabularnewline \vspace{1pt}
                                      \begin{equation}
                                        \inferrule
-                                       { e \red{s}{rl} e'}
+                                       { e\, \red{s}{rl}\, e'}
                                        { \textbf{proj}_1\,e \, \red{s}{rl}\, \textbf{proj}_1\,e'  } \tag{R-Proj1-Eval}\label{eq:r-evalproj1}
                                        \end{equation}\vspace{-7mm}
                                                      \tabularnewline
                                      \begin{equation}
                                      \inferrule
-                                     { e \red{s}{rl} e'}
+                                     { e\, \red{s}{rl}\, e'}
                                       { \textbf{proj}_2\,e \, \red{s}{rl}\, \textbf{proj}_2\,e'  } \tag{R-Proj2-Eval}\label{eq:r-evalproj2}
                                       \end{equation}\vspace{-7mm}
                                      \tabularnewline
@@ -1498,7 +1528,7 @@ The above expressions has equivalent behaviour to the original versions of the c
                                                                  \end{equation} \vspace{-7mm}
               \tabularnewline    \begin{equation}
                \inferrule
-                {e \red{s}{rl} e'}
+                {e\, \red{s}{rl}\, e'}
                 { \textbf{fix}\,e \, \red{s}{rl}\, \textbf{fix}\,e'   } \tag{R-Fix-Eval}
                                                                            \label{eq:r-evalfix}  \end{equation}\vspace{-5mm} 
                \end{tabularx}
@@ -1729,7 +1759,7 @@ I chose to always reduce a placeholder to an expression within the framework to 
                                         \end{equation}\vspace{-9mm}}
                                         \tabularnewline   { \begin{equation}
                                         \inferrule
-                                         { e \red{s}{rl} e'}
+                                         { e\, \red{s}{rl}\, e'}
                                         { \textbf{ret }\,e \, \red{s}{rl}\, \textbf{ret }\,e' } \tag{R-Evalret}\label{eq:r-evalret}
                                                                                 \end{equation}\vspace{-7mm}}
                                       \tabularnewline  { \begin{equation}
@@ -1738,12 +1768,12 @@ I chose to always reduce a placeholder to an expression within the framework to 
                                                                             { \textbf{live }  v\,\gg=\,e' \, \red{s}{\tau}\, e'\, v  } \tag{R-Dobind}\label{eq:r-dobind} \end{equation}\vspace{-9mm}}
                                       \tabularnewline  { \begin{equation}
                                       \inferrule
-                                       { e \red{s}{rl} e''}
+                                       { e\, \red{s}{rl}\, e''}
                                        { \textbf{live }  e\,\gg=\,e' \, \red{s}{rl}\, \textbf{live } e''\, \gg= e'\,  } \tag{R-Movebind}\label{eq:r-movebind}
                                                                 \end{equation}\vspace{-7mm}}
               \tabularnewline  { \begin{equation}
               \inferrule
-              { e \red{s}{rl} e''}
+              { e\, \red{s}{rl}\, e''}
               { e\,\gg=\,e' \, \red{s}{rl}\, e''\, \gg= e'\,  } \tag{R-Evalbind} \label{eq:r-evalbind}
               \end{equation}\vspace{-5mm}}
               \end{tabularx}
@@ -1768,23 +1798,23 @@ Bind evaluates left to right: it evaluates the expression on the left to a concu
      \begin{tabularx}{\textwidth}{>{\raggedright}X}
                  \textit{Evaluation} \hfill \fbox{$e \, \red{s}{rl} \, e'$}  \tabularnewline   \begin{equation}
                                          \inferrule
-                                           {e \red{s}{el} e'' \\ e' \notin \text{Values} }
-                                           { \textbf{fork } (\textbf{live } e) (\textbf{live } e')  \red{L\,\,s}{rl} \textbf{fork } (\textbf{live } e'') (\textbf{live } e')  } \tag{R-Forkmove1} \label{eq:forkmove1}
+                                           {e\, \red{s}{el}\, e'' \\ e' \notin \text{Values} }
+                                           { \textbf{fork } (\textbf{live } e) (\textbf{live } e')\,  \red{L\,\,s}{rl}\, \textbf{fork } (\textbf{live } e'') (\textbf{live } e')  } \tag{R-Forkmove1} \label{eq:forkmove1}
                                          \end{equation} \vspace{-7mm}
                                          \tabularnewline   \begin{equation}
                                           \inferrule
-                                            {e' \red{s}{rl} e'' \\ e \notin \text{Values} }
-                                            { \textbf{fork } (\textbf{live } e) (\textbf{live } e') \red{R\,\,s}{rl} \textbf{fork }  (\textbf{live } e) (\textbf{live } e'')  } \tag{R-Forkmove2} \label{eq:forkmove2}
+                                            {e'\, \red{s}{rl}\, e'' \\ e \notin \text{Values} }
+                                            { \textbf{fork } (\textbf{live } e) (\textbf{live } e')\, \red{R\,\,s}{rl}\, \textbf{fork }  (\textbf{live } e) (\textbf{live } e'')  } \tag{R-Forkmove2} \label{eq:forkmove2}
                                            \end{equation}\vspace{-7mm}\tabularnewline
                                             \begin{equation}
                                             \inferrule
                                             {}
-                                            { \textbf{fork } (\textbf{live } v) (\textbf{live } e')  \red{s}{\tau} \textbf{live } \textbf{left}  \{v, (\textbf{live } e')\}  } \tag{R-Forkdeath1}\label{eq:r-forkdeath1}   \end{equation} \vspace{-7mm} \tabularnewline
+                                            { \textbf{fork } (\textbf{live } v) (\textbf{live } e')\,  \red{s}{\tau}\, \textbf{live } \textbf{left}  \{v, (\textbf{live } e')\}  } \tag{R-Forkdeath1}\label{eq:r-forkdeath1}   \end{equation} \vspace{-7mm} \tabularnewline
                           \begin{equation}
                                                                       \inferrule
                                                                       {}
-                         { \textbf{fork } (\textbf{live } e) (\textbf{live } v')  \red{s}{\tau} \textbf{live } \textbf{right}  \{(\textbf{live }e) ,  v'\}  } \tag{R-Forkdeath2}\label{eq:r-forkdeath2}   \end{equation} \vspace{-7mm}\tabularnewline\begin{equation}\inferrule{e \red{s}{rl} e'' }{ \textbf{fork }\,\,  e\,\, e' \red{s}{rl} \textbf{fork } \,\, e'' \,\, e' } \tag{R-Forkeval1} \label{eq:forkeval1}\end{equation}\vspace{-7mm}
-                        \tabularnewline\begin{equation}\inferrule{e' \red{s}{rl} e'' }{ \textbf{fork }\,\,  v\,\, e'  \red{s}{rl} \textbf{fork } \,\, v \,\, e'' } \tag{R-Forkeval2} \label{eq:forkeval2}\end{equation}\vspace{-5mm}   
+                         { \textbf{fork } (\textbf{live } e) (\textbf{live } v')\,  \red{s}{\tau}\, \textbf{live } \textbf{right}  \{(\textbf{live }e) ,  v'\}  } \tag{R-Forkdeath2}\label{eq:r-forkdeath2}   \end{equation} \vspace{-7mm}\tabularnewline\begin{equation}\inferrule{e\, \red{s}{rl}\, e'' }{ \textbf{fork }\,\,  e\,\, e'\, \red{s}{rl}\, \textbf{fork } \,\, e'' \,\, e' } \tag{R-Forkeval1} \label{eq:forkeval1}\end{equation}\vspace{-7mm}
+                        \tabularnewline\begin{equation}\inferrule{e'\, \red{s}{rl}\, e'' }{ \textbf{fork }\,\,  v\,\, e'\,  \red{s}{rl}\, \textbf{fork } \,\, v \,\, e'' } \tag{R-Forkeval2} \label{eq:forkeval2}\end{equation}\vspace{-5mm}   
                  \end{tabularx}
     \end{minipage}
     \end{tabular}
@@ -1860,7 +1890,8 @@ Fixpoint is_value_of_expr (e:expr) : Prop :=
   | E_fix e' => False
   | E_comp e' => False
   | E_live_expr e' => True
-  | E_pair e' e'' => (is_value_of_expr e' /\ is_value_of_expr e'')
+  | E_pair e' e'' => 
+       (is_value_of_expr e' /\ is_value_of_expr e'')
   | E_proj1 e' => False
   | E_proj2 e' => False
   | E_fork e' e'' => False
@@ -2109,7 +2140,8 @@ The multiple layers of automatic naming make development in raw MOCaml cumbersom
   
   let rec evalrand e n = (match n with 
                        | 0 -> e
-                       | m -> evalrand (xJO_red12 e (makerand ())) (m-1))
+                       | m -> 
+                        evalrand (xJO_red12 e (makerand ())) (m-1))
 \end{lstlisting}
 
 \end{minipage}
@@ -2129,7 +2161,7 @@ First the semantics of the equivalence $ \equiv $ had to be examined. If two exp
 Labelled transition systems, like the operational semantics I have defined, are a common way to describe systems with side-effects. As the selection operator is external and not determined by the system I consider it and therefore the transition system non-deterministic. Brookes\cite{brookes1983behavioural} surveys various equivalence relations over non-deterministic labelled transition systems. I chose to follow Milner\cite{milner1982calculus} and used weak bisimilarity.
 
 \subsection{Weak bisimilarity}
-Bisimilarity is a standard method for establishing behavioural equivalence of a non-deterministic language used by Milner for CCS\cite{milner1982calculus}, Pierce and Sangiorgi for $ \pi $-calculus\cite{pierce2000behavioral} and Bergstra for the Algebra of Communicating Processes\cite{bergstra1986algebra,bergstra1985algebra} among others. 
+Bisimilarity is a standard method for establishing behavioural equivalence of a non-deterministic language used by Milner for CCS\cite{milner1982calculus}, Pierce and Sangiorgi for $ \pi $-calculus\cite{pierce2000behavioral} and Bergstra for the Algebra of Communicating Processes\cite{bergstra1985algebra,bergstra1986algebra} among others. 
 
 In the following definitions I use $ p,\, q,\, e $ (and $ p',\,q',\, e' $ etc.) as expressions, $ \alpha $ as an atomic action, $ \tau $ as a silent action, $ \sigma $ as an action that may be either silent or atomic and $ p \overset{\sigma}{\rightarrow} p' $ as the statement that for some selection value $ p $ may transition in a single step to $ p' $ with a side-effect $ \sigma $.
 
@@ -2354,7 +2386,7 @@ To show that erasing labels is safe it suffices to show that there exists a dete
 \begin{thm}[Unique labels]
 \label{thm:unique_label}
 For all expressions $ e,\, e'$, selection value $ s $ and reduction labels $ rl, rl' $:
- if $ e \red{s}{rl}e' $ and $ e \red{s}{rl'}e' $ then $ rl = rl' $. 
+ if $ e\, \red{s}{rl}e'\, $ and $ e\, \red{s}{rl'}e'\, $ then $ rl = rl' $. 
 \end{thm}
 \subsubsection{Equivalence}
 I denote the logical model reduction as $ e\, \red{s}{rl}\, e' $, as usual, while I denote the extractable reduction as $ e\, \xred{s}\, e' $.
@@ -2422,9 +2454,9 @@ In \Cref{fig:kpn_process_outline,fig:sieve_process_outline,fig:sorter_process_ou
   \node[mvar] (M2) [right of=T2, label=below:{$\text{m}_2$}] {};
   \node[mvar] (M3) [right of=T3, label=below:{$\text{m}_3$}] {};
   \node[mvar] (M5) [right of=T5, label=below:{$\text{m}_5$}] {};
-  \node[main node] (Merge35) [below=0.5 of M3, xshift=2cm, label=below:{$\textit{merge}_{35}$}] {};
+  \node[main node] (Merge35) [below=0.5 of M3, xshift=2cm, label=below:{$\textit{Merge}_{35}$}] {};
   \node[mvar] (M35) [right of=Merge35, label=below:{$\textit{m}_{35}$}] {};
-  \node[main node] (Merge235) [below=0.5 of M2, xshift=6cm, label=below:{$\textit{merge}_{235}$}] {};
+  \node[main node] (Merge235) [below=0.5 of M2, xshift=6cm, label=below:{$\textit{Merge}_{235}$}] {};
    \node[mvar] (M235) [right of=Merge235, label=below:{$\textit{m}_{235}$}] {};
   \node[main node] (P) [right of=M235, label=below:{\textit{P}}] {};
 %  \node[main node] (S) [right of=E] {S};
@@ -2461,8 +2493,8 @@ In \Cref{fig:kpn_process_outline,fig:sieve_process_outline,fig:sorter_process_ou
 \verb|Kpn| is a process network of 6 static threads shown in \Cref{fig:kpn_process_outline}:
 \begin{itemize}
 \item{The processes $ \times \textit{2} $, $ \times \textit{3} $, $ \times \textit{5} $ multiply their input (taken from the corresponding FIFO) by 2, 3 and 5 respectively.}
-\item{The process $ \textit{merge}_{35} $ merges the output of $ \times \textit{3} $, $ \times \textit{5} $ processes using the corresponding message variables: it outputs the lower and fetches a new element that edge.}
-\item{Similarly, the process $ \textit{merge}_{235} $ merges the output of the $ \textit{merge}_{35} $ and $ \times \textit{2} $ processes}
+\item{The process $ \textit{Merge}_{35} $ merges the output of $ \times \textit{3} $, $ \times \textit{5} $ processes using the corresponding message variables: it outputs the lower of the two inputs and fetches a new element on the same input. If the two inputs are the same it outputs only one, but fetches on both inputs.}
+\item{Similarly, the process $ \textit{Merge}_{235} $ merges the output of the $ \textit{Merge}_{35} $ and $ \times \textit{2} $ processes}
 \item{The process \textit{P} prints the numbers coming in and copies them to the three FIFOs at the beginning.}
 \end{itemize}
 This network exemplifies a common case in concurrency: a low number of static threads with simple behaviour. As expected, \Cref{fig:kpn_exec_times} shows that MOCaml exhibits exactly the same behaviour as other lightweight implementations, but with a serious overhead: it is up to 200 times slower than the fastest implementation, \textbf{tramp}.  
@@ -2498,10 +2530,10 @@ The sieve of Eratosthenes is one of the simplest algorithms to find primes:
 
 This algorithm is implemented using a dynamic process network. Initially the network is made up of four types of processes:
 \begin{enumerate}
-\item{Integers: generates the infinite sequence of integers starting from 2}
-\item{Sift: If a number $ p $ is read Sift puts $ p $ forward to the printer process. Sift also creates a new process, Filter $ p $ and inserts it between the input of Sift and Sift itself in the flow of numbers (\Cref{fig:sieve_process_outline}). }
-\item{Filter $ p $ discards all numbers divisible by $ p $ and passes everything else on.}
-\item{Print just prints all numbers consumed.}
+\item{\textit{Integers}: generates the infinite sequence of integers starting from 2}
+\item{\textit{Sift}: If a number $ p $ is read \textit{Sift} puts $ p $ forward to the printer process. \textit{Sift} also creates a new process, \textit{Filter p}  and inserts it between the input of \textit{Sift} and \textit{Sift} itself in the flow of numbers (\Cref{fig:sieve_process_outline}). }
+\item{\textit{Filter p}  discards all numbers divisible by $ p $ and passes everything else on.}
+\item{\textit{Print} just prints all numbers consumed.}
 \end{enumerate}
 
 This problem is a good example of dynamic thread creation that most general purpose concurrency frameworks should support.
@@ -2511,28 +2543,28 @@ This problem is a good example of dynamic thread creation that most general purp
 \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm,
   thick,main node/.style={circle,draw,
   font=\sffamily\Large\bfseries,minimum size=8mm}, mvar/.style={rectangle, draw, ,minimum size=3mm}]
-  \node[main node] (I1) [label=below:{Integers}] {};
+  \node[main node] (I1) [label=below:{\textit{Integers}}] {};
   \node[mvar] (M11) [right=0.5 of I1, label=below:{$\text{m}_1$}] {};
-  \node[main node] (S1) [right=8 of M11, label=below:{Sift}] {};
+  \node[main node] (S1) [right=8 of M11, label=below:{\textit{Sift}}] {};
   \node[mvar] (MS1) [right=0.5 of S1, label=below:{$\text{m}_s$}] {};
-  \node[main node] (P1) [right=1 of MS1, label=below:{Print}] {};
+  \node[main node] (P1) [right=1 of MS1, label=below:{\textit{Print}}] {};
  
-  \node[main node] (I2) [below= of I1, label=below:{Integers}] {};
+  \node[main node] (I2) [below= of I1, label=below:{\textit{Integers}}] {};
   \node[mvar] (M12) [below=2.5 of M11, label=below:{$\text{m}_1$}] {};
-  \node[main node] (F2) [right=0.5 of M12, label=below:{Filter 2}] {};
+  \node[main node] (F2) [right=0.5 of M12, label=below:{\textit{Filter 2}}] {};
   \node[mvar] (M22) [right=0.5 of F2, label=below:{$\text{m}_s$}] {};
-  \node[main node] (S2) [below= of S1, label=below:{Sift}] {};
+  \node[main node] (S2) [below= of S1, label=below:{\textit{Sift}}] {};
   \node[mvar] (MS2) [below=2.5 of MS1, label=below:{$\text{m}_s$}] {};
-  \node[main node] (P2) [below= of P1, label=below:{Print}] {};
-  \node[main node] (I3) [below= of I2, label=below:{Integers}] {};
+  \node[main node] (P2) [below= of P1, label=below:{\textit{Print}}] {};
+  \node[main node] (I3) [below= of I2, label=below:{\textit{Integers}}] {};
     \node[mvar] (M13) [below=2.5 of M12, label=below:{$\text{m}_1$}] {};
-    \node[main node] (F22) [right=0.5 of M13, label=below:{Filter 2}] {};
+    \node[main node] (F22) [right=0.5 of M13, label=below:{\textit{Filter 2}}] {};
       \node[mvar] (M23) [right=0.5 of F22, label=below:{$\text{m}_2$}] {};
-   \node[main node] (F5) [right=0.5 of M23, label=below:{Filter 3}] {};
+   \node[main node] (F5) [right=0.5 of M23, label=below:{\textit{Filter 3}}] {};
      \node[mvar] (M33) [right=0.5 of F5, label=below:{$\text{m}_s$}] {};
-    \node[main node] (S3) [below= of S2, label=below:{Sift}] {};
+    \node[main node] (S3) [below= of S2, label=below:{\textit{Sift}}] {};
     \node[mvar] (MS3) [below=2.5 of MS2, label=below:{$\text{m}_s$}] {};
-    \node[main node] (P3) [below= of P2, label=below:{Print}] {};
+    \node[main node] (P3) [below= of P2, label=below:{\textit{Print}}] {};
   %\node[mvar] (F3) [below of=F2, label=below:{$\text{FIFO}_3$}] {};
   %\node[mvar] (F5) [below of=F3, label=below:{$\text{FIFO}_5$}] {};
   %\node[main node] (T2) [right = 1 of F2, label=below:{$\times 2$}] {};
@@ -2745,7 +2777,7 @@ As described in \Cref{sec:random_sched}, the default MOCaml scheduler chooses th
 
 Uniform random reductions assigns equal probabilities to each edge of a fork as shown in \Cref{fig:sieve_without_ftt}. In general the probability that the filter process of the $ k $th prime fires is $ \frac{1}{2^{k+1}} $. This uneven probability distribution means that for the expected number of reduction steps taken by the system before finding the $ k $th prime is bigger than $ 2^{k+1} \in O(2^{k}) $ as it has to make at least one step within each filter.
 
-However, although the default scheduler in the MOCaml concurrency framework is random, the user is not restricted to uniform probabilities for each decision. It is possible to keep track of the fork tree at runtime and equalize the scheduling probabilities of all processes with every computation placeholder. This results in the scheduling probabilities shown in \Cref{fig:sieve_ftt}. These probabilities reduce the expected number of steps for the $ k $th prime to $ k(k+1) $. The speedup is easily seen on \Cref{fig:sieve_exec_times} with the series $ \text{MOCaml}_{\text{ftt}} $.
+However, although the default scheduler in the MOCaml concurrency framework is random, the user is not restricted to uniform probabilities for each decision. It is possible to keep track of the fork tree at runtime and equalize the scheduling probabilities of all processes with every computation placeholder. This results in the scheduling probabilities shown in \Cref{fig:sieve_ftt}. These probabilities reduce the expected number of steps for the $ k $th prime to $ O(k^2) $. The speedup is easily seen on \Cref{fig:sieve_exec_times} with the series $ \text{MOCaml}_{\text{ftt}} $.
 
 % Define styles for the different kind of edges in a Feynman diagram
 
@@ -3023,7 +3055,7 @@ Lemma red_not_value : forall (e e' : expr)(s : select) (rl : redlabel),
 \end{minipage}
 \section{Weak bisimilarity definitions and theorems}
 \begin{minipage}{\linewidth}
-\begin{lstlisting}[language={Coq}, caption={Definitions of reduction relations}]
+\begin{lstlisting}[language={Coq}, caption={Definitions of reduction relations}, numbersep=11pt]
 Inductive tauStep : relation expr :=
  | tStep :  forall (e e' : expr) (s : select), JO_red e s RL_tau e' -> tauStep e e'.
 
@@ -3050,9 +3082,8 @@ Inductive weakred : redlabel -> relation expr :=
                weakred (RL_labelled l) e e'.               
 \end{lstlisting}
 \end{minipage}
-
 \begin{minipage}{\linewidth}
-\begin{lstlisting}[language={Coq}, caption={Definitions of weak bisimilarity}]
+\begin{lstlisting}[language={Coq}, caption={Definitions of weak bisimilarity},numbersep=11pt]
 (* Milner *)
 Definition isExprRelationWeakBisimilarity (R : relation expr) : Prop :=
    forall (p q : expr), R p q -> 
@@ -3082,9 +3113,8 @@ Definition isExprRelationStepWeakBisimilarity (R : relation expr) : Prop :=
         (exists (p' : expr), weakred rl p p' /\  R p' q' ))).            
 \end{lstlisting}
 \end{minipage}
-
 \begin{minipage}{\linewidth}
-\begin{lstlisting}[language={Coq}, caption={Weak bisimilarity properties}]
+\begin{lstlisting}[language={Coq}, caption={Weak bisimilarity properties},numbersep=11pt]
 Definition WBSM : relation expr -> Prop := isExprRelationStepWeakBisimilarity
 
 Lemma isExprRelationWeakBisimilarity_equiv_WBSM : 
@@ -3105,9 +3135,8 @@ Lemma WBSM_union2 : forall (R S : relation expr), WBSM R -> WBSM S ->
 \end{lstlisting}
 \end{minipage}
 \section{Monadic laws}
-
 \begin{minipage}{\linewidth}
-\begin{lstlisting}[language={Coq}, caption={Monadic left and right ret neutrality}]
+\begin{lstlisting}[language={Coq}, caption={Monadic left and right ret neutrality},numbersep=11pt]
 Inductive mon_left_id_rel : relation expr :=
 | mon_left_id_bound : forall (e e' : expr), is_value_of_expr e' -> 
            mon_left_id_rel ((E_ret e) >>= e') (E_apply e' e)
@@ -3137,20 +3166,21 @@ Theorem mon_right_id_wbsm : WBSM mon_right_id_rel.
 Theorem mon_right_id_rel_vewbsm : VEWBSM mon_right_id_rel.
 
 Inductive mon_right_id_ext_rel : relation expr :=
-| mon_right_id_ext_bound : forall (a : expr) (x : value_name) (t : typexpr),
+| mon_right_id_ext_bound : forall (a : expr) (x : value_name) 
+(t : typexpr),
   mon_right_id_ext_rel 
   (E_live_expr (a) >>= (E_function x t (E_ret (E_ident x))))  
   (E_ret a)
-| mon_right_id_ext_orig : forall (a b : expr) (x : value_name) (t : typexpr), mon_right_id_rel a b -> mon_right_id_ext_rel a b.
+| mon_right_id_ext_orig : forall (a b : expr) (x : value_name) 
+(t : typexpr), mon_right_id_rel a b -> mon_right_id_ext_rel a b.
 
 Theorem mon_right_id_ext_wbsm : WBSM mon_right_id_ext_rel.
 
 Theorem mon_right_id_ext_rel_vewbsm : VEWBSM mon_right_id_ext_rel.
 \end{lstlisting}
 \end{minipage}
-
 \begin{minipage}{\linewidth}
-\begin{lstlisting}[language={Coq}, caption={Monadic associativity}]
+\begin{lstlisting}[language={Coq}, caption={Monadic associativity},numbersep=11pt]
 Definition exprClosedOnVariable : expr -> value_name -> Prop := 
 fun e v =>   ( forall (e' : expr), (subst_expr e' v e) = e ).
 
@@ -3163,20 +3193,31 @@ Inductive mon_assoc_rel : relation expr :=
    (e >>= (E_function v t e') >>= (E_function v' t' e''))
    (e >>= (E_function v'' t (E_apply (E_function v t e') 
      (E_ident v'') >>= (E_function v' t' e''))))
-| mon_assoc_s1 : forall (e e' e'' : expr) (v v' v'' : value_name) (t t' : typexpr), v <> v'' -> v' <> v'' -> is_value_of_expr e ->  exprClosedOnVariable e' v'' -> exprClosedOnVariable e'' v'' ->
-    mon_assoc_rel ( (E_apply (E_function v t e') e ) >>= (E_function v' t' e'')) (E_apply (E_function v'' t (E_apply (E_function v t e') (E_ident v'') >>= (E_function v' t' e''))) e)
-| mon_assoc_s2 : forall (e e' e'' : expr) (v v' v'' : value_name) (t t' : typexpr), v <> v'' -> v' <> v'' -> is_value_of_expr e -> exprClosedOnVariable e' v'' -> exprClosedOnVariable e'' v'' ->
-    mon_assoc_rel ( ( ( (subst_expr e v e'))  ) >>= (E_function v' t' e''))    ( ( ((E_apply (E_function v t e') e) >>= (E_function v' t' e''))) )
-| mon_assoc_s3 : forall (e e' e'' : expr) (v v' : value_name) (t t' : typexpr), is_value_of_expr e -> 
-    mon_assoc_rel ( ( ( (subst_expr e v e'))  ) >>= (E_function v' t' e''))    ( ( ((subst_expr e v e') >>= (E_function v' t' e''))) )
+| mon_assoc_s1 : forall (e e' e'' : expr) (v v' v'' : value_name) 
+(t t' : typexpr), v <> v'' -> v' <> v'' -> is_value_of_expr e ->
+  exprClosedOnVariable e' v'' -> exprClosedOnVariable e'' v'' ->
+    mon_assoc_rel 
+ ((E_apply (E_function v t e') e ) >>= (E_function v' t' e''))
+ (E_apply (E_function v'' t (E_apply (E_function v t e') 
+ (E_ident v'') >>= (E_function v' t' e''))) e)
+| mon_assoc_s2 : forall (e e' e'' : expr) (v v' v'' : value_name) 
+(t t' : typexpr), v <> v'' -> v' <> v'' -> is_value_of_expr e -> 
+exprClosedOnVariable e' v'' -> exprClosedOnVariable e'' v'' ->
+    mon_assoc_rel 
+    ((( (subst_expr e v e'))) >>= (E_function v' t' e''))    
+    ((E_apply (E_function v t e') e) >>= (E_function v' t' e''))
+| mon_assoc_s3 : forall (e e' e'' : expr) (v v' : value_name) 
+(t t' : typexpr), is_value_of_expr e -> 
+    mon_assoc_rel 
+    ((((subst_expr e v e'))) >>= (E_function v' t' e''))
+    ((((subst_expr e v e') >>= (E_function v' t' e''))))
 | mon_assoc_fin : forall (e : expr) , 
     mon_assoc_rel e e.
 \end{lstlisting}
 \end{minipage}
-
-\section{Fork and join}
+\section{Fork}
 \begin{minipage}{\linewidth}
-\begin{lstlisting}[language={Coq}, caption={The original Coq $\mathit{swapf}$ function}, label={lst:orig_coq_swapf}]
+\begin{lstlisting}[language={Coq}, caption={The original Coq $\mathit{swapf}$ function}, label={lst:orig_coq_swapf},numbersep=11pt]
 Definition swapbodyl : expr :=
             E_ret (  
              E_taggingright (
@@ -3201,9 +3242,8 @@ Definition swapf : expr :=
     E_function (0) TE_unit swapbody.
 \end{lstlisting}
 \end{minipage}
-
 \begin{minipage}{\linewidth}
-\begin{lstlisting}[language={Coq}, caption={Fork commutativity}]
+\begin{lstlisting}[language={Coq}, caption={Fork commutativity},numbersep=11pt]
 Inductive fork_comm_rel :  relation expr := 
  | forkee_start : forall (e e' : expr), fork_comm_rel (e # e') (e' # e)
  | forkee_endl : forall (e e' : expr), is_value_of_expr e -> fork_comm_rel (e <# e') (e' #> e)
@@ -3214,7 +3254,7 @@ Theorem fork_comm_wbsm: WBSM fork_comm_rel.
 \end{minipage}
 \section{Deadlock properties}
 \begin{minipage}{1\linewidth}
-\begin{lstlisting}[language={Coq}, caption={The original Coq $\mathit{takeright}$ function}, label={lst:orig_coq_takeright}]
+\begin{lstlisting}[language={Coq}, caption={The original Coq $\mathit{takeright}$ function}, label={lst:orig_coq_takeright},numbersep=11pt]
 Definition takeright : expr :=
     E_function (0) TE_unit 
       (E_case (E_ident (0)) 
@@ -3222,10 +3262,44 @@ Definition takeright : expr :=
            (2) (E_ret (E_proj2  (E_ident (2))))).
 \end{lstlisting}
 \end{minipage}
-\section{Equivalence}
+\begin{minipage}{1\linewidth}
+\begin{lstlisting}[language={Coq}, caption={Fork deadlock}, label={lst:orig_fork_deadlock},numbersep=11pt]
+Inductive deadlock_left_rel : relation expr :=
+ | deadlock_live : forall (d e : expr), totalDetTauStep d d -> deadlock_left_rel (( d) # ( e)) e
+ | deadlock_dead : forall (d e : expr), totalDetTauStep d d -> is_value_of_expr e -> deadlock_left_rel (( d) #> (e)) e.
+ 
+Lemma deadlock_rel_wbsm : isExprRelationStepWeakBisimilarity deadlock_left_rel.
+
+Inductive deadlock_left_ext_rel : relation expr :=
+ | deadlock_ext_live : forall (d e : expr), totalDetTauStep d d -> deadlock_left_ext_rel ((( d) # ( e)) >>= takeright) (E_ret e)
+ | deadlock_ext_dead : forall (d e f : expr), totalDetTauStep d d -> is_value_of_expr e -> totalTauRed ((( d) #> (e))>>= takeright) f -> deadlock_left_ext_rel f (E_live_expr e).
+
+Lemma deadlock_ext_rel_wbsm : isExprRelationStepWeakBisimilarity deadlock_left_ext_rel.
+
+Theorem deadlock_ext_rel_vewbsm : isExprRelationValueEqualWeakBisimilarity deadlock_left_ext_rel.
+
+Inductive deadlock_right_rel : relation expr :=
+ | deadlock_right_live : forall (d e : expr), totalDetTauStep d d -> deadlock_right_rel (( e) # ( d)) e
+ | deadlock_right_dead : forall (d e : expr), totalDetTauStep d d -> is_value_of_expr e -> deadlock_right_rel (( e) <# (d)) e.
+
+Lemma deadlock_right_rel_wbsm : isExprRelationStepWeakBisimilarity deadlock_right_rel.
+\end{lstlisting}
+\end{minipage}
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={Coq}, caption={Bind deadlock},label={lst:orig_bind_deadlock},numbersep=11pt]
+Inductive deadlock_bind_left_rel : relation expr :=
+ | deadlock_bind : forall (d e : expr), totalDetTauStep d d -> deadlock_bind_left_rel (d >>= e) d.
+
+Lemma deadlock_bind_rel_wbsm : isExprRelationStepWeakBisimilarity deadlock_bind_left_rel.
+\end{lstlisting}
+\end{minipage}
+
+
 \cleardoublepage
 
 \chapter{Project Proposal}
+
+
 
 \input{partIIproposal}
 

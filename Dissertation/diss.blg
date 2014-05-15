@@ -15,7 +15,7 @@ Warning--can't use both volume and number fields in liskov1988promises
 Warning--can't use both volume and number fields in sevvcik2011relaxed
 You've used 45 entries,
             2118 wiz_defined-function locations,
-            737 strings with 9993 characters,
+            737 strings with 9998 characters,
 and the built_in function-call counts, 13822 in all, are:
 = -- 1391
 > -- 509

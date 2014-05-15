@@ -25,7 +25,7 @@
 \contentsline {subsubsection}{Arrow types}{23}
 \contentsline {subsubsection}{Sum types}{23}
 \contentsline {subsubsection}{Product types}{24}
-\contentsline {subsubsection}{Fixpoint combinator}{25}
+\contentsline {subsubsection}{Fixpoint combinator}{24}
 \contentsline {subsubsection}{The reduction relation of MOCaml}{26}
 \contentsline {subsubsection}{Operational semantics of the sequential MOCaml features}{27}
 \contentsline {subsection}{\numberline {3.1.2}Concurrency features: computation placeholders, monadic primitives and fork}{31}
@@ -65,9 +65,8 @@
 \contentsline {section}{\numberline {B.1}Supporting lemmas}{78}
 \contentsline {section}{\numberline {B.2}Weak bisimilarity definitions and theorems}{79}
 \contentsline {section}{\numberline {B.3}Monadic laws}{82}
-\contentsline {section}{\numberline {B.4}Fork and join}{84}
+\contentsline {section}{\numberline {B.4}Fork}{84}
 \contentsline {section}{\numberline {B.5}Deadlock properties}{85}
-\contentsline {section}{\numberline {B.6}Equivalence}{85}
 \contentsline {chapter}{\numberline {C}Project Proposal}{87}
 \contentsline {section}{\numberline {C.1}Introduction of work to be undertaken}{87}
 \contentsline {section}{\numberline {C.2}Description of starting point}{87}
